@@ -14,12 +14,12 @@ import (
 
 	"github.com/boltdb/bolt"
 
-	"github.com/skycoin/skycoin/src/daemon/gnet"
-	"github.com/skycoin/skycoin/src/daemon/pex"
+	"github.com/MDLlife/MDL/src/daemon/gnet"
+	"github.com/MDLlife/MDL/src/daemon/pex"
 
-	"github.com/skycoin/skycoin/src/util/elapse"
-	"github.com/skycoin/skycoin/src/util/logging"
-	"github.com/skycoin/skycoin/src/util/utc"
+	"github.com/MDLlife/MDL/src/util/elapse"
+	"github.com/MDLlife/MDL/src/util/logging"
+	"github.com/MDLlife/MDL/src/util/utc"
 )
 
 /*

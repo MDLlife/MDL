@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/util/file"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/util/file"
 )
 
 // Wallets wallets map

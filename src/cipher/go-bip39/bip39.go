@@ -9,7 +9,7 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/skycoin/skycoin/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher"
 
 	"golang.org/x/crypto/pbkdf2"
 )

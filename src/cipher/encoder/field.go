@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/skycoin/skycoin/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher"
 )
 
 // StructField field struct

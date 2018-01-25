@@ -10,9 +10,9 @@ import (
 
 	gcli "github.com/urfave/cli"
 
-	"github.com/skycoin/skycoin/src/api/webrpc"
-	"github.com/skycoin/skycoin/src/util/droplet"
-	"github.com/skycoin/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/api/webrpc"
+	"github.com/MDLlife/MDL/src/util/droplet"
+	"github.com/MDLlife/MDL/src/wallet"
 )
 
 type addrHistory struct {

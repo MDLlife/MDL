@@ -8,10 +8,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/cipher/go-bip39"
-	secp256k1 "github.com/skycoin/skycoin/src/cipher/secp256k1-go"
-	"github.com/skycoin/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher/go-bip39"
+	secp256k1 "github.com/MDLlife/MDL/src/cipher/secp256k1-go"
+	"github.com/MDLlife/MDL/src/wallet"
 
 	gcli "github.com/urfave/cli"
 )

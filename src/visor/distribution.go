@@ -1,6 +1,6 @@
 package visor
 
-import "github.com/skycoin/skycoin/src/coin"
+import "github.com/MDLlife/MDL/src/coin"
 
 const (
 	// Maximum supply of skycoins

@@ -1,10 +1,10 @@
 package visor
 
 import (
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/coin"
-	"github.com/skycoin/skycoin/src/visor/blockdb"
-	"github.com/skycoin/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/visor/blockdb"
+	"github.com/MDLlife/MDL/src/wallet"
 )
 
 // TransactionResult represents transaction result

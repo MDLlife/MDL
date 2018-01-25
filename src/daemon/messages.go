@@ -8,9 +8,9 @@ import (
 	"net"
 	"strings"
 
-	"github.com/skycoin/skycoin/src/daemon/gnet"
-	"github.com/skycoin/skycoin/src/daemon/pex"
-	"github.com/skycoin/skycoin/src/util/utc"
+	"github.com/MDLlife/MDL/src/daemon/gnet"
+	"github.com/MDLlife/MDL/src/daemon/pex"
+	"github.com/MDLlife/MDL/src/util/utc"
 )
 
 // Message represent a packet to be serialized over the network by

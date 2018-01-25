@@ -3,8 +3,8 @@ package webrpc
 import (
 	"fmt"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/visor/historydb"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/visor/historydb"
 )
 
 // AddrUxoutResult the address uxout json format

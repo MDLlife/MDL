@@ -7,12 +7,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/coin"
-	wh "github.com/skycoin/skycoin/src/util/http"
-	"github.com/skycoin/skycoin/src/visor" //http,json helpers
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/coin"
+	wh "github.com/MDLlife/MDL/src/util/http"
+	"github.com/MDLlife/MDL/src/visor" //http,json helpers
 
-	"github.com/skycoin/skycoin/src/daemon"
+	"github.com/MDLlife/MDL/src/daemon"
 )
 
 const lastBlockNum = 10

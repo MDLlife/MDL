@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/coin"
-	"github.com/skycoin/skycoin/src/daemon"
-	"github.com/skycoin/skycoin/src/visor"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/daemon"
+	"github.com/MDLlife/MDL/src/visor"
 
-	wh "github.com/skycoin/skycoin/src/util/http" //http,json helpers
+	wh "github.com/MDLlife/MDL/src/util/http" //http,json helpers
 )
 
 // RegisterTxHandlers registers transaction handlers

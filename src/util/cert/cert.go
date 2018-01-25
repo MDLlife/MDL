@@ -19,8 +19,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/skycoin/skycoin/src/util/logging"
-	"github.com/skycoin/skycoin/src/util/utc"
+	"github.com/MDLlife/MDL/src/util/logging"
+	"github.com/MDLlife/MDL/src/util/utc"
 )
 
 var logger = logging.MustGetLogger("util")

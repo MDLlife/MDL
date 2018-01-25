@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/skycoin/skycoin/src/visor"
+	"github.com/MDLlife/MDL/src/visor"
 )
 
 var blockString = `{

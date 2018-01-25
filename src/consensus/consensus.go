@@ -6,7 +6,7 @@ package consensus
 import (
 	"fmt"
 
-	"github.com/skycoin/skycoin/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher"
 )
 
 ////////////////////////////////////////////////////////////////////////////////

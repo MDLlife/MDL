@@ -12,12 +12,12 @@ import (
 
 	"io"
 
-	"github.com/skycoin/skycoin/src/cipher/encoder"
-	"github.com/skycoin/skycoin/src/daemon/strand"
+	"github.com/MDLlife/MDL/src/cipher/encoder"
+	"github.com/MDLlife/MDL/src/daemon/strand"
 
-	"github.com/skycoin/skycoin/src/util/elapse"
-	"github.com/skycoin/skycoin/src/util/logging"
-	"github.com/skycoin/skycoin/src/util/utc"
+	"github.com/MDLlife/MDL/src/util/elapse"
+	"github.com/MDLlife/MDL/src/util/logging"
+	"github.com/MDLlife/MDL/src/util/utc"
 )
 
 // DisconnectReason is passed to ConnectionPool's DisconnectCallback

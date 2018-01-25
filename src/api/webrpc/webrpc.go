@@ -8,9 +8,9 @@ import (
 
 	"encoding/json"
 
-	wh "github.com/skycoin/skycoin/src/util/http"
+	wh "github.com/MDLlife/MDL/src/util/http"
 
-	"github.com/skycoin/skycoin/src/util/logging"
+	"github.com/MDLlife/MDL/src/util/logging"
 
 	"bytes"
 	"strings"

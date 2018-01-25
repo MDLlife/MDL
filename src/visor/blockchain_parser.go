@@ -3,8 +3,8 @@ package visor
 import (
 	"fmt"
 
-	"github.com/skycoin/skycoin/src/coin"
-	"github.com/skycoin/skycoin/src/visor/historydb"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/visor/historydb"
 )
 
 // ParserOption option type which will be used when creating parser instance

@@ -17,16 +17,16 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/skycoin/skycoin/src/api/webrpc"
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/coin"
-	"github.com/skycoin/skycoin/src/daemon"
-	"github.com/skycoin/skycoin/src/gui"
-	"github.com/skycoin/skycoin/src/util/browser"
-	"github.com/skycoin/skycoin/src/util/cert"
-	"github.com/skycoin/skycoin/src/util/file"
-	"github.com/skycoin/skycoin/src/util/logging"
-	"github.com/skycoin/skycoin/src/visor"
+	"github.com/MDLlife/MDL/src/api/webrpc"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/daemon"
+	"github.com/MDLlife/MDL/src/gui"
+	"github.com/MDLlife/MDL/src/util/browser"
+	"github.com/MDLlife/MDL/src/util/cert"
+	"github.com/MDLlife/MDL/src/util/file"
+	"github.com/MDLlife/MDL/src/util/logging"
+	"github.com/MDLlife/MDL/src/visor"
 )
 
 var (

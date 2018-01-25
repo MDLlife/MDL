@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/skycoin/skycoin/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher"
 )
 
 func randBytes(n int) []byte {

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/skycoin/skycoin/src/cipher/base58"
+	"github.com/MDLlife/MDL/src/cipher/base58"
 )
 
 /*

@@ -5,10 +5,10 @@ import (
 	"os"
 	"sync"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	bip39 "github.com/skycoin/skycoin/src/cipher/go-bip39"
-	"github.com/skycoin/skycoin/src/coin"
-	"github.com/skycoin/skycoin/src/visor/blockdb"
+	"github.com/MDLlife/MDL/src/cipher"
+	bip39 "github.com/MDLlife/MDL/src/cipher/go-bip39"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/visor/blockdb"
 )
 
 func errWalletNotExist(wltName string) error {

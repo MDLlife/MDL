@@ -9,9 +9,9 @@ import (
 	"fmt"
 	mathrand "math/rand"
 	//
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/cipher/secp256k1-go"
-	"github.com/skycoin/skycoin/src/consensus"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher/secp256k1-go"
+	"github.com/MDLlife/MDL/src/consensus"
 )
 
 var Cfg_simu_num_node int = 5

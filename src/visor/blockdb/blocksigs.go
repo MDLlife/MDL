@@ -3,9 +3,9 @@ package blockdb
 import (
 	"github.com/boltdb/bolt"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/cipher/encoder"
-	"github.com/skycoin/skycoin/src/visor/bucket"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher/encoder"
+	"github.com/MDLlife/MDL/src/visor/bucket"
 )
 
 // blockSigs manages known blockSigs as received.

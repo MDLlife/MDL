@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	bip39 "github.com/skycoin/skycoin/src/cipher/go-bip39"
-	"github.com/skycoin/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/cipher"
+	bip39 "github.com/MDLlife/MDL/src/cipher/go-bip39"
+	"github.com/MDLlife/MDL/src/wallet"
 )
 
 // Note: Address_gen generates public keys and addresses

@@ -1,7 +1,7 @@
 package wallet
 
 import (
-	"github.com/skycoin/skycoin/src/coin"
+	"github.com/MDLlife/MDL/src/coin"
 )
 
 /*

@@ -12,7 +12,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/skycoin/skycoin/src/util/logging"
+	"github.com/MDLlife/MDL/src/util/logging"
 )
 
 var (

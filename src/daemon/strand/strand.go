@@ -3,7 +3,7 @@ package strand
 import (
 	"time"
 
-	"github.com/skycoin/skycoin/src/util/logging"
+	"github.com/MDLlife/MDL/src/util/logging"
 )
 
 const (

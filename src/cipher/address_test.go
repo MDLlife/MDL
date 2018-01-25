@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/skycoin/skycoin/src/cipher/base58"
+	"github.com/MDLlife/MDL/src/cipher/base58"
 )
 
 func TestMustDecodeBase58Address(t *testing.T) {

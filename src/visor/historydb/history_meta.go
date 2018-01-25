@@ -5,7 +5,7 @@ import (
 
 	"github.com/boltdb/bolt"
 
-	"github.com/skycoin/skycoin/src/visor/bucket"
+	"github.com/MDLlife/MDL/src/visor/bucket"
 )
 
 var (

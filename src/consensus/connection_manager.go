@@ -3,7 +3,7 @@
 // 20161025 - Code revision by user johnstuartmill.
 package consensus
 
-//"github.com/skycoin/skycoin/src/cipher"
+//"github.com/MDLlife/MDL/src/cipher"
 
 ////////////////////////////////////////////////////////////////////////////////
 type ConnectionManagerInterface interface {

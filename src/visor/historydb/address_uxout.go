@@ -3,9 +3,9 @@ package historydb
 import (
 	"github.com/boltdb/bolt"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/cipher/encoder"
-	"github.com/skycoin/skycoin/src/visor/bucket"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher/encoder"
+	"github.com/MDLlife/MDL/src/visor/bucket"
 )
 
 // bucket for storing address with UxOut, key as address, value as UxOut.

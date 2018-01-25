@@ -11,8 +11,8 @@ import (
 
 	"github.com/boltdb/bolt"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/visor/blockdb"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/visor/blockdb"
 )
 
 // loadBlockchain loads blockchain from DB and if any error occurs then delete

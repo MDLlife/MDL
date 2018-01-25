@@ -1,7 +1,7 @@
 package daemon
 
 import (
-	"github.com/skycoin/skycoin/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher"
 )
 
 // Connection a connection's state within the daemon

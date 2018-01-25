@@ -11,14 +11,14 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/daemon"
-	"github.com/skycoin/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/daemon"
+	"github.com/MDLlife/MDL/src/wallet"
 
-	"github.com/skycoin/skycoin/src/util/file"
-	wh "github.com/skycoin/skycoin/src/util/http" //http,json helpers
+	"github.com/MDLlife/MDL/src/util/file"
+	wh "github.com/MDLlife/MDL/src/util/http" //http,json helpers
 
-	"github.com/skycoin/skycoin/src/util/logging"
+	"github.com/MDLlife/MDL/src/util/logging"
 )
 
 var (

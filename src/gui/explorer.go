@@ -3,11 +3,11 @@ package gui
 import (
 	"net/http"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/daemon"
-	"github.com/skycoin/skycoin/src/util/droplet"
-	wh "github.com/skycoin/skycoin/src/util/http" //http,json helpers
-	"github.com/skycoin/skycoin/src/visor"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/daemon"
+	"github.com/MDLlife/MDL/src/util/droplet"
+	wh "github.com/MDLlife/MDL/src/util/http" //http,json helpers
+	"github.com/MDLlife/MDL/src/visor"
 )
 
 // RegisterExplorerHandlers register explorer handlers

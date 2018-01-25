@@ -9,11 +9,11 @@ import (
 	"log"
 	"time"
 
-	"github.com/skycoin/skycoin/src/cipher/ripemd160"
+	"github.com/MDLlife/MDL/src/cipher/ripemd160"
 
-	"github.com/skycoin/skycoin/src/cipher/secp256k1-go"
+	"github.com/MDLlife/MDL/src/cipher/secp256k1-go"
 
-	"github.com/skycoin/skycoin/src/util/logging"
+	"github.com/MDLlife/MDL/src/util/logging"
 )
 
 var (

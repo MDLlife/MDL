@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/skycoin/skycoin/src/cipher/ripemd160"
+	"github.com/MDLlife/MDL/src/cipher/ripemd160"
 )
 
 func freshSumRipemd160(b []byte) Ripemd160 {

@@ -1,17 +1,17 @@
 package daemon
 
 import (
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/coin"
-	"github.com/skycoin/skycoin/src/daemon/strand"
-	"github.com/skycoin/skycoin/src/util/utc"
-	"github.com/skycoin/skycoin/src/visor"
-	"github.com/skycoin/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/daemon/strand"
+	"github.com/MDLlife/MDL/src/util/utc"
+	"github.com/MDLlife/MDL/src/visor"
+	"github.com/MDLlife/MDL/src/wallet"
 
 	"fmt"
 
-	"github.com/skycoin/skycoin/src/visor/blockdb"
-	"github.com/skycoin/skycoin/src/visor/historydb"
+	"github.com/MDLlife/MDL/src/visor/blockdb"
+	"github.com/MDLlife/MDL/src/visor/historydb"
 )
 
 // Exposes a read-only api for use by the gui rpc interface

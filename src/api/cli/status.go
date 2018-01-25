@@ -3,7 +3,7 @@ package cli
 import (
 	gcli "github.com/urfave/cli"
 
-	"github.com/skycoin/skycoin/src/api/webrpc"
+	"github.com/MDLlife/MDL/src/api/webrpc"
 )
 
 func statusCmd() gcli.Command {

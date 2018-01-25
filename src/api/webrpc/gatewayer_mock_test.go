@@ -5,11 +5,11 @@ import (
 
 	mock "github.com/stretchr/testify/mock"
 
-	cipher "github.com/skycoin/skycoin/src/cipher"
-	coin "github.com/skycoin/skycoin/src/coin"
-	daemon "github.com/skycoin/skycoin/src/daemon"
-	visor "github.com/skycoin/skycoin/src/visor"
-	historydb "github.com/skycoin/skycoin/src/visor/historydb"
+	cipher "github.com/MDLlife/MDL/src/cipher"
+	coin "github.com/MDLlife/MDL/src/coin"
+	daemon "github.com/MDLlife/MDL/src/daemon"
+	visor "github.com/MDLlife/MDL/src/visor"
+	historydb "github.com/MDLlife/MDL/src/visor/historydb"
 )
 
 // GatewayerMock mock

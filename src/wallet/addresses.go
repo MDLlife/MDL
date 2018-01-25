@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/skycoin/skycoin/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher"
 )
 
 // CreateAddresses genCount addresses deterministically from seed.  coinType is either CoinTypeBitcoin or CoinTypeSkycoin.

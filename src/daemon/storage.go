@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/skycoin/skycoin/src/daemon/pex"
+	"github.com/MDLlife/MDL/src/daemon/pex"
 )
 
 // base storage struct

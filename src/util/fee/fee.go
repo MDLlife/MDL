@@ -3,7 +3,7 @@ package fee
 import (
 	"errors"
 
-	"github.com/skycoin/skycoin/src/coin"
+	"github.com/MDLlife/MDL/src/coin"
 )
 
 const (
