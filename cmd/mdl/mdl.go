@@ -702,18 +702,18 @@ func Run(c *Config) {
 	*/
 
 	//first transaction
-	if c.RunMaster == true {
-		go func() {
-			for d.Visor.HeadBkSeq() < 2 {
-				tx := InitTransaction()
-				_, err := d.Visor.InjectTxn(tx)
-				if err != nil {
-					log.Panic(err)
-				}
-				time.Sleep(5 * time.Minute)
-			}
-		}()
-	}
+	// if c.RunMaster == true {
+	// 	go func() {
+	// 		for d.Visor.HeadBkSeq() < 2 {
+	// 			tx := InitTransaction()
+	// 			_, err := d.Visor.InjectTxn(tx)
+	// 			if err != nil {
+	// 				log.Panic(err)
+	// 			}
+	// 			time.Sleep(5 * time.Minute)
+	// 		}
+	// 	}()
+	// }
 
 	select {
 	case <-quit:
