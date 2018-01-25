@@ -30,7 +30,7 @@ import (
 
 const (
 	// DefaultPeerListURL is the default URL to download remote peers list from, if enabled
-	DefaultPeerListURL = "https://downloads.skycoin.net/blockchain/peers.txt"
+	DefaultPeerListURL = ""
 	// PeerDatabaseFilename filename for disk-cached peers
 	PeerDatabaseFilename = "peers.txt"
 	// MaxPeerRetryTimes is the maximum number of times to retry a peer
