@@ -1,13 +1,13 @@
 {
-    "name": "skycoin",
-    "productName": "Skycoin",
-    "author": "skycoin",
+    "name": "mdl",
+    "productName": "mdl",
+    "author": "MDLlife",
     "main": "src/electron-main.js",
     "version": "0.21.1",
-    "description": "skycoin wallet",
+    "description": "MDLlife wallet",
     "license": "MIT",
     "build": {
-        "appId": "org.skycoin.skycoin",
+        "appId": "org.MDLlife.MDLlife",
         "nsis": {
             "oneClick": false,
             "allowToChangeInstallationDirectory": true

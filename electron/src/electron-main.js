@@ -25,7 +25,7 @@ let currentURL;
 app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1');
 app.commandLine.appendSwitch('ssl-version-fallback-min', 'tls1.2');
 app.commandLine.appendSwitch('--no-proxy-server');
-app.setAsDefaultProtocolClient('skycoin');
+app.setAsDefaultProtocolClient('mdl');
 
 
 
@@ -33,35 +33,35 @@ app.setAsDefaultProtocolClient('skycoin');
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
-var skycoin = null;
+var mdl = null;
 
-function startSkycoin() {
-  console.log('Starting skycoin from electron');
+function startMDL() {
+  console.log('Starting mdl from electron');
 
-  if (skycoin) {
-    console.log('Skycoin already running');
-    app.emit('skycoin-ready');
+  if (mdl) {
+    console.log('mdl already running');
+    app.emit('mdl-ready');
     return
   }
 
   var reset = () => {
-    skycoin = null;
+    mdl = null;
   }
 
-  // Resolve skycoin binary location
+  // Resolve mdl binary location
   var appPath = app.getPath('exe');
   var exe = (() => {
         switch (process.platform) {
   case 'darwin':
-    return path.join(appPath, '../../Resources/app/skycoin');
+    return path.join(appPath, '../../Resources/app/mdl');
   case 'win32':
     // Use only the relative path on windows due to short path length
     // limits
-    return './resources/app/skycoin.exe';
+    return './resources/app/mdl.exe';
   case 'linux':
-    return path.join(path.dirname(appPath), './resources/app/skycoin');
+    return path.join(path.dirname(appPath), './resources/app/mdl');
   default:
-    return './resources/app/skycoin';
+    return './resources/app/mdl';
   }
 })()
 
@@ -75,14 +75,14 @@ function startSkycoin() {
     // broken (automatically generated certs do not work):
     // '-web-interface-https=true',
   ]
-  skycoin = childProcess.spawn(exe, args);
+  mdl = childProcess.spawn(exe, args);
 
-  skycoin.on('error', (e) => {
-    dialog.showErrorBox('Failed to start skycoin', e.toString());
+  mdl.on('error', (e) => {
+    dialog.showErrorBox('Failed to start mdl', e.toString());
   app.quit();
 });
 
-  skycoin.stdout.on('data', (data) => {
+  mdl.stdout.on('data', (data) => {
     console.log(data.toString());
 
   // Scan for the web URL string
@@ -103,22 +103,22 @@ function startSkycoin() {
   // var url = data.slice(i + marker.length, j);
   // currentURL = url.toString();
   currentURL = defaultURL;
-  app.emit('skycoin-ready', { url: currentURL });
+  app.emit('mdl-ready', { url: currentURL });
 });
 
-  skycoin.stderr.on('data', (data) => {
+  mdl.stderr.on('data', (data) => {
     console.log(data.toString());
 });
 
-  skycoin.on('close', (code) => {
-    // log.info('Skycoin closed');
-    console.log('Skycoin closed');
+  mdl.on('close', (code) => {
+    // log.info('mdl closed');
+    console.log('mdl closed');
   reset();
 });
 
-  skycoin.on('exit', (code) => {
-    // log.info('Skycoin exited');
-    console.log('Skycoin exited');
+  mdl.on('exit', (code) => {
+    // log.info('mdl exited');
+    console.log('mdl exited');
   reset();
 });
 }
@@ -132,7 +132,7 @@ function createWindow(url) {
   win = new BrowserWindow({
     width: 1200,
     height: 900,
-    title: 'Skycoin',
+    title: 'MDLlife',
     nodeIntegration: false,
     webPreferences: {
       webgl: false,
@@ -145,7 +145,7 @@ function createWindow(url) {
 
   const ses = win.webContents.session
   ses.clearCache(function () {
-    console.log('Cleared the caching of the skycoin wallet.');
+    console.log('Cleared the caching of the MDLlife wallet.');
   });
 
   ses.clearStorageData([],function(){
@@ -167,9 +167,9 @@ function createWindow(url) {
 
   // create application's main menu
   var template = [{
-    label: "Skycoin",
+    label: "MDLlife",
     submenu: [
-      { label: "About Skycoin", selector: "orderFrontStandardAboutPanel:" },
+      { label: "About MDLlife", selector: "orderFrontStandardAboutPanel:" },
       { type: "separator" },
       { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); } }
     ]
@@ -210,9 +210,9 @@ if (alreadyRunning) {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', startSkycoin);
+app.on('ready', startMDL);
 
-app.on('skycoin-ready', (e) => {
+app.on('mdl-ready', (e) => {
   createWindow(e.url);
 });
 
@@ -234,8 +234,8 @@ app.on('activate', () => {
 });
 
 app.on('will-quit', () => {
-  if (skycoin) {
-    skycoin.kill('SIGINT');
+  if (mdl) {
+    mdl.kill('SIGINT');
   }
 });
 
