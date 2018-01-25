@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class ApiService {
 
-  private url = 'http://127.0.0.1:6420/'; // production
+  private url = 'http://127.0.0.1:8320/'; // production
   // private url = '/api/'; // test
 
   constructor(private http: Http) { }

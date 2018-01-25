@@ -467,7 +467,7 @@ func TestPeerJSONParsing(t *testing.T) {
 	// The serialized peer json format changed,
 	// this tests that the old format can still parse.
 	oldFormat := `{
-        "Addr": "11.22.33.44:6000",
+        "Addr": "11.22.33.44:7800",
         "LastSeen": "2017-09-24T06:42:18.999999999Z",
         "Private": true,
         "Trusted": true,
@@ -475,7 +475,7 @@ func TestPeerJSONParsing(t *testing.T) {
     }`
 
 	newFormat := `{
-        "Addr": "11.22.33.44:6000",
+        "Addr": "11.22.33.44:7800",
         "LastSeen": 1506235338,
         "Private": true,
         "Trusted": true,
@@ -483,7 +483,7 @@ func TestPeerJSONParsing(t *testing.T) {
     }`
 
 	check := func(p *Peer) {
-		require.Equal(t, "11.22.33.44:6000", p.Addr)
+		require.Equal(t, "11.22.33.44:7800", p.Addr)
 		require.True(t, p.Private)
 		require.True(t, p.Trusted)
 		require.True(t, p.HasIncomingPort)

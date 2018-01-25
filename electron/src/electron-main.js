@@ -18,7 +18,7 @@ require('electron-debug')({ enabled: true, showDevTools: false });
 
 global.eval = function() { throw new Error('bad!!'); }
 
-const defaultURL = 'http://127.0.0.1:6420/';
+const defaultURL = 'http://127.0.0.1:8320/';
 let currentURL;
 
 // Force everything localhost, in case of a leak
@@ -70,7 +70,7 @@ function startSkycoin() {
     '-gui-dir=' + path.dirname(exe),
     '-color-log=false', // must be disabled or web interface detection
     '-logtofile=true',
-    '-download-peerlist=true'
+    '-download-peerlist=false'
     // will break
     // broken (automatically generated certs do not work):
     // '-web-interface-https=true',
