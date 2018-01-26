@@ -25,7 +25,7 @@
     <md-divider></md-divider>
     <h3 md-subheader>Outputs</h3>
     <md-list-item *ngFor="let output of transaction.txn.outputs">
-      <h4 md-line><button md-button [routerLink]="['/explorer/address/', output.dst]">{{ output.dst }} ({{ output.coins }} SKY)</button></h4>
+      <h4 md-line><button md-button [routerLink]="['/explorer/address/', output.dst]">{{ output.dst }} ({{ output.coins }} MDL)</button></h4>
     </md-list-item>
   </md-list>
 </md-card>
