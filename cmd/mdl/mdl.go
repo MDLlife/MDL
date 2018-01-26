@@ -38,7 +38,7 @@ var (
 	help = false
 
 	logger     = logging.MustGetLogger("main")
-	logFormat  = "[skycoin.%{module}:%{level}] %{message}"
+	logFormat  = "[mdl.%{module}:%{level}] %{message}"
 	logModules = []string{
 		"main",
 		"daemon",
@@ -53,30 +53,21 @@ var (
 	}
 
 	// GenesisSignatureStr hex string of genesis signature
-	GenesisSignatureStr = "eb10468d10054d15f2b6f8946cd46797779aa20a7617ceb4be884189f219bc9a164e56a5b9f7bec392a804ff3740210348d73db77a37adb542a8e08d429ac92700"
+	GenesisSignatureStr = "97f68c5564c8526a77a26c54e48c005c18ee76a92a7d0ee397a2e3bd25e5c74a1630952716f3281362f8b2baf22139282ab6b2f3d0e5ee825a69690e76d4401e00"
 	// GenesisAddressStr genesis address string
-	GenesisAddressStr = "2jBbGxZRGoQG1mqhPBnXnLTxK6oxsTf8os6"
+	GenesisAddressStr = "zVebXKCqbtGJMnEoGdFkewvUN5KMryrRTc"
 	// BlockchainPubkeyStr pubic key string
-	BlockchainPubkeyStr = "0328c576d3f420e7682058a981173a4b374c7cc5ff55bf394d3cf57059bbe6456a"
+	BlockchainPubkeyStr = "025d096499390a1924969f0991b1e0fd5f37c9ec54f7830f10fa8d911a51bb1e4b"
 	// BlockchainSeckeyStr empty private key string
 	BlockchainSeckeyStr = ""
 
 	// GenesisTimestamp genesis block create unix time
-	GenesisTimestamp uint64 = 1426562704
+	GenesisTimestamp uint64 = 1516848705
 	// GenesisCoinVolume represents the coin capacity
-	GenesisCoinVolume uint64 = 100e12
+	GenesisCoinVolume uint64 = 1000e12
 
 	// DefaultConnections the default trust node addresses
-	DefaultConnections = []string{
-		"118.178.135.93:6000",
-		"47.88.33.156:6000",
-		"121.41.103.148:6000",
-		"120.77.69.188:6000",
-		"104.237.142.206:6000",
-		"176.58.126.224:6000",
-		"172.104.85.6:6000",
-		"139.162.7.132:6000",
-	}
+	DefaultConnections = []string{}
 )
 
 // Command line interface arguments
@@ -128,7 +119,7 @@ type Config struct {
 	// If true, print the configured client web interface address and exit
 	PrintWebInterfaceAddress bool
 
-	// Data directory holds app data -- defaults to ~/.skycoin
+	// Data directory holds app data -- defaults to ~/.mdl
 	DataDirectory string
 	// GUI directory contains assets for the html gui
 	GUIDirectory string
@@ -215,7 +206,7 @@ func (c *Config) register() {
 	flag.BoolVar(&c.PrintWebInterfaceAddress, "print-web-interface-address",
 		c.PrintWebInterfaceAddress, "print configured web interface address and exit")
 	flag.StringVar(&c.DataDirectory, "data-dir", c.DataDirectory,
-		"directory to store app data (defaults to ~/.skycoin)")
+		"directory to store app data (defaults to ~/.mdl)")
 	flag.StringVar(&c.ConnectTo, "connect-to", c.ConnectTo,
 		"connect to this ip only")
 	flag.BoolVar(&c.ProfileCPU, "profile-cpu", c.ProfileCPU,
@@ -251,7 +242,7 @@ func (c *Config) register() {
 		"genesis block timestamp")
 
 	flag.StringVar(&c.WalletDirectory, "wallet-dir", c.WalletDirectory,
-		"location of the wallet files. Defaults to ~/.skycoin/wallet/")
+		"location of the wallet files. Defaults to ~/.mdl/wallet/")
 	flag.IntVar(&c.MaxOutgoingConnections, "max-outgoing-connections", 16, "The maximum outgoing connections allowed")
 	flag.IntVar(&c.PeerlistSize, "peerlist-size", 65535, "The peer list size")
 	flag.DurationVar(&c.OutgoingConnectionsRate, "connection-rate",
@@ -278,11 +269,11 @@ var devConfig = Config{
 	// public interface
 	Address: "",
 	//gnet uses this for TCP incoming and outgoing
-	Port: 6000,
+	Port: 7800,
 	// MaxOutgoingConnections is the maximum outgoing connections allowed.
 	MaxOutgoingConnections: 16,
 	DownloadPeerList:       false,
-	PeerListURL:            "https://downloads.skycoin.net/blockchain/peers.txt",
+	PeerListURL:            "",
 	// How often to make outgoing connections, in seconds
 	OutgoingConnectionsRate: time.Second * 5,
 	PeerlistSize:            65535,
@@ -290,7 +281,7 @@ var devConfig = Config{
 	//AddressVersion: "test",
 	// Remote web interface
 	WebInterface:             true,
-	WebInterfacePort:         6420,
+	WebInterfacePort:         8320,
 	WebInterfaceAddr:         "127.0.0.1",
 	WebInterfaceCert:         "",
 	WebInterfaceKey:          "",
@@ -298,13 +289,13 @@ var devConfig = Config{
 	PrintWebInterfaceAddress: false,
 
 	RPCInterface:     true,
-	RPCInterfacePort: 6430,
+	RPCInterfacePort: 8330,
 	RPCInterfaceAddr: "127.0.0.1",
 	RPCThreadNum:     5,
 
 	LaunchBrowser: true,
-	// Data directory holds app data -- defaults to ~/.skycoin
-	DataDirectory: ".skycoin",
+	// Data directory holds app data -- defaults to ~/.mdl
+	DataDirectory: ".mdl",
 	// Web GUI static resources
 	GUIDirectory: "./src/gui/static/",
 	// Logging
@@ -328,7 +319,7 @@ var devConfig = Config{
 	// Enable cpu profiling
 	ProfileCPU: false,
 	// Where the file is written to
-	ProfileCPUFile: "skycoin.prof",
+	ProfileCPUFile: "mdl.prof",
 	// HTTP profiling interface (see http://golang.org/pkg/net/http/pprof/)
 	HTTPProf: false,
 	// Will force it to connect to this ip:port, instead of waiting for it
@@ -539,7 +530,7 @@ func configureDaemon(c *Config) daemon.Config {
 	return dc
 }
 
-// Run starts the skycoin node
+// Run starts the mdl node
 func Run(c *Config) {
 	defer func() {
 		// try catch panic in main thread
@@ -588,7 +579,7 @@ func Run(c *Config) {
 
 	db, err := visor.OpenDB(dconf.Visor.Config.DBPath)
 	if err != nil {
-		logger.Error("Database failed to open: %v. Is another skycoin instance running?", err)
+		logger.Error("Database failed to open: %v. Is another mdl instance running?", err)
 		return
 	}
 
@@ -663,7 +654,7 @@ func Run(c *Config) {
 		var err error
 		if c.WebInterfaceHTTPS {
 			// Verify cert/key parameters, and if neither exist, create them
-			errs := cert.CreateCertIfNotExists(host, c.WebInterfaceCert, c.WebInterfaceKey, "Skycoind")
+			errs := cert.CreateCertIfNotExists(host, c.WebInterfaceCert, c.WebInterfaceKey, "Mdld")
 			if len(errs) != 0 {
 				for _, err := range errs {
 					logger.Error(err.Error())
@@ -710,21 +701,19 @@ func Run(c *Config) {
 		}
 	*/
 
-	/*
-		//first transaction
-		if c.RunMaster == true {
-			go func() {
-				for d.Visor.Visor.Blockchain.Head().Seq() < 2 {
-					time.Sleep(5)
-					tx := InitTransaction()
-					err, _ := d.Visor.Visor.InjectTxn(tx)
-					if err != nil {
-						//log.Panic(err)
-					}
-				}
-			}()
-		}
-	*/
+	//first transaction
+	// if c.RunMaster == true {
+	// 	go func() {
+	// 		for d.Visor.HeadBkSeq() < 2 {
+	// 			tx := InitTransaction()
+	// 			_, err := d.Visor.InjectTxn(tx)
+	// 			if err != nil {
+	// 				log.Panic(err)
+	// 			}
+	// 			time.Sleep(5 * time.Minute)
+	// 		}
+	// 	}()
+	// }
 
 	select {
 	case <-quit:
@@ -752,7 +741,7 @@ func main() {
 func InitTransaction() coin.Transaction {
 	var tx coin.Transaction
 
-	output := cipher.MustSHA256FromHex("043836eb6f29aaeb8b9bfce847e07c159c72b25ae17d291f32125e7f1912e2a0")
+	output := cipher.MustSHA256FromHex("21fe34061dfc4a8c7d28f6804f9a04440eb5e01c670abad6d36dfcf0e2b17984")
 	tx.PushInput(output)
 
 	addrs := visor.GetDistributionAddresses()
@@ -761,8 +750,8 @@ func InitTransaction() coin.Transaction {
 		log.Panic("Should have 100 distribution addresses")
 	}
 
-	// 1 million per address, measured in droplets
-	if visor.DistributionAddressInitialBalance != 1e6 {
+	// 10 million per address, measured in droplets
+	if visor.DistributionAddressInitialBalance != 10e6 {
 		log.Panic("visor.DistributionAddressInitialBalance expected to be 1e6*1e6")
 	}
 
@@ -770,15 +759,13 @@ func InitTransaction() coin.Transaction {
 		addr := cipher.MustDecodeBase58Address(addrs[i])
 		tx.PushOutput(addr, visor.DistributionAddressInitialBalance*1e6, 1)
 	}
-	/*
-		seckeys := make([]cipher.SecKey, 1)
-		seckey := ""
-		seckeys[0] = cipher.MustSecKeyFromHex(seckey)
-		tx.SignInputs(seckeys)
-	*/
+	// seckeys := make([]cipher.SecKey, 1)
+	// seckey := ""
+	// seckeys[0] = cipher.MustSecKeyFromHex(seckey)
+	// tx.SignInputs(seckeys)
 
 	txs := make([]cipher.Sig, 1)
-	sig := "ed9bd7a31fe30b9e2d53b35154233dfdf48aaaceb694a07142f84cdf4f5263d21b723f631817ae1c1f735bea13f0ff2a816e24a53ccb92afae685fdfc06724de01"
+	sig := "26d511559ec3f86173c982601a9508d6a5b15e6a13d03ed162ba026e1e7165e4764a37af2bba5a6e34ea37cf8df0d82e8ccadc5fa59c2c2eefedfc69844926b400"
 	txs[0] = cipher.MustSigFromHex(sig)
 	tx.Sigs = txs
 
