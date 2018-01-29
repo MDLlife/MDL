@@ -1,6 +1,6 @@
-![mdl logo](https://user-images.githubusercontent.com/26845312/32426705-d95cb988-c281-11e7-9463-a3fce8076a72.png)
+![mdl logo](https://ipfs.io/ipfs/QmRXCGXRKsUZmspv7uoNgGVRHfom1bCE7K7iiR291v1Pre)
 
-# MDL
+# MDL (Testnet)
 
 [![Build Status](https://travis-ci.org/skycoin/skycoin.svg)](https://travis-ci.org/MDLLife/MDL)
 [![GoDoc](https://godoc.org/github.com/skycoin/skycoin?status.svg)](https://godoc.org/github.com/skycoin/skycoin)
