@@ -8,9 +8,8 @@
 
 MDL is a next-generation cryptocurrency. It's based on [Skycoin](https://skycoin.net)'s code base.
 
-Skycoin improves on Bitcoin in too many ways to be addressed here.
+Skycoin improves on Bitcoin in too many ways to be addressed here. Read it's website and [blog](https://blog.skycoin.net) instead.
 
-Skycoin is a small part of OP Redecentralize.
 
 ## Links
 
