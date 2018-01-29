@@ -1,4 +1,4 @@
-![mdl logo](https://github.com/MDLlife/MDL/raw/testnet/mdl.png)
+[![mdl logo](https://github.com/MDLlife/MDL/raw/testnet/mdl.png)](http://mdl.life)
 
 # MDL (Testnet)
 
@@ -6,14 +6,14 @@
 [![GoDoc](https://godoc.org/github.com/skycoin/skycoin?status.svg)](https://godoc.org/github.com/skycoin/skycoin)
 [![Go Report Card](https://goreportcard.com/badge/github.com/MDLLife/MDL)](https://goreportcard.com/report/github.com/MDLLife/MDL)
 
-MDL is a next-generation cryptocurrency. It's based on [Skycoin](https://skycoin.net)'s code base.
+MDL is a token used in MDL Talent Hub platform. It's based on [Skycoin](https://skycoin.net)'s code base.
 
 Skycoin improves on Bitcoin in too many ways to be addressed here. Read it's website and [blog](https://blog.skycoin.net) instead.
 
 
 ## Links
 
-* [MDL.life](https://mdl.life)
+* [MDL Talent Hub](http://mdl.life)
 * [MDL Blog](https://mdl.wtf)
 * [MDL Blockchain Explorer](https://explorer.mdl.wtf)
 
