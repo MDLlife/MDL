@@ -1,8 +1,8 @@
-![mdl logo](https://ipfs.io/ipfs/QmRXCGXRKsUZmspv7uoNgGVRHfom1bCE7K7iiR291v1Pre)
+![mdl logo](https://github.com/MDLlife/MDL/raw/testnet/mdl.png)
 
 # MDL (Testnet)
 
-[![Build Status](https://travis-ci.org/skycoin/skycoin.svg)](https://travis-ci.org/MDLLife/MDL)
+[![Build Status](https://travis-ci.org/MDLlife/MDL.svg)](https://travis-ci.org/MDLlife/MDL)
 [![GoDoc](https://godoc.org/github.com/skycoin/skycoin?status.svg)](https://godoc.org/github.com/skycoin/skycoin)
 [![Go Report Card](https://goreportcard.com/badge/github.com/MDLLife/MDL)](https://goreportcard.com/report/github.com/MDLLife/MDL)
 
@@ -30,7 +30,7 @@ Skycoin improves on Bitcoin in too many ways to be addressed here. Read it's web
 - [API Documentation](#api-documentation)
     - [Wallet REST API](#wallet-rest-api)
     - [JSON-RPC 2.0 API](#json-rpc-20-api)
-    - [MDL command line interface](#skycoin-command-line-interface)
+    - [MDL command line interface](#mdl-command-line-interface)
 - [Contributing a node to the network](#contributing-a-node-to-the-network)
 - [Development](#development)
     - [Modules](#modules)
