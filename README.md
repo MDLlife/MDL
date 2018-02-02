@@ -1,23 +1,21 @@
-![skycoin logo](https://user-images.githubusercontent.com/26845312/32426705-d95cb988-c281-11e7-9463-a3fce8076a72.png)
+[![mdl logo](https://github.com/MDLlife/MDL/raw/testnet/mdl.png)](http://mdl.life)
 
-# Skycoin
+# MDL (Testnet)
 
-[![Build Status](https://travis-ci.org/skycoin/skycoin.svg)](https://travis-ci.org/skycoin/skycoin)
+[![Build Status](https://travis-ci.org/MDLlife/MDL.svg)](https://travis-ci.org/MDLlife/MDL)
 [![GoDoc](https://godoc.org/github.com/skycoin/skycoin?status.svg)](https://godoc.org/github.com/skycoin/skycoin)
-[![Go Report Card](https://goreportcard.com/badge/github.com/skycoin/skycoin)](https://goreportcard.com/report/github.com/skycoin/skycoin)
+[![Go Report Card](https://goreportcard.com/badge/github.com/MDLLife/MDL)](https://goreportcard.com/report/github.com/MDLLife/MDL)
 
-Skycoin is a next-generation cryptocurrency.
+MDL is a token used in MDL Talent Hub platform. It's based on [Skycoin](https://skycoin.net)'s code base.
 
-Skycoin improves on Bitcoin in too many ways to be addressed here.
+Skycoin improves on Bitcoin in too many ways to be addressed here. Read it's website and [blog](https://blog.skycoin.net) instead.
 
-Skycoin is a small part of OP Redecentralize and OP Darknet Plan.
 
 ## Links
 
-* [skycoin.net](https://www.skycoin.net)
-* [Skycoin Blog](https://blog.skycoin.net)
-* [Skycoin Blockchain Explorer](https://explorer.skycoin.net)
-* [Skycoin Distribution Event](https://event.skycoin.net)
+* [MDL Talent Hub](http://mdl.life)
+* [MDL Blog](https://mdl.wtf)
+* [MDL Blockchain Explorer](https://explorer.mdl.wtf)
 
 ## Table of Contents
 
@@ -25,15 +23,14 @@ Skycoin is a small part of OP Redecentralize and OP Darknet Plan.
 
 - [Installation](#installation)
     - [Go 1.9+ Installation and Setup](#go-19-installation-and-setup)
-    - [Go get skycoin](#go-get-skycoin)
-    - [Run Skycoin from the command line](#run-skycoin-from-the-command-line)
-    - [Show Skycoin node options](#show-skycoin-node-options)
-    - [Run Skycoin with options](#run-skycoin-with-options)
-    - [Docker image](#docker-image)
+    - [Go get MDL](#go-get-mdl)
+    - [Run MDL from the command line](#run-mdl-from-the-command-line)
+    - [Show MDL node options](#show-mdl-node-options)
+    - [Run MDL with options](#run-mdl-with-options)
 - [API Documentation](#api-documentation)
     - [Wallet REST API](#wallet-rest-api)
     - [JSON-RPC 2.0 API](#json-rpc-20-api)
-    - [Skycoin command line interface](#skycoin-command-line-interface)
+    - [MDL command line interface](#mdl-command-line-interface)
 - [Contributing a node to the network](#contributing-a-node-to-the-network)
 - [Development](#development)
     - [Modules](#modules)
@@ -53,41 +50,37 @@ Skycoin is a small part of OP Redecentralize and OP Darknet Plan.
 
 [Golang 1.9+ Installation/Setup](./Installation.md)
 
-### Go get skycoin
+### Go get MDL
 
 ```sh
-go get github.com/skycoin/skycoin/...
+go get github.com/MDLlife/MDL/...
 ```
 
-This will download `github.com/skycoin/skycoin` to `$GOPATH/src/github.com/skycoin/skycoin`.
+This will download `github.com/MDLlife/MDL` to `$GOPATH/src/github.com/MDLlife/MDL`.
 
-You can also clone the repo directly with `git clone https://github.com/skycoin/skycoin`,
-but it must be cloned to this path: `$GOPATH/src/github.com/skycoin/skycoin`.
+You can also clone the repo directly with `git clone https://github.com/MDLlife/MDL`,
+but it must be cloned to this path: `$GOPATH/src/github.com/MDLlife/MDL`.
 
-### Run Skycoin from the command line
+### Run MDL from the command line
 
 ```sh
-cd $GOPATH/src/github.com/skycoin/skycoin
+cd $GOPATH/src/github.com/MDLlife/MDL
 make run
 ```
 
-### Show Skycoin node options
+### Show MDL node options
 
 ```sh
-cd $GOPATH/src/github.com/skycoin/skycoin
+cd $GOPATH/src/github.com/MDLlife/MDL
 make run-help
 ```
 
-### Run Skycoin with options
+### Run MDL with options
 
 ```sh
-cd $GOPATH/src/github.com/skycoin/skycoin
+cd $GOPATH/src/github.com/MDLlife/MDL
 make ARGS="--launch-browser=false" run
 ```
-
-### Docker image
-
-A Dockerfile is available at https://github.com/skycoin/docker-img
 
 ## API Documentation
 
@@ -99,7 +92,7 @@ A Dockerfile is available at https://github.com/skycoin/docker-img
 
 [JSON-RPC 2.0 README](src/api/webrpc/README.md).
 
-### Skycoin command line interface
+### MDL command line interface
 
 [CLI command API](cmd/cli/README.md).
 
