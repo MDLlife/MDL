@@ -8,7 +8,7 @@ export class SkyPipe implements PipeTransform {
     if (value == null || value < 0) {
       return 'loading .. ';
     } else {
-      return (value ? (value / 1000000) : 0) + ' SKY';
+      return (value ? (value / 1000000) : 0) + ' MDL';
     }
   }
 }
