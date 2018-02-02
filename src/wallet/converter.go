@@ -1,11 +1,10 @@
 package wallet
 
 import (
-  // TODO change to MDL's repo, it's for stringer
-	// "github.com/skycoin/skycoin/src/cipher/base58"   
-  
-  // TODO change to MDL's repo
-	"github.com/skycoin/skycoin/src/cipher"                        
+	//It's for stringer
+	// "github.com/MDLlife/MDL/src/cipher/base58"   
+   
+	"github.com/MDLlife/MDL/src/cipher"                        
 	   
  	 "strings"                                                      
 )
