@@ -38,10 +38,10 @@ func MDLAddressFromAddress(ad cipher.Address) MDLAddress {
 }
 
 //  Create new MDL wallet as Skycoin wallet with MDL address
-func NewMDLWallet(wltName string, opts wallet.Options) ([]MDLAddress, error)  {
+func NewMDLWallet(wltName string, opts Options) ([]MDLAddress, error)  {
 	//  for future MDL wallet
 	//opts.Coin = CoinTypeMDL
-	 mdlwal, _ := wallet.NewWallet(wltName, opts)
+	 mdlwal, _ := NewWallet(wltName, opts)
 	 newMDLaddresses := []MDLAddress{}
 	 for i,addr := range mdlwal.GetAddresses() {
 	 	newMDLaddresses[i] = MDLAddressFromAddress(addr)
