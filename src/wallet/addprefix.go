@@ -10,7 +10,7 @@ MDL  address is 3+20+1+4 bytes
 - the next 25 bytes are the Skycoin-type address
 */
 
-// Add MDL  prefix to string address
+// Add MDL prefix to string address
 func AddPrefix(add string) string {
 	mdlAddress := "MDL" + add	
 	return mdlAddress
