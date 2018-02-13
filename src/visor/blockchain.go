@@ -34,7 +34,10 @@ const (
 // are unlikely to occur. DebugLevel2 adds checks for conditions that
 // can only occur through programmer error and malice.
 
-// Note: a droplet is the base coin unit. Each Skycoin is one million droplets
+// Note: a doron is the base coin unit. Each MDL is one million dorons
+// 1000000 dorons = 1 MDL,  1 doron  = 0.000001 MDL
+// 1000   timokhs = 1 MDL,  1 timokh = 0.001 MDL
+// 100    tronens = 1 MDL,  1 tronen = 0.01 MDL
 
 //Termonology:
 // UXTO - unspent transaction outputs

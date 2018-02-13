@@ -44,7 +44,7 @@ func TestNewWallet(t *testing.T) {
 				meta: map[string]string{
 					"label":    "",
 					"filename": "test.wlt",
-					"coin":     "skycoin",
+					"coin":     "MDL",
 					"type":     "deterministic",
 					"seed":     "testseed123",
 				},
@@ -62,7 +62,7 @@ func TestNewWallet(t *testing.T) {
 				meta: map[string]string{
 					"label":    "wallet1",
 					"filename": "test.wlt",
-					"coin":     "skycoin",
+					"coin":     "MDL",
 					"type":     "deterministic",
 					"seed":     "testseed123",
 				},

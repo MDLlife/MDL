@@ -36,6 +36,8 @@ const (
 	// WalletTimestampFormat  wallet timestamp layout
 	WalletTimestampFormat = "2006_01_02"
 
+	// CoinTypeBitcoin bitcoin type
+	CoinTypeMDL CoinType = "MDL"
 	// CoinTypeSkycoin skycoin type
 	CoinTypeSkycoin CoinType = "skycoin"
 	// CoinTypeBitcoin bitcoin type
@@ -80,7 +82,7 @@ func NewWallet(wltName string, opts Options) (*Wallet, error) {
 
 	coin := opts.Coin
 	if coin == "" {
-		coin = CoinTypeSkycoin
+		coin = CoinTypeMDL
 	}
 
 	w := &Wallet{
