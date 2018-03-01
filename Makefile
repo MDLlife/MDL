@@ -23,10 +23,10 @@ PACKAGES = $(shell find ./src -type d -not -path '\./src' \
     							      -not -path '*/testdata*')
 
 run:  ## Run the skycoin node. To add arguments, do 'make ARGS="--foo" run'.
-	go run cmd/skycoin/skycoin.go --gui-dir="./${STATIC_DIR}" ${ARGS}
+	go run cmd/mdl/mdl.go --gui-dir="./${STATIC_DIR}" ${ARGS}
 
 run-help: ## Show skycoin node help
-	@go run cmd/skycoin/skycoin.go --help
+	@go run cmd/mdl/mdl.go --help
 
 test: ## Run tests
 	go test ./cmd/... -timeout=1m
