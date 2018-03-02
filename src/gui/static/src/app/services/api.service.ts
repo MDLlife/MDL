@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import { GetWalletsResponseEntry, GetWalletsResponseWallet, Wallet } from '../app.datatypes';
+import { Address, GetWalletsResponseEntry, GetWalletsResponseWallet, PostWalletNewAddressResponse, Wallet } from '../app.datatypes';
 
 @Injectable()
 export class ApiService {
@@ -12,7 +12,9 @@ export class ApiService {
   private url = 'http://127.0.0.1:8320/'; // production
   // private url = '/api/'; // test
 
-  constructor(private http: Http) { }
+  constructor(
+    private http: Http,
+  ) { }
 
   getWallets(): Observable<Wallet[]> {
     return this.get('wallets').map((response: GetWalletsResponseWallet[]) => {
@@ -35,6 +37,23 @@ export class ApiService {
       });
       return wallets;
     });
+  }
+
+  postWalletCreate(label: string, seed: string, scan: number): Observable<Wallet> {
+    return this.post('wallet/create', { label: label, seed: seed, scan: scan })
+      .map(response => ({
+        label: response.meta.label,
+        filename: response.meta.filename,
+        seed: response.meta.seed,
+        coins: null,
+        hours: null,
+        addresses: [ { address: response.entries[0].address, coins: null, hours: null } ],
+      }))
+  }
+
+  postWalletNewAddress(wallet: Wallet): Observable<Address> {
+    return this.post('wallet/newAddress', { id: wallet.filename })
+      .map((response: PostWalletNewAddressResponse) => ({ address: response.addresses[0], coins: null, hours: null }));
   }
 
   get(url, options = null) {

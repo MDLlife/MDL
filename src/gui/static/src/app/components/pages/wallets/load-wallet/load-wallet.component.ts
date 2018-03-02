@@ -4,18 +4,18 @@ import { WalletService } from '../../../../services/wallet.service';
 import { MdDialogRef } from '@angular/material';
 
 @Component({
-  selector: 'app-create-wallet',
-  templateUrl: './create-wallet.component.html',
-  styleUrls: ['./create-wallet.component.scss']
+  selector: 'app-load-wallet',
+  templateUrl: './load-wallet.component.html',
+  styleUrls: ['./load-wallet.component.scss']
 })
-export class CreateWalletComponent implements OnInit {
+export class LoadWalletComponent implements OnInit {
 
   form: FormGroup;
   seed: string;
   scan: Number;
 
   constructor(
-    public dialogRef: MdDialogRef<CreateWalletComponent>,
+    public dialogRef: MdDialogRef<LoadWalletComponent>,
     private walletService: WalletService,
   ) {}
 
@@ -27,29 +27,20 @@ export class CreateWalletComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  createWallet() {
-    this.walletService.create(this.form.value.label, this.form.value.seed, this.scan)
-      .subscribe(() => this.dialogRef.close());
-  }
-
   generateSeed() {
     this.walletService.generateSeed().subscribe(seed => this.form.controls.seed.setValue(seed));
+  }
+
+  loadWallet() {
+    this.walletService.create(this.form.value.label, this.form.value.seed, this.scan)
+      .subscribe(() => this.dialogRef.close());
   }
 
   private initForm() {
     this.form = new FormGroup({});
     this.form.addControl('label', new FormControl('', [Validators.required]));
     this.form.addControl('seed', new FormControl('', [Validators.required]));
-    this.form.addControl('confirm_seed', new FormControl('', [
-      Validators.compose([Validators.required, this.validateAreEqual.bind(this)])
-    ]));
-
     this.generateSeed();
-
     this.scan = 100;
-  }
-
-  private validateAreEqual(fieldControl: FormControl){
-    return fieldControl.value === this.form.get('seed').value ? null : { NotEqual: true };
   }
 }

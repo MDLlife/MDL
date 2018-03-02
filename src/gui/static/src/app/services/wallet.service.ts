@@ -38,8 +38,11 @@ export class WalletService {
   }
 
   addAddress(wallet: Wallet) {
-    return this.apiService.post('wallet/newAddress', {id: wallet.filename})
-      .map(response => ({ address: response.addresses[0], coins: null, hours: null }));
+    return this.apiService.postWalletNewAddress(wallet)
+      .do(address => {
+        wallet.addresses.push(address);
+        this.refreshBalances();
+      });
   }
 
   all(): Observable<Wallet[]> {
@@ -51,8 +54,9 @@ export class WalletService {
   }
 
   create(label, seed, scan) {
-    return this.apiService.post('wallet/create', {label: label ? label : 'undefined', seed: seed, scan: scan ? scan : 100})
+    return this.apiService.postWalletCreate(label ? label : 'undefined', seed, scan ? scan : 100)
       .do(wallet => {
+        console.log(wallet);
         this.wallets.first().subscribe(wallets => {
           wallets.push(wallet);
           this.wallets.next(wallets);
@@ -182,7 +186,7 @@ export class WalletService {
 
   private retrieveWalletBalance(wallet: Wallet): Observable<any> {
     return Observable.forkJoin(wallet.addresses.map(address => this.retrieveAddressBalance(address).map(balance => {
-      address.coins = balance.confirmed.coins;
+      address.coins = balance.confirmed.coins / 1000000;
       address.hours = balance.confirmed.hours;
       return address;
     })));
