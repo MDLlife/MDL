@@ -1,6 +1,7 @@
-<div class="large-header">
-  <app-top-bar [title]="title"></app-top-bar>
-  <div class="balance-container">
+<div class="-container">
+  <div class="large-header">
+    <app-top-bar [title]="title"></app-top-bar>
+    <div class="balance-container">
       <div class="balance">
         <p class="coins"><span>{{ coins }}</span> MDL</p>
         <!--<p class="dollars">$0.00 ($7.5)</p>-->
@@ -9,4 +10,5 @@
   <div class="hour-balance">
     <p>{{ hours }} MDL Hours</p>
   </div>
+  <app-nav-bar></app-nav-bar>
 </div>
