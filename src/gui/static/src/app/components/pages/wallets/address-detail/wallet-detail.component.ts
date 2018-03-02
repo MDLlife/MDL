@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { WalletService } from '../../../../services/wallet.service';
-import { MdDialog, MdDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { ChangeNameComponent } from '../change-name/change-name.component';
 import { QrCodeComponent } from '../../../layout/qr-code/qr-code.component';
 import { Wallet } from '../../../../app.datatypes';
@@ -15,7 +15,7 @@ export class WalletDetailComponent {
 
   constructor(
     public walletService: WalletService,
-    private dialog: MdDialog,
+    private dialog: MatDialog,
   ) {}
 
   addAddress() {
@@ -23,7 +23,7 @@ export class WalletDetailComponent {
   }
 
   renameWallet() {
-    const config = new MdDialogConfig();
+    const config = new MatDialogConfig();
     config.width = '500px';
     config.data = this.wallet;
     this.dialog.open(ChangeNameComponent, config).afterClosed().subscribe(result => {
@@ -34,7 +34,7 @@ export class WalletDetailComponent {
   }
 
   showQr(address) {
-    const config = new MdDialogConfig();
+    const config = new MatDialogConfig();
     config.data = address;
     this.dialog.open(QrCodeComponent, config);
   }
