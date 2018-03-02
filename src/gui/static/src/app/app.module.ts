@@ -9,18 +9,18 @@ import { CreateWalletComponent } from './components/pages/wallets/create-wallet/
 import { ReactiveFormsModule } from '@angular/forms';
 import { SendSkycoinComponent } from './components/pages/send-skycoin/send-skycoin.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { HistoryComponent } from './components/pages/history/history.component';
+// import { HistoryComponent } from './components/pages/history/history.component';
 import { DateFromNowPipe } from './pipes/date-from-now.pipe';
 import { RouterModule } from '@angular/router';
-import { BreadcrumbComponent } from './components/layout/breadcrumb/breadcrumb.component';
+// import { BreadcrumbComponent } from './components/layout/breadcrumb/breadcrumb.component';
 import { TransactionComponent } from './components/pages/transaction/transaction.component';
-import { BackButtonComponent } from './components/layout/back-button/back-button.component';
+// import { BackButtonComponent } from './components/layout/back-button/back-button.component';
 import { ExplorerComponent } from './components/pages/explorer/explorer.component';
 import { BlockchainService } from './services/blockchain.service';
 import { DateTimePipe } from './pipes/date-time.pipe';
 import { TransactionsAmountPipe } from './pipes/transactions-amount.pipe';
-import { BlockComponent } from './components/pages/block/block.component';
-import { AddressComponent } from './components/pages/address/address.component';
+// import { BlockComponent } from './components/pages/block/block.component';
+// import { AddressComponent } from './components/pages/address/address.component';
 import { PendingTransactionsComponent } from './components/pages/settings/pending-transactions/pending-transactions.component';
 import { OutputsComponent } from './components/pages/settings/outputs/outputs.component';
 import { BlockchainComponent } from './components/pages/settings/blockchain/blockchain.component';
@@ -37,7 +37,7 @@ import { TellerStatusPipe } from './pipes/teller-status.pipe';
 import { HeaderComponent } from './components/layout/header/header.component';
 import { TopBarComponent } from './components/layout/header/top-bar/top-bar.component';
 import { FooterComponent } from './components/layout/footer/footer.component';
-import { WalletShowComponent } from './components/pages/wallet-show/wallet-show.component';
+// import { WalletShowComponent } from './components/pages/wallet-show/wallet-show.component';
 import { LoadWalletComponent } from './components/pages/wallets/load-wallet/load-wallet.component';
 import { TransactionListComponent } from './components/pages/transaction-list/transaction-list.component';
 import { TransactionDetailComponent } from './components/pages/transaction-list/transaction-detail/transaction-detail.component';
@@ -115,18 +115,17 @@ const ROUTES = [
 @NgModule({
   declarations: [
     AppComponent,
-    HistoryComponent,
+    // HistoryComponent,
     WalletsComponent,
-    CreateWalletComponent,
-    SendSkycoinComponent,
-    BreadcrumbComponent,
-    AddressComponent,
-    PendingTransactionsComponent,
+    // CreateWalletComponent,
+    // BreadcrumbComponent,
+    // AddressComponent,
+    // PendingTransactionsComponent,
     AddDepositAddressComponent,
     AppComponent,
-    BackButtonComponent,
+    // BackButtonComponent,
     BackupComponent,
-    BlockComponent,
+    // BlockComponent,
     BlockchainComponent,
     BuyComponent,
     ButtonComponent,
@@ -148,7 +147,7 @@ const ROUTES = [
     TransactionDetailComponent,
     TransactionListComponent,
     TransactionsAmountPipe,
-    WalletShowComponent,
+    // WalletShowComponent,
     WalletsComponent,
     NavBarComponent,
     WalletDetailComponent,
