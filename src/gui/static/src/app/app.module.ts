@@ -69,9 +69,6 @@ const ROUTES = [
   {
     path: 'buy',
     component: BuyComponent,
-    data: {
-      breadcrumb: 'Buy Skycoin',
-    },
   },
   {
     path: 'settings',
@@ -79,37 +76,22 @@ const ROUTES = [
       {
         path: 'backup',
         component: BackupComponent,
-        data: {
-          breadcrumb: 'Backup',
-        },
       },
       {
         path: 'blockchain',
         component: BlockchainComponent,
-        data: {
-          breadcrumb: 'Blockchain',
-        },
       },
       {
         path: 'network',
         component: NetworkComponent,
-        data: {
-          breadcrumb: 'Networking',
-        },
       },
       {
         path: 'outputs',
         component: OutputsComponent,
-        data: {
-          breadcrumb: 'Outputs',
-        },
       },
       {
         path: 'pending-transactions',
         component: PendingTransactionsComponent,
-        data: {
-          breadcrumb: 'Pending transactions',
-        },
       },
     ],
   },
@@ -126,6 +108,7 @@ const ROUTES = [
     AddressComponent,
     PendingTransactionsComponent,
     AddDepositAddressComponent,
+    AppComponent,
     BackButtonComponent,
     BackupComponent,
     BlockComponent,
@@ -133,6 +116,7 @@ const ROUTES = [
     BuyComponent,
     ButtonComponent,
     ChangeNameComponent,
+    CreateWalletComponent,
     DateFromNowPipe,
     DateTimePipe,
     ExplorerComponent,
@@ -141,13 +125,16 @@ const ROUTES = [
     LoadWalletComponent,
     NetworkComponent,
     OutputsComponent,
+    PendingTransactionsComponent,
     QrCodeComponent,
+    SendSkycoinComponent,
     TellerStatusPipe,
     TopBarComponent,
     TransactionDetailComponent,
     TransactionListComponent,
     TransactionsAmountPipe,
     WalletShowComponent,
+    WalletsComponent,
   ],
   entryComponents: [
     AddDepositAddressComponent,
@@ -155,6 +142,7 @@ const ROUTES = [
     ChangeNameComponent,
     LoadWalletComponent,
     QrCodeComponent,
+    SendSkycoinComponent,
     TransactionDetailComponent,
   ],
   imports: [
