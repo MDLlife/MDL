@@ -62,8 +62,8 @@ const ROUTES = [
     component: WalletsComponent,
   },
   {
-    path: 'wallet/:filename',
-    component: WalletShowComponent,
+    path: 'send',
+    component: SendSkycoinComponent,
   },
   {
     path: 'transactions',
@@ -140,6 +140,7 @@ const ROUTES = [
     WalletsComponent,
     NavBarComponent,
     WalletDetailComponent,
+    ModalComponent,
   ],
   entryComponents: [
     AddDepositAddressComponent,

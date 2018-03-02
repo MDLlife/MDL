@@ -10,7 +10,6 @@ import { Wallet } from '../../../../app.datatypes';
   styleUrls: ['./change-name.component.css']
 })
 export class ChangeNameComponent implements OnInit {
-
   form: FormGroup;
 
   constructor(
