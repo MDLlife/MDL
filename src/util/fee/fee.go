@@ -8,7 +8,7 @@ import (
 
 const (
 	// BurnFactor inverse fraction of coinhours that must be burned
-	BurnFactor uint64 = 2
+	BurnFactor uint64 = 1550 //MDL
 )
 
 var (
