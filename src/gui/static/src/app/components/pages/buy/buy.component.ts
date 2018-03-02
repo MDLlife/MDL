@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { PurchaseService } from '../../../services/purchase.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AddDepositAddressComponent } from './add-deposit-address/add-deposit-address.component';
-import { config } from '../../../app.config';
+import { AppConfig } from '../../../app.config';
 
 @Component({
   selector: 'app-buy',
@@ -18,7 +18,7 @@ export class BuyComponent {
     public purchaseService: PurchaseService,
     private dialog: MatDialog,
   ) {
-    this.otcEnabled = config.otcEnabled;
+    this.otcEnabled = AppConfig.otcEnabled;
   }
 
   addDepositAddress() {

@@ -27,6 +27,7 @@ export class LoadWalletComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  // ???
   generateSeed() {
     this.walletService.generateSeed().subscribe(seed => this.form.controls.seed.setValue(seed));
   }
@@ -40,7 +41,7 @@ export class LoadWalletComponent implements OnInit {
     this.form = new FormGroup({});
     this.form.addControl('label', new FormControl('', [Validators.required]));
     this.form.addControl('seed', new FormControl('', [Validators.required]));
-    this.generateSeed();
+    this.generateSeed(); // ???
     this.scan = 100;
   }
 }
