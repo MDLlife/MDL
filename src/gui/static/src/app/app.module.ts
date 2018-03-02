@@ -11,10 +11,8 @@ import { HttpModule } from '@angular/http';
 import { ApiService } from './services/api.service';
 import { WalletService } from './services/wallet.service';
 import { WalletsComponent } from './components/pages/wallets/wallets.component';
-import { WalletDetailComponent } from './components/pages/wallets/address-detail/wallet-detail.component';
 import { CreateWalletComponent } from './components/pages/wallets/create-wallet/create-wallet.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SkyPipe } from './pipes/sky.pipe';
 import { SendSkycoinComponent } from './components/pages/send-skycoin/send-skycoin.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { HistoryComponent } from './components/pages/history/history.component';
@@ -47,6 +45,7 @@ import { TopBarComponent } from './components/layout/header/top-bar/top-bar.comp
 import { FooterComponent } from './components/layout/footer/footer.component';
 import { WalletShowComponent } from './components/pages/wallet-show/wallet-show.component';
 import { LoadWalletComponent } from './components/pages/wallets/load-wallet/load-wallet.component';
+import { TransactionListComponent } from './components/pages/transaction-list/transaction-list.component';
 
 const ROUTES = [
   {
@@ -57,72 +56,14 @@ const ROUTES = [
   {
     path: 'wallets',
     component: WalletsComponent,
-    data: {
-      breadcrumb: 'Wallets',
-    },
   },
   {
     path: 'wallet/:filename',
     component: WalletShowComponent,
   },
   {
-    path: 'send',
-    component: SendSkycoinComponent,
-    data: {
-      breadcrumb: 'Send Skycoin',
-    },
-  },
-  {
-    path: 'history',
-    children: [
-      {
-        path: '',
-        component: HistoryComponent,
-        data: {
-          breadcrumb: 'History',
-        },
-      },
-      {
-        path: ':transaction',
-        component: TransactionComponent,
-        data: {
-          breadcrumb: 'Transaction',
-        },
-      },
-    ],
-  },
-  {
-    path: 'explorer',
-    children: [
-      {
-        path: '',
-        component: ExplorerComponent,
-        data: {
-          breadcrumb: 'Explorer',
-        },
-      },
-      {
-        path: 'address/:address',
-        component: AddressComponent,
-        data: {
-          breadcrumb: 'Address',
-        },
-      },
-      {
-        path: ':block',
-        component: BlockComponent,
-        data: {
-          breadcrumb: 'Block',
-        },
-      },
-      {
-        path: 'transaction/:transaction',
-        component: TransactionComponent,
-        data: {
-          breadcrumb: 'Transaction',
-        },
-      },
-    ],
+    path: 'transactions',
+    component: TransactionListComponent,
   },
   {
     path: 'buy',
@@ -178,26 +119,22 @@ const ROUTES = [
     AppComponent,
     HistoryComponent,
     WalletsComponent,
-    WalletDetailComponent,
     CreateWalletComponent,
-    SkyPipe,
     SendSkycoinComponent,
-    DateFromNowPipe,
     BreadcrumbComponent,
-    TransactionComponent,
-    BackButtonComponent,
-    ExplorerComponent,
-    DateTimePipe,
-    TransactionsAmountPipe,
-    BlockComponent,
     AddressComponent,
     PendingTransactionsComponent,
     AddDepositAddressComponent,
+    BackButtonComponent,
     BackupComponent,
+    BlockComponent,
     BlockchainComponent,
     BuyComponent,
     ButtonComponent,
     ChangeNameComponent,
+    DateFromNowPipe,
+    DateTimePipe,
+    ExplorerComponent,
     FooterComponent,
     HeaderComponent,
     LoadWalletComponent,
@@ -206,6 +143,9 @@ const ROUTES = [
     QrCodeComponent,
     TellerStatusPipe,
     TopBarComponent,
+    TransactionComponent,
+    TransactionListComponent,
+    TransactionsAmountPipe,
     WalletShowComponent,
   ],
   entryComponents: [
@@ -214,6 +154,7 @@ const ROUTES = [
     ChangeNameComponent,
     LoadWalletComponent,
     QrCodeComponent,
+    TransactionListComponent,
   ],
   imports: [
     BrowserModule,
