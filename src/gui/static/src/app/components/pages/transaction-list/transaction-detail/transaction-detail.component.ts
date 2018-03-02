@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { MD_DIALOG_DATA, MdDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Transaction } from '../../../../app.datatypes';
 
 @Component({
@@ -12,8 +12,8 @@ export class TransactionDetailComponent implements OnInit, OnDestroy {
   price: number;
 
   constructor(
-    @Inject(MD_DIALOG_DATA) public transaction: Transaction,
-    public dialogRef: MdDialogRef<TransactionDetailComponent>,
+    @Inject(MAT_DIALOG_DATA) public transaction: Transaction,
+    public dialogRef: MatDialogRef<TransactionDetailComponent>,
   ) {}
 
   ngOnInit() {

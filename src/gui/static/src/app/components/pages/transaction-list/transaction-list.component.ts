@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WalletService } from '../../../services/wallet.service';
 import { Subscription } from 'rxjs/Subscription';
-import { MdDialog, MdDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
 import { Transaction } from '../../../app.datatypes';
 
@@ -16,7 +16,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   private priceSubscription: Subscription;
 
   constructor(
-    private dialog: MdDialog,
+    private dialog: MatDialog,
     private walletService: WalletService,
   ) { }
 
@@ -29,7 +29,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   }
 
   showTransaction(transaction: Transaction) {
-    const config = new MdDialogConfig();
+    const config = new MatDialogConfig();
     config.width = '566px';
     config.data = transaction;
     this.dialog.open(TransactionDetailComponent, config).afterClosed().subscribe();
