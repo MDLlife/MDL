@@ -98,17 +98,11 @@ export class WalletService {
   }
 
   renameWallet(wallet: Wallet, label: string): Observable<Wallet> {
-    return this.apiService.post('wallet/update', { id: wallet.filename, label: label });
-  }
-
-  retrieveUpdatedTransactions(transactions) {
-    return Observable.forkJoin((transactions.map(transaction => {
-      return this.apiService.get('transaction', { txid: transaction.id }).map(response => {
-        response.amount = transaction.amount;
-        response.address = transaction.address;
-        return response;
+    return this.apiService.post('wallet/update', { id: wallet.filename, label: label })
+      .do(() => {
+        wallet.label = label;
+        this.updateWallet(wallet)
       });
-    })));
   }
 
   sendSkycoin(wallet: Wallet, address: string, amount: number) {
@@ -184,5 +178,13 @@ export class WalletService {
       address.hours = balance.confirmed.hours;
       return address;
     })));
+  }
+
+  private updateWallet(wallet: Wallet) {
+    this.wallets.first().subscribe(wallets => {
+      const index = wallets.findIndex(w => w.seed === wallet.seed);
+      wallets[index] = wallet;
+      this.wallets.next(wallets);
+    });
   }
 }

@@ -24,6 +24,10 @@ export class ChangeNameComponent implements OnInit {
     this.initForm();
   }
 
+  closePopup() {
+    this.dialogRef.close();
+  }
+
   rename() {
     this.walletService.renameWallet(this.data, this.form.value.label)
       .subscribe(() => this.dialogRef.close(this.form.value.label));

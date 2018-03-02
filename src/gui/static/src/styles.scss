@@ -33,6 +33,9 @@
 $mat-font-family: Poppins, sans-serif;
 $white: #FBFBFB;
 
+$primary-color: #0072ff;
+$secondary-color: #ffc125;
+
 body, div, h1, h2, h3, h4, h5, h6, p, span, a, button, option, select,
 md-panel-description, md-panel-title, md-option.mat-option {
   font-family: $mat-font-family;
@@ -166,6 +169,26 @@ md-panel-title {
   background: -moz-linear-gradient(bottom right, $gradient-blue-dark, $gradient-blue-light); /* For Firefox 3.6 to 15 */
   background: linear-gradient(to bottom right, $gradient-blue-dark, $gradient-blue-light); /* Standard syntax */
   color: white;
+}
+
+/**
+General Helpers
+ */
+
+.primary-color {
+  color: $primary-color;
+}
+
+.secondary-color {
+  color: $secondary-color;
+}
+
+.no-opacity {
+  opacity: 1 !important;
+}
+
+.light-opacity {
+  opacity: 0.2
 }
 
 .rotate-90 {
