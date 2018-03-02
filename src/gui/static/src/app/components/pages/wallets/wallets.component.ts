@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { WalletService } from '../../../services/wallet.service';
 import { MdDialog, MdDialogConfig } from '@angular/material';
 import { CreateWalletComponent } from './create-wallet/create-wallet.component';
-import { WalletModel } from '../../../models/wallet.model';
-import { ChangeNameComponent } from './change-name/change-name.component';
+import { Wallet } from '../../../app.datatypes';
 
 @Component({
   selector: 'app-wallets',
@@ -29,7 +28,7 @@ export class WalletsComponent {
     // to be implemented
   }
 
-  openWallet() {
-    // to be implemented
+  openWallet(wallet: Wallet) {
+    //
   }
 }
