@@ -47,6 +47,7 @@ import { WalletShowComponent } from './components/pages/wallet-show/wallet-show.
 import { LoadWalletComponent } from './components/pages/wallets/load-wallet/load-wallet.component';
 import { TransactionListComponent } from './components/pages/transaction-list/transaction-list.component';
 import { TransactionDetailComponent } from './components/pages/transaction-list/transaction-detail/transaction-detail.component';
+import { NavBarComponent } from './components/layout/header/nav-bar/nav-bar.component';
 
 const ROUTES = [
   {
@@ -135,6 +136,7 @@ const ROUTES = [
     TransactionsAmountPipe,
     WalletShowComponent,
     WalletsComponent,
+    NavBarComponent,
   ],
   entryComponents: [
     AddDepositAddressComponent,

@@ -1,15 +1,12 @@
-<div class="small-header" *ngIf="!showLargeHeader">
-  <app-top-bar [title]="title"></app-top-bar>
-</div>
-<div class="large-header" *ngIf="showLargeHeader">
+<div class="large-header">
   <app-top-bar [title]="title"></app-top-bar>
   <div class="balance-container">
       <div class="balance">
-        <p class="coins"><span>{{ this.coins }}</span> MDL</p>
+        <p class="coins"><span>{{ coins }}</span> MDL</p>
         <!--<p class="dollars">$0.00 ($7.5)</p>-->
       </div>
     </div>
   <div class="hour-balance">
-    <p>{{ this.hours }} MDL Hours</p>
+    <p>{{ hours }} MDL Hours</p>
   </div>
 </div>
