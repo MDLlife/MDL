@@ -1,13 +1,14 @@
 <md-toolbar color="primary" id="top-menu">
+  <span *ngIf="loading()" class="syncing">
+    Syncing blocks {{ current && highest ?  '(' + current + '/'  + highest + ')' : '..' }}
+  </span>
+  <span *ngIf="!loading()">{{ walletService.sum() | async | sky }}</span>
+  <span class="fill-remaining-space"></span>
   <img src="/assets/logo-white.png" class="logo">
   <!--<span><app-breadcrumb></app-breadcrumb></span>-->
   <!-- This fills the remaining space of the current row -->
   <span class="fill-remaining-space"></span>
 
-  <span *ngIf="loading()" class="syncing">
-    Syncing blocks {{ current && highest ?  '(' + current + '/'  + highest + ')' : '..' }}
-  </span>
-  <span *ngIf="!loading()">{{ walletService.sum() | async | sky }}</span>
   <md-menu #settingsMenu="mdMenu">
     <button md-menu-item [disabled]="true"> Version {{ version }} </button>
     <button md-menu-item [routerLink]="['/settings/network']"> Networking </button>
@@ -17,7 +18,9 @@
     <button md-menu-item [routerLink]="['/settings/backup']"> Back-up wallet </button>
   </md-menu>
 
-  <button md-button [mdMenuTriggerFor]="settingsMenu">Settings</button>
+  <button md-button [mdMenuTriggerFor]="settingsMenu">
+    <md-icon md-font-icon="mdl-icon-explorer"></md-icon>
+  </button>
 </md-toolbar>
 <md-toolbar class="main-menu">
   <button md-button [routerLink]="['/wallets']" routerLinkActive="active">Wallets</button>

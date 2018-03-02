@@ -1,4 +1,11 @@
-$white: #FBFBFB;
+$grapePurple: #33144a;
+$eggplant: #1d082d;
+
+$white: #ffffff;
+$paleGrey: #f8f9fb;
+$silver: #eceded;
+$warmGrey: #8c8c8c;
+
 
 md-card {
   max-width: 1000px;
@@ -51,10 +58,10 @@ md-toolbar span {
 }
 
 .mat-toolbar {
-  background: #673290;
+  background: $white;
 }
 .mat-primary {
-  background-color: #673290;
+  background-color: $grapePurple;
 }
 .mat-button {
   color: #fff;
