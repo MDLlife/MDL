@@ -1,18 +1,34 @@
 @import '../../../../theme/_variables';
 
+:host {
+  display: inline-block;
+
+  &:not([class*=last-child]) {
+    margin-right: 5px;
+  }
+}
+
 button {
-  border-radius: 25px;
-  height: 50px;
-  margin: 20px 10px;
-  width: 160px;
-}
-
-button.enabled {
-  background-color: rgba(30, 34, 39, 0.05);
+  border-radius: 5px;
   box-shadow: none;
-  color: #1e2227;
+
+  &.primary {
+    border: 1px solid $purple-pink;
+  }
+
+  &.secondary {
+    background-color: $white;
+    color: $purple;
+    border: 1px solid $purple;
+  }
 }
 
+button[disabled] {
+  &.primary {
+    background-color: $purple-pink;
+    color: rgba($white, 0.5);
+  }
+}
 
 mat-icon {
   margin-left: 10px;

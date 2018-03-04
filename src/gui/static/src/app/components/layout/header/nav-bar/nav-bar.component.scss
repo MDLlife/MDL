@@ -2,6 +2,9 @@
 
 :host {
   background: $white;
+  border-bottom: 1px solid $grey-silver;
+  display: flex;
+  margin-bottom: 32px;
 }
 
 .mat-tab-nav-bar {
@@ -20,7 +23,6 @@
 
 .mat-tab-link {
   color: $purple-dark;
-  font-weight: bold;
   height: 67px;
   min-width: auto;
   padding: 0 22px;

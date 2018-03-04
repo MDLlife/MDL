@@ -12,8 +12,8 @@
 // hue.
 
 $mat-mdl-primary: (
-        100: #00C3FF,
-        500: $purple,
+        100: $purple,
+        500: $purple-dark,
         contrast: (
                 100: white,
                 500: white,
@@ -21,10 +21,57 @@ $mat-mdl-primary: (
 );
 
 $mat-mdl-accent: (
-        500: #FFC125,
+        500: $purple-pink,
         contrast: (
                 500: white
         )
+);
+
+$dark-primary-text: $purple-dark;
+$dark-secondary-text: $grey-warm;
+$dark-disabled-text: rgba(black, 0.38);
+$dark-dividers: rgba(black, 0.12);
+$dark-focused: rgba(black, 0.12);
+$light-primary-text: white;
+$light-secondary-text: rgba(white, 0.7);
+$light-disabled-text: rgba(white, 0.5);
+$light-dividers: rgba(white, 0.12);
+$light-focused: rgba(white, 0.12);
+
+// Background palette for light themes.
+$mat-light-theme-background: (
+        status-bar: map_get($mat-grey, 300),
+        app-bar:    map_get($mat-grey, 100),
+        background: map_get($mat-grey, 50),
+        hover:      rgba(black, 0.04),
+        card:       white,
+        dialog:     white,
+        disabled-button: rgba(black, 0.12),
+        raised-button: white,
+        focused-button: $dark-focused,
+        selected-button: map_get($mat-grey, 300),
+        selected-disabled-button: map_get($mat-grey, 400),
+        disabled-button-toggle: map_get($mat-grey, 200),
+        unselected-chip: map_get($mat-grey, 300),
+        disabled-list-option: map_get($mat-grey, 200),
+);
+
+// Foreground palette for light themes.
+$mat-light-theme-foreground: (
+        base:              black,
+        divider:           $dark-dividers,
+        dividers:          $dark-dividers,
+        disabled:          $dark-disabled-text,
+        disabled-button:   rgba(black, 0.26),
+        disabled-text:     $dark-disabled-text,
+        hint-text:         $dark-disabled-text,
+        secondary-text:    $dark-secondary-text,
+        icon:              rgba(black, 0.54),
+        icons:             rgba(black, 0.54),
+        text:              $purple-dark,
+        slider-min:        rgba(black, 0.87),
+        slider-off:        rgba(black, 0.26),
+        slider-off-active: rgba(black, 0.38),
 );
 
 $candy-app-primary: mat-palette($mat-mdl-primary, 500, 100, 500);
@@ -40,8 +87,20 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 // `headlines` and `body-1` levels.
 $mdl-typography: mat-typography-config(
         $font-family: "'Open Sans', sans-serif",
-        $headline: mat-typography-level(32px, 48px, 700),
-        $body-1: mat-typography-level(16px, 24px, 500)
+        $display-4:     mat-typography-level(112px, 112px, 300),
+        $display-3:     mat-typography-level(56px, 56px, 400),
+        $display-2:     mat-typography-level(45px, 48px, 400),
+        $display-1:     mat-typography-level(34px, 40px, 400),
+        $headline:      mat-typography-level(24px, 32px, 400),
+        $title:         mat-typography-level(20px, 32px, 600),
+        $subheading-2:  mat-typography-level(16px, 28px, 400),
+        $subheading-1:  mat-typography-level(16px, 24px, 400),
+        $body-2:        mat-typography-level(16px, 24px, 600),
+        $body-1:        mat-typography-level(16px, 20px, 400),
+        $caption:       mat-typography-level(12px, 20px, 400),
+        $button:        mat-typography-level(16px, 16px, 600),
+                // Line-height must be unit-less fraction of the font-size.
+        $input:         mat-typography-level(inherit, 1.125, 400)
 );
 
 // Override typography CSS classes (e.g., mat-h1, mat-display-1, mat-typography, etc.).
@@ -60,3 +119,23 @@ $mdl-typography: mat-typography-config(
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($candy-app-theme);
+
+
+.mat-expansion-indicator::after {
+  border-width: 0 !important;
+  padding: 0 !important;
+  transform: rotate(0deg) !important;
+  vertical-align: middle !important;
+
+  width: 0;
+  height: 0;
+  border-color: $purple-heather;
+  border-left: 6px solid transparent !important;
+  border-right: 6px solid transparent !important;
+
+  border-top: 6px solid $purple-heather !important;
+}
+
+.mat-list .mat-subheader, .mat-nav-list .mat-subheader, .mat-selection-list .mat-subheader {
+  color: $purple;
+}

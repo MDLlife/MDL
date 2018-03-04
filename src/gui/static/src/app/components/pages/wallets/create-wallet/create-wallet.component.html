@@ -1,4 +1,4 @@
-<app-modal title="Create Wallet" [dialog]="dialogRef">
+<app-modal [dialog]="dialogRef">
   <div [formGroup]="form">
     <div class="form-field">
       <label for="label">Name</label>
@@ -13,11 +13,11 @@
       <textarea formControlName="confirm_seed" id="confirm_seed" row="2"></textarea>
     </div>
   </div>
-  <div class="-buttons">
-    <app-button (action)="closePopup()">
+  <div class="button-line">
+    <app-button (action)="closePopup()" [class]="'secondary'">
       Cancel
     </app-button>
-    <app-button (action)="createWallet()" class="primary" [disabled]="!form.valid">
+    <app-button (action)="createWallet()" [class]="'primary'" class="last-child" [disabled]="!form.valid">
       Create
     </app-button>
   </div>
