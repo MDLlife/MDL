@@ -60,7 +60,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
 
@@ -184,7 +184,7 @@ const ROUTES = [
     MatToolbarModule,
     MatTooltipModule,
     NgxDatatableModule,
-    NoopAnimationsModule,
+    BrowserAnimationsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
   ],
@@ -197,7 +197,4 @@ const ROUTES = [
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-  constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer){
-    matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/mdi.svg')); // Or whatever path you placed mdi.svg at
-}
+export class AppModule { }
