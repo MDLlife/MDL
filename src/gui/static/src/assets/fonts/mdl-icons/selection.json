@@ -163,7 +163,7 @@
       "showMetadata": true,
       "showVersion": true,
       "selector": "class",
-      "classSelector": ".swk-icon",
+      "classSelector": ".mdl-icon",
       "noie8": true,
       "ie7": false,
       "autoHost": true,
@@ -172,15 +172,16 @@
       "cssVarsFormat": "scss"
     },
     "imagePref": {
-      "prefix": "swk-",
+      "prefix": "",
       "png": false,
       "useClassSelector": true,
       "color": 0,
       "bgColor": 16777215,
       "classSelector": ".icon",
-      "height": 32,
+      "height": 24,
       "columns": 16,
-      "margin": 16
+      "margin": 16,
+      "overrideSize": true
     },
     "historySize": 50,
     "showCodes": false,

@@ -1,13 +1,16 @@
+@import "variables";
+
 @font-face {
   font-family: 'mdl-icons';
   src:
-    local('MDL Icons'), local('MDL-Icons'), url('assets/fonts/mdl-icons/mdl-icons.woff') format('woff'),
-    url('assets/fonts/mdl-icons/mdl-icons.svg#mdl-icons') format('svg');
+    url('#{$icomoon-font-path}/mdl-icons.ttf') format('truetype'),
+    url('#{$icomoon-font-path}/mdl-icons.woff') format('woff'),
+    url('#{$icomoon-font-path}/mdl-icons.svg#mdl-icons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
-.swk-icon {
+.mdl-icon {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'mdl-icons' !important;
   speak: none;
@@ -22,19 +25,33 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.mdl-icon-wallet:before {
-  content: "\e900";
+@function unicode($str) {
+  @return unquote("\"") + $str + unquote("\"");
 }
-.mdl-icon-settings:before {
-  content: "\e901";
+
+.mdl-icon-wallet {
+  &:before {
+    content: unicode($mdl-icon-wallet); 
+  }
 }
-.mdl-icon-send:before {
-  content: "\e902";
+.mdl-icon-settings {
+  &:before {
+    content: unicode($mdl-icon-settings); 
+  }
 }
-.mdl-icon-history:before {
-  content: "\e903";
+.mdl-icon-send {
+  &:before {
+    content: unicode($mdl-icon-send); 
+  }
 }
-.mdl-icon-explorer:before {
-  content: "\e904";
+.mdl-icon-history {
+  &:before {
+    content: unicode($mdl-icon-history); 
+  }
+}
+.mdl-icon-explorer {
+  &:before {
+    content: unicode($mdl-icon-explorer); 
+  }
 }
 
