@@ -18,10 +18,10 @@
     </div>
   </ng-container>
   <div class="action-buttons">
-    <button md-button (click)="newAddress()">
+    <button mat-button (click)="newAddress()">
       <img src="../../../../assets/img/load-gold.png"> New Address
     </button>
-    <button md-button (click)="toggleEmpty()">
+    <button mat-button (click)="toggleEmpty()">
       <ng-container *ngIf="!wallet || !wallet.hideEmpty"><img src="../../../../assets/img/minus-red.png"> Hide Empty</ng-container>
       <ng-container *ngIf="wallet && wallet.hideEmpty"><img src="../../../../assets/img/plus-gold.png"> Show Empty</ng-container>
     </button>
