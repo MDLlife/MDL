@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-go build
-mv cli $GOPATH/bin/mdl-cli
+go build -o $GOPATH/bin/mdl-cli .

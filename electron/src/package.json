@@ -4,6 +4,7 @@
   "description": "MDLlife wallet",
   "dependencies": {
     "electron-debug": "^1.0.1",
-    "electron-log": "^1.2.2"
+    "electron-log": "^1.2.2",
+    "electron-context-menu": "^0.9.1"
   }
 }
