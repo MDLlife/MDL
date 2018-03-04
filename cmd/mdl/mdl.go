@@ -634,7 +634,7 @@ func Run(c *Config) {
 		}
 	}
 
-	// POTENTIALLY UNSAFE CODE -- See https://github.com/skycoin/skycoin/issues/838
+	// POTENTIALLY UNSAFE CODE -- See https://github.com/mdllife/mdl/issues/838
 	// closelog, err := initLogging(c.DataDirectory, c.LogLevel, c.ColorLog, c.Logtofile, c.Logtogui, &d.LogBuff)
 	// if err != nil {
 	// 	fmt.Println(err)

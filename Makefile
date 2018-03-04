@@ -28,10 +28,10 @@ BUILDLIB_DIR = $(BUILD_DIR)/skycoinlib
 LIB_DIR = lib
 
 run:  ## Run the skycoin node. To add arguments, do 'make ARGS="--foo" run'.
-	go run cmd/skycoin/skycoin.go --gui-dir="./${STATIC_DIR}" ${ARGS}
+	go run cmd/mdllife/mdl.go --gui-dir="./${STATIC_DIR}" ${ARGS}
 
 run-help: ## Show skycoin node help
-	@go run cmd/skycoin/skycoin.go --help
+	@go run cmd/mdllife/mdl.go --help
 
 test: ## Run tests
 	go test ./cmd/... -timeout=1m
@@ -74,9 +74,9 @@ install-linters: ## Install linters
 	gometalinter --vendored-linters --install
 
 format:  # Formats the code. Must have goimports installed (use make install-linters).
-	goimports -w -local github.com/skycoin/skycoin ./cmd
-	goimports -w -local github.com/skycoin/skycoin ./src
-	goimports -w -local github.com/skycoin/skycoin ./lib
+	goimports -w -local github.com/mdllife/mdl ./cmd
+	goimports -w -local github.com/mdllife/mdl ./src
+	goimports -w -local github.com/mdllife/mdl ./lib
 
 release: ## Build electron apps, the builds are located in electron/release folder.
 	cd $(ELECTRON_DIR) && ./build.sh

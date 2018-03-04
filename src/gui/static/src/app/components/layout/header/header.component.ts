@@ -93,7 +93,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private retrieveReleaseVersion() {
-    this.http.get('https://api.github.com/repos/skycoin/skycoin/tags')
+    this.http.get('https://api.github.com/repos/mdllife/mdl/tags')
       .map((res: any) => res.json())
       .catch((error: any) => Observable.throw(error || 'Unable to fetch latest release version from github.'))
       .subscribe(response =>  {
