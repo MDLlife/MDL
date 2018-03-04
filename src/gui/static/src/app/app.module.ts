@@ -8,6 +8,7 @@ import { WalletsComponent } from './components/pages/wallets/wallets.component';
 import { CreateWalletComponent } from './components/pages/wallets/create-wallet/create-wallet.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SendSkycoinComponent } from './components/pages/send-skycoin/send-skycoin.component';
+import { SkyPipe } from './pipes/sky.pipe';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 // import { HistoryComponent } from './components/pages/history/history.component';
 import { DateFromNowPipe } from './pipes/date-from-now.pipe';
@@ -143,6 +144,7 @@ const ROUTES = [
     PendingTransactionsComponent,
     QrCodeComponent,
     SendSkycoinComponent,
+    SkyPipe,
     TellerStatusPipe,
     TopBarComponent,
     TransactionDetailComponent,
@@ -195,6 +197,6 @@ const ROUTES = [
     PurchaseService,
     WalletService,
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,36 +1,28 @@
 @import '../../../../../theme/variables';
 
 :host {
-  background-color: #fbfbfb;
-  min-height: 66px;
+  background: $white;
 }
 
-.-buttons {
-  display: flex;
-  width: 100%;
+.mat-tab-nav-bar {
+    //padding-left: 28pt;
+    border-bottom: none;
 
-  .-button {
-    cursor: pointer;
-    padding: 0 20px;
-
-    img {
-      display: inline-block;
-      float: left;
-      height: 66px;
-      padding: 17px 0;
-      width: 32px;
-    }
-
-    span {
-      display: inline-block;
-      font-size: 14px;
-      height: 66px;
-      line-height: 66px;
-      margin: 0 5px;
+    .mat-tab-link:focus {
+      background-color: transparent;
     }
   }
 
-  .-low-opacity {
-    opacity: 0.2;
-  }
+.mdl-icon {
+  font-size: 24px;
+  margin-right: 8px;
+}
+
+.mat-tab-link {
+  color: $purple-dark;
+  font-weight: bold;
+  height: 67px;
+  min-width: auto;
+  padding: 0 22px;
+  opacity: 0.5;
 }

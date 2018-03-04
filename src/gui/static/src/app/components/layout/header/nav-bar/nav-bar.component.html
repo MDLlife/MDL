@@ -1,21 +1,16 @@
 <div class="container">
-  <div class="-buttons">
-    <div class="-button -low-opacity" routerLink="/wallets" routerLinkActive="no-opacity">
-      <img src="../../../../../assets/img/wallet-black.png">
-      <span>Wallets</span>
-    </div>
-    <div class="-button -low-opacity" routerLink="/send" routerLinkActive="no-opacity">
-      <img src="../../../../../assets/img/send-black.png">
-      <span>Send</span>
-    </div>
-    <div class="-button -low-opacity" routerLink="/transactions" routerLinkActive="no-opacity">
-      <img src="../../../../../assets/img/transactions-black.png">
-      <span>History</span>
-    </div>
-    <div class="flex-fill"></div>
-    <div class="-button">
-      <img src="../../../../../assets/img/money-gold.png">
-      <span class="secondary-color">Buy MDLlife</span>
-    </div>
-  </div>
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link  class="low-opacity" routerLink="/wallets"  #rlaWallets="routerLinkActive" [active]="rlaWallets.isActive" routerLinkActive="no-opacity">
+      <mat-icon fontSet="mdl" fontIcon="mdl-icon-wallet"></mat-icon>Wallet
+    </a>
+    <a mat-tab-link  class="low-opacity" routerLink="/send"  #rlaSend="routerLinkActive" [active]="rlaSend.isActive" routerLinkActive="no-opacity">
+      <mat-icon fontSet="mdl" fontIcon="mdl-icon-send"></mat-icon>Send
+    </a>
+    <a mat-tab-link  class="low-opacity" routerLink="/history"  #rlaHistory="routerLinkActive" [active]="rlaHistory.isActive" routerLinkActive="no-opacity">
+      <mat-icon fontSet="mdl" fontIcon="mdl-icon-history"></mat-icon>History
+    </a>
+    <a mat-tab-link  class="low-opacity" routerLink="/explore"  #rlaExplore="routerLinkActive" [active]="rlaExplore.isActive" routerLinkActive="no-opacity">
+      <mat-icon fontSet="mdl" fontIcon="mdl-icon-explorer"></mat-icon>Explore
+    </a>
+  </nav>
 </div>
