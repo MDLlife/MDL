@@ -90,7 +90,7 @@ fi
 echo "shutting down mdl node"
 
 # Shutdown mdl node
-kill -s SIGINT $MDL_PID
+kill -9 SIGINT $MDL_PID
 wait $MDL_PID
 
 rm "$BINARY"
