@@ -25,10 +25,10 @@ import (
 const (
 	Version           = "0.20.3"
 	walletExt         = ".wlt"
-	defaultCoin       = "skycoin"
+	defaultCoin       = "mdl"
 	defaultWalletName = "$COIN_cli" + walletExt
 	defaultWalletDir  = "$HOME/.$COIN/wallets"
-	defaultRpcAddress = "127.0.0.1:6430"
+	defaultRpcAddress = "127.0.0.1:8330"
 )
 
 var (

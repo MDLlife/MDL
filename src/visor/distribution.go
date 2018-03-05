@@ -4,7 +4,7 @@ import "github.com/MDLlife/MDL/src/coin"
 
 const (
 	// Maximum supply of skycoins
-	MaxCoinSupply uint64 = 1e9 // 100,000,000 million
+	MaxCoinSupply uint64 = 1e9 // 1,000,000,000
 
 	// Number of distribution addresses
 	DistributionAddressesTotal uint64 = 100
@@ -12,10 +12,10 @@ const (
 	DistributionAddressInitialBalance uint64 = MaxCoinSupply / DistributionAddressesTotal
 
 	// Initial number of unlocked addresses
-	InitialUnlockedCount uint64 = 100
+	InitialUnlockedCount uint64 = 56
 
 	// Number of addresses to unlock per unlock time interval
-	UnlockAddressRate uint64 = 5
+	UnlockAddressRate uint64 = 24
 
 	// Unlock time interval, measured in seconds
 	// Once the InitialUnlockedCount is exhausted,
@@ -30,7 +30,7 @@ func init() {
 }
 
 // Returns a copy of the hardcoded distribution addresses array.
-// Each address has 1,000,000 coins. There are 100 addresses.
+// Each address has 10,000,000 coins. There are 100 addresses.
 func GetDistributionAddresses() []string {
 	addrs := make([]string, len(distributionAddresses))
 	for i := range distributionAddresses {
@@ -41,7 +41,7 @@ func GetDistributionAddresses() []string {
 
 // Returns distribution addresses that are unlocked, i.e. they have spendable outputs
 func GetUnlockedDistributionAddresses() []string {
-	// The first InitialUnlockedCount (25) addresses are unlocked by default.
+	// The first InitialUnlockedCount (100) addresses are unlocked by default.
 	// Subsequent addresses will be unlocked at a rate of UnlockAddressRate (5) per year,
 	// after the InitialUnlockedCount (25) addresses have no remaining balance.
 	// The unlock timer will be enabled manually once the
