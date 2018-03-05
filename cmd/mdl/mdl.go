@@ -710,30 +710,30 @@ func Run(c *Config) {
 	}
 
 	/*
-time.Sleep(5)
-tx := InitTransaction()
-_ = tx
-err, _ = d.Visor.Visor.InjectTransaction(tx)
-if err != nil {
-   log.Panic(err)
-}
-*/
+		time.Sleep(5)
+		tx := InitTransaction()
+		_ = tx
+		err, _ = d.Visor.Visor.InjectTransaction(tx)
+		if err != nil {
+		   log.Panic(err)
+		}
+	*/
 
 	/*
-//first transaction
-if c.RunMaster == true {
-   go func() {
-	   for d.Visor.Visor.Blockchain.Head().Seq() < 2 {
-		   time.Sleep(5)
-		   tx := InitTransaction()
-		   err, _ := d.Visor.Visor.InjectTransaction(tx)
-		   if err != nil {
-			   //log.Panic(err)
-		   }
-	   }
-   }()
-}
-*/
+		//first transaction
+		if c.RunMaster == true {
+		   go func() {
+			   for d.Visor.Visor.Blockchain.Head().Seq() < 2 {
+				   time.Sleep(5)
+				   tx := InitTransaction()
+				   err, _ := d.Visor.Visor.InjectTransaction(tx)
+				   if err != nil {
+					   //log.Panic(err)
+				   }
+			   }
+		   }()
+		}
+	*/
 
 	select {
 	case <-quit:

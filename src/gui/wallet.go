@@ -12,8 +12,8 @@ import (
 	"github.com/MDLlife/MDL/src/visor"
 	"github.com/MDLlife/MDL/src/wallet"
 
-	wh "github.com/MDLlife/MDL/src/util/http" //http,json helpers
 	"github.com/MDLlife/MDL/src/util/fee"
+	wh "github.com/MDLlife/MDL/src/util/http" //http,json helpers
 )
 
 // SpendResult represents the result of spending
