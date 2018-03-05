@@ -2,16 +2,16 @@
 # reference https://github.com/skycoin/skycoin
 FROM golang:1.9 AS build
 
-ENV SKYCOIN_VERSION=0.21.1
+ENV MDL_VERSION=0.1.0
 
 # dirs
 RUN mkdir -p $GOPATH/src/github.com/mdllife/mdl
 
 # clone
-RUN wget -c https://github.com/mdllife/mdl/archive/v${SKYCOIN_VERSION}.tar.gz
+RUN wget -c https://github.com/mdllife/mdl/archive/v${MDL_VERSION}.tar.gz
 
 # uncompress
-RUN tar zxf v${SKYCOIN_VERSION}.tar.gz -C $GOPATH/src/github.com/mdllife/mdl/ --strip-components=1
+RUN tar zxf v${MDL_VERSION}.tar.gz -C $GOPATH/src/github.com/mdllife/mdl/ --strip-components=1
 
 # install cli
 RUN cd $GOPATH/src/github.com/mdllife/mdl/cmd/cli && \

@@ -13,7 +13,7 @@
             <select formControlName="wallet" id="wallet" class="-wallet" required>
               <option disabled selected>Make a choice</option>
               <option *ngFor="let wallet of wallets" [value]="wallet.filename">
-                {{ wallet.label }} - <span class="-coins">{{ wallet.coins }} SKY</span>
+                {{ wallet.label }} - <span class="-coins">{{ wallet.coins }} MDL</span>
               </option>
             </select>
           </div>
@@ -31,7 +31,7 @@
           <h3>Send Bitcoin</h3>
           <p>
             Send Bitcoin to the address below. Once received, we will deposit the MDL to a new address in the wallet
-            selected above at the current rate of <span>{{ config.sky_btc_exchange_rate }} SKY/BTC</span>.
+            selected above at the current rate of <span>{{ config.sky_btc_exchange_rate }} MDL/BTC</span>.
           </p>
           <span class="-address">
           {{ order.deposit_address }}
