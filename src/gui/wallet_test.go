@@ -20,7 +20,7 @@ import (
 	"github.com/MDLlife/MDL/src/wallet"
 )
 
-const configuredHost = "127.0.0.1:6420"
+const configuredHost = "127.0.0.1:8320"
 
 func TestWalletSpendHandler(t *testing.T) {
 	type httpBody struct {

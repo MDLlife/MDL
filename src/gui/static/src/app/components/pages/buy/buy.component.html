@@ -37,8 +37,8 @@
           {{ order.deposit_address }}
           </span>
           <span class="-subtitle">
-          Only send multiple of the SKY/BTC rate! MDL is sent in whole number; fractional SKY is not sent!
-        MDL
+          Only send multiple of the MDL/BTC rate! MDL is sent in whole number; fractional MDL is not sent!
+        </span>
         </div>
       </div>
       <div class="-step" *ngIf="order">
@@ -46,10 +46,10 @@
           <span class="primary-gradient-background">3</span>
         </div>
         <div class="-instructions flex-fill">
-          <h3>Receive Sky</h3>
+          <h3>Receive MDL</h3>
           <p>
             After receiving your Bitcoin, we'll send you your MDL. It may take anywhere between 20 minutes and an hour
-            to receive your SKY.
+            to receive your MDL.
           </p>
           <span class="-status">
             Status: {{ order.status | tellerStatus }}
