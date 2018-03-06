@@ -72,7 +72,7 @@ func TestFromString(t *testing.T) {
 			n: 123000456,
 		},
 		{
-			s: "MDL",
+			s: "100MDL",
 			e: errors.New("can't convert 100MDL to decimal"),
 		},
 		{
