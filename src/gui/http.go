@@ -437,13 +437,13 @@ func versionHandler(gateway Gatewayer) http.HandlerFunc {
 
 /*
 attrActualLog remove color char in log
-origin: "\u001b[36m[skycoin.daemon:DEBUG] Trying to connect to 47.88.33.156:6000\u001b[0m",
+origin: "\u001b[36m[mdl.daemon:DEBUG] Trying to connect to 47.88.33.156:6000\u001b[0m",
 */
 func attrActualLog(logInfo string) string {
 	//return logInfo
 	var actualLog string
 	actualLog = logInfo
-	if strings.HasPrefix(logInfo, "[skycoin") {
+	if strings.HasPrefix(logInfo, "[mdl") {
 		if strings.Contains(logInfo, "\u001b") {
 			actualLog = logInfo[0 : len(logInfo)-4]
 		}

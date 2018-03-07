@@ -1,7 +1,7 @@
 /*
 Implements an interface for creating a CLI application.
 Includes methods for manipulating wallets files and interacting with the
-webrpc API to query a skycoin node's status.
+webrpc API to query a mdl node's status.
 */
 package cli
 
