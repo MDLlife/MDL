@@ -22,10 +22,10 @@ func versionCmd() gcli.Command {
 		OnUsageError: onCommandUsageError(name),
 		Action: func(c *gcli.Context) error {
 			var ver = struct {
-				MDL string `json:"mdl"`
-				Cli     string `json:"cli"`
-				RPC     string `json:"rpc"`
-				Wallet  string `json:"wallet"`
+				MDL    string `json:"mdl"`
+				Cli    string `json:"cli"`
+				RPC    string `json:"rpc"`
+				Wallet string `json:"wallet"`
 			}{
 				Version,
 				Version,
