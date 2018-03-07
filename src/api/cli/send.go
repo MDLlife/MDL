@@ -12,7 +12,7 @@ func sendCmd() gcli.Command {
 	name := "send"
 	return gcli.Command{
 		Name:      name,
-		Usage:     "Send skycoin from a wallet or an address to a recipient address",
+		Usage:     "Send mdl from a wallet or an address to a recipient address",
 		ArgsUsage: "[to address] [amount]",
 		Description: `
 		Note: the [amount] argument is the coins you will spend, 1 coins = 1e6 droplets.

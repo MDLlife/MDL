@@ -10,12 +10,12 @@ func verifyAddressCmd() gcli.Command {
 	name := "verifyAddress"
 	return gcli.Command{
 		Name:         name,
-		Usage:        "Verify a skycoin address",
-		ArgsUsage:    "[skycoin address]",
+		Usage:        "Verify a MDL address",
+		ArgsUsage:    "[mdl address]",
 		OnUsageError: onCommandUsageError(name),
 		Action: func(c *gcli.Context) error {
-			skyAddr := c.Args().First()
-			_, err := cipher.DecodeBase58Address(skyAddr)
+			mdlAddr := c.Args().First()
+			_, err := cipher.DecodeBase58Address(mdlAddr)
 			return err
 		},
 	}

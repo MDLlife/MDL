@@ -11,7 +11,7 @@ func versionCmd() gcli.Command {
 	name := "version"
 	return gcli.Command{
 		Name:      name,
-		ArgsUsage: "List the current version of Skycoin components",
+		ArgsUsage: "List the current version of MDL components",
 		Usage:     " ",
 		Flags: []gcli.Flag{
 			gcli.BoolFlag{
@@ -22,7 +22,7 @@ func versionCmd() gcli.Command {
 		OnUsageError: onCommandUsageError(name),
 		Action: func(c *gcli.Context) error {
 			var ver = struct {
-				Skycoin string `json:"skycoin"`
+				MDL string `json:"mdl"`
 				Cli     string `json:"cli"`
 				RPC     string `json:"rpc"`
 				Wallet  string `json:"wallet"`

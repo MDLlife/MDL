@@ -40,7 +40,7 @@ const (
 	WalletTimestampFormat = "2006_01_02"
 
 	// CoinTypeBitcoin bitcoin type
-	CoinTypeMDL CoinType = "MDL"
+	CoinTypeMDL CoinType = "mdl"
 	// CoinTypeSkycoin skycoin type
 	CoinTypeSkycoin CoinType = "skycoin"
 	// CoinTypeBitcoin bitcoin type

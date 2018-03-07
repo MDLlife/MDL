@@ -10,7 +10,7 @@ func statusCmd() gcli.Command {
 	name := "status"
 	return gcli.Command{
 		Name:         name,
-		Usage:        "Check the status of current skycoin node",
+		Usage:        "Check the status of current mdl node",
 		ArgsUsage:    " ",
 		OnUsageError: onCommandUsageError(name),
 		Action: func(c *gcli.Context) error {

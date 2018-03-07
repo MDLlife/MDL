@@ -54,7 +54,7 @@ func cleanup(fn string) {
 }
 
 func TestBuildDataDir(t *testing.T) {
-	dir := "./.test-skycoin/test"
+	dir := "./.test-mdl/test"
 	builtDir, err := buildDataDir(dir)
 	require.NoError(t, err)
 

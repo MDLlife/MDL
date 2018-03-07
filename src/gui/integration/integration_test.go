@@ -20,7 +20,7 @@ import (
 	"github.com/MDLlife/MDL/src/wallet"
 )
 
-/* Runs HTTP API tests against a running skycoin node
+/* Runs HTTP API tests against a running mdl node
 
 Set envvar SKYCOIN_INTEGRATION_TESTS=1 to enable them
 Set SKYCOIN_NODE_HOST to the node's address (defaults to http://127.0.0.1:6420)
@@ -31,7 +31,7 @@ Each test has two modes:
     2. against a live, active blockchain
 
 When running mode 1, API responses do not change. The exact responses are compared to saved responses on disk.
-Make sure the skycoin node is running against the pinned blockchain data provided in this package's folder.
+Make sure the mdl node is running against the pinned blockchain data provided in this package's folder.
 
 When running mode 2, API responses may change (such as /coinSupply). The exact responses are not compared,
 but the response is checked to be unmarshallable to a known JSON object.
