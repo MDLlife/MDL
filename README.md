@@ -1,6 +1,6 @@
-[![mdl logo](https://github.com/MDLlife/MDL/raw/testnet/mdl.png)](http://mdl.life)
+[![mdl logo](https://github.com/MDLlife/MDL/raw/testnet/mdl.png)](https://mdl.life)
 
-# MDL (Testnet)
+# MDL
 
 [![Build Status](https://travis-ci.org/MDLlife/MDL.svg)](https://travis-ci.org/MDLlife/MDL)
 [![GoDoc](https://godoc.org/github.com/MDLlife/MDL?status.svg)](https://godoc.org/github.com/MDLlife/MDL)
@@ -8,7 +8,7 @@
 
 MDL is a token used in MDL Talent Hub platform. It's based on [Skycoin](https://skycoin.net)'s code base.
 
-Skycoin improves on Bitcoin in too many ways to be addressed here. Read it's website and [blog](https://blog.skycoin.net) instead.
+Skycoin improves on Bitcoin in too many ways to be addressed here. Read their website and [blog](https://blog.skycoin.net) instead.
 
 
 ## Links
