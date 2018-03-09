@@ -362,7 +362,7 @@ func testKnownBlocks(t *testing.T) {
 				return
 			}
 
-			require.NotNil(t, b, tc.name + " " + tc.hash)
+			require.NotNil(t, b, tc.name+" "+tc.hash)
 
 			var expected visor.ReadableBlock
 			loadJSON(t, tc.golden, &TestData{b, &expected})
