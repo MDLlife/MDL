@@ -165,7 +165,7 @@ func TestLiveCoinSupply(t *testing.T) {
 	require.NotEmpty(t, cs.CurrentSupply)
 	require.NotEmpty(t, cs.TotalSupply)
 	require.NotEmpty(t, cs.MaxSupply)
-	require.Equal(t, "100000000.000000", cs.MaxSupply)
+	require.Equal(t, "1000000000.000000", cs.MaxSupply)
 	require.NotEmpty(t, cs.CurrentCoinHourSupply)
 	require.NotEmpty(t, cs.TotalCoinHourSupply)
 	require.Equal(t, 100, len(cs.UnlockedAddresses)+len(cs.LockedAddresses))
@@ -296,8 +296,10 @@ func TestLiveBlock(t *testing.T) {
 
 	testKnownBlocks(t)
 
-	// These blocks were affected by the coinhour overflow issue, make sure that they can be queried
-	blockSeqs := []uint64{11685, 11707, 11710, 11709, 11705, 11708, 11711, 11706, 11699}
+	//// These blocks were affected by the coinhour overflow issue, make sure that they can be queried
+	//blockSeqs := []uint64{11685, 11707, 11710, 11709, 11705, 11708, 11711, 11706, 11699}
+
+	blockSeqs := []uint64{1, 2, 3, 4, 5, 6, 7, 8, 9}
 
 	c := gui.NewClient(nodeAddress())
 	for _, seq := range blockSeqs {
@@ -457,7 +459,9 @@ func TestLiveBlockchainProgress(t *testing.T) {
 
 	require.NotEqual(t, uint64(0), progress.Current)
 	require.True(t, progress.Current <= progress.Highest)
-	require.NotEmpty(t, progress.Peers)
+
+	//disable-networking=true
+	require.Empty(t, progress.Peers)
 }
 
 func TestStableBalance(t *testing.T) {
@@ -519,17 +523,17 @@ func TestLiveBalance(t *testing.T) {
 	c := gui.NewClient(nodeAddress())
 
 	// Genesis address check, should not have a balance
-	b, err := c.Balance([]string{"2jBbGxZRGoQG1mqhPBnXnLTxK6oxsTf8os6"})
+	b, err := c.Balance([]string{"2Dc7kXtwBLr8GL4TSZKFCJM3xqEwnqH6m67"})
 	require.NoError(t, err)
-	require.Equal(t, wallet.BalancePair{}, *b)
+	require.NotEqual(t, wallet.BalancePair{}, *b)
 
 	// Balance of final distribution address. Should have the same coins balance
 	// for the next 15-20 years.
-	b, err = c.Balance([]string{"ejJjiCwp86ykmFr5iTJ8LxQXJ2wJPTYmkm"})
+	b, err = c.Balance([]string{"2Dc7kXtwBLr8GL4TSZKFCJM3xqEwnqH6m67"})
 	require.NoError(t, err)
 	require.Equal(t, b.Confirmed, b.Predicted)
 	require.NotEmpty(t, b.Confirmed.Hours)
-	require.Equal(t, uint64(1e6*1e6), b.Confirmed.Coins)
+	require.Equal(t, uint64(0x32cfd0), b.Confirmed.Coins)
 
 	// Check that the balance is queryable for addresses known to be affected
 	// by the coinhour overflow problem
@@ -590,7 +594,7 @@ func TestLiveUxOut(t *testing.T) {
 	c := gui.NewClient(nodeAddress())
 
 	// A spent uxout should never change
-	ux, err := c.UxOut("fe6762d753d626115c8dd3a053b5fb75d6d419a8d0fb1478c5fffc1fe41c5f20")
+	ux, err := c.UxOut("30cc1bfbe6eb56a494db86a36a4c85742ed5720895638901047b6f1e1688f9ff")
 	require.NoError(t, err)
 
 	var expected historydb.UxOutJSON

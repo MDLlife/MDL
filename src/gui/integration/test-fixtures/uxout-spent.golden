@@ -1,11 +1,11 @@
 {
-    "uxid": "fe6762d753d626115c8dd3a053b5fb75d6d419a8d0fb1478c5fffc1fe41c5f20",
-    "time": 1431339429,
-    "src_block_seq": 179,
-    "src_tx": "f58f664eea258100126636a4111838e489ef5aec848ca8498319c290fa2a0805",
-    "owner_address": "R6aHqKWSQfvpdo2fGSrq4F1RYXkBWR9HHJ",
-    "coins": 615700000000,
-    "hours": 5521648,
-    "spent_block_seq": 181,
-    "spent_tx": "701d23fd513bad325938ba56869f9faba19384a8ec3dd41833aff147eac53947"
+	"uxid": "30cc1bfbe6eb56a494db86a36a4c85742ed5720895638901047b6f1e1688f9ff",
+	"time": 1516866501,
+	"src_block_seq": 1,
+	"src_tx": "8b2b69ab2c7d6a8a9038f7516fd466814c1b6025f4ddfa2209f3f450934c045e",
+	"owner_address": "23Vkppq67wXyJyEZEForsst4dgBBNU5Gt4F",
+	"coins": 10000000000000,
+	"hours": 1,
+	"spent_block_seq": 50,
+	"spent_tx": "e329c6e76f4900e92f966747f128b71d5bbfe9d4cc952337c026375d6c172a2e"
 }

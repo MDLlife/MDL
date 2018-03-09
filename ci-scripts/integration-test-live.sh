@@ -6,11 +6,17 @@
 
 #Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
-PORT="6420"
-RPC_PORT="6430"
-HOST="http://127.0.0.1:$PORT"
-RPC_ADDR="127.0.0.1:$RPC_PORT"
+PORT="46420"
+RPC_PORT="46430"
+HOST="http://0.0.0.0:$PORT"
+RPC_ADDR="0.0.0.0:$RPC_PORT"
 MODE="live"
+TEST=""
+
+
+echo "sleeping for startup"
+sleep 5
+echo "done sleeping"
 
 usage () {
   echo "Usage: $SCRIPT"

@@ -55,11 +55,45 @@ lint: ## Run linters. Use make install-linters first.
 
 check: lint test ## Run tests and linters
 
+## BEGIN CI TESTS ##
 integration-test-stable: ## Run stable integration tests
 	./ci-scripts/integration-test-stable.sh
 
-integration-test-live: ## Run live integration tests
+integration-test-live: build-start ## Run live integration tests
 	./ci-scripts/integration-test-live.sh
+	./ci-scripts/stop.sh
+
+integration-test-all: ## Run live integration tests
+	./ci-scripts/integration-test-all.sh
+
+integration-test-stable-gui: ## Run stable integration tests
+	./ci-scripts/integration-test-stable.sh -t gui
+
+integration-test-live-gui: build-start ## Run live integration tests
+	./ci-scripts/integration-test-live.sh -t gui
+	./ci-scripts/stop.sh
+
+integration-test-all-gui: ## Run live integration tests
+	./ci-scripts/integration-test-all.sh -t gui
+
+integration-test-stable-cli: ## Run stable integration tests
+	./ci-scripts/integration-test-stable.sh -t cli
+
+integration-test-live-cli: build-start ## Run live integration tests
+	./ci-scripts/integration-test-live.sh -t cli
+	./ci-scripts/stop.sh
+
+integration-test-all-cli: ## Run live integration tests
+	./ci-scripts/integration-test-all.sh -t cli
+
+build-start: stop
+	nohup ./ci-scripts/build-start.sh  2>&1 >/dev/null &
+
+stop:
+	./ci-scripts/stop.sh
+
+## END INTEGRATION TESTS  ##
+
 
 cover: ## Runs tests on ./src/ with HTML code coverage
 	@echo "mode: count" > coverage-all.out

@@ -41,8 +41,8 @@ script:
   - vendorcheck ./...
   - GOARCH=386 go test ./...
   - GOARCH=amd64 go test ./...
-  # stable integration tests
-  - make integration-test-stable
+  # stable/live integration tests
+  - make integration-test-all
   # build wallets
   - if [[ "$TRAVIS_PULL_REQUEST" == false ]]; then ./ci-scripts/build-wallet.sh; fi
 
