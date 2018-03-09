@@ -5,12 +5,13 @@
 
 #Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
-PORT="8320"
-RPC_PORT="8330"
-HOST="http://127.0.0.1:$PORT"
-RPC_ADDR="127.0.0.1:$RPC_PORT"
+PORT="46420"
+RPC_PORT="46430"
+IP_ADDR="0.0.0.0"
+HOST="http://$IP_ADDR:$PORT"
+RPC_ADDR="$IP_ADDR:$RPC_PORT"
 MODE="stable"
-BINARY="mdl-integration"
+BINARY="$PWD/mdl-integration"
 TEST=""
 UPDATE=""
 
@@ -45,17 +46,19 @@ fi
 # Compile the mdl node
 # We can't use "go run" because this creates two processes which doesn't allow us to kill it at the end
 echo "compiling mdl"
-go build -o "$BINARY" cmd/mdl/mdl.go
+go build -o "$BINARY" $PWD/cmd/mdl/mdl.go
 
 # Run mdl node with pinned blockchain database
-echo "starting mdl node in background with http listener on $HOST"
+echo "starting mdl ($PWD/mdl-integration) node in background with http listener on $HOST"
 
-./mdl-integration -disable-networking=true \
+$PWD/mdl-integration -disable-networking=true \
+                      -web-interface-addr=$IP_ADDR \
                       -web-interface-port=$PORT \
                       -download-peerlist=false \
-                      -db-path=./src/gui/integration/test-fixtures/blockchain-180.db \
+                      -db-path=./src/gui/integration/test-fixtures/blockchain-development.db \
                       -db-read-only=true \
                       -rpc-interface=true \
+                      -rpc-interface-addr=$IP_ADDR \
                       -rpc-interface-port=$RPC_PORT \
                       -launch-browser=false \
                       -data-dir="$DATA_DIR" \
@@ -65,7 +68,7 @@ MDL_PID=$!
 echo "mdl node pid=$MDL_PID"
 
 echo "sleeping for startup"
-sleep 3
+sleep 5
 echo "done sleeping"
 
 set +e

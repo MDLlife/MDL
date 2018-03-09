@@ -3,5 +3,5 @@
 	"num_of_blocks": 118,
 	"hash_of_last_block": "1d98a066f11b6af0de14cce8925144fad64a105e5ccd737df2a7eeaaac1a6b9c",
 	"time_since_last_block": "",
-	"webrpc_address": "127.0.0.1:8330"
+	"webrpc_address": "0.0.0.0:46430"
 }
