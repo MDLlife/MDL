@@ -22,9 +22,9 @@ import (
 
 /* Runs HTTP API tests against a running mdl node
 
-Set envvar SKYCOIN_INTEGRATION_TESTS=1 to enable them
-Set SKYCOIN_NODE_HOST to the node's address (defaults to http://127.0.0.1:6420)
-Set SKYCOIN_INTEGRATION_TEST_MODE to either "stable" or "live" (defaults to "stable")
+Set envvar MDL_INTEGRATION_TESTS=1 to enable them
+Set MDL_NODE_HOST to the node's address (defaults to http://127.0.0.1:6420)
+Set MDL_INTEGRATION_TEST_MODE to either "stable" or "live" (defaults to "stable")
 
 Each test has two modes:
     1. against a stable, pinned blockchain
@@ -54,7 +54,7 @@ type TestData struct {
 var update = flag.Bool("update", false, "update golden files")
 
 func nodeAddress() string {
-	addr := os.Getenv("SKYCOIN_NODE_HOST")
+	addr := os.Getenv("MDL_NODE_HOST")
 	if addr == "" {
 		return "http://127.0.0.1:6420"
 	}
@@ -62,7 +62,7 @@ func nodeAddress() string {
 }
 
 func mode(t *testing.T) string {
-	mode := os.Getenv("SKYCOIN_INTEGRATION_TEST_MODE")
+	mode := os.Getenv("MDL_INTEGRATION_TEST_MODE")
 	switch mode {
 	case "":
 		mode = testModeStable
@@ -74,7 +74,7 @@ func mode(t *testing.T) string {
 }
 
 func enabled() bool {
-	return os.Getenv("SKYCOIN_INTEGRATION_TESTS") == "1"
+	return os.Getenv("MDL_INTEGRATION_TESTS") == "1"
 }
 
 func doStable(t *testing.T) bool {
@@ -327,17 +327,17 @@ func testKnownBlocks(t *testing.T) {
 		{
 			name:   "valid hash",
 			golden: "block-hash.golden",
-			hash:   "70584db7fb8ab88b8dbcfed72ddc42a1aeb8c4882266dbb78439ba3efcd0458d",
+			hash:   "4580013fd2acf5eef12b23375d7d2285bb4a698297d66848f6adabf2b3dc79df",
 		},
 		{
 			name:   "genesis hash",
 			golden: "block-hash-genesis.golden",
-			hash:   "0551a1e5af999fe8fff529f6f2ab341e1e33db95135eef1b2be44fe6981349f3",
+			hash:   "4580013fd2acf5eef12b23375d7d2285bb4a698297d66848f6adabf2b3dc79df",
 		},
 		{
 			name:   "genesis seq",
 			golden: "block-seq-0.golden",
-			seq:    0,
+			seq:    1,
 		},
 		{
 			name:   "seq 100",
@@ -362,7 +362,7 @@ func testKnownBlocks(t *testing.T) {
 				return
 			}
 
-			require.NotNil(t, b)
+			require.NotNil(t, b, tc.name + " " + tc.hash)
 
 			var expected visor.ReadableBlock
 			loadJSON(t, tc.golden, &TestData{b, &expected})
@@ -378,11 +378,12 @@ func testKnownBlocks(t *testing.T) {
 	require.NoError(t, err)
 
 	var prevBlock *visor.ReadableBlock
-	for i := uint64(0); i < progress.Current; i++ {
-		t.Run(fmt.Sprintf("block-seq-%d", i), func(t *testing.T) {
+	for i := uint64(1); i < progress.Current; i++ {
+		s := fmt.Sprintf("block-seq-%d", i)
+		t.Run(s, func(t *testing.T) {
 			b, err := c.BlockBySeq(i)
 			require.NoError(t, err)
-			require.NotNil(t, b)
+			require.NotNil(t, b, fmt.Sprintf("block-seq-%d", i))
 			require.Equal(t, i, b.Head.BkSeq)
 
 			if prevBlock != nil {
@@ -391,7 +392,7 @@ func testKnownBlocks(t *testing.T) {
 
 			bHash, err := c.BlockByHash(b.Head.BlockHash)
 			require.NoError(t, err)
-			require.NotNil(t, bHash)
+			require.NotNil(t, bHash, fmt.Sprintf("block-seq-%d", i))
 			require.Equal(t, b, bHash)
 
 			prevBlock = b
@@ -561,14 +562,14 @@ func TestStableUxOut(t *testing.T) {
 		{
 			name:   "valid uxID",
 			golden: "uxout.golden",
-			uxID:   "fe6762d753d626115c8dd3a053b5fb75d6d419a8d0fb1478c5fffc1fe41c5f20",
+			uxID:   "21fe34061dfc4a8c7d28f6804f9a04440eb5e01c670abad6d36dfcf0e2b17984",
 		},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			ux, err := c.UxOut(tc.uxID)
-			require.NoError(t, err)
+			require.NoError(t, err, tc.name, tc.golden, tc.uxID)
 
 			var expected historydb.UxOutJSON
 			loadJSON(t, tc.golden, &TestData{ux, &expected})

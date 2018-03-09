@@ -1,5 +1,14 @@
 {
-	"current": 180,
-	"highest": 180,
-	"peers": null
+	"current": 117,
+	"highest": 117,
+	"peers": [
+		{
+			"address": "172.105.218.179:7800",
+			"height": 117
+		},
+		{
+			"address": "76.74.178.136:7800",
+			"height": 117
+		}
+	]
 }

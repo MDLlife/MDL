@@ -248,7 +248,7 @@ var devConfig = Config{
 	// public interface
 	Address: "",
 	//gnet uses this for TCP incoming and outgoing
-	Port: 7800,
+	Port: 7800, //6000
 	// MaxOutgoingConnections is the maximum outgoing connections allowed.
 	MaxOutgoingConnections: 16,
 	DownloadPeerList:       false,
@@ -260,7 +260,7 @@ var devConfig = Config{
 	//AddressVersion: "test",
 	// Remote web interface
 	WebInterface:             true,
-	WebInterfacePort:         8320,
+	WebInterfacePort:         8320, //6420
 	WebInterfaceAddr:         "127.0.0.1",
 	WebInterfaceCert:         "",
 	WebInterfaceKey:          "",
@@ -268,7 +268,7 @@ var devConfig = Config{
 	PrintWebInterfaceAddress: false,
 
 	RPCInterface:     true,
-	RPCInterfacePort: 8330,
+	RPCInterfacePort: 8330, //6430
 	RPCInterfaceAddr: "127.0.0.1",
 	RPCThreadNum:     5,
 

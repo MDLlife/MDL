@@ -5,8 +5,8 @@
 
 #Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
-PORT="46420"
-RPC_PORT="46430"
+PORT="8320"
+RPC_PORT="8330"
 HOST="http://127.0.0.1:$PORT"
 RPC_ADDR="127.0.0.1:$RPC_PORT"
 MODE="stable"
@@ -72,7 +72,7 @@ set +e
 
 if [[ -z $TEST || $TEST = "gui" ]]; then
 
-MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST go test ./src/gui/integration/... $UPDATE -timeout=30s -v
+MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST go test ./src/gui/integration/... $UPDATE -timeout=60s -v
 
 GUI_FAIL=$?
 
@@ -80,7 +80,7 @@ fi
 
 if [[ -z $TEST  || $TEST = "cli" ]]; then
 
-MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR go test ./src/api/cli/integration/... $UPDATE -timeout=30s -v
+MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR go test ./src/api/cli/integration/... $UPDATE -timeout=60s -v
 
 CLI_FAIL=$?
 

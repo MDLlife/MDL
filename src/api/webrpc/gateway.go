@@ -10,7 +10,7 @@ import (
 
 //go:generate goautomock -template=testify Gatewayer
 
-// Gatewayer provides interfaces for getting skycoin related info.
+// Gatewayer provides interfaces for getting mdl related info.
 type Gatewayer interface {
 	GetLastBlocks(num uint64) (*visor.ReadableBlocks, error)
 	GetBlocks(start, end uint64) (*visor.ReadableBlocks, error)
