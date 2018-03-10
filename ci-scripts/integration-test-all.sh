@@ -11,6 +11,8 @@ IP_ADDR="0.0.0.0"
 HOST="http://$IP_ADDR:$PORT"
 RPC_ADDR="$IP_ADDR:$RPC_PORT"
 MODE="stable"
+MODE_LIVE="live"
+
 BINARY="$PWD/mdl-integration"
 TEST=""
 UPDATE=""
@@ -79,6 +81,10 @@ MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST go t
 
 GUI_FAIL=$?
 
+MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE_LIVE MDL_NODE_HOST=$HOST go test ./src/gui/integration/... -timeout=60s -v
+
+GUI_FAIL_LIVE=$?
+
 fi
 
 if [[ -z $TEST  || $TEST = "cli" ]]; then
@@ -86,6 +92,11 @@ if [[ -z $TEST  || $TEST = "cli" ]]; then
 MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR go test ./src/api/cli/integration/... $UPDATE -timeout=60s -v
 
 CLI_FAIL=$?
+
+MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE_LIVE RPC_ADDR=$RPC_ADDR go test ./src/api/cli/integration/... $UPDATE -timeout=60s -v
+
+CLI_FAIL_LIVE=$?
+
 
 fi
 
@@ -101,9 +112,12 @@ rm "$BINARY"
 
 if [[ (-z $TEST || $TEST = "gui") && $GUI_FAIL -ne 0 ]]; then
   exit $GUI_FAIL
+elif [[ (-z $TEST || $TEST = "gui") && $GUI_FAIL_LIVE -ne 0 ]]; then
+    exit $GUI_FAIL_LIVE
 elif [[ (-z $TEST || $TEST = "cli") && $CLI_FAIL -ne 0 ]]; then
   exit $CLI_FAIL
+elif [[ (-z $TEST || $TEST = "cli") && $CLI_FAIL_LIVE -ne 0 ]]; then
+  exit $CLI_FAIL_LIVE
 else 
   exit 0
 fi
-# exit $FAIL

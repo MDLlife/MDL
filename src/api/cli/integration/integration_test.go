@@ -515,7 +515,7 @@ func TestStableAddressBalance(t *testing.T) {
 		return
 	}
 
-	output, err := exec.Command(binaryPath, "addressBalance", "2kvLEyXwAYvHfJuFCkjnYNRTUfHPyWgVwKt").CombinedOutput()
+	output, err := exec.Command(binaryPath, "addressBalance", "2Dc7kXtwBLr8GL4TSZKFCJM3xqEwnqH6m67").CombinedOutput()
 	require.NoError(t, err)
 
 	var addrBalance cli.BalanceResult
@@ -537,7 +537,7 @@ func TestLiveAddressBalance(t *testing.T) {
 		return
 	}
 
-	output, err := exec.Command(binaryPath, "addressBalance", "2kvLEyXwAYvHfJuFCkjnYNRTUfHPyWgVwKt").CombinedOutput()
+	output, err := exec.Command(binaryPath, "addressBalance", "2Dc7kXtwBLr8GL4TSZKFCJM3xqEwnqH6m67").CombinedOutput()
 	require.NoError(t, err)
 
 	var addrBalance cli.BalanceResult
@@ -620,7 +620,7 @@ func TestStableAddressOutputs(t *testing.T) {
 		return
 	}
 
-	output, err := exec.Command(binaryPath, "addressOutputs", "2kvLEyXwAYvHfJuFCkjnYNRTUfHPyWgVwKt").CombinedOutput()
+	output, err := exec.Command(binaryPath, "addressOutputs", "CDLrMvPcmpdido8cbSFNNgzQXdC97TsgEQ").CombinedOutput()
 	require.NoError(t, err)
 
 	var addrOutputs webrpc.OutputsResult
@@ -642,7 +642,7 @@ func TestLiveAddressOutputs(t *testing.T) {
 		return
 	}
 
-	output, err := exec.Command(binaryPath, "addressOutputs", "2kvLEyXwAYvHfJuFCkjnYNRTUfHPyWgVwKt").CombinedOutput()
+	output, err := exec.Command(binaryPath, "addressOutputs", "2Dc7kXtwBLr8GL4TSZKFCJM3xqEwnqH6m67").CombinedOutput()
 	require.NoError(t, err)
 
 	var addrOutputs webrpc.OutputsResult
@@ -705,6 +705,7 @@ func TestStableTransaction(t *testing.T) {
 	if !doStable(t) {
 		return
 	}
+	//return
 
 	tt := []struct {
 		name       string
@@ -736,7 +737,7 @@ func TestStableTransaction(t *testing.T) {
 		},
 		{
 			"genesis transaction",
-			[]string{"d556c1c7abf1e86138316b8c17183665512dc67633c04cf236a8b7f332cb4add"},
+			[]string{"8b2b69ab2c7d6a8a9038f7516fd466814c1b6025f4ddfa2209f3f450934c045e"},
 			nil,
 			"",
 			"./testdata/genesisTransaction.golden",
@@ -747,7 +748,10 @@ func TestStableTransaction(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			args := append([]string{"transaction"}, tc.args...)
 			o, err := exec.Command(binaryPath, args...).CombinedOutput()
-			if err != nil {
+			if err != nil && tc.err == nil {
+				require.NotNil(t, tc.err, "Got error when no error was expected.")
+				return
+			} else if err != nil {
 				require.Equal(t, tc.err.Error(), err.Error())
 				require.Equal(t, tc.errMsg, string(o))
 				return
@@ -776,7 +780,7 @@ func TestLiveTransaction(t *testing.T) {
 		return
 	}
 
-	o, err := exec.Command(binaryPath, "transaction", "d556c1c7abf1e86138316b8c17183665512dc67633c04cf236a8b7f332cb4add").CombinedOutput()
+	o, err := exec.Command(binaryPath, "transaction", "8b2b69ab2c7d6a8a9038f7516fd466814c1b6025f4ddfa2209f3f450934c045e").CombinedOutput()
 	require.NoError(t, err)
 	var tx webrpc.TxnResult
 	err = json.NewDecoder(bytes.NewReader(o)).Decode(&tx)
@@ -1006,7 +1010,7 @@ func writeJSON(t *testing.T, filename string, obj interface{}) {
 }
 
 func mode(t *testing.T) string {
-	mode := os.Getenv("SKYCOIN_INTEGRATION_TEST_MODE")
+	mode := os.Getenv("MDL_INTEGRATION_TEST_MODE")
 	switch mode {
 	case "":
 		mode = testModeStable
@@ -1018,7 +1022,7 @@ func mode(t *testing.T) string {
 }
 
 func enabled() bool {
-	return os.Getenv("SKYCOIN_INTEGRATION_TESTS") == "1"
+	return os.Getenv("MDL_INTEGRATION_TESTS") == "1"
 }
 
 func doStable(t *testing.T) bool {

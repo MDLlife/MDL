@@ -1,6 +1,6 @@
 # CLI
 
-Skycoin command line interface
+MDL command line interface
 
 <!-- MarkdownTOC depth="3" autolink="true" bracket="round" -->
 

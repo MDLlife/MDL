@@ -1,7 +1,4 @@
-#!/bin/bash
-# Runs "stable"-mode tests against a mdl node configured with a pinned database
-# "stable" mode tests assume the blockchain data is static, in order to check API responses more precisely
-# $TEST defines which test to run i.e, cli or gui; If empty both are run
+#!/usr/bin/env bash
 
 #Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
@@ -11,9 +8,36 @@ IP_ADDR="0.0.0.0"
 HOST="http://$IP_ADDR:$PORT"
 RPC_ADDR="$IP_ADDR:$RPC_PORT"
 MODE="stable"
+MODE_LIVE="live"
+
 BINARY="$PWD/mdl-integration"
 TEST=""
 UPDATE=""
+
+# Runs "stable"-mode tests against a mdl node configured with a pinned database
+# "stable" mode tests assume the blockchain data is static, in order to check API responses more precisely
+# $TEST defines which test to run i.e, cli or gui; If empty both are run
+
+
+# this function is called when Ctrl-C is sent
+function trap_ctrlc ()
+{
+    # perform cleanup here
+    echo "Ctrl-C caught...performing clean up"
+
+    echo "Doing cleanup"
+
+    # exit shell script with error code 2
+    # if omitted, shell script will continue execution
+    lsof -i tcp:$PORT | awk 'NR!=1 {print $2}' | xargs kill -9  2>&1 >/dev/null | true
+
+    exit 0
+}
+
+# initialise trap to call trap_ctrlc function
+# when signal 2 (SIGINT) is received
+trap "trap_ctrlc" 2
+
 
 usage () {
   echo "Usage: $SCRIPT"
@@ -62,48 +86,6 @@ $PWD/mdl-integration -disable-networking=true \
                       -rpc-interface-port=$RPC_PORT \
                       -launch-browser=false \
                       -data-dir="$DATA_DIR" \
-                      -wallet-dir="$WALLET_DIR" &
-MDL_PID=$!
-
-echo "mdl node pid=$MDL_PID"
-
-echo "sleeping for startup"
-sleep 5
-echo "done sleeping"
-
-set +e
-
-if [[ -z $TEST || $TEST = "gui" ]]; then
-
-MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST go test ./src/gui/integration/... $UPDATE -timeout=60s -v
-
-GUI_FAIL=$?
-
-fi
-
-if [[ -z $TEST  || $TEST = "cli" ]]; then
-
-MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR go test ./src/api/cli/integration/... $UPDATE -timeout=60s -v
-
-CLI_FAIL=$?
-
-fi
+                      -wallet-dir="$WALLET_DIR" 2>&1 >/dev/null
 
 
-echo "shutting down mdl node"
-
-# Shutdown mdl node
-kill -9 $MDL_PID
-wait $MDL_PID
-
-rm "$BINARY"
-
-
-if [[ (-z $TEST || $TEST = "gui") && $GUI_FAIL -ne 0 ]]; then
-  exit $GUI_FAIL
-elif [[ (-z $TEST || $TEST = "cli") && $CLI_FAIL -ne 0 ]]; then
-  exit $CLI_FAIL
-else 
-  exit 0
-fi
-# exit $FAIL

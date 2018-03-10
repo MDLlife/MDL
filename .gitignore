@@ -60,19 +60,19 @@ Thumbs.db
 release
 .bin
 
-.skycoin
+.mdl
 
 *.prof
 *.out
 
 # Binaries
-/skycoind
-/skycoin
-/skycoindev
+/mdld
+/mdl
+/mdldev
 /blockchain
 /generate_cert
 /address_gen
-/skycoin-integration
+/mdl-integration
 
 *.pem
 
