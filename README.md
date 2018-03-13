@@ -1,14 +1,14 @@
-[![mdl logo](https://github.com/MDLlife/MDL/raw/testnet/mdl.png)](http://mdl.life)
+[![mdl logo](https://github.com/MDLlife/MDL/raw/testnet/mdl.png)](https://mdl.life)
 
-# MDL (Testnet)
+# MDL
 
 [![Build Status](https://travis-ci.org/MDLlife/MDL.svg)](https://travis-ci.org/MDLlife/MDL)
-[![GoDoc](https://godoc.org/github.com/skycoin/skycoin?status.svg)](https://godoc.org/github.com/skycoin/skycoin)
+[![GoDoc](https://godoc.org/github.com/MDLlife/MDL?status.svg)](https://godoc.org/github.com/MDLlife/MDL)
 [![Go Report Card](https://goreportcard.com/badge/github.com/MDLLife/MDL)](https://goreportcard.com/report/github.com/MDLLife/MDL)
 
-MDL is a token used in MDL Talent Hub platform. It's based on [Skycoin](https://skycoin.net)'s code base.
+MDL is a token used in MDL Talent Hub platform. It's based on [MDL](https://mdl.wtf)'s code base.
 
-Skycoin improves on Bitcoin in too many ways to be addressed here. Read it's website and [blog](https://blog.skycoin.net) instead.
+MDL improves on Bitcoin in too many ways to be addressed here. Read their website and [blog](https://blog.mdl.wtf) instead.
 
 
 ## Links
@@ -27,6 +27,7 @@ Skycoin improves on Bitcoin in too many ways to be addressed here. Read it's web
     - [Run MDL from the command line](#run-mdl-from-the-command-line)
     - [Show MDL node options](#show-mdl-node-options)
     - [Run MDL with options](#run-mdl-with-options)
+    - [Docker image](#docker-image)
 - [API Documentation](#api-documentation)
     - [Wallet REST API](#wallet-rest-api)
     - [JSON-RPC 2.0 API](#json-rpc-20-api)
@@ -82,6 +83,24 @@ cd $GOPATH/src/github.com/MDLlife/MDL
 make ARGS="--launch-browser=false" run
 ```
 
+### Docker image
+
+```
+$ docker volume create mdl-data
+$ docker volume create mdl-wallet
+$ docker run -ti --rm \
+    -v mdl-data:/data \
+    -v mdl-wallet:/wallet \
+    -p 6000:6000 \
+    -p 6420:6420 \
+    -p 6430:6430 \
+    mdl/mdl
+```
+
+Access the dashboard: [http://localhost:6420](http://localhost:6420).
+
+Access the API: [http://localhost:6420/version](http://localhost:6420/version).
+
 ## API Documentation
 
 ### Wallet REST API
@@ -99,7 +118,7 @@ make ARGS="--launch-browser=false" run
 ## Contributing a node to the network
 
 Add your node's ip:port to the [peers.txt](./peers.txt) file.
-This file will be periodically uploaded to https://downloads.skycoin.net/blockchain/peers.txt
+This file will be periodically uploaded to https://downloads.mdl.net/blockchain/peers.txt
 and used to seed client with peers.
 
 ## Development

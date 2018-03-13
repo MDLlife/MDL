@@ -1,6 +1,6 @@
 # CLI
 
-Skycoin command line interface
+MDL command line interface
 
 <!-- MarkdownTOC depth="3" autolink="true" bracket="round" -->
 
@@ -23,7 +23,7 @@ Skycoin command line interface
 ## Install
 
 ```bash
-$ cd $GOPATH/src/github.com/skycoin/skycoin/cmd/cli
+$ cd $GOPATH/src/github.com/mdllife/mdl/cmd/cli
 $ ./install.sh
 ```
 
@@ -32,7 +32,7 @@ $ ./install.sh
 If you are in `bash`, run the following command:
 
 ```bash
-$ PROG=skycoin-cli source $GOPATH/src/github.com/skycoin/skycoin/cmd/cli/autocomplete/bash_autocomplete
+$ PROG=skycoin-cli source $GOPATH/src/github.com/mdllife/mdl/cmd/cli/autocomplete/bash_autocomplete
 ```
 
 If you are in `zsh`, please replace the `bash_autocomplete` with `zsh_autocomplete` in the previous command.

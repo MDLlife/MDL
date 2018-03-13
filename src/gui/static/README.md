@@ -1,12 +1,12 @@
-# Skycoin desktop client
+# MDL desktop client
 
-The Skycoin wallet ships with a web interface which can be ran from the browser and/or Electron.
+MDL wallet ships with a web interface which can be ran from the browser and/or Electron.
 
 The project contains both the source (src) and target (dist) files of this web interface.
 
 ## Prerequisites
 
-The Skycoin web interface requires Node 6.9.0 or higher, together with NPM 3 or higher.
+MDL web interface requires Node 6.9.0 or higher, together with NPM 3 or higher.
 
 ## Installation
 
@@ -36,6 +36,8 @@ You can route all calls to this address by changing the url property on the ApiS
 
 Please note that at the moment the Purchase API (teller) is both offline and not supporting CORS headers.
 
-While event.skycoin.net is not working, we will have to run the purchase API locally.
-
 Similar as the solution for the above CORS issue, you can circumvent CORS issues by changing the url property to '/teller/'
+
+## Style guide
+
+As an Angular application, we try to follow the [Angular style guide](https://angular.io/guide/styleguide).

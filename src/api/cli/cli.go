@@ -1,7 +1,7 @@
 /*
 Implements an interface for creating a CLI application.
 Includes methods for manipulating wallets files and interacting with the
-webrpc API to query a skycoin node's status.
+webrpc API to query a mdl node's status.
 */
 package cli
 
@@ -23,7 +23,7 @@ import (
 // Commands all cmds that we support
 
 const (
-	Version           = "0.20.3"
+	Version           = "0.21.1"
 	walletExt         = ".wlt"
 	defaultCoin       = "mdl"
 	defaultWalletName = "$COIN_cli" + walletExt
@@ -228,6 +228,7 @@ func NewApp(cfg Config) *App {
 		walletHisCmd(),
 		walletOutputsCmd(cfg),
 		checkdbCmd(),
+		verifyAddressCmd(),
 	}
 
 	app.Name = fmt.Sprintf("%s-cli", cfg.Coin)

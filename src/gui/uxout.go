@@ -4,20 +4,11 @@ import (
 	"net/http"
 
 	"github.com/MDLlife/MDL/src/cipher"
-	"github.com/MDLlife/MDL/src/daemon"
 	wh "github.com/MDLlife/MDL/src/util/http" //http,json helpers
 	"github.com/MDLlife/MDL/src/visor/historydb"
 )
 
-// RegisterUxOutHandlers binds uxout entries.
-func RegisterUxOutHandlers(mux *http.ServeMux, gateway *daemon.Gateway) {
-	// get uxout by id.
-	mux.HandleFunc("/uxout", getUxOutByID(gateway))
-	// get all the address affected uxouts.
-	mux.HandleFunc("/address_uxouts", getAddrUxOuts(gateway))
-}
-
-func getUxOutByID(gateway *daemon.Gateway) http.HandlerFunc {
+func getUxOutByID(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
 			wh.Error405(w)
@@ -51,7 +42,7 @@ func getUxOutByID(gateway *daemon.Gateway) http.HandlerFunc {
 	}
 }
 
-func getAddrUxOuts(gateway *daemon.Gateway) http.HandlerFunc {
+func getAddrUxOuts(gateway Gatewayer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
 			wh.Error405(w)

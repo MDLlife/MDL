@@ -60,18 +60,19 @@ Thumbs.db
 release
 .bin
 
-.skycoin
+.mdl
 
 *.prof
 *.out
 
 # Binaries
-/skycoind
-/skycoin
-/skycoindev
+/mdld
+/mdl
+/mdldev
 /blockchain
 /generate_cert
 /address_gen
+/mdl-integration
 
 *.pem
 
@@ -103,10 +104,15 @@ electron/.standalone_output
 
 .vscode/
 
+*.swo
+*.swp
+
 src/mesh/TODO
 
 .idea/
 
 *.iml
 *.test
-/vendor/
+coverage.html
+
+src/gui/integration/wallets/

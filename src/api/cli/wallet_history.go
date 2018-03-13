@@ -23,7 +23,7 @@ type addrHistory struct {
 	Timestamp time.Time `json:"timestamp"`
 	Status    int       `json:"status"`
 
-	coins uint64 `json:"-"`
+	coins uint64
 }
 
 type byTime []addrHistory
@@ -44,7 +44,7 @@ func walletHisCmd() gcli.Command {
 	name := "walletHistory"
 	return gcli.Command{
 		Name:         name,
-		Usage:        "Display the transaction history of specific wallet. Requires skycoin node rpc.",
+		Usage:        "Display the transaction history of specific wallet. Requires mdl node rpc.",
 		ArgsUsage:    " ",
 		OnUsageError: onCommandUsageError(name),
 		Flags: []gcli.Flag{
