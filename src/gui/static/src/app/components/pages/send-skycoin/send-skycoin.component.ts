@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { WalletService } from '../../../services/wallet.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {WalletService} from '../../../services/wallet.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MatSnackBar, MatSnackBarConfig} from '@angular/material/snack-bar';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/filter';
-import { ButtonComponent } from '../../layout/button/button.component';
+import {ButtonComponent} from '../../layout/button/button.component';
+import { IntervalObservable } from 'rxjs/observable/IntervalObservable';
 
 @Component({
   selector: 'app-send-skycoin',
@@ -22,10 +23,17 @@ export class SendSkycoinComponent implements OnInit {
     public formBuilder: FormBuilder,
     public walletService: WalletService,
     private snackbar: MatSnackBar,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.initForm();
+    IntervalObservable
+      .create(2500)
+      .filter(() => !!this.transactions.length)
+      .flatMap(() => this.walletService.retrieveUpdatedTransactions(this.transactions))
+      .subscribe(transactions => this.records = transactions);
+    this.walletService.recent().subscribe(transactions => this.transactions = transactions);
   }
 
   send() {

@@ -15,6 +15,7 @@ import { Address, Wallet } from '../app.datatypes';
 @Injectable()
 export class WalletService {
   addresses: Address[];
+  recentTransactions: Subject<any[]> = new BehaviorSubject<any[]>([]);
   wallets: Subject<Wallet[]> = new BehaviorSubject<Wallet[]>([]);
 
   constructor(
@@ -85,6 +86,10 @@ export class WalletService {
     return this.apiService.get('pendingTxs');
   }
 
+  recent(): Observable<any[]> {
+    return this.recentTransactions.asObservable();
+  }
+
   refreshBalances() {
     this.wallets.first().subscribe(wallets => {
       Observable.forkJoin(wallets.map(wallet => this.retrieveWalletBalance(wallet).map(response => {
@@ -105,8 +110,23 @@ export class WalletService {
       });
   }
 
+  retrieveUpdatedTransactions(transactions) {
+    return Observable.forkJoin((transactions.map(transaction => {
+      return this.apiService.get('transaction', { txid: transaction.id }).map(response => {
+        response.amount = transaction.amount;
+        response.address = transaction.address;
+        return response;
+      });
+    })));
+  }
+
   sendSkycoin(wallet: Wallet, address: string, amount: number) {
     return this.apiService.post('wallet/spend', {id: wallet.filename, dst: address, coins: amount})
+    // .do(output => this.recentTransactions.first().subscribe(transactions => {
+    //   const transaction = {id: output.txn.txid, address: address, amount: amount / 1000000};
+    //   transactions.push(transaction);
+    //   this.recentTransactions.next(transactions);
+    // }));
   }
 
   sum(): Observable<number> {
