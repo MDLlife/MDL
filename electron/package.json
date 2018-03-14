@@ -1,9 +1,9 @@
 {
-    "name": "mdl",
-    "productName": "mdl",
-    "author": "MDLlife",
+    "name": "MDL",
+    "productName": "MDL",
+    "author": "MDL.life",
     "main": "src/electron-main.js",
-    "version": "0.21.1",
+    "version": "0.21.2",
     "description": "MDLlife wallet",
     "license": "MIT",
     "build": {

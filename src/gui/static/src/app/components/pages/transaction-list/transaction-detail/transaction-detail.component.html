@@ -4,7 +4,7 @@
   </div>
   <div class="-body">
     <div class="-icon" [ngClass]="{ '-incoming': transaction.balance > 0, '-pending': !transaction.confirmed }">
-      <img src="/assets/img/send-gold.png">
+      <img src="/assets/img/send_1.svg">
     </div>
     <h4>{{ transaction.balance }} MDL</h4>
     <p *ngIf="price">{{ transaction.balance * price | currency:'USD':true:'1.2-2' }}</p>

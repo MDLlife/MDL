@@ -12,8 +12,8 @@
         <div class="-wallet" (click)="toggleWallet(wallet)">
           <div class="-width-250 -label">{{ wallet.label }}</div>
           <div class="flex-fill -encryption">
-            <img src="../../../../assets/img/lock-gold.png" *ngIf="!wallet.seed">
-            <img src="../../../../assets/img/unlock-grey.png" *ngIf="wallet.seed">
+            <img src="../../../../assets/img/lock.svg" *ngIf="!wallet.seed">
+            <img src="../../../../assets/img/unlock_gray.svg" *ngIf="wallet.seed">
           </div>
           <div class="-width-150 -hours">{{ (wallet.hours ? wallet.hours : 0) | number:'1.0-6' }}</div>
           <div class="-width-150 -coins">{{ (wallet.coins ? wallet.coins : 0) | number:'1.0-6' }}</div>
@@ -27,10 +27,10 @@
     </div>
     <div class="action-buttons">
       <button mat-button (click)="addWallet()">
-        <img src="../../../../assets/img/plus-gold.png"> Add Wallet
+        <img src="../../../../assets/img/add_wallet.svg"> Add Wallet
       </button>
       <button mat-button (click)="loadWallet()">
-        <img src="../../../../assets/img/load-gold.png"> Load Wallet
+        <img src="../../../../assets/img/load_wallet.svg"> Load Wallet
       </button>
     </div>
   </div>

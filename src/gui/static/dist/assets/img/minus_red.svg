@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="44px" viewBox="0 0 44 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Page 1</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 0 43.9997 0 43.9997 43.9993 0 43.9993"></polygon>
+    </defs>
+    <g id="SEND-Copy-4" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-668.000000, -436.000000)">
+        <g id="Page-1" transform="translate(424.000000, 134.000000)">
+            <g transform="translate(244.000000, 302.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Clip-2"></g>
+                <path d="M30.9887,23.0193 L13.0277,23.0193 C12.4647,23.0193 12.0087,22.5623 12.0087,21.9993 C12.0087,21.4373 12.4647,20.9803 13.0277,20.9803 L30.9887,20.9803 C31.5517,20.9803 32.0087,21.4373 32.0087,21.9993 C32.0087,22.5623 31.5517,23.0193 30.9887,23.0193 M21.9997,-0.0007 C9.8687,-0.0007 -0.0003,9.8693 -0.0003,21.9993 C-0.0003,34.1303 9.8687,43.9993 21.9997,43.9993 C34.1307,43.9993 43.9997,34.1303 43.9997,21.9993 C43.9997,9.8693 34.1307,-0.0007 21.9997,-0.0007" id="Fill-1" fill="#E840A3" mask="url(#mask-2)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

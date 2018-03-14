@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 14</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0.5094 0.771 25.421 0.771 25.421 25.688 0.5094 25.688"></polygon>
+    </defs>
+    <g id="SEND-Copy-4" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-1161.000000, -555.000000)">
+        <g id="Page-1" transform="translate(-282.000000, 326.000000)">
+            <g id="Group-13" transform="translate(336.000000, 229.000000)">
+                <g id="Group-14" transform="translate(1107.000000, 0.000000)">
+                    <path d="M3.592,19.3869 L0.263,28.3139 C0.234,28.4219 0.218,28.5299 0.216,28.6339 C0.21,28.8439 0.256,29.0439 0.341,29.2229 C0.425,29.4019 0.549,29.5589 0.7,29.6839 C0.928,29.8699 1.218,29.9839 1.531,29.9839 C1.646,29.9839 1.765,29.9669 1.884,29.9349 L10.812,26.6069 L3.592,19.3869 Z M2.681,25.6289 L4.138,21.7209 L8.478,26.0599 L4.57,27.5179 L2.681,25.6289 Z" id="Fill-8" fill="#CECFD0"></path>
+                    <g id="Group-12" transform="translate(4.000000, 0.000000)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <g id="Clip-11"></g>
+                        <path d="M25.0344,6.553 L19.6384,1.157 C19.3814,0.9 19.0434,0.771 18.7044,0.771 C18.3664,0.771 18.0294,0.9 17.7714,1.157 L0.5094,18.427 L7.7704,25.688 L25.0344,8.42 C25.5504,7.905 25.5504,7.069 25.0344,6.553 M19.3134,5.715 L8.6254,16.408 C8.4954,16.539 8.3254,16.603 8.1554,16.603 C7.9864,16.603 7.8164,16.539 7.6854,16.408 C7.4274,16.15 7.4274,15.73 7.6854,15.47 L18.3754,4.777 C18.6344,4.517 19.0544,4.517 19.3134,4.777 C19.5724,5.036 19.5724,5.456 19.3134,5.715" id="Fill-10" fill="#CECFD0" mask="url(#mask-2)"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -118,7 +118,7 @@ Access the API: [http://localhost:6420/version](http://localhost:6420/version).
 ## Contributing a node to the network
 
 Add your node's ip:port to the [peers.txt](./peers.txt) file.
-This file will be periodically uploaded to https://downloads.mdl.net/blockchain/peers.txt
+This file will be periodically uploaded to https://res.mdl.wtf/blockchain/peers.txt
 and used to seed client with peers.
 
 ## Development
