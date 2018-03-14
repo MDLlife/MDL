@@ -28,10 +28,10 @@ BUILDLIB_DIR = $(BUILD_DIR)/skycoinlib
 LIB_DIR = lib
 
 run:  ## Run the skycoin node. To add arguments, do 'make ARGS="--foo" run'.
-	go run cmd/mdllife/mdl.go --gui-dir="./${STATIC_DIR}" ${ARGS}
+	go run cmd/mdl/mdl.go --gui-dir="./${STATIC_DIR}" ${ARGS}
 
 run-help: ## Show skycoin node help
-	@go run cmd/mdllife/mdl.go --help
+	@go run cmd/mdl/mdl.go --help
 
 test: ## Run tests
 	go test ./cmd/... -timeout=1m
