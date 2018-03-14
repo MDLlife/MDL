@@ -7,7 +7,7 @@ import (
 	"sync"
 
 	"github.com/MDLlife/MDL/src/cipher"
-	bip39 "github.com/MDLlife/MDL/src/cipher/go-bip39"
+//	bip39 "github.com/MDLlife/MDL/src/cipher/go-bip39"
 	"github.com/MDLlife/MDL/src/coin"
 	"github.com/MDLlife/MDL/src/visor/blockdb"
 )
@@ -48,25 +48,25 @@ func NewService(walletDir string) (*Service, error) {
 
 	serv.wallets = serv.removeDup(w)
 
-	if len(serv.wallets) == 0 {
-		seed, err := bip39.NewDefaultMnemomic()
-		if err != nil {
-			return nil, err
-		}
-
-		// create default wallet
-		w, err := serv.CreateWallet("", Options{
-			Label: "Your Wallet",
-			Seed:  seed,
-		})
-		if err != nil {
-			return nil, err
-		}
-
-		if err := w.Save(serv.WalletDirectory); err != nil {
-			return nil, fmt.Errorf("failed to save wallets to %s: %v", serv.WalletDirectory, err)
-		}
-	}
+	// if len(serv.wallets) == 0 {
+	// 	seed, err := bip39.NewDefaultMnemomic()
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+  //
+	// 	// create default wallet
+	// 	w, err := serv.CreateWallet("", Options{
+	// 		Label: "Your Wallet",
+	// 		Seed:  seed,
+	// 	})
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+  //
+	// 	if err := w.Save(serv.WalletDirectory); err != nil {
+	// 		return nil, fmt.Errorf("failed to save wallets to %s: %v", serv.WalletDirectory, err)
+	// 	}
+	// }
 
 	return serv, nil
 }
