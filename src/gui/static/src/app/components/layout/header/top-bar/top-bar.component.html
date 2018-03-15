@@ -1,7 +1,4 @@
 <div class="buttons-left"></div>
-<div class="title">
-  {{ title }}
-</div>
 <div class="buttons-right">
   <mat-menu #settingsMenu="matMenu" [overlapTrigger]="false">
     <button mat-menu-item [routerLink]="['/settings/network']"> Networking </button>
@@ -12,7 +9,7 @@
 
   <mat-menu #menuMenu="matMenu" [overlapTrigger]="false">
     <button mat-menu-item [routerLink]="['/settings/backup']"> Backup wallet </button>
-    <a mat-menu-item href="http://explorer.mdl.wtf:8080" class="color-primary"> MDL Explorer </a>
+    <a mat-menu-item target="_blank" href="http://explorer.mdl.wtf:8080" class="color-primary"> MDL Explorer </a>
   </mat-menu>
 
   <button mat-icon-button [matMenuTriggerFor]="settingsMenu">

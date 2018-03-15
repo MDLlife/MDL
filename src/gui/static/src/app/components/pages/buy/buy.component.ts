@@ -65,7 +65,7 @@ export class BuyComponent {
 
   private loadConfig() {
     this.purchaseService.config()
-      .filter(config => !!config && !!config.sky_btc_exchange_rate)
+      .filter(config => !!config && !!config.mdl_btc_exchange_rate)
       .first()
       .subscribe(config => this.config = config);
   }

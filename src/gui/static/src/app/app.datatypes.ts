@@ -18,7 +18,7 @@ export class PurchaseOrder {
 
 export class TellerConfig {
   enabled: boolean;
-  sky_btc_exchange_rate: number;
+  mdl_btc_exchange_rate: number;
 }
 
 export class Transaction {

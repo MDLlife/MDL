@@ -5,11 +5,11 @@
     <key>CFBundleExecutable</key>
     <string>Skycoin</string>
     <key>CFBundleIdentifier</key>
-    <string>org.skycoin.Skycoin</string>
+    <string>life.MDL</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>Skycoin</string>
+    <string>MDL</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>LSMinimumSystemVersion</key>
@@ -26,10 +26,10 @@
     <array>
       <dict>
         <key>CFBundleURLName</key>
-        <string>Skycoin</string>
+        <string>MDL</string>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>skycoin</string>
+          <string>mdl</string>
         </array>
       </dict>
     </array>

@@ -33,14 +33,14 @@ export class PurchaseService {
     return this.get('config')
       .map((response: any) => ({
         enabled: true,
-        sky_btc_exchange_rate: parseFloat(response.sky_btc_exchange_rate),
+        mdl_btc_exchange_rate: parseFloat(response.mdl_btc_exchange_rate),
       }))
       .subscribe(response => this.configSubject.next(response));
   }
 
   generate(wallet: Wallet): Observable<PurchaseOrder> {
     return this.walletService.addAddress(wallet).flatMap(address => {
-      return this.post('bind', { skyaddr: address.address, coin_type: 'BTC' })
+      return this.post('bind', { mdladdr: address.address, coin_type: 'BTC' })
         .map(response => ({
           coin_type: response.coin_type,
           deposit_address: response.deposit_address,
@@ -52,7 +52,7 @@ export class PurchaseService {
   }
 
   scan(address: string) {
-    return this.get('status?skyaddr=' + address)
+    return this.get('status?mdladdr=' + address)
       .map((response: any) => {
         if (!response.statuses || response.statuses.length > 1) {
           throw new Error('too many purchase orders found');
