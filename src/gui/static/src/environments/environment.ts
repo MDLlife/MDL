@@ -6,5 +6,5 @@
 export const environment = {
   nodeUrl: '/api/',
   production: false,
-  tellerUrl: '/teller/',
+  tellerUrl: 'http://ito.mdl.wtf:1550/api/',
 };

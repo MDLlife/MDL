@@ -7,8 +7,8 @@
           <span class="primary-gradient-background">1</span>
         </div>
         <div class="-instructions flex-fill">
-          <h3>Deposit Location</h3>
-          <p>Choose a wallet where you'd like us to deposit your MDL after we receive your Bitcoin.</p>
+          <h3>Choose your MDL wallet</h3>
+          <p>This is your MDL wallet where you will receive your MDL tokens, after the transaction is confirmed.</p>
           <div class="form-field">
             <select formControlName="wallet" id="wallet" class="-wallet" required>
               <option disabled selected>Make a choice</option>
@@ -17,9 +17,20 @@
               </option>
             </select>
           </div>
+          <p>Choose preferable payment method. Plese be aware that some methods can be temporarily disabled.</p>
+          <div class="form-field">
+            <select formControlName="coin_type" id="coin_type" class="-coin_type" required>
+              <option value="" selected>Please choose your favourite crypto ;)</option>
+              <option value="BTC" disabled>Bitcoin (Under Mainteinance)</option>
+              <option value="ETH">Ethereum</option>
+              <option value="SKY" disabled>Skycoin (Temporary Disabled)</option>
+              <option value="WAVES" disabled>WAVES (Temporary Disabled)</option>
+              <option value="MDL.life" disabled>MDL.life (pre-MDL token on Waves, coming later...)</option>
+            </select>
+          </div>
           <span class="-subtitle">
-          Each time a new wallet and address are selected, a new BTC address is generated. A single MDL address can
-          have up to 5 BTC addresses assigned to it.
+          Each time a new MDL address is selected, a new {{ this.order.coin_type }} address is generated. A single MDL address can
+          have up to 2 {{form.value.coin_type}} addresses assigned to it.
         </span>
         </div>
       </div>
@@ -28,17 +39,14 @@
           <span class="primary-gradient-background">2</span>
         </div>
         <div class="-instructions flex-fill">
-          <h3>Send Bitcoin</h3>
+          <h3>Send {{form.value.coin_type}}</h3>
           <p>
-            Send Bitcoin to the address below. Once received, we will deposit the MDL to a new address in the wallet
-            selected above at the current rate of <span>{{ config.mdl_btc_exchange_rate }} MDL/BTC</span>.
+            Send {{form.value.coin_type}} to the address below. After enough confirmations on the blockchain, you will receive MDL tokens to the wallet
+            selected above at the current rate of <span>{{ form.value.coin_type === 'ETH' ? config.mdl_eth_exchange_rate : config.mdl_btc_exchange_rate }} MDL/{{form.value.coin_type}}</span>.
           </p>
           <span class="-address">
           {{ order.deposit_address }}
           </span>
-          <span class="-subtitle">
-          Only send multiple of the MDL/BTC rate! MDL is sent in whole number; fractional MDL is not sent!
-        </span>
         </div>
       </div>
       <div class="-step" *ngIf="order">
@@ -48,8 +56,8 @@
         <div class="-instructions flex-fill">
           <h3>Receive MDL</h3>
           <p>
-            After receiving your Bitcoin, we'll send you your MDL. It may take anywhere between 20 minutes and an hour
-            to receive your MDL.
+            After sending your deposit, you'll receive your MDL tokens. It may take anywhere between 30 minutes and an hour
+            to receive your MDL, it depends on the crypto you've choosen as well as business of its blockchain. If something went wrong, please contact us at support@mdl.life.
           </p>
           <span class="-status">
             Status: {{ order.status | tellerStatus }}

@@ -46,17 +46,28 @@ export class BuyComponent {
   removeOrder() {
     window.localStorage.removeItem('purchaseOrder');
     this.order = null;
+    this.form.controls.coin_type.setValue('', { emitEvent: false });
   }
 
   private initForm() {
     this.form = this.formBuilder.group({
       wallet: ['', Validators.required],
+      coin_type: ['', Validators.required],
     });
 
     this.form.controls.wallet.valueChanges.subscribe(filename => {
+      if (this.form.value.coin_type === '') return;
       const wallet = this.wallets.find(wallet => wallet.filename === filename);
       console.log('changing wallet value', filename);
-      this.purchaseService.generate(wallet).subscribe(
+      this.purchaseService.generate(wallet, this.form.value.coin_type).subscribe(
+        order => this.saveData(order),
+        error => this.snackBar.open(error.toString())
+      );
+    })
+    this.form.controls.coin_type.valueChanges.subscribe(type => {
+      if (this.form.value.wallet === '') return;
+      const wallet = this.wallets.find(wallet => wallet.filename === this.form.value.wallet);
+      this.purchaseService.generate(wallet, type).subscribe(
         order => this.saveData(order),
         error => this.snackBar.open(error.toString())
       );
@@ -79,11 +90,14 @@ export class BuyComponent {
 
       if (this.order) {
         this.form.controls.wallet.setValue(this.order.filename, { emitEvent: false });
+        this.form.controls.coin_type.setValue(this.order.coin_type, { emitEvent: false });
       }
     });
   }
 
   private loadOrder() {
+    if (this.form.value.coin_type === '' || this.form.value.coin_type === '') return;
+
     const order: PurchaseOrder = JSON.parse(window.localStorage.getItem('purchaseOrder'));
     if (order) {
       this.order = order;

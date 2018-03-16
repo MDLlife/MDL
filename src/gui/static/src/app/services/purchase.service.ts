@@ -3,9 +3,10 @@ import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { PurchaseOrder, TellerConfig, Wallet } from '../app.datatypes';
 import { WalletService } from './wallet.service';
-import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/timeout';
 
 @Injectable()
 export class PurchaseService {
@@ -15,7 +16,7 @@ export class PurchaseService {
   private purchaseUrl = environment.tellerUrl;
 
   constructor(
-    private httpClient: HttpClient,
+    private http: Http,
     private walletService: WalletService,
   ) {
     this.getConfig();
@@ -38,9 +39,9 @@ export class PurchaseService {
       .subscribe(response => this.configSubject.next(response));
   }
 
-  generate(wallet: Wallet): Observable<PurchaseOrder> {
+  generate(wallet: Wallet, coin_type: string): Observable<PurchaseOrder> {
     return this.walletService.addAddress(wallet).flatMap(address => {
-      return this.post('bind', { mdladdr: address.address, coin_type: 'BTC' })
+      return this.post('bind', { mdladdr: address.address, coin_type: coin_type })
         .map(response => ({
           coin_type: response.coin_type,
           deposit_address: response.deposit_address,
@@ -61,12 +62,15 @@ export class PurchaseService {
       });
   }
 
-  private get(url): any {
-    return this.httpClient.get(this.purchaseUrl + url)
+
+  private get(url) {
+    return this.http.get(this.purchaseUrl + url).timeout(15000)
+      .map((res: any) => res.json())
   }
 
-  private post(url, parameters = {}): any {
-    return this.httpClient.post(this.purchaseUrl + url, parameters)
+  private post(url, parameters = {}) {
+    return this.http.post(this.purchaseUrl + url, parameters).timeout(15000)
+      .map((res: any) => res.json())
   }
 
 }

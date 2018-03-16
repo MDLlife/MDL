@@ -12,9 +12,9 @@ export class TellerStatusPipe implements PipeTransform {
       case 'waiting_confirm':
         return 'Waiting for confirmation';
       case 'waiting_deposit':
-        return 'Waiting for Bitcoin deposit';
+        return 'Waiting for your deposit';
       case 'waiting_send':
-        return 'Waiting to send Skycoin';
+        return 'Waiting to send MDL';
       default:
         return 'Unknown';
     }
