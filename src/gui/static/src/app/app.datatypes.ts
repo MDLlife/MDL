@@ -18,7 +18,13 @@ export class PurchaseOrder {
 
 export class TellerConfig {
   enabled: boolean;
+  supported: string[];
   mdl_btc_exchange_rate: number;
+  mdl_eth_exchange_rate: number;
+  mdl_sky_exchange_rate: number;
+  mdl_waves_exchange_rate: number;
+  max_bound_addrs: number;
+
 }
 
 export class Transaction {

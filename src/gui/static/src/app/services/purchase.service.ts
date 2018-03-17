@@ -35,6 +35,11 @@ export class PurchaseService {
       .map((response: any) => ({
         enabled: true,
         mdl_btc_exchange_rate: parseFloat(response.mdl_btc_exchange_rate),
+        mdl_eth_exchange_rate: parseFloat(response.mdl_eth_exchange_rate),
+        mdl_sky_exchange_rate: parseFloat(response.mdl_sky_exchange_rate),
+        mdl_waves_exchange_rate: parseFloat(response.mdl_waves_exchange_rate),
+        max_bound_addrs: parseFloat(response.max_bound_addrs),
+        supported: response.supported,
       }))
       .subscribe(response => this.configSubject.next(response));
   }

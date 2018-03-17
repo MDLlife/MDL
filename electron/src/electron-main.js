@@ -23,9 +23,9 @@ const defaultURL = 'http://127.0.0.1:8320/';
 let currentURL;
 
 // Force everything localhost, in case of a leak
-app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1, EXCLUDE api.coinmarketcap.com, api.github.com');
-app.commandLine.appendSwitch('ssl-version-fallback-min', 'tls1.2');
-app.commandLine.appendSwitch('--no-proxy-server');
+//app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1, EXCLUDE api.coinmarketcap.com, api.github.com, ito.mdl.wtf, explorer.mdr.wtf');
+//app.commandLine.appendSwitch('ssl-version-fallback-min', 'tls1.2');
+//app.commandLine.appendSwitch('--no-proxy-server');
 app.setAsDefaultProtocolClient('mdl');
 
 
@@ -142,7 +142,7 @@ function createWindow(url) {
   win = new BrowserWindow({
     width: 1200,
     height: 900,
-    title: 'MDLlife',
+    title: 'MDL Talent Hub :: MDL.life :: MDL Wallet',
     icon: iconPath,
     nodeIntegration: false,
     webPreferences: {
@@ -156,7 +156,7 @@ function createWindow(url) {
 
   const ses = win.webContents.session
   ses.clearCache(function () {
-    console.log('Cleared the caching of the MDLlife wallet.');
+    console.log('Cleared the caching of the MDL wallet.');
   });
 
   ses.clearStorageData([],function(){
@@ -178,9 +178,9 @@ function createWindow(url) {
 
   // create application's main menu
   var template = [{
-    label: "MDLlife",
+    label: "MDL Talent Hub :: MDL Wallet :: MDL.life",
     submenu: [
-      { label: "About MDLlife", selector: "orderFrontStandardAboutPanel:" },
+       { label: "About MDL", selector: "orderFrontStandardAboutPanel:" },
       { type: "separator" },
       { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); } }
     ]

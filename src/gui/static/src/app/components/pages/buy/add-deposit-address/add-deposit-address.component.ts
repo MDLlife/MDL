@@ -31,6 +31,7 @@ export class AddDepositAddressComponent implements OnInit {
   private initForm() {
     this.form = this.formBuilder.group({
       address: ['', Validators.required],
+      coin_type: ['', Validators.required],
     });
   }
 }

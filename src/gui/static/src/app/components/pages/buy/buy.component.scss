@@ -15,9 +15,11 @@
   .-background-image {
     display: block;
     left: 50%;
-    width: 80%;
+    width: 60%;
     position: absolute;
     top: 0;
+    right: 8px;
+    padding: 80px;
   }
 }
 
@@ -26,14 +28,20 @@
     left: 40%;
     width: 90%;
     max-width: 850px;
+    right: 8px;
+    padding: 30px;
   }
 }
 
 @media (min-width: 1200px) {
   .-background-image {
     left: 40%;
-    width: 80%;
     max-width: 850px;
+    width: 60%;
+    position: absolute;
+    top: 0;
+    right: 8px;
+    padding: 80px;
   }
 }
 

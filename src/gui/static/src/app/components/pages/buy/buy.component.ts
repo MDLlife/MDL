@@ -16,6 +16,8 @@ export class BuyComponent {
 
   address: Address;
   config: any;
+  supported: string[];
+  methods: any;
   form: FormGroup;
   order: PurchaseOrder;
   wallets: Wallet[];
@@ -65,6 +67,7 @@ export class BuyComponent {
       );
     })
     this.form.controls.coin_type.valueChanges.subscribe(type => {
+      if (type === '') return;
       if (this.form.value.wallet === '') return;
       const wallet = this.wallets.find(wallet => wallet.filename === this.form.value.wallet);
       this.purchaseService.generate(wallet, type).subscribe(
@@ -78,7 +81,10 @@ export class BuyComponent {
     this.purchaseService.config()
       .filter(config => !!config && !!config.mdl_btc_exchange_rate)
       .first()
-      .subscribe(config => this.config = config);
+      .subscribe(config => {
+        this.config = config;
+        this.supported = config.supported;
+      });
   }
 
   private loadData() {
