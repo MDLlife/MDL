@@ -22,14 +22,8 @@
             <select formControlName="coin_type" id="coin_type" class="-coin_type" required>
               <option value="" selected>Please choose your favourite crypto ;)</option>
               <option *ngFor="let method of supported" [value]="method.value" [disabled]="method.disabled">
-              {{method.label}}
+                {{method.label}} (1 {{method.value}}  = {{method.price_mdl}} MDL)
               </option>
-              <!-- <option value="BTC" ng-disabled="!supported.includes('BTC')">{{!supported.includes('BTC')}} Bitcoin (Under Mainteinance)  </option>
-              <option value="ETH" ng-disabled="!supported.includes('ETH')">Ethereum</option>
-              <option value="SKY" ng-disabled="!supported.includes('SKY')">Skycoin (Temporary Disabled)</option>
-              <option value="WAVES" ng-disabled="!supported.includes('WAVES')">WAVES (Temporary Disabled)</option>
-              <option value="MDL.life" ng-disabled="!supported.includes('MDL.life')">MDL.life (pre-MDL token on Waves, coming later...)</option>
--->
             </select>
           </div>
           <span class="-subtitle">
@@ -46,7 +40,7 @@
           <h3>Send {{form.value.coin_type}}</h3>
           <p>
             Send {{form.value.coin_type}} to the address below. After enough confirmations on the blockchain, you will receive MDL tokens to the wallet
-            selected above at the current rate of <span>{{ form.value.coin_type === 'ETH' ? config.mdl_eth_exchange_rate : config.mdl_btc_exchange_rate }} MDL = 1 {{form.value.coin_type}}</span>.
+            selected above at the current rate of <span>{{ currentCoinPrice() }} MDL = 1 {{form.value.coin_type}}</span>.
           </p>
           <span class="-address">
           {{ order.deposit_address }}
@@ -60,7 +54,7 @@
         <div class="-instructions flex-fill">
           <h3>Receive MDL</h3>
           <p>
-            After sending your deposit, you'll receive your MDL tokens. It may take anywhere between 30 minutes and an hour
+            After sending your deposit, you'll receive your MDL tokens. It may take anywhere between 30 minutes or several hours
             to receive your MDL, it depends on the crypto you've choosen as well as business of its blockchain. If something went wrong, please contact us at support@mdl.life.
           </p>
           <span class="-status">

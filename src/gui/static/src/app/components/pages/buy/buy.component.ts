@@ -5,6 +5,7 @@ import { WalletService } from '../../../services/wallet.service';
 import { Address, PurchaseOrder, Wallet } from '../../../app.datatypes';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ButtonComponent } from '../../layout/button/button.component';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-buy',
@@ -63,7 +64,9 @@ export class BuyComponent {
       console.log('changing wallet value', filename);
       this.purchaseService.generate(wallet, this.form.value.coin_type).subscribe(
         order => this.saveData(order),
-        error => this.snackBar.open(error.toString())
+        err => {
+          this.snackBar.open(err._body);
+        }
       );
     })
     this.form.controls.coin_type.valueChanges.subscribe(type => {
@@ -72,7 +75,9 @@ export class BuyComponent {
       const wallet = this.wallets.find(wallet => wallet.filename === this.form.value.wallet);
       this.purchaseService.generate(wallet, type).subscribe(
         order => this.saveData(order),
-        error => this.snackBar.open(error.toString())
+        err => {
+          this.snackBar.open(err._body);
+        }
       );
     })
   }
@@ -121,5 +126,15 @@ export class BuyComponent {
       response => this.order.status = response.status,
       error => console.log(error)
     );
+  }
+
+  public currentCoinPrice() {
+    switch (this.form.value.coin_type) {
+      case "BTC": return this.config.mdl_btc_exchange_rate;
+      case "ETH": return this.config.mdl_eth_exchange_rate;
+      case "SKY": return this.config.mdl_sky_exchange_rate;
+      case "WAVES": return this.config.mdl_waves_exchange_rate;
+    }
+    return "???";
   }
 }
