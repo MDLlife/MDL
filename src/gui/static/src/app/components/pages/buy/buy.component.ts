@@ -19,6 +19,7 @@ export class BuyComponent {
   config: any;
   supported: string[];
   methods: any;
+  available: number;
   form: FormGroup;
   order: PurchaseOrder;
   wallets: Wallet[];
@@ -42,7 +43,10 @@ export class BuyComponent {
         this.button.setSuccess();
         this.order.status = response.status;
       },
-      error => this.button.setError(error)
+      error => {
+        this.button.setError(error);
+        this.order = null;
+      }
     );
   }
 
@@ -66,17 +70,26 @@ export class BuyComponent {
         order => this.saveData(order),
         err => {
           this.snackBar.open(err._body);
+          setTimeout(() => {
+            this.snackBar.dismiss();
+          }, 5000)
         }
       );
     })
     this.form.controls.coin_type.valueChanges.subscribe(type => {
+      if (this.order) this.order.coin_type = type;
       if (type === '') return;
       if (this.form.value.wallet === '') return;
       const wallet = this.wallets.find(wallet => wallet.filename === this.form.value.wallet);
       this.purchaseService.generate(wallet, type).subscribe(
-        order => this.saveData(order),
+        order => {
+          this.saveData(order);
+        },
         err => {
           this.snackBar.open(err._body);
+          setTimeout(() => {
+            this.snackBar.dismiss();
+          }, 5000)
         }
       );
     })
@@ -89,6 +102,7 @@ export class BuyComponent {
       .subscribe(config => {
         this.config = config;
         this.supported = config.supported;
+        this.available = config.available;
       });
   }
 
@@ -107,7 +121,7 @@ export class BuyComponent {
   }
 
   private loadOrder() {
-    if (this.form.value.coin_type === '' || this.form.value.coin_type === '') return;
+    //if (this.form.value.coin_type === '' || this.form.value.coin_type === '') return;
 
     const order: PurchaseOrder = JSON.parse(window.localStorage.getItem('purchaseOrder'));
     if (order) {
@@ -130,11 +144,11 @@ export class BuyComponent {
 
   public currentCoinPrice() {
     switch (this.form.value.coin_type) {
-      case "BTC": return this.config.mdl_btc_exchange_rate;
-      case "ETH": return this.config.mdl_eth_exchange_rate;
-      case "SKY": return this.config.mdl_sky_exchange_rate;
-      case "WAVES": return this.config.mdl_waves_exchange_rate;
+      case "BTC": return this.config.supported[0].exchange_rate;
+      case "ETH": return this.config.supported[1].exchange_rate;
+      case "SKY": return this.config.supported[2].exchange_rate;
+      case "WAVES": return this.config.supported[3].exchange_rate;
     }
-    return "???";
+    return "1"
   }
 }

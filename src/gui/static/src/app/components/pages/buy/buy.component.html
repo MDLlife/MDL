@@ -2,6 +2,9 @@
 <div class="-background-container">
   <div class="container">
     <div [formGroup]="form" class="-paper" *ngIf="config">
+      <div class="flex-fill">
+        <h2>Available Now: {{available}} MDL</h2>
+      </div>
       <div class="-step">
         <div class="-number">
           <span class="primary-gradient-background">1</span>
@@ -17,22 +20,22 @@
               </option>
             </select>
           </div>
-          <p>Choose preferable payment method. Plese be aware that some methods can be temporarily disabled.</p>
+          <p>Choose preferable payment method. Please be aware that some methods can be temporarily disabled.</p>
           <div class="form-field">
             <select formControlName="coin_type" id="coin_type" class="-coin_type" required>
               <option value="" selected>Please choose your favourite crypto ;)</option>
-              <option *ngFor="let method of supported" [value]="method.value" [disabled]="method.disabled">
-                {{method.label}} (1 {{method.value}}  = {{method.price_mdl}} MDL)
+              <option *ngFor="let method of supported" [value]="method.name" [disabled]="!method.enabled">
+                {{method.label}} (1 {{method.name}} = {{method.exchange_rate}} MDL)
               </option>
             </select>
           </div>
           <span class="-subtitle">
           Each time a new MDL address is selected, a new {{ form.value.coin_type }} address is generated. A single MDL address can
-          have up to 2 {{form.value.coin_type}} addresses assigned to it.
+          have up to {{config.max_bound_addrs}} {{form.value.coin_type}} addresses assigned to it.
         </span>
         </div>
       </div>
-      <div class="-step" *ngIf="order && form.value.coin_type">
+      <div class="-step" *ngIf="order && form.value.coin_type != ''">
         <div class="-number">
           <span class="primary-gradient-background">2</span>
         </div>

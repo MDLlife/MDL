@@ -40,6 +40,7 @@ export class PurchaseService {
         mdl_waves_exchange_rate: parseFloat(response.mdl_waves_exchange_rate),
         max_bound_addrs: parseFloat(response.max_bound_addrs),
         supported: response.supported,
+        available: parseFloat(response.available),
       }))
       .subscribe(response => this.configSubject.next(response));
   }

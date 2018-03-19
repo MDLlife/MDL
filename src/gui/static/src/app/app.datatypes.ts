@@ -18,6 +18,7 @@ export class PurchaseOrder {
 
 export class TellerConfig {
   enabled: boolean;
+  available: number;
   supported: string[];
   mdl_btc_exchange_rate: number;
   mdl_eth_exchange_rate: number;
