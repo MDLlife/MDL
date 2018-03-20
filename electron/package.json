@@ -3,7 +3,7 @@
     "productName": "MDL",
     "author": "MDL.life",
     "main": "src/electron-main.js",
-    "version": "0.21.7",
+    "version": "0.21.8",
     "description": "MDL wallet",
     "license": "MIT",
     "build": {

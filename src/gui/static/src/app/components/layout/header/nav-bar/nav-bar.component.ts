@@ -8,7 +8,7 @@ import { AppConfig } from '../../../../app.config';
 })
 export class NavBarComponent implements OnInit {
 
-  otcEnabled = AppConfig.otcEnabled;
+  otcEnabled = AppConfig.otcEnabled && ( new Date() < new Date(Date.UTC(2018, 3, 24)) );
 
   constructor() { }
 
