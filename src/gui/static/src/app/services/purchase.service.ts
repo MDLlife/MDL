@@ -33,7 +33,7 @@ export class PurchaseService {
   getConfig() {
     return this.get('config')
       .map((response: any) => ({
-        enabled: true,
+        enabled: response.enabled,
         mdl_btc_exchange_rate: parseFloat(response.mdl_btc_exchange_rate),
         mdl_eth_exchange_rate: parseFloat(response.mdl_eth_exchange_rate),
         mdl_sky_exchange_rate: parseFloat(response.mdl_sky_exchange_rate),
@@ -43,6 +43,20 @@ export class PurchaseService {
         available: parseFloat(response.available),
       }))
       .subscribe(response => this.configSubject.next(response));
+  }
+
+  refreshConfig() {
+    return this.get('config')
+      .map((response: any) => ({
+        enabled: response.enabled,
+        mdl_btc_exchange_rate: parseFloat(response.mdl_btc_exchange_rate),
+        mdl_eth_exchange_rate: parseFloat(response.mdl_eth_exchange_rate),
+        mdl_sky_exchange_rate: parseFloat(response.mdl_sky_exchange_rate),
+        mdl_waves_exchange_rate: parseFloat(response.mdl_waves_exchange_rate),
+        max_bound_addrs: parseFloat(response.max_bound_addrs),
+        supported: response.supported,
+        available: parseFloat(response.available),
+      }));
   }
 
   generate(wallet: Wallet, coin_type: string): Observable<PurchaseOrder> {

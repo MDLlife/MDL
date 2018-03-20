@@ -14,6 +14,7 @@ import { Observable } from 'rxjs/Observable';
 })
 export class BuyComponent {
   @ViewChild('button') button: ButtonComponent;
+  @ViewChild('refresh') refresh: ButtonComponent;
 
   address: Address;
   config: any;
@@ -34,6 +35,7 @@ export class BuyComponent {
   ngOnInit() {
     this.initForm();
     this.loadData();
+
   }
 
   checkStatus() {
@@ -95,9 +97,23 @@ export class BuyComponent {
     })
   }
 
+  refreshConfig() {
+    this.refresh.setLoading();
+    this.purchaseService.refreshConfig()
+      .first()
+      .subscribe(config => {
+        this.refresh.setSuccess();
+        this.config = config;
+        this.supported = config.supported;
+        this.available = config.available;
+      }, error => {
+        this.refresh.setError(error);
+      });
+  }
+
   private loadConfig() {
     this.purchaseService.config()
-      .filter(config => !!config && !!config.mdl_btc_exchange_rate)
+      .filter(config => !!config && !!config.enabled)
       .first()
       .subscribe(config => {
         this.config = config;

@@ -30,7 +30,7 @@ import (
 
 var (
 	// Version node version which will be set when build wallet by LDFLAGS
-	Version = "0.21.7"
+	Version = "0.21.8rc1"
 	// Commit id
 	Commit = ""
 
@@ -67,8 +67,10 @@ var (
 
 	// DefaultConnections the default trust node addresses
 	DefaultConnections = []string{
+		"208.110.84.122:7800",
+		"69.90.132.231:7800",
 		"76.74.178.136:7800",
-	}
+		"64.34.218.31:7800"	}
 )
 
 // Config records the node's configuration

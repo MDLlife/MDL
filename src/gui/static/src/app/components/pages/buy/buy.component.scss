@@ -55,6 +55,10 @@
   max-width: 540px;
   z-index: 5;
 
+  .-available {
+    text-align: center;
+  }
+  
   .-step {
     display: flex;
     margin-bottom: 30px;
@@ -74,6 +78,7 @@
         width: 40px;
       }
     }
+
 
     .-instructions {
       flex: 1 1;

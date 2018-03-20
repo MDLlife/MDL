@@ -2,8 +2,9 @@
 <div class="-background-container">
   <div class="container">
     <div [formGroup]="form" class="-paper" *ngIf="config">
-      <div class="flex-fill">
-        <h2>Available Now: {{available}} MDL</h2>
+      <div class="-available flex-fill">
+        <h2 >Available Now: {{available}} MDL</h2>
+        <app-button #refresh (action)="refreshConfig()">Refresh</app-button>
       </div>
       <div class="-step">
         <div class="-number">
