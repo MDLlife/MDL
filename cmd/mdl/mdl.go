@@ -30,7 +30,7 @@ import (
 
 var (
 	// Version node version which will be set when build wallet by LDFLAGS
-	Version = "0.21.8rc1"
+	Version = "0.21.9"
 	// Commit id
 	Commit = ""
 

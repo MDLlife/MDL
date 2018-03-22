@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   get balance() {
     if (this.price === null) { return 'loading..'; }
     const balance = Math.round(this.coins * this.price * 100) / 100;
-    return '$' + balance.toFixed(2) + ' ($' + (Math.round(this.price * 100) / 100) + ')';
+    return '$' + balance.toFixed(2) + ' (1 MDL = $' + (Math.round(this.price * 100) / 100) + 'USD)';
   }
 
   get loading() {
