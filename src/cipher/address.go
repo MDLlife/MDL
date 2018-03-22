@@ -4,7 +4,8 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-
+        "strings"
+	
 	"github.com/MDLlife/MDL/src/cipher/base58"
 )
 
@@ -52,6 +53,9 @@ func AddressFromSecKey(secKey SecKey) Address {
 
 // DecodeBase58Address creates an Address from its base58 encoding
 func DecodeBase58Address(addr string) (Address, error) {
+	if strings.HasPrefix(addr, "MDL")	 {
+		strings.Replace(addr, "MDL", "", 1)
+	}
 	b, err := base58.Base582Hex(addr)
 	if err != nil {
 		return Address{}, err
@@ -151,9 +155,9 @@ func (addr Address) Verify(key PubKey) error {
 // String address as Base58 encoded string
 // Returns address as printable
 // version is first byte in binary format
-// in printed address its key, version, checksum
+// in printed address its prefix, key, version, checksum
 func (addr Address) String() string {
-	return string(base58.Hex2Base58(addr.Bytes()))
+	return "MDL + string(base58.Hex2Base58(addr.Bytes()))
 }
 
 // BitcoinString convert bitcoin address to hex string
