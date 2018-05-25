@@ -3,6 +3,7 @@
 # Runs "live"-mode tests against a mdl node that is already running
 # "live" mode tests assume the blockchain data is active and may change at any time
 # Data is checked for the appearance of correctness but the values themselves are not verified
+# The MDL node must be run with -enable-wallet-api=true
 
 #Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
@@ -12,6 +13,15 @@ HOST="http://0.0.0.0:$PORT"
 RPC_ADDR="0.0.0.0:$RPC_PORT"
 MODE="live"
 TEST=""
+UPDATE=""
+TIMEOUT="10m"
+# run go test with -v flag
+VERBOSE=""
+# run go test with -run flag
+RUN_TESTS=""
+# run wallet tests
+TEST_LIVE_WALLET=""
+FAILFAST=""
 
 
 echo "sleeping for startup"
@@ -22,15 +32,25 @@ usage () {
   echo "Usage: $SCRIPT"
   echo "Optional command line arguments"
   echo "-t <string>  -- Test to run, gui or cli; empty runs both tests"
+  echo "-r <string>  -- Run test with -run flag"
+  echo "-u <boolean> -- Update stable testdata"
+  echo "-v <boolean> -- Run test with -v flag"
+  echo "-w <boolean> -- Run wallet tests."
+  echo "-f <boolean> -- Run test with -failfast flag"
   exit 1
 }
 
-while getopts "h?t:u" args; do
+while getopts "h?t:r:uvwf" args; do
 case $args in
     h|\?)
         usage;
         exit;;
     t ) TEST=${OPTARG};;
+    r ) RUN_TESTS="-run ${OPTARG}";;
+    u ) UPDATE="--update";;
+    v ) VERBOSE="-v";;
+    w ) TEST_LIVE_WALLET="--test-live-wallet";;
+    f ) FAILFAST="-failfast"
   esac
 done
 
@@ -47,12 +67,14 @@ fi
 
 if [[ -z $TEST || $TEST = "gui" ]]; then
 
-MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST go test ./src/gui/integration/... -timeout=3m -v
+MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST \
+    go test ./src/gui/integration/... $FAILFAST $UPDATE -timeout=$TIMEOUT $VERBOSE $RUN_TESTS $TEST_LIVE_WALLET
 
 fi
 
 if [[ -z $TEST || $TEST = "cli" ]]; then
 
-MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR go test ./src/api/cli/integration/... -timeout=3m -v
+MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR MDL_NODE_HOST=$HOST \
+    go test ./src/api/cli/integration/... $FAILFAST $UPDATE -timeout=$TIMEOUT $VERBOSE $RUN_TESTS $TEST_LIVE_WALLET
 
 fi

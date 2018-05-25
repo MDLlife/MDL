@@ -69,9 +69,13 @@ function startMDL() {
   var args = [
     '-launch-browser=false',
     '-gui-dir=' + path.dirname(exe),
-    '-color-log=false', // must be disabled or web interface detection
+    '-color-log=false', // must be disabled for web interface detection
     '-logtofile=true',
-    '-download-peerlist=false'
+    '-download-peerlist=true',
+    '-enable-seed-api=true',
+    '-enable-wallet-api=true',
+    '-rpc-interface=false',
+    "-disable-csrf=false"
     // will break
     // broken (automatically generated certs do not work):
     // '-web-interface-https=true',
@@ -85,31 +89,22 @@ function startMDL() {
 
   mdl.stdout.on('data', (data) => {
     console.log(data.toString());
-
-  // Scan for the web URL string
-  if (currentURL) {
-    return
-  }
-  const marker = 'Starting web interface on ';
-  var i = data.indexOf(marker);
-  if (i === -1) {
-    return
-  }
-  // var j = data.indexOf('\n', i);
-
-  // // dialog.showErrorBox('index of newline: ', j);
-  // if (j === -1) {
-  //     throw new Error('web interface url log line incomplete');
-  // }
-  // var url = data.slice(i + marker.length, j);
-  // currentURL = url.toString();
-  currentURL = defaultURL;
-  app.emit('mdl-ready', { url: currentURL });
-});
+    // Scan for the web URL string
+    if (currentURL) {
+      return
+    }
+    const marker = 'Starting web interface on ';
+    var i = data.indexOf(marker);
+    if (i === -1) {
+      return
+    }
+    currentURL = defaultURL;
+    app.emit('mdl-ready', { url: currentURL });
+  });
 
   mdl.stderr.on('data', (data) => {
     console.log(data.toString());
-});
+  });
 
   mdl.on('close', (code) => {
     // log.info('mdl closed');
@@ -174,7 +169,12 @@ function createWindow(url) {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     win = null;
-});
+  });
+
+  win.webContents.on('will-navigate', function(e, url) {
+    e.preventDefault();
+    require('electron').shell.openExternal(url);
+  });
 
   // create application's main menu
   var template = [{

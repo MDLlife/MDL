@@ -32,6 +32,10 @@
       margin: 0;
       vertical-align: middle;
     }
+
+    &:hover .copy-label {
+      display: inline-block;
+    }
   }
 
   .hours-column {

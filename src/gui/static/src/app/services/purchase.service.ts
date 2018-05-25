@@ -3,9 +3,9 @@ import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { PurchaseOrder, TellerConfig, Wallet } from '../app.datatypes';
 import { WalletService } from './wallet.service';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
-import { Http } from '@angular/http';
 import 'rxjs/add/operator/timeout';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class PurchaseService {
   private purchaseUrl = environment.tellerUrl;
 
   constructor(
-    private http: Http,
+    private httpClient: HttpClient,
     private walletService: WalletService,
   ) {
     this.getConfig();
@@ -68,12 +68,12 @@ export class PurchaseService {
           filename: wallet.filename,
           recipient_address: address.address,
           status: 'waiting_deposit',
-        }))
-    })
+        }));
+    });
   }
 
   scan(address: string) {
-    return this.get('status?mdladdr=' + address)
+    return this.get('status?skyaddr=' + address)
       .map((response: any) => {
         if (!response.statuses || response.statuses.length > 1) {
           throw new Error('too many purchase orders found');
@@ -82,14 +82,13 @@ export class PurchaseService {
       });
   }
 
-
-  private get(url) {
-    return this.http.get(this.purchaseUrl + url).timeout(15000)
+  private get(url): any {
+    return this.httpClient.get(this.purchaseUrl + url).timeout(15000)
       .map((res: any) => res.json())
   }
 
-  private post(url, parameters = {}) {
-    return this.http.post(this.purchaseUrl + url, parameters).timeout(15000)
+  private post(url, parameters = {}): any {
+    return this.httpClient.post(this.purchaseUrl + url, parameters).timeout(15000)
       .map((res: any) => res.json())
   }
 

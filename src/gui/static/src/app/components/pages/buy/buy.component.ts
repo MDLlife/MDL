@@ -1,18 +1,18 @@
 import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PurchaseService } from '../../../services/purchase.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { WalletService } from '../../../services/wallet.service';
 import { Address, PurchaseOrder, Wallet } from '../../../app.datatypes';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ButtonComponent } from '../../layout/button/button.component';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-buy',
   templateUrl: './buy.component.html',
   styleUrls: ['./buy.component.scss']
 })
-export class BuyComponent {
+export class BuyComponent implements OnInit {
   @ViewChild('button') button: ButtonComponent;
   @ViewChild('refresh') refresh: ButtonComponent;
 
@@ -77,7 +77,8 @@ export class BuyComponent {
           }, 5000)
         }
       );
-    })
+    });
+
     this.form.controls.coin_type.valueChanges.subscribe(type => {
       if (this.order) this.order.coin_type = type;
       if (type === '') return;

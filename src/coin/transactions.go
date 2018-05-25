@@ -184,12 +184,12 @@ func (txn *Transaction) PushInput(uxOut cipher.SHA256) uint16 {
 }
 
 // UxID compute transaction output id
-func (txOut TransactionOutput) UxID(TxID cipher.SHA256) cipher.SHA256 {
+func (txOut TransactionOutput) UxID(txID cipher.SHA256) cipher.SHA256 {
 	var x UxBody
 	x.Coins = txOut.Coins
 	x.Hours = txOut.Hours
 	x.Address = txOut.Address
-	x.SrcTransaction = TxID
+	x.SrcTransaction = txID
 	return x.Hash()
 }
 

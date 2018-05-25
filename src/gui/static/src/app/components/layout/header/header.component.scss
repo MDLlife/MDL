@@ -19,13 +19,13 @@
 }
 
 .balance-container {
-  text-align: center; 
   align-items: center;
   color: $white;
   display: flex;
   flex: 1 1 auto;
   font-size: 12px;
   justify-content: center;
+  text-align: center;
 
   .balance {
     .coins {
@@ -39,6 +39,7 @@
   }
 
   .dollars {
+    margin: 0;
     text-align: center;
   }
 }

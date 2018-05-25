@@ -14,22 +14,34 @@ MODE="stable"
 BINARY="$PWD/mdl-integration"
 TEST=""
 UPDATE=""
+# run go test with -v flag
+VERBOSE=""
+# run go test with -run flag
+RUN_TESTS=""
+
+COMMIT=$(git rev-parse HEAD)
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+GOLDFLAGS="-X main.Commit=${COMMIT} -X main.Branch=${BRANCH}"
 
 usage () {
   echo "Usage: $SCRIPT"
   echo "Optional command line arguments"
   echo "-t <string>  -- Test to run, gui or cli; empty runs both tests"
+  echo "-r <string>  -- Run test with -run flag"
   echo "-u <boolean> -- Update stable testdata"
+  echo "-v <boolean> -- Run test with -v flag"
   exit 1
 }
 
-while getopts "h?t:u" args; do
-case $args in
+while getopts "h?t:r:uvw" args; do
+  case $args in
     h|\?)
         usage;
         exit;;
     t ) TEST=${OPTARG};;
+    r ) RUN_TESTS="-run ${OPTARG}";;
     u ) UPDATE="--update";;
+    v ) VERBOSE="-v";;
   esac
 done
 
@@ -46,7 +58,7 @@ fi
 # Compile the mdl node
 # We can't use "go run" because this creates two processes which doesn't allow us to kill it at the end
 echo "compiling mdl"
-go build -o "$BINARY" $PWD/cmd/mdl/mdl.go
+go build -o "$BINARY" -ldflags "${GOLDFLAGS}" $PWD/cmd/mdl/mdl.go
 
 # Run mdl node with pinned blockchain database
 echo "starting mdl ($PWD/mdl-integration) node in background with http listener on $HOST"
@@ -75,7 +87,8 @@ set +e
 
 if [[ -z $TEST || $TEST = "gui" ]]; then
 
-MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST go test ./src/gui/integration/... $UPDATE -timeout=60s -v
+MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST \
+    go test ./src/gui/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
 
 GUI_FAIL=$?
 
@@ -83,7 +96,8 @@ fi
 
 if [[ -z $TEST  || $TEST = "cli" ]]; then
 
-MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR go test ./src/api/cli/integration/... $UPDATE -timeout=60s -v
+MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR \
+    go test ./src/api/cli/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
 
 CLI_FAIL=$?
 
@@ -103,7 +117,7 @@ if [[ (-z $TEST || $TEST = "gui") && $GUI_FAIL -ne 0 ]]; then
   exit $GUI_FAIL
 elif [[ (-z $TEST || $TEST = "cli") && $CLI_FAIL -ne 0 ]]; then
   exit $CLI_FAIL
-else 
+else
   exit 0
 fi
 # exit $FAIL

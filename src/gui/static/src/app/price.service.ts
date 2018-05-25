@@ -13,8 +13,7 @@ export class PriceService {
   ) {
     this.http.get('https://api.coinmarketcap.com/v1/ticker/skycoin/')
       .map(response => response.json()[0])
-      //.subscribe(data => this.price.next(data.price_usd))
-      .subscribe(data => this.price.next(0.05))
+      .subscribe(data => this.price.next(data.price_usd));
   }
 
 }

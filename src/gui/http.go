@@ -1,15 +1,14 @@
 package gui
 
 import (
-	"bytes"
 	"crypto/tls"
 	"fmt"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"path/filepath"
-	"strconv"
 	"strings"
+	"time"
 	"unicode"
 
 	"github.com/MDLlife/MDL/src/cipher"
@@ -28,43 +27,86 @@ const (
 	resourceDir = "dist/"
 	devDir      = "dev/"
 	indexPage   = "index.html"
+
+	defaultReadTimeout  = time.Second * 10
+	defaultWriteTimeout = time.Second * 60
+	defaultIdleTimeout  = time.Second * 120
 )
 
 // Server exposes an HTTP API
 type Server struct {
-	mux      *http.ServeMux
+	server   *http.Server
 	listener net.Listener
 	done     chan struct{}
 }
 
-type ServerConfig struct {
-	StaticDir   string
-	DisableCSRF bool
+// Config configures Server
+type Config struct {
+	StaticDir       string
+	DisableCSRF     bool
+	EnableWalletAPI bool
+	ReadTimeout     time.Duration
+	WriteTimeout    time.Duration
+	IdleTimeout     time.Duration
 }
 
-func create(host string, serverConfig ServerConfig, daemon *daemon.Daemon) (*Server, error) {
-	appLoc, err := file.DetermineResourcePath(serverConfig.StaticDir, resourceDir, devDir)
-	if err != nil {
-		return nil, err
+type muxConfig struct {
+	host            string
+	appLoc          string
+	enableWalletAPI bool
+}
+
+func create(host string, c Config, daemon *daemon.Daemon) (*Server, error) {
+	var appLoc string
+	if c.EnableWalletAPI {
+		var err error
+		appLoc, err = file.DetermineResourcePath(c.StaticDir, resourceDir, devDir)
+		if err != nil {
+			return nil, err
+		}
+		logger.Infof("Web resources directory: %s", appLoc)
 	}
-	logger.Info("Web resources directory: %s", appLoc)
 
 	csrfStore := &CSRFStore{
-		Enabled: !serverConfig.DisableCSRF,
+		Enabled: !c.DisableCSRF,
 	}
-	if serverConfig.DisableCSRF {
+	if c.DisableCSRF {
 		logger.Warning("CSRF check disabled")
 	}
 
+	if c.ReadTimeout == 0 {
+		c.ReadTimeout = defaultReadTimeout
+	}
+	if c.WriteTimeout == 0 {
+		c.WriteTimeout = defaultWriteTimeout
+	}
+	if c.IdleTimeout == 0 {
+		c.IdleTimeout = defaultIdleTimeout
+	}
+
+	mc := muxConfig{
+		host:            host,
+		appLoc:          appLoc,
+		enableWalletAPI: c.EnableWalletAPI,
+	}
+
+	srvMux := newServerMux(mc, daemon.Gateway, csrfStore)
+	srv := &http.Server{
+		Handler:      srvMux,
+		ReadTimeout:  c.ReadTimeout,
+		WriteTimeout: c.WriteTimeout,
+		IdleTimeout:  c.IdleTimeout,
+	}
+
 	return &Server{
-		mux:  NewServerMux(host, appLoc, daemon.Gateway, csrfStore),
-		done: make(chan struct{}),
+		server: srv,
+		done:   make(chan struct{}),
 	}, nil
 }
 
 // Create creates a new Server instance that listens on HTTP
-func Create(host string, serverConfig ServerConfig, daemon *daemon.Daemon) (*Server, error) {
-	s, err := create(host, serverConfig, daemon)
+func Create(host string, c Config, daemon *daemon.Daemon) (*Server, error) {
+	s, err := create(host, c, daemon)
 	if err != nil {
 		return nil, err
 	}
@@ -80,14 +122,14 @@ func Create(host string, serverConfig ServerConfig, daemon *daemon.Daemon) (*Ser
 }
 
 // CreateHTTPS creates a new Server instance that listens on HTTPS
-func CreateHTTPS(host string, serverConfig ServerConfig, daemon *daemon.Daemon, certFile, keyFile string) (*Server, error) {
-	s, err := create(host, serverConfig, daemon)
+func CreateHTTPS(host string, c Config, daemon *daemon.Daemon, certFile, keyFile string) (*Server, error) {
+	s, err := create(host, c, daemon)
 	if err != nil {
 		return nil, err
 	}
 
-	logger.Info("Using %s for the certificate", certFile)
-	logger.Info("Using %s for the key", keyFile)
+	logger.Infof("Using %s for the certificate", certFile)
+	logger.Infof("Using %s for the key", keyFile)
 
 	cert, err := tls.LoadX509KeyPair(certFile, keyFile)
 	if err != nil {
@@ -106,11 +148,11 @@ func CreateHTTPS(host string, serverConfig ServerConfig, daemon *daemon.Daemon, 
 
 // Serve serves the web interface on the configured host
 func (s *Server) Serve() error {
-	logger.Info("Starting web interface on %s", s.listener.Addr())
+	logger.Infof("Starting web interface on %s", s.listener.Addr())
 	defer logger.Info("Web interface closed")
 	defer close(s.done)
 
-	if err := http.Serve(s.listener, s.mux); err != nil {
+	if err := s.server.Serve(s.listener); err != nil {
 		if err != http.ErrServerClosed {
 			return err
 		}
@@ -126,8 +168,8 @@ func (s *Server) Shutdown() {
 	<-s.done
 }
 
-// NewServerMux creates an http.ServeMux with handlers registered
-func NewServerMux(host, appLoc string, gateway Gatewayer, csrfStore *CSRFStore) *http.ServeMux {
+// newServerMux creates an http.ServeMux with handlers registered
+func newServerMux(c muxConfig, gateway Gatewayer, csrfStore *CSRFStore) *http.ServeMux {
 	mux := http.NewServeMux()
 
 	headerCheck := func(host string, handler http.Handler) http.Handler {
@@ -137,24 +179,28 @@ func NewServerMux(host, appLoc string, gateway Gatewayer, csrfStore *CSRFStore) 
 	}
 
 	webHandler := func(endpoint string, handler http.Handler) {
+
+		handler = wh.ElapsedHandler(logger, handler)
 		handler = CSRFCheck(csrfStore, handler)
-		handler = headerCheck(host, handler)
+		handler = headerCheck(c.host, handler)
 		mux.Handle(endpoint, handler)
 	}
 
-	webHandler("/", newIndexHandler(appLoc))
+	if c.enableWalletAPI {
+		webHandler("/", newIndexHandler(c.appLoc))
 
-	fileInfos, _ := ioutil.ReadDir(appLoc)
-	for _, fileInfo := range fileInfos {
-		route := fmt.Sprintf("/%s", fileInfo.Name())
-		if fileInfo.IsDir() {
-			route = route + "/"
+		fileInfos, _ := ioutil.ReadDir(c.appLoc)
+		for _, fileInfo := range fileInfos {
+			route := fmt.Sprintf("/%s", fileInfo.Name())
+			if fileInfo.IsDir() {
+				route = route + "/"
+			}
+			webHandler(route, http.FileServer(http.Dir(c.appLoc)))
 		}
-		webHandler(route, http.FileServer(http.Dir(appLoc)))
 	}
 
 	// get the current CSRF token
-	mux.Handle("/csrf", headerCheck(host, getCSRFToken(gateway, csrfStore)))
+	mux.Handle("/csrf", headerCheck(c.host, getCSRFToken(gateway, csrfStore)))
 
 	webHandler("/version", versionHandler(gateway))
 
@@ -194,11 +240,13 @@ func NewServerMux(host, appLoc string, gateway Gatewayer, csrfStore *CSRFStore) 
 	// POST arguments:
 	//  id: Wallet ID
 	//  coins: Number of coins to spend
-	//  hours: Number of hours to spends
-	//  fee: Number of hours to use as fee, on top of the default fee.
+	//  dst: Destination address
 	//  Returns total amount spent if successful, otherwise error describing
 	//  failure status.
 	webHandler("/wallet/spend", walletSpendHandler(gateway))
+
+	// Creates a transaction from a wallet
+	webHandler("/wallet/transaction", createTransactionHandler(gateway))
 
 	// GET Arguments:
 	//      id: Wallet ID
@@ -206,19 +254,46 @@ func NewServerMux(host, appLoc string, gateway Gatewayer, csrfStore *CSRFStore) 
 	webHandler("/wallet/transactions", walletTransactionsHandler(gateway))
 
 	// Update wallet label
-	//      POST Arguments:
-	//          id: wallet id
-	//          label: wallet label
+	// POST Arguments:
+	//     id: wallet id
+	//     label: wallet label
 	webHandler("/wallet/update", walletUpdateHandler(gateway))
 
 	// Returns all loaded wallets
 	// returns sensitive information
 	webHandler("/wallets", walletsHandler(gateway))
 
+	// Returns wallets directory path
 	webHandler("/wallets/folderName", getWalletFolder(gateway))
 
-	// generate wallet seed
+	// Generate wallet seed
+	// GET Arguments:
+	//     entropy: entropy bitsize.
 	webHandler("/wallet/newSeed", newWalletSeed(gateway))
+
+	// Gets seed of wallet of given id
+	// GET Arguments:
+	//     id: wallet id
+	//     password: wallet password
+	webHandler("/wallet/seed", walletSeedHandler(gateway))
+
+	// unload wallet
+	// POST Argument:
+	//         id: wallet id
+	webHandler("/wallet/unload", walletUnloadHandler(gateway))
+
+	// Encrypts wallet
+	// POST arguments:
+	//     id: wallet id
+	//     password: wallet password
+	// Returns an encrypted wallet json without sensitive data
+	webHandler("/wallet/encrypt", walletEncryptHandler(gateway))
+
+	// Decrypts wallet
+	// POST arguments:
+	//     id: wallet id
+	//     password: wallet password
+	webHandler("/wallet/decrypt", walletDecryptHandler(gateway))
 
 	// Blockchain interface
 
@@ -233,7 +308,6 @@ func NewServerMux(host, appLoc string, gateway Gatewayer, csrfStore *CSRFStore) 
 	webHandler("/last_blocks", getLastBlocks(gateway))
 
 	// Network stats interface
-
 	webHandler("/network/connection", connectionHandler(gateway))
 	webHandler("/network/connections", connectionsHandler(gateway))
 	webHandler("/network/defaultConnections", defaultConnectionsHandler(gateway))
@@ -244,10 +318,11 @@ func NewServerMux(host, appLoc string, gateway Gatewayer, csrfStore *CSRFStore) 
 
 	// get set of pending transactions
 	webHandler("/pendingTxs", getPendingTxs(gateway))
-	// get latest confirmed transactions
-	webHandler("/lastTxs", getLastTxs(gateway))
 	// get txn by txid
 	webHandler("/transaction", getTransactionByID(gateway))
+
+	// Health check handler
+	webHandler("/health", healthCheck(gateway))
 
 	// Returns transactions that match the filters.
 	// Method: GET
@@ -255,13 +330,13 @@ func NewServerMux(host, appLoc string, gateway Gatewayer, csrfStore *CSRFStore) 
 	//     addrs: Comma seperated addresses [optional, returns all transactions if no address is provided]
 	//     confirmed: Whether the transactions should be confirmed [optional, must be 0 or 1; if not provided, returns all]
 	webHandler("/transactions", getTransactions(gateway))
-	//inject a transaction into network
+	// inject a transaction into network
 	webHandler("/injectTransaction", injectTransaction(gateway))
 	webHandler("/resendUnconfirmedTxns", resendUnconfirmedTxns(gateway))
 	// get raw tx by txid.
 	webHandler("/rawtx", getRawTx(gateway))
 
-	// UxOUt api handler
+	// UxOut api handler
 
 	// get uxout by id.
 	webHandler("/uxout", getUxOutByID(gateway))
@@ -287,7 +362,7 @@ func newIndexHandler(appLoc string) http.HandlerFunc {
 	// Serves the main page
 	return func(w http.ResponseWriter, r *http.Request) {
 		page := filepath.Join(appLoc, indexPage)
-		logger.Debug("Serving index page: %s", page)
+		logger.Debugf("Serving index page: %s", page)
 		if r.URL.Path == "/" {
 			http.ServeFile(w, r, page)
 		} else {
@@ -367,12 +442,12 @@ func getOutputsHandler(gateway Gatewayer) http.HandlerFunc {
 
 		outs, err := gateway.GetUnspentOutputs(filters...)
 		if err != nil {
-			logger.Error("get unspent outputs failed: %v", err)
+			logger.Errorf("get unspent outputs failed: %v", err)
 			wh.Error500(w)
 			return
 		}
 
-		wh.SendOr404(w, outs)
+		wh.SendJSONOr500(logger, w, outs)
 	}
 }
 
@@ -399,7 +474,7 @@ func getBalanceHandler(gateway Gatewayer) http.HandlerFunc {
 		bals, err := gateway.GetBalanceOfAddrs(addrs)
 		if err != nil {
 			errMsg := fmt.Sprintf("Get balance failed: %v", err)
-			logger.Error("%s", errMsg)
+			logger.Error(errMsg)
 			wh.Error500Msg(w, errMsg)
 			return
 		}
@@ -420,7 +495,7 @@ func getBalanceHandler(gateway Gatewayer) http.HandlerFunc {
 			}
 		}
 
-		wh.SendOr404(w, balance)
+		wh.SendJSONOr500(logger, w, balance)
 	}
 }
 
@@ -431,30 +506,8 @@ func versionHandler(gateway Gatewayer) http.HandlerFunc {
 			return
 		}
 
-		wh.SendOr404(w, gateway.GetBuildInfo())
+		wh.SendJSONOr500(logger, w, gateway.GetBuildInfo())
 	}
-}
-
-/*
-attrActualLog remove color char in log
-origin: "\u001b[36m[mdl.daemon:DEBUG] Trying to connect to 47.88.33.156:6000\u001b[0m",
-*/
-func attrActualLog(logInfo string) string {
-	//return logInfo
-	var actualLog string
-	actualLog = logInfo
-	if strings.HasPrefix(logInfo, "[mdl") {
-		if strings.Contains(logInfo, "\u001b") {
-			actualLog = logInfo[0 : len(logInfo)-4]
-		}
-	} else {
-		if len(logInfo) > 5 {
-			if strings.Contains(logInfo, "\u001b") {
-				actualLog = logInfo[5 : len(logInfo)-4]
-			}
-		}
-	}
-	return actualLog
 }
 func getLogsHandler(logbuf *bytes.Buffer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

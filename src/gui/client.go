@@ -1,19 +1,28 @@
 package gui
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/MDLlife/MDL/src/daemon"
 	"github.com/MDLlife/MDL/src/visor"
 	"github.com/MDLlife/MDL/src/visor/historydb"
 	"github.com/MDLlife/MDL/src/wallet"
+)
+
+const (
+	dialTimeout         = 60 * time.Second
+	httpClientTimeout   = 120 * time.Second
+	tlsHandshakeTimeout = 60 * time.Second
 )
 
 // APIError is used for non-200 API responses
@@ -29,16 +38,28 @@ func (e APIError) Error() string {
 
 // Client provides an interface to a remote node's HTTP API
 type Client struct {
-	Addr string
+	HTTPClient *http.Client
+	Addr       string
 }
 
 // NewClient creates a Client
 func NewClient(addr string) *Client {
+	transport := &http.Transport{
+		Dial: (&net.Dialer{
+			Timeout: dialTimeout,
+		}).Dial,
+		TLSHandshakeTimeout: tlsHandshakeTimeout,
+	}
+	httpClient := &http.Client{
+		Transport: transport,
+		Timeout:   httpClientTimeout,
+	}
 	addr = strings.TrimRight(addr, "/")
 	addr += "/"
 
 	return &Client{
-		Addr: addr,
+		Addr:       addr,
+		HTTPClient: httpClient,
 	}
 }
 
@@ -68,7 +89,6 @@ func (c *Client) Get(endpoint string, obj interface{}) error {
 	if obj == nil {
 		return nil
 	}
-
 	return json.NewDecoder(resp.Body).Decode(obj)
 }
 
@@ -82,11 +102,26 @@ func (c *Client) get(endpoint string) (*http.Response, error) {
 		return nil, err
 	}
 
-	return http.DefaultClient.Do(req)
+	return c.HTTPClient.Do(req)
+}
+
+// PostForm makes a POST request to an endpoint with body of "application/x-www-form-urlencoded" formated data.
+func (c *Client) PostForm(endpoints string, body io.Reader, obj interface{}) error {
+	return c.post(endpoints, "application/x-www-form-urlencoded", body, obj)
+}
+
+// PostJSON makes a POST request to an endpoint with body of json data.
+func (c *Client) PostJSON(endpoints string, reqObj, respObj interface{}) error {
+	body, err := json.Marshal(reqObj)
+	if err != nil {
+		return err
+	}
+
+	return c.post(endpoints, "application/json", bytes.NewReader(body), respObj)
 }
 
 // Post makes a POST request to an endpoint. Caller must close response body.
-func (c *Client) Post(endpoint string, body io.Reader, obj interface{}) error {
+func (c *Client) post(endpoint string, contentType string, body io.Reader, obj interface{}) error {
 	csrf, err := c.CSRF()
 	if err != nil {
 		return err
@@ -101,9 +136,9 @@ func (c *Client) Post(endpoint string, body io.Reader, obj interface{}) error {
 	}
 
 	req.Header.Set("X-CSRF-Token", csrf)
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", contentType)
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return err
 	}
@@ -179,10 +214,31 @@ func (c *Client) Version() (*visor.BuildInfo, error) {
 	return &bi, nil
 }
 
-// Outputs makes a request to /outputs?addrs=xxx&hashes=zzz
-func (c *Client) Outputs(addrs, hashes []string) (*visor.ReadableOutputSet, error) {
+// Outputs makes a request to /outputs
+func (c *Client) Outputs() (*visor.ReadableOutputSet, error) {
+	var o visor.ReadableOutputSet
+	if err := c.Get("/outputs", &o); err != nil {
+		return nil, err
+	}
+	return &o, nil
+}
+
+// OutputsForAddresses makes a request to /outputs?addrs=xxx
+func (c *Client) OutputsForAddresses(addrs []string) (*visor.ReadableOutputSet, error) {
 	v := url.Values{}
 	v.Add("addrs", strings.Join(addrs, ","))
+	endpoint := "/outputs?" + v.Encode()
+
+	var o visor.ReadableOutputSet
+	if err := c.Get(endpoint, &o); err != nil {
+		return nil, err
+	}
+	return &o, nil
+}
+
+// OutputsForHashes makes a request to /outputs?hashes=zzz
+func (c *Client) OutputsForHashes(hashes []string) (*visor.ReadableOutputSet, error) {
+	v := url.Values{}
 	v.Add("hashes", strings.Join(hashes, ","))
 	endpoint := "/outputs?" + v.Encode()
 
@@ -245,7 +301,7 @@ func (c *Client) Blocks(start, end int) (*visor.ReadableBlocks, error) {
 // LastBlocks makes a request to /last_blocks
 func (c *Client) LastBlocks(n int) (*visor.ReadableBlocks, error) {
 	v := url.Values{}
-	v.Add("n", fmt.Sprint(n))
+	v.Add("num", fmt.Sprint(n))
 	endpoint := "/last_blocks?" + v.Encode()
 
 	var b visor.ReadableBlocks
@@ -313,39 +369,65 @@ func (c *Client) AddressUxOuts(addr string) ([]*historydb.UxOutJSON, error) {
 }
 
 // Wallet makes a request to /wallet
-func (c *Client) Wallet(id string) (*wallet.Wallet, error) {
+func (c *Client) Wallet(id string) (*WalletResponse, error) {
 	v := url.Values{}
 	v.Add("id", id)
 	endpoint := "/wallet?" + v.Encode()
 
-	var w wallet.Wallet
-	if err := c.Get(endpoint, &w); err != nil {
+	var wr WalletResponse
+	if err := c.Get(endpoint, &wr); err != nil {
+		return nil, err
+	}
+
+	return &wr, nil
+}
+
+// Wallets makes a request to /wallets
+func (c *Client) Wallets() ([]*WalletResponse, error) {
+	var wrs []*WalletResponse
+	if err := c.Get("/wallets", &wrs); err != nil {
+		return nil, err
+	}
+
+	return wrs, nil
+}
+
+// CreateUnencryptedWallet makes a request to /wallet/create and create
+// a wallet without no encryption
+// If scanN is <= 0, the scan number defaults to 1
+func (c *Client) CreateUnencryptedWallet(seed, label string, scanN int) (*WalletResponse, error) {
+	v := url.Values{}
+	v.Add("seed", seed)
+	v.Add("label", label)
+	v.Add("encrypt", "false")
+
+	if scanN > 0 {
+		v.Add("scan", fmt.Sprint(scanN))
+	}
+
+	var w WalletResponse
+	if err := c.PostForm("/wallet/create", strings.NewReader(v.Encode()), &w); err != nil {
 		return nil, err
 	}
 	return &w, nil
 }
 
-// Wallets makes a request to /wallets
-func (c *Client) Wallets() ([]*wallet.ReadableWallet, error) {
-	var w []*wallet.ReadableWallet
-	if err := c.Get("/wallets", &w); err != nil {
-		return nil, err
-	}
-	return w, nil
-}
-
-// CreateWallet makes a request to /wallet/create
+// CreateEncryptedWallet makes a request to /wallet/create and try to create
+// a wallet with encryption.
 // If scanN is <= 0, the scan number defaults to 1
-func (c *Client) CreateWallet(seed, label string, scanN int) (*wallet.ReadableWallet, error) {
+func (c *Client) CreateEncryptedWallet(seed, label, password string, scanN int) (*WalletResponse, error) {
 	v := url.Values{}
 	v.Add("seed", seed)
 	v.Add("label", label)
+	v.Add("encrypt", "true")
+	v.Add("password", password)
+
 	if scanN > 0 {
 		v.Add("scan", fmt.Sprint(scanN))
 	}
 
-	var w wallet.ReadableWallet
-	if err := c.Post("/wallet/create", strings.NewReader(v.Encode()), &w); err != nil {
+	var w WalletResponse
+	if err := c.PostForm("/wallet/create", strings.NewReader(v.Encode()), &w); err != nil {
 		return nil, err
 	}
 	return &w, nil
@@ -353,17 +435,19 @@ func (c *Client) CreateWallet(seed, label string, scanN int) (*wallet.ReadableWa
 
 // NewWalletAddress makes a request to /wallet/newAddress
 // if n is <= 0, defaults to 1
-func (c *Client) NewWalletAddress(id string, n int) ([]string, error) {
+func (c *Client) NewWalletAddress(id string, n int, password string) ([]string, error) {
 	v := url.Values{}
 	v.Add("id", id)
 	if n > 0 {
 		v.Add("num", fmt.Sprint(n))
 	}
 
+	v.Add("password", password)
+
 	var obj struct {
 		Addresses []string `json:"addresses"`
 	}
-	if err := c.Post("/wallet/newAddress", strings.NewReader(v.Encode()), &obj); err != nil {
+	if err := c.PostForm("/wallet/newAddress", strings.NewReader(v.Encode()), &obj); err != nil {
 		return nil, err
 	}
 	return obj.Addresses, nil
@@ -383,14 +467,56 @@ func (c *Client) WalletBalance(id string) (*wallet.BalancePair, error) {
 }
 
 // Spend makes a request to /wallet/spend
-func (c *Client) Spend(id, dst string, coins uint64) (*SpendResult, error) {
+func (c *Client) Spend(id, dst string, coins uint64, password string) (*SpendResult, error) {
 	v := url.Values{}
 	v.Add("id", id)
 	v.Add("dst", dst)
 	v.Add("coins", fmt.Sprint(coins))
+	v.Add("password", password)
 
 	var r SpendResult
-	if err := c.Post("/wallet/spend", strings.NewReader(v.Encode()), &r); err != nil {
+	endpoint := "/wallet/spend"
+	if err := c.PostForm(endpoint, strings.NewReader(v.Encode()), &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+// CreateTransactionRequest is sent to /wallet/transaction
+type CreateTransactionRequest struct {
+	HoursSelection HoursSelection                 `json:"hours_selection"`
+	Wallet         CreateTransactionRequestWallet `json:"wallet"`
+	ChangeAddress  string                         `json:"change_address"`
+	To             []Receiver                     `json:"to"`
+}
+
+// CreateTransactionRequestWallet defines a wallet to spend from and optionally which addresses in the wallet
+type CreateTransactionRequestWallet struct {
+	ID        string   `json:"id"`
+	Addresses []string `json:"addresses,omitempty"`
+	Password  string   `json:"password"`
+}
+
+// HoursSelection defines options for hours distribution
+type HoursSelection struct {
+	Type        string `json:"type"`
+	Mode        string `json:"mode"`
+	ShareFactor string `json:"share_factor,omitempty"`
+}
+
+// Receiver specifies a spend destination
+type Receiver struct {
+	Address string `json:"address"`
+	Coins   string `json:"coins"`
+	Hours   string `json:"hours,omitempty"`
+}
+
+// CreateTransaction makes a request to POST /wallet/transaction
+func (c *Client) CreateTransaction(req CreateTransactionRequest) (*CreateTransactionResponse, error) {
+	var r CreateTransactionResponse
+	endpoint := "/wallet/transaction"
+	if err := c.PostJSON(endpoint, req, &r); err != nil {
 		return nil, err
 	}
 
@@ -398,12 +524,12 @@ func (c *Client) Spend(id, dst string, coins uint64) (*SpendResult, error) {
 }
 
 // WalletTransactions makes a request to /wallet/transactions
-func (c *Client) WalletTransactions(id string) ([]visor.UnconfirmedTxn, error) {
+func (c *Client) WalletTransactions(id string) (*UnconfirmedTxnsResponse, error) {
 	v := url.Values{}
 	v.Add("id", id)
 	endpoint := "/wallet/transactions?" + v.Encode()
 
-	var utx []visor.UnconfirmedTxn
+	var utx *UnconfirmedTxnsResponse
 	if err := c.Get(endpoint, &utx); err != nil {
 		return nil, err
 	}
@@ -416,16 +542,13 @@ func (c *Client) UpdateWallet(id, label string) error {
 	v.Add("id", id)
 	v.Add("label", label)
 
-	if err := c.Post("/wallet/update", strings.NewReader(v.Encode()), nil); err != nil {
-		return err
-	}
-	return nil
+	return c.PostForm("/wallet/update", strings.NewReader(v.Encode()), nil)
 }
 
-// WalletFolderName makes a request to /wallet/folderName
+// WalletFolderName makes a request to /wallets/folderName
 func (c *Client) WalletFolderName() (*WalletFolder, error) {
 	var w WalletFolder
-	if err := c.Get("/wallet/folderName", &w); err != nil {
+	if err := c.Get("/wallets/folderName", &w); err != nil {
 		return nil, err
 	}
 	return &w, nil
@@ -447,6 +570,22 @@ func (c *Client) NewSeed(entropy int) (string, error) {
 	return r.Seed, nil
 }
 
+// GetWalletSeed makes a request to /wallet/seed
+func (c *Client) GetWalletSeed(id string, password string) (string, error) {
+	v := url.Values{}
+	v.Add("id", id)
+	v.Add("password", password)
+
+	var r struct {
+		Seed string `json:"seed"`
+	}
+	if err := c.PostForm("/wallet/seed", strings.NewReader(v.Encode()), &r); err != nil {
+		return "", err
+	}
+
+	return r.Seed, nil
+}
+
 // NetworkConnection makes a request to /network/connection
 func (c *Client) NetworkConnection(addr string) (*daemon.Connection, error) {
 	v := url.Values{}
@@ -461,7 +600,7 @@ func (c *Client) NetworkConnection(addr string) (*daemon.Connection, error) {
 }
 
 // NetworkConnections makes a request to /network/connections
-func (c *Client) NetworkConnections(addr string) (*daemon.Connections, error) {
+func (c *Client) NetworkConnections() (*daemon.Connections, error) {
 	var dc daemon.Connections
 	if err := c.Get("/network/connections", &dc); err != nil {
 		return nil, err
@@ -470,7 +609,7 @@ func (c *Client) NetworkConnections(addr string) (*daemon.Connections, error) {
 }
 
 // NetworkDefaultConnections makes a request to /network/defaultConnections
-func (c *Client) NetworkDefaultConnections(addr string) ([]string, error) {
+func (c *Client) NetworkDefaultConnections() ([]string, error) {
 	var dc []string
 	if err := c.Get("/network/defaultConnections", &dc); err != nil {
 		return nil, err
@@ -479,7 +618,7 @@ func (c *Client) NetworkDefaultConnections(addr string) ([]string, error) {
 }
 
 // NetworkTrustedConnections makes a request to /network/connections/trust
-func (c *Client) NetworkTrustedConnections(addr string) ([]string, error) {
+func (c *Client) NetworkTrustedConnections() ([]string, error) {
 	var dc []string
 	if err := c.Get("/network/connections/trust", &dc); err != nil {
 		return nil, err
@@ -488,7 +627,7 @@ func (c *Client) NetworkTrustedConnections(addr string) ([]string, error) {
 }
 
 // NetworkExchangeableConnections makes a request to /network/connections/exchange
-func (c *Client) NetworkExchangeableConnections(addr string) ([]string, error) {
+func (c *Client) NetworkExchangeableConnections() ([]string, error) {
 	var dc []string
 	if err := c.Get("/network/connections/exchange", &dc); err != nil {
 		return nil, err
@@ -515,12 +654,12 @@ func (c *Client) LastTransactions() ([]visor.TransactionResult, error) {
 }
 
 // Transaction makes a request to /transaction
-func (c *Client) Transaction(txid string) (*visor.ReadableTransaction, error) {
+func (c *Client) Transaction(txid string) (*visor.TransactionResult, error) {
 	v := url.Values{}
 	v.Add("txid", txid)
 	endpoint := "/transaction?" + v.Encode()
 
-	var r visor.ReadableTransaction
+	var r visor.TransactionResult
 	if err := c.Get(endpoint, &r); err != nil {
 		return nil, err
 	}
@@ -528,12 +667,12 @@ func (c *Client) Transaction(txid string) (*visor.ReadableTransaction, error) {
 }
 
 // Transactions makes a request to /transactions
-func (c *Client) Transactions(addrs []string) (*visor.TransactionResults, error) {
+func (c *Client) Transactions(addrs []string) (*[]visor.TransactionResult, error) {
 	v := url.Values{}
 	v.Add("addrs", strings.Join(addrs, ","))
 	endpoint := "/transactions?" + v.Encode()
 
-	var r visor.TransactionResults
+	var r []visor.TransactionResult
 	if err := c.Get(endpoint, &r); err != nil {
 		return nil, err
 	}
@@ -541,27 +680,27 @@ func (c *Client) Transactions(addrs []string) (*visor.TransactionResults, error)
 }
 
 // ConfirmedTransactions makes a request to /transactions?confirmed=true
-func (c *Client) ConfirmedTransactions(addrs []string) (*visor.TransactionResults, error) {
+func (c *Client) ConfirmedTransactions(addrs []string) (*[]visor.TransactionResult, error) {
 	v := url.Values{}
 	v.Add("addrs", strings.Join(addrs, ","))
 	v.Add("confirmed", "true")
 	endpoint := "/transactions?" + v.Encode()
 
-	var r visor.TransactionResults
+	var r []visor.TransactionResult
 	if err := c.Get(endpoint, &r); err != nil {
 		return nil, err
 	}
 	return &r, nil
 }
 
-// UnconfirmedTransactions makes a request to /transactions?confirmed=true
-func (c *Client) UnconfirmedTransactions(addrs []string) (*visor.TransactionResults, error) {
+// UnconfirmedTransactions makes a request to /transactions?confirmed=false
+func (c *Client) UnconfirmedTransactions(addrs []string) (*[]visor.TransactionResult, error) {
 	v := url.Values{}
 	v.Add("addrs", strings.Join(addrs, ","))
 	v.Add("confirmed", "false")
 	endpoint := "/transactions?" + v.Encode()
 
-	var r visor.TransactionResults
+	var r []visor.TransactionResult
 	if err := c.Get(endpoint, &r); err != nil {
 		return nil, err
 	}
@@ -570,11 +709,14 @@ func (c *Client) UnconfirmedTransactions(addrs []string) (*visor.TransactionResu
 
 // InjectTransaction makes a request to /injectTransaction
 func (c *Client) InjectTransaction(rawTx string) (string, error) {
-	v := url.Values{}
-	v.Add("rawtx", rawTx)
+	v := struct {
+		Rawtx string `json:"rawtx"`
+	}{
+		Rawtx: rawTx,
+	}
 
 	var txid string
-	if err := c.Post("/injectTransaction", strings.NewReader(v.Encode()), &txid); err != nil {
+	if err := c.PostJSON("/injectTransaction", v, &txid); err != nil {
 		return "", err
 	}
 	return txid, nil
@@ -615,13 +757,28 @@ func (c *Client) AddressTransactions(addr string) ([]ReadableTransaction, error)
 	return b, nil
 }
 
+// RichlistParams are arguments to the /richlist endpoint
+type RichlistParams struct {
+	N                   int
+	IncludeDistribution bool
+}
+
 // Richlist makes a request to /richlist
-func (c *Client) Richlist() (visor.Richlist, error) {
-	var r visor.Richlist
-	if err := c.Get("/richlist", &r); err != nil {
+func (c *Client) Richlist(params *RichlistParams) (*Richlist, error) {
+	endpoint := "/richlist"
+
+	if params != nil {
+		v := url.Values{}
+		v.Add("n", fmt.Sprint(params.N))
+		v.Add("include-distribution", fmt.Sprint(params.IncludeDistribution))
+		endpoint = "/richlist?" + v.Encode()
+	}
+
+	var r Richlist
+	if err := c.Get(endpoint, &r); err != nil {
 		return nil, err
 	}
-	return r, nil
+	return &r, nil
 }
 
 // AddressCount makes a request to /addresscount
@@ -634,4 +791,47 @@ func (c *Client) AddressCount() (uint64, error) {
 	}
 	return r.Count, nil
 
+}
+
+// UnloadWallet makes a request to /wallet/unload
+func (c *Client) UnloadWallet(id string) error {
+	v := url.Values{}
+	v.Add("id", id)
+	return c.PostForm("/wallet/unload", strings.NewReader(v.Encode()), nil)
+}
+
+// Health makes a request to /health
+func (c *Client) Health() (*HealthResponse, error) {
+	var r HealthResponse
+	if err := c.Get("/health", &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
+
+// EncryptWallet encrypts specific wallet with given password
+func (c *Client) EncryptWallet(id string, password string) (*WalletResponse, error) {
+	v := url.Values{}
+	v.Add("id", id)
+	v.Add("password", password)
+	var wlt WalletResponse
+	if err := c.PostForm("/wallet/encrypt", strings.NewReader(v.Encode()), &wlt); err != nil {
+		return nil, err
+	}
+
+	return &wlt, nil
+}
+
+// DecryptWallet decrypts wallet by making a request to /wallet/decrypt
+func (c *Client) DecryptWallet(id string, password string) (*WalletResponse, error) {
+	v := url.Values{}
+	v.Add("id", id)
+	v.Add("password", password)
+	var wlt WalletResponse
+	if err := c.PostForm("/wallet/decrypt", strings.NewReader(v.Encode()), &wlt); err != nil {
+		return nil, err
+	}
+
+	return &wlt, nil
 }
