@@ -517,27 +517,3 @@ func VerifyTransactionHoursSpending(headTime uint64, uxIn UxArray, uxOut UxArray
 	return nil
 }
 
-func multUint64(a, b uint64) (uint64, error) {
-	c := a * b
-	if a != 0 && c/a != b {
-		return 0, errors.New("uint64 multiplication overflow")
-	}
-	return c, nil
-}
-
-// AddUint64 adds a and b, returning an error if the values would overflow
-func AddUint64(a, b uint64) (uint64, error) {
-	c := a + b
-	if c < a || c < b {
-		return 0, errors.New("uint64 addition overflow")
-	}
-	return c, nil
-}
-
-func addUint32(a, b uint32) (uint32, error) {
-	c := a + b
-	if c < a || c < b {
-		return 0, errors.New("uint32 addition overflow")
-	}
-	return c, nil
-}

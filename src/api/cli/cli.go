@@ -35,7 +35,7 @@ var (
     RPC_ADDR: Address of RPC node. Default "%s"
     COIN: Name of the coin. Default "%s"
     WALLET_DIR: Directory where wallets are stored. This value is overriden by any subcommand flag specifying a wallet filename, if that filename includes a path. Default "%s"
-    WALLET_NAME: Name of wallet file (without path). This value is overriden by any subcommand flag specifying a wallet filename. Default "%s"`, defaultRPCAddress, defaultCoin, defaultWalletDir, defaultWalletName)
+    WALLET_NAME: Name of wallet file (without path). This value is overriden by any subcommand flag specifying a wallet filename. Default "%s"`, defaultRpcAddress, defaultCoin, defaultWalletDir, defaultWalletName)
 
 	commandHelpTemplate = fmt.Sprintf(`USAGE:
         {{.HelpName}}{{if .VisibleFlags}} [command options]{{end}} {{if .ArgsUsage}}{{.ArgsUsage}}{{else}}[arguments...]{{end}}{{if .Category}}
@@ -115,7 +115,7 @@ func LoadConfig() (Config, error) {
 	// get rpc address from env
 	rpcAddr := os.Getenv("RPC_ADDR")
 	if rpcAddr == "" {
-		rpcAddr = defaultRPCAddress
+		rpcAddr = defaultRpcAddress
 	}
 
 	home := file.UserHome()

@@ -6,6 +6,7 @@ import (
 
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/util/file"
+	"fmt"
 )
 
 var (

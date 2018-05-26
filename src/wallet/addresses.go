@@ -36,8 +36,6 @@ func CreateAddresses(coinType CoinType, seed string, genCount int, hideSecretKey
 			entry = GetBitcoinWalletEntry(pub, sec)
 		case CoinTypeSkycoin:
 			entry = GetSkycoinWalletEntry(pub, sec)
-		case CoinTypeMDL:
-			entry = GetMDLWalletEntry(pub, sec)
 		default:
 			return nil, fmt.Errorf(`unknown coinType "%s"`, coinType)
 		}

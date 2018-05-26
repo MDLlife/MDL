@@ -79,6 +79,7 @@ export class ApiService {
       params['encrypt'] = true;
     }
 
+    // return null;
     return this.post('wallet/create', params)
       .map(response => ({
           label: response.meta.label,

@@ -6,7 +6,7 @@ import (
 
 	"github.com/shopspring/decimal"
 
-	logging "github.com/skycoin/skycoin/src/util/logging"
+	logging "github.com/MDLlife/MDL/src/util/logging"
 )
 
 const (

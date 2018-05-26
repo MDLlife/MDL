@@ -13,11 +13,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/coin"
-	"github.com/skycoin/skycoin/src/testutil" //http,json helpers
-	"github.com/skycoin/skycoin/src/util/fee"
-	"github.com/skycoin/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/testutil" //http,json helpers
+	"github.com/MDLlife/MDL/src/util/fee"
+	"github.com/MDLlife/MDL/src/wallet"
 )
 
 func TestCreateTransaction(t *testing.T) {

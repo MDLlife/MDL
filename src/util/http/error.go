@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/MDLlife/Mdl/src/util/logging"
+	"github.com/MDLlife/MDL/src/util/logging"
 )
 
 var (

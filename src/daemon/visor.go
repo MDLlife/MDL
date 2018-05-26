@@ -13,7 +13,6 @@ import (
 	"github.com/MDLlife/MDL/src/daemon/strand"
 	"github.com/MDLlife/MDL/src/util/utc"
 	"github.com/MDLlife/MDL/src/visor"
-	"github.com/MDLlife/MDL/src/wallet"
 )
 
 //TODO

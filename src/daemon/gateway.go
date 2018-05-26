@@ -515,9 +515,6 @@ func (gw *Gateway) Spend(wltID string, password []byte, coins uint64, dest ciphe
 
 	var tx *coin.Transaction
 	var err error
-	if gw.Config.DisableWalletAPI {
-		return tx, wallet.ErrWalletApiDisabled
-	}
 	gw.strand("Spend", func() {
 		// create spend validator
 		unspent := gw.v.Blockchain.Unspent()

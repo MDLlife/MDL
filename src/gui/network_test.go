@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/skycoin/skycoin/src/daemon"
+	"github.com/MDLlife/MDL/src/daemon"
 )
 
 func TestConnection(t *testing.T) {

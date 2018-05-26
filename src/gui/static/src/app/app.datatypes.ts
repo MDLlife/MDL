@@ -47,7 +47,7 @@ export class Version {
 export class Wallet {
   label: string;
   filename: string;
-  seed: string;
+  // seed: string;
   coins: number;
   hours: number;
   addresses: Address[];

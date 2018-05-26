@@ -11,8 +11,6 @@ import (
 	"github.com/MDLlife/MDL/src/util/droplet"
 	"github.com/MDLlife/MDL/src/wallet"
 
-	"strconv"
-
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/coin"
 )

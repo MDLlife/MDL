@@ -2,7 +2,6 @@ package httphelper
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 

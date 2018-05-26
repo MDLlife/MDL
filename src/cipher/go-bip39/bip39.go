@@ -2,7 +2,6 @@ package bip39
 
 import (
 	"crypto/sha256"
-	"crypto/sha512"
 	"encoding/binary"
 	"errors"
 	"fmt"
@@ -11,7 +10,6 @@ import (
 
 	"github.com/MDLlife/MDL/src/cipher"
 
-	"golang.org/x/crypto/pbkdf2"
 )
 
 // Some bitwise operands for working with big.Ints

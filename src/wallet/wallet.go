@@ -279,7 +279,7 @@ func newWallet(wltName string, opts Options, bg BalanceGetter) (*Wallet, error) 
 
 	coin := opts.Coin
 	if coin == "" {
-		coin = CoinTypeMDL
+		coin = CoinTypeSkycoin
 	}
 
 	w := &Wallet{

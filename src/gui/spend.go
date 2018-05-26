@@ -10,13 +10,13 @@ import (
 
 	"github.com/shopspring/decimal"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/coin"
-	"github.com/skycoin/skycoin/src/util/droplet"
-	"github.com/skycoin/skycoin/src/util/fee"
-	wh "github.com/skycoin/skycoin/src/util/http" //http,json helpers
-	"github.com/skycoin/skycoin/src/visor"
-	"github.com/skycoin/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/util/droplet"
+	"github.com/MDLlife/MDL/src/util/fee"
+	wh "github.com/MDLlife/MDL/src/util/http" //http,json helpers
+	"github.com/MDLlife/MDL/src/visor"
+	"github.com/MDLlife/MDL/src/wallet"
 )
 
 // CreateTransactionResponse is returned by /wallet/transaction

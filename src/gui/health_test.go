@@ -11,8 +11,8 @@ import (
 	"encoding/json"
 	"net/http/httptest"
 
-	"github.com/skycoin/skycoin/src/daemon"
-	"github.com/skycoin/skycoin/src/visor"
+	"github.com/MDLlife/MDL/src/daemon"
+	"github.com/MDLlife/MDL/src/visor"
 )
 
 func TestHealthCheckHandler(t *testing.T) {

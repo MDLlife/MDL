@@ -9,9 +9,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	secp256k1 "github.com/skycoin/skycoin/src/cipher/secp256k1-go"
-	"github.com/skycoin/skycoin/src/testutil"
+	"github.com/MDLlife/MDL/src/cipher"
+	secp256k1 "github.com/MDLlife/MDL/src/cipher/secp256k1-go"
+	"github.com/MDLlife/MDL/src/testutil"
 )
 
 func TestEncrypt(t *testing.T) {
