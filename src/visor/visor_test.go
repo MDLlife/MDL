@@ -17,7 +17,7 @@ import (
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/coin"
 	"github.com/MDLlife/MDL/src/testutil"
-	_require "github.com/MDL/src/testutil/require"
+	_require "github.com/MDLlife/MDL/src/testutil/require"
 	"github.com/MDLlife/MDL/src/util/fee"
 	"github.com/MDLlife/MDL/src/util/utc"
 	"github.com/MDLlife/MDL/src/visor/blockdb"

@@ -19,6 +19,12 @@ import (
 	"github.com/MDLlife/MDL/src/testutil"
 )
 
+func prepareWltDir() string {
+	dir, err := ioutil.TempDir("", "wallets")
+	if err != nil {
+		panic(err)
+	}
+
 	return dir
 }
 

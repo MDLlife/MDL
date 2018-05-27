@@ -1089,32 +1089,6 @@ func TestWalletCreateHandler(t *testing.T) {
 			gatewayCreateWalletErr: errors.New("gateway.CreateWallet error"),
 		},
 		{
-<<<<<<< HEAD
-			name:   "500 - gateway.ScanAheadWalletAddresses error",
-			method: http.MethodPost,
-			body: &httpBody{
-				Seed:  "foo",
-				Label: "bar",
-				ScanN: "2",
-			},
-			status:  http.StatusInternalServerError,
-			err:     "500 Internal Server Error",
-			wltName: "filename",
-			scnN:    2,
-			options: wallet.Options{
-				Label: "bar",
-				Seed:  "foo",
-			},
-			gatewayCreateWalletResult: wallet.Wallet{
-				Meta: map[string]string{
-					"filename": "filename",
-				},
-			},
-			scanWalletAddressesError: errors.New("gateway.ScanAheadWalletAddresses error"),
-		},
-		{
-=======
->>>>>>> 452491da01d7ce66c4ed6c01e19f986e1dda34ea
 			name:   "403 - Forbidden - wallet API disabled",
 			method: http.MethodPost,
 			body: &httpBody{

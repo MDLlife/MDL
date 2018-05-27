@@ -25,21 +25,25 @@ import (
 	"github.com/MDLlife/MDL/src/api/cli"
 	"github.com/MDLlife/MDL/src/api/webrpc"
 	"github.com/MDLlife/MDL/src/cipher"
-	"github.com/MDLlife/MDL/src/visor"
+	"github.com/MDLlife/MDL/src/gui"
 	"github.com/MDLlife/MDL/src/util/droplet"
 	"github.com/MDLlife/MDL/src/visor"
 	"github.com/MDLlife/MDL/src/wallet"
 )
 
 const (
-	binaryName = "mdl-cli"
-	walletName = "integration_test.wlt"
+	binaryName = "skycoin-cli"
 
-	testModeStable = "stable"
-	testModeLive   = "live"
+	testModeStable           = "stable"
+	testModeLive             = "live"
+	testModeDisableWalletApi = "disable-wallet-api"
 
 	// Number of random transactions of live transaction test.
 	randomLiveTransactionNum = 500
+
+	testFixturesDir = "test-fixtures"
+
+	stableWalletName = "integration-test.wlt"
 )
 
 var (
@@ -360,13 +364,13 @@ func TestVerifyAddress(t *testing.T) {
 		errMsg string
 	}{
 		{
-			"valid mdl address",
+			"valid skycoin address",
 			"2Kg3eRXUhY6hrDZvNGB99DKahtrPDQ1W9vN",
 			nil,
 			"",
 		},
 		{
-			"invalid mdl address",
+			"invalid skycoin address",
 			"2KG9eRXUhx6hrDZvNGB99DKahtrPDQ1W9vn",
 			errors.New("exit status 1"),
 			"Invalid version",
@@ -477,8 +481,8 @@ func TestAddressGen(t *testing.T) {
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
-				// Confirms the wallet type is mdl
-				require.Equal(t, "mdl", w.Meta["coin"])
+				// Confirms the wallet type is skycoin
+				require.Equal(t, "skycoin", w.Meta["coin"])
 
 				// Confirms that the seed is consisted of 12 words
 				seed := w.Meta["seed"]
@@ -508,8 +512,8 @@ func TestAddressGen(t *testing.T) {
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
-				// Confirms the wallet type is mdl
-				require.Equal(t, "mdl", w.Meta["coin"])
+				// Confirms the wallet type is skycoin
+				require.Equal(t, "skycoin", w.Meta["coin"])
 
 				// Confirms that the seed is consisted of 12 words
 				seed := w.Meta["seed"]
@@ -539,8 +543,8 @@ func TestAddressGen(t *testing.T) {
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
-				// Confirms the wallet type is mdl
-				require.Equal(t, "mdl", w.Meta["coin"])
+				// Confirms the wallet type is skycoin
+				require.Equal(t, "skycoin", w.Meta["coin"])
 
 				// Confirms the secrets in Entries are hidden
 				require.Len(t, w.Entries, 2)
@@ -557,8 +561,8 @@ func TestAddressGen(t *testing.T) {
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
-				// Confirms the wallet type is mdl
-				require.Equal(t, "mdl", w.Meta["coin"])
+				// Confirms the wallet type is skycoin
+				require.Equal(t, "skycoin", w.Meta["coin"])
 
 				// Confirms the secrets in Entries are hidden
 				require.Len(t, w.Entries, 2)
@@ -575,7 +579,6 @@ func TestAddressGen(t *testing.T) {
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
-				// Confirms the wallet type is bitcoin
 				// Confirms the wallet type is skycoin
 				require.Equal(t, "bitcoin", w.Meta["coin"])
 
@@ -602,7 +605,7 @@ func TestAddressGen(t *testing.T) {
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
-				// Confirms the wallet type is bitcoin
+				// Confirms the wallet type is skycoin
 				require.Equal(t, "bitcoin", w.Meta["coin"])
 
 				require.Len(t, w.Entries, 2)

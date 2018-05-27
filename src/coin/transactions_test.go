@@ -13,6 +13,7 @@ import (
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/cipher/encoder"
 	"github.com/MDLlife/MDL/src/testutil"
+	_require "github.com/MDLlife/MDL/src/testutil/require"
 )
 
 func makeTransactionFromUxOut(t *testing.T, ux UxOut, s cipher.SecKey) Transaction {

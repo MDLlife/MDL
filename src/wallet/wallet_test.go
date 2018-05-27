@@ -21,7 +21,10 @@ import (
 	"github.com/MDLlife/MDL/src/testutil"
 	"github.com/MDLlife/MDL/src/util/fee"
 	"github.com/MDLlife/MDL/src/util/logging"
+)
 
+var (
+	log = logging.MustGetLogger("wallet_test")
 )
 
 // set rand seed.
