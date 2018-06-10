@@ -115,7 +115,7 @@ func LoadConfig() (Config, error) {
 	// get rpc address from env
 	rpcAddr := os.Getenv("RPC_ADDR")
 	if rpcAddr == "" {
-		rpcAddr = defaultRpcAddress
+		rpcAddr = defaultRPCAddress
 	}
 
 	home := file.UserHome()
