@@ -63,14 +63,24 @@ else
 endif
 
 run:  ## Run the MDL node. To add arguments, do 'make ARGS="--foo" run'.
-	go run cmd/mdl/mdl.go --gui-dir="./${STATIC_DIR}" ${ARGS}
+	go run cmd/mdl/mdl.go --gui-dir="./${GUI_STATIC_DIR}" ${ARGS}
 
 run-help: ## Show MDL node help
 	@go run cmd/mdl/mdl.go --help
 
 test: ## Run tests for MDL
-	go test ./cmd/... -timeout=5m
-	go test ./src/... -timeout=5m
+	go test ./cmd/... -timeout=15m
+	go test ./src/api/... -timeout=15m
+	go test ./src/cipher/... -timeout=15m
+	go test ./src/coin/... -timeout=15m
+	go test ./src/consensus/... -timeout=15m
+	go test ./src/daemon/... -timeout=15m
+	go test ./src/gui/... -timeout=15m
+	go test ./src/testutil/... -timeout=15m
+	go test ./src/util/... -timeout=15m
+	go test ./src/visor/... -timeout=15m
+	go test ./src/wallet/... -timeout=15m
+
 
 test-386: ## Run tests for MDL with GOARCH=386
 	GOARCH=386 go test ./cmd/... -timeout=5m
