@@ -67,7 +67,7 @@ function startMDL() {
 })()
 
   var args = [
-    '-launch-browser=false',
+    '-launch-browser=true',
     '-gui-dir=' + path.dirname(exe),
     '-color-log=false', // must be disabled for web interface detection
     '-logtofile=true',
