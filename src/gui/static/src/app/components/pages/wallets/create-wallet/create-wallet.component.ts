@@ -65,7 +65,9 @@ export class CreateWalletComponent implements OnInit {
     this.form.addControl('password', new FormControl());
     this.form.addControl('confirm_password', new FormControl());
 
-    this.generateSeed();
+    if (this.data.create) {
+      this.generateSeed();
+    }
 
     this.scan = 100;
   }

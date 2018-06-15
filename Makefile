@@ -236,7 +236,7 @@ test-ui:  ## Run UI tests
 	cd $(GUI_STATIC_DIR) && npm run e2e
 
 build-ui:  ## Builds the UI
-	cd $(GUI_STATIC_DIR) && yarn && npm run build
+	cd $(GUI_STATIC_DIR) && npm run build
 
 release: ## Build electron apps, the builds are located in electron/release folder.
 	cd $(ELECTRON_DIR) && ./build.sh

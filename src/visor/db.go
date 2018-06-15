@@ -66,6 +66,7 @@ func OpenDB(dbFile string, readOnly bool) (*bolt.DB, error) {
 		Timeout:  500 * time.Millisecond,
 		ReadOnly: readOnly,
 	})
+	println("err", err)
 	if err != nil {
 		return nil, fmt.Errorf("Open boltdb failed, %v", err)
 	}
