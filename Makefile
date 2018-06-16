@@ -5,7 +5,17 @@
 .PHONY: install-linters format release clean-release install-deps-ui build-ui help
 
 # Static files directory
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 GUI_STATIC_DIR = src/gui/static
+
+PORT="46430"
+RPC_PORT="46420"
+
+IP_ADDR="0.0.0.0"
+
+RPC_ADDR="$IP_ADDR:$RPC_PORT"
+
 
 # Electron files directory
 ELECTRON_DIR = electron
@@ -43,15 +53,16 @@ LDFLAGS = -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BUILDLIB_DIR) -L$(BUI
 OSNAME = $(TRAVIS_OS_NAME)
 
 ifeq ($(shell uname -s),Linux)
-  LDLIBS=$(LIBC_LIBS) -lpthread
+	OSNAME = linux
+	LDLIBS=$(LIBC_LIBS) -lpthread
 	LDPATH=$(shell printenv LD_LIBRARY_PATH)
 	LDPATHVAR=LD_LIBRARY_PATH
 ifndef OSNAME
-  OSNAME = linux
+	OSNAME = linux
 endif
 else ifeq ($(shell uname -s),Darwin)
 ifndef OSNAME
-  OSNAME = osx
+	OSNAME = osx
 endif
 	LDLIBS = $(LIBC_LIBS)
 	LDPATH=$(shell printenv DYLD_LIBRARY_PATH)
@@ -63,24 +74,37 @@ else
 endif
 
 run:  ## Run the MDL node. To add arguments, do 'make ARGS="--foo" run'.
-	go run cmd/mdl/mdl.go --gui-dir="./${GUI_STATIC_DIR}" ${ARGS}
+	go run cmd/mdl/mdl.go \
+	    -web-interface=true \
+        -web-interface-addr=${IP_ADDR} \
+        -web-interface-port=${PORT} \
+        -gui-dir="${DIR}/src/gui/static/" \
+        -launch-browser=true \
+        -enable-wallet-api=true \
+        -rpc-interface=true \
+        -rpc-interface-addr=${IP_ADDR} \
+        -rpc-interface-port=${RPC_PORT} \
+        -log-level=debug \
+        -download-peerlist=true \
+        -enable-seed-api=true \
+        -disable-csrf=false \
+        $@
 
 run-help: ## Show MDL node help
 	@go run cmd/mdl/mdl.go --help
 
 test: ## Run tests for MDL
-	go test ./cmd/... -timeout=15m
-	go test ./src/api/... -timeout=15m
-	go test ./src/cipher/... -timeout=15m
-	go test ./src/coin/... -timeout=15m
-	go test ./src/consensus/... -timeout=15m
-	go test ./src/daemon/... -timeout=15m
-	go test ./src/gui/... -timeout=15m
-	go test ./src/testutil/... -timeout=15m
-	go test ./src/util/... -timeout=15m
-	go test ./src/visor/... -timeout=15m
-	go test ./src/wallet/... -timeout=15m
-
+	go test ./cmd/... -timeout=5m
+	go test ./src/api/... -timeout=5m
+	go test ./src/cipher/... -timeout=5m
+	go test ./src/coin/... -timeout=5m
+	go test ./src/consensus/... -timeout=5m
+	go test ./src/daemon/... -timeout=5m
+	go test ./src/gui/... -timeout=5m
+	go test ./src/testutil/... -timeout=5m
+	go test ./src/util/... -timeout=5m
+	go test ./src/visor/... -timeout=5m
+	go test ./src/wallet/... -timeout=5m
 
 test-386: ## Run tests for MDL with GOARCH=386
 	GOARCH=386 go test ./cmd/... -timeout=5m
