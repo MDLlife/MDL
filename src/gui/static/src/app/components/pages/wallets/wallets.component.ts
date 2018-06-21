@@ -34,10 +34,11 @@ export class WalletsComponent implements OnInit, OnDestroy {
     this.walletSubscription.unsubscribe();
   }
 
-  addWallet() {
+  addWallet(create) {
     const config = new MatDialogConfig();
     config.width = '566px';
-    this.dialog.open(CreateWalletComponent, config).afterClosed().subscribe();
+    config.data = { create };
+    this.dialog.open(CreateWalletComponent, config);
   }
 
   loadWallet() {
