@@ -221,7 +221,7 @@ func TestNewWallet(t *testing.T) {
 			expect{
 				meta: map[string]string{
 					"label":     "wallet1",
-					"coin":      string(CoinTypeSkycoin),
+					"coin":      string(CoinTypeMDL),
 					"type":      "deterministic",
 					"encrypted": "true",
 				},
@@ -233,14 +233,14 @@ func TestNewWallet(t *testing.T) {
 			"test.wlt",
 			Options{
 				Label:   "wallet1",
-				Coin:    CoinTypeSkycoin,
+				Coin:    CoinTypeMDL,
 				Seed:    "testseed123",
 				Encrypt: true,
 			},
 			expect{
 				meta: map[string]string{
 					"label":     "wallet1",
-					"coin":      string(CoinTypeSkycoin),
+					"coin":      string(CoinTypeMDL),
 					"type":      "deterministic",
 					"encrypted": "true",
 				},
@@ -252,14 +252,14 @@ func TestNewWallet(t *testing.T) {
 			"test.wlt",
 			Options{
 				Label:    "wallet1",
-				Coin:     CoinTypeSkycoin,
+				Coin:     CoinTypeMDL,
 				Encrypt:  true,
 				Password: []byte("pwd"),
 			},
 			expect{
 				meta: map[string]string{
 					"label":     "wallet1",
-					"coin":      string(CoinTypeSkycoin),
+					"coin":      string(CoinTypeMDL),
 					"type":      "deterministic",
 					"encrypted": "true",
 				},
@@ -271,7 +271,7 @@ func TestNewWallet(t *testing.T) {
 			"test.wlt",
 			Options{
 				Label:    "wallet1",
-				Coin:     CoinTypeSkycoin,
+				Coin:     CoinTypeMDL,
 				Encrypt:  false,
 				Seed:     "seed",
 				Password: []byte("pwd"),
@@ -540,7 +540,7 @@ func TestLoadWallet(t *testing.T) {
 			"./testdata/test1.wlt",
 			expect{
 				meta: map[string]string{
-					"coin":     string(CoinTypeSkycoin),
+					"coin":     string(CoinTypeMDL),
 					"filename": "test1.wlt",
 					"label":    "test3",
 					"lastSeed": "9182b02c0004217ba9a55593f8cf0abecc30d041e094b266dbb5103e1919adaf",
@@ -597,7 +597,7 @@ func TestLoadWallet(t *testing.T) {
 			"./testdata/scrypt-chacha20poly1305-encrypted.wlt",
 			expect{
 				meta: map[string]string{
-					"coin":       "skycoin",
+					"coin":       "mdl",
 					"cryptoType": "scrypt-chacha20poly1305",
 					"encrypted":  "true",
 					"filename":   "scrypt-chacha20poly1305-encrypted.wlt",
@@ -615,7 +615,7 @@ func TestLoadWallet(t *testing.T) {
 			"./testdata/sha256xor-encrypted.wlt",
 			expect{
 				meta: map[string]string{
-					"coin":       "skycoin",
+					"coin":       "mdl",
 					"cryptoType": "sha256-xor",
 					"encrypted":  "true",
 					"filename":   "sha256xor-encrypted.wlt",
@@ -633,7 +633,7 @@ func TestLoadWallet(t *testing.T) {
 			"./testdata/v2_no_encrypt.wlt",
 			expect{
 				meta: map[string]string{
-					"coin":       "skycoin",
+					"coin":       "mdl",
 					"cryptoType": "scrypt-chacha20poly1305",
 					"encrypted":  "false",
 					"filename":   "v2_no_encrypt.wlt",

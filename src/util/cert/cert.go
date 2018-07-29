@@ -4,6 +4,7 @@
 
 // Modifications Copyright 2018 MDL authors.
 // Modifications Copyright 2014 Skycoin authors.
+// Modifications Copyright 2018 MDL authors.
 
 package cert
 

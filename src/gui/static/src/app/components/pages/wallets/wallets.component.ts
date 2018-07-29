@@ -4,7 +4,6 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CreateWalletComponent } from './create-wallet/create-wallet.component';
 import { Wallet } from '../../../app.datatypes';
 import { Subscription } from 'rxjs/Subscription';
-import { LoadWalletComponent } from './load-wallet/load-wallet.component';
 
 @Component({
   selector: 'app-wallets',
@@ -39,12 +38,6 @@ export class WalletsComponent implements OnInit, OnDestroy {
     config.width = '566px';
     config.data = { create };
     this.dialog.open(CreateWalletComponent, config);
-  }
-
-  loadWallet() {
-    const config = new MatDialogConfig();
-    config.width = '566px';
-    this.dialog.open(LoadWalletComponent, config).afterClosed().subscribe();
   }
 
   toggleWallet(wallet: Wallet) {

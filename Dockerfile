@@ -8,7 +8,7 @@ RUN cd $GOPATH/src/github.com/MDLLife/MDL && \
   CGO_ENABLED=0 GOOS=linux go install -a -installsuffix cgo ./...
 
 
-# skycoin gui
+# mdl gui
 FROM node:8.9 AS build-node
 
 COPY . /mdl
@@ -21,18 +21,18 @@ RUN npm install -g --unsafe @angular/cli && \
     npm run build
 
 
-# skycoin image
+# mdl image
 FROM alpine:3.7
 
 ENV COIN="mdl" \
-    RPC_ADDR="0.0.0.0:6430" \
+    RPC_ADDR="0.0.0.0:8330" \
     DATA_DIR="/data/.$COIN" \
     WALLET_DIR="/wallet" \
     WALLET_NAME="$COIN_cli.wlt"
 
 RUN adduser -D mdl
 
-USER skycoin
+USER mdl
 
 # copy binaries
 COPY --from=build-go /go/bin/* /usr/bin/
@@ -44,7 +44,7 @@ COPY --from=build-node /mdl/src/gui/static /usr/local/mdl/src/gui/static
 VOLUME $WALLET_DIR
 VOLUME $DATA_DIR
 
-EXPOSE 6000 6420 6430
+EXPOSE 6000 8320 8330
 
 WORKDIR /usr/local/mdl
 

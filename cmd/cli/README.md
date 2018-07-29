@@ -2,7 +2,7 @@
 
 MDL command line interface
 
-The CLI command APIs can be used directly from a Go application, see [Skycoin CLI Godoc](https://godoc.org/github.com/skycoin/skycoin/src/api/cli).
+The CLI command APIs can be used directly from a Go application, see [Skycoin CLI Godoc](https://godoc.org/github.com/MDLLife/mdl/src/api/cli).
 
 <!-- MarkdownTOC autolink="true" bracket="round" -->
 
@@ -74,7 +74,7 @@ $ ./install.sh
 If you are in `bash`, run the following command:
 
 ```bash
-$ PROG=skycoin-cli source $GOPATH/src/github.com/mdllife/mdl/cmd/cli/autocomplete/bash_autocomplete
+$ PROG=mdl-cli source $GOPATH/src/github.com/mdllife/mdl/cmd/cli/autocomplete/bash_autocomplete
 ```
 
 If you are in `zsh`, please replace the `bash_autocomplete` with `zsh_autocomplete` in the previous command.

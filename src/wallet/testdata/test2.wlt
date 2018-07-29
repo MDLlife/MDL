@@ -1,6 +1,6 @@
 {
     "meta": {
-        "coin": "sky",
+        "coin": "mdl",
         "filename": "2017_08_23_46d6.wlt",
         "label": "test1",
         "lastSeed": "67de80ac3ae025c8742bec541da7018d08fa351983557d2bc753e90e24337d13",

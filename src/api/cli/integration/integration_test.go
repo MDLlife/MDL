@@ -32,7 +32,7 @@ import (
 )
 
 const (
-	binaryName = "skycoin-cli"
+	binaryName = "mdl-cli"
 
 	testModeStable           = "stable"
 	testModeLive             = "live"
@@ -92,9 +92,9 @@ func TestMain(m *testing.M) {
 }
 
 func nodeAddress() string {
-	addr := os.Getenv("SKYCOIN_NODE_HOST")
+	addr := os.Getenv("MDL_NODE_HOST")
 	if addr == "" {
-		return "http://127.0.0.1:6420"
+		return "http://127.0.0.1:8320"
 	}
 	return addr
 }
@@ -191,7 +191,7 @@ func writeJSON(t *testing.T, filename string, obj interface{}) {
 }
 
 func mode(t *testing.T) string {
-	mode := os.Getenv("SKYCOIN_INTEGRATION_TEST_MODE")
+	mode := os.Getenv("MDL_INTEGRATION_TEST_MODE")
 	switch mode {
 	case "":
 		mode = testModeStable
@@ -203,7 +203,7 @@ func mode(t *testing.T) string {
 }
 
 func enabled() bool {
-	return os.Getenv("SKYCOIN_INTEGRATION_TESTS") == "1"
+	return os.Getenv("MDL_INTEGRATION_TESTS") == "1"
 }
 
 func doStable(t *testing.T) bool {
@@ -288,7 +288,7 @@ func doLiveOrStable(t *testing.T) bool {
 func rpcAddress() string {
 	rpcAddr := os.Getenv("RPC_ADDR")
 	if rpcAddr == "" {
-		rpcAddr = "127.0.0.1:6430"
+		rpcAddr = "127.0.0.1:8330"
 	}
 
 	return rpcAddr
@@ -364,13 +364,13 @@ func TestVerifyAddress(t *testing.T) {
 		errMsg string
 	}{
 		{
-			"valid skycoin address",
+			"valid mdl address",
 			"2Kg3eRXUhY6hrDZvNGB99DKahtrPDQ1W9vN",
 			nil,
 			"",
 		},
 		{
-			"invalid skycoin address",
+			"invalid mdl address",
 			"2KG9eRXUhx6hrDZvNGB99DKahtrPDQ1W9vn",
 			errors.New("exit status 1"),
 			"Invalid version",
@@ -463,8 +463,8 @@ func TestAddressGen(t *testing.T) {
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
-				// Confirms the wallet type is skycoin
-				require.Equal(t, "skycoin", w.Meta["coin"])
+				// Confirms the wallet type is mdl
+				require.Equal(t, "mdl", w.Meta["coin"])
 
 				// Confirms that the seed is consisted of 12 words
 				seed := w.Meta["seed"]
@@ -481,8 +481,8 @@ func TestAddressGen(t *testing.T) {
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
-				// Confirms the wallet type is skycoin
-				require.Equal(t, "skycoin", w.Meta["coin"])
+				// Confirms the wallet type is mdl
+				require.Equal(t, "mdl", w.Meta["coin"])
 
 				// Confirms that the seed is consisted of 12 words
 				seed := w.Meta["seed"]
@@ -512,8 +512,8 @@ func TestAddressGen(t *testing.T) {
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
-				// Confirms the wallet type is skycoin
-				require.Equal(t, "skycoin", w.Meta["coin"])
+				// Confirms the wallet type is mdl
+				require.Equal(t, "mdl", w.Meta["coin"])
 
 				// Confirms that the seed is consisted of 12 words
 				seed := w.Meta["seed"]
@@ -543,8 +543,8 @@ func TestAddressGen(t *testing.T) {
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
-				// Confirms the wallet type is skycoin
-				require.Equal(t, "skycoin", w.Meta["coin"])
+				// Confirms the wallet type is mdl
+				require.Equal(t, "mdl", w.Meta["coin"])
 
 				// Confirms the secrets in Entries are hidden
 				require.Len(t, w.Entries, 2)
@@ -561,8 +561,8 @@ func TestAddressGen(t *testing.T) {
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
-				// Confirms the wallet type is skycoin
-				require.Equal(t, "skycoin", w.Meta["coin"])
+				// Confirms the wallet type is mdl
+				require.Equal(t, "mdl", w.Meta["coin"])
 
 				// Confirms the secrets in Entries are hidden
 				require.Len(t, w.Entries, 2)
@@ -579,7 +579,7 @@ func TestAddressGen(t *testing.T) {
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
-				// Confirms the wallet type is skycoin
+				// Confirms the wallet type is bitcoin
 				require.Equal(t, "bitcoin", w.Meta["coin"])
 
 				require.Len(t, w.Entries, 2)
@@ -605,7 +605,7 @@ func TestAddressGen(t *testing.T) {
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
-				// Confirms the wallet type is skycoin
+				// Confirms the wallet type is bitcoin
 				require.Equal(t, "bitcoin", w.Meta["coin"])
 
 				require.Len(t, w.Entries, 2)
@@ -1519,7 +1519,7 @@ func TestLiveSend(t *testing.T) {
 				return []string{"send", "-a", w.Entries[2].Address.String(),
 					w.Entries[1].Address.String(), "1"}
 			},
-			errMsg:  []byte("ERROR: Transaction has zero coinhour fee. See 'skycoin-cli send --help'"),
+			errMsg:  []byte("ERROR: Transaction has zero coinhour fee. See 'mdl-cli send --help'"),
 			checkTx: func(t *testing.T, txid string) {},
 		},
 	}
@@ -1567,7 +1567,7 @@ func TestLiveSend(t *testing.T) {
 
 	// Send with too small decimal value
 	// CLI send is a litte bit slow, almost 300ms each. so we only test 20 invalid decimal coin.
-	errMsg := []byte("ERROR: invalid amount, too many decimal places. See 'skycoin-cli send --help'")
+	errMsg := []byte("ERROR: invalid amount, too many decimal places. See 'mdl-cli send --help'")
 	for i := uint64(1); i < uint64(20); i++ {
 		v, err := droplet.ToString(i)
 		require.NoError(t, err)
@@ -1699,7 +1699,7 @@ func TestLiveCreateAndBroadcastRawTransaction(t *testing.T) {
 	}
 
 	// Send with too small decimal value
-	errMsg := []byte("ERROR: invalid amount, too many decimal places. See 'skycoin-cli createRawTransaction --help'")
+	errMsg := []byte("ERROR: invalid amount, too many decimal places. See 'mdl-cli createRawTransaction --help'")
 	for i := uint64(1); i < uint64(20); i++ {
 		v, err := droplet.ToString(i)
 		require.NoError(t, err)
@@ -1930,14 +1930,14 @@ func TestVersion(t *testing.T) {
 	require.NoError(t, err)
 
 	var ver = struct {
-		Skycoin string `json:"skycoin"`
+		MDL string `json:"mdl"`
 		Cli     string `json:"cli"`
 		RPC     string `json:"rpc"`
 		Wallet  string `json:"wallet"`
 	}{}
 	err = json.NewDecoder(bytes.NewReader(output)).Decode(&ver)
 	require.NoError(t, err)
-	require.True(t, ver.Skycoin != "")
+	require.True(t, ver.MDL != "")
 	require.True(t, ver.Cli != "")
 	require.True(t, ver.RPC != "")
 	require.True(t, ver.Wallet != "")
@@ -1969,8 +1969,8 @@ func TestStableGenerateWallet(t *testing.T) {
 			args:  []string{"-r"},
 			setup: createTempWalletDir,
 			checkWallet: func(t *testing.T, w *wallet.Wallet) {
-				// Confirms the default wallet name is skycoin_cli.wlt
-				require.Equal(t, "skycoin_cli.wlt", w.Filename())
+				// Confirms the default wallet name is mdl_cli.wlt
+				require.Equal(t, "mdl_cli.wlt", w.Filename())
 
 				// Confirms the seed is a valid hex string
 				_, err := hex.DecodeString(w.Meta["seed"])
@@ -1985,8 +1985,8 @@ func TestStableGenerateWallet(t *testing.T) {
 			args:  []string{"--rd"},
 			setup: createTempWalletDir,
 			checkWallet: func(t *testing.T, w *wallet.Wallet) {
-				// Confirms the default wallet name is skycoin_cli.wlt
-				require.Equal(t, "skycoin_cli.wlt", w.Filename())
+				// Confirms the default wallet name is mdl_cli.wlt
+				require.Equal(t, "mdl_cli.wlt", w.Filename())
 
 				// Confirms the seed is consisited of 12 words
 				seed := w.Meta["seed"]
@@ -2002,8 +2002,8 @@ func TestStableGenerateWallet(t *testing.T) {
 			args:  []string{"-s", "great duck trophy inhale dad pluck include maze smart mechanic ring merge"},
 			setup: createTempWalletDir,
 			checkWallet: func(t *testing.T, w *wallet.Wallet) {
-				// Confirms the default wallet name is skycoin_cli.wlt
-				require.Equal(t, "skycoin_cli.wlt", w.Filename())
+				// Confirms the default wallet name is mdl_cli.wlt
+				require.Equal(t, "mdl_cli.wlt", w.Filename())
 				// Confirms the label is empty
 				require.Empty(t, w.Meta["label"])
 
@@ -2018,8 +2018,8 @@ func TestStableGenerateWallet(t *testing.T) {
 			args:  []string{"-n", "5"},
 			setup: createTempWalletDir,
 			checkWallet: func(t *testing.T, w *wallet.Wallet) {
-				// Confirms the default wallet name is skycoin_cli.wlt
-				require.Equal(t, "skycoin_cli.wlt", w.Filename())
+				// Confirms the default wallet name is mdl_cli.wlt
+				require.Equal(t, "mdl_cli.wlt", w.Filename())
 				// Confirms the label is empty
 				require.Empty(t, w.Meta["label"])
 				// Confirms wallet has 5 address entries
@@ -2031,7 +2031,7 @@ func TestStableGenerateWallet(t *testing.T) {
 			args:  []string{"-f", "integration-cli.wlt"},
 			setup: createTempWalletDir,
 			checkWallet: func(t *testing.T, w *wallet.Wallet) {
-				// Confirms the default wallet name is skycoin_cli.wlt
+				// Confirms the default wallet name is mdl_cli.wlt
 				require.Equal(t, "integration-cli.wlt", w.Filename())
 				// Confirms the label is empty
 				require.Empty(t, w.Meta["label"])
@@ -2042,8 +2042,8 @@ func TestStableGenerateWallet(t *testing.T) {
 			args:  []string{"-l", "integration-cli"},
 			setup: createTempWalletDir,
 			checkWallet: func(t *testing.T, w *wallet.Wallet) {
-				// Confirms the default wallet name is skycoin_cli.wlt
-				require.Equal(t, "skycoin_cli.wlt", w.Filename())
+				// Confirms the default wallet name is mdl_cli.wlt
+				require.Equal(t, "mdl_cli.wlt", w.Filename())
 				label, ok := w.Meta["label"]
 				require.True(t, ok)
 				require.Equal(t, "integration-cli", label)
@@ -2056,7 +2056,7 @@ func TestStableGenerateWallet(t *testing.T) {
 				_, clean := createTempWalletFile(t)
 				return clean
 			},
-			errMsg: []byte("ERROR: integration-test.wlt already exist. See 'skycoin-cli generateWallet --help'"),
+			errMsg: []byte("ERROR: integration-test.wlt already exist. See 'mdl-cli generateWallet --help'"),
 		},
 	}
 

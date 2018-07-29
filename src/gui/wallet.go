@@ -18,7 +18,7 @@ import (
 )
 
 // HTTP401AuthHeader WWW-Authenticate value
-const HTTP401AuthHeader = "SkycoinWallet"
+const HTTP401AuthHeader = "MDLWallet"
 
 // SpendResult represents the result of spending
 type SpendResult struct {

@@ -3,7 +3,7 @@
 #Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
 PORT="8320"
-RPC_PORT="8320"
+RPC_PORT="8330"
 IP_ADDR="0.0.0.0"
 HOST="http://$IP_ADDR:$PORT"
 RPC_ADDR="$IP_ADDR:$RPC_PORT"
@@ -75,16 +75,16 @@ go build -o "$BINARY" $PWD/cmd/mdl/mdl.go
 # Run mdl node with pinned blockchain database
 echo "starting mdl ($PWD/mdl-integration) node in background with http listener on $HOST"
 
-$PWD/mdl-integration -disable-networking=false \
+$PWD/mdl-integration -disable-networking=true \
                       -web-interface-addr=$IP_ADDR \
                       -web-interface-port=$PORT \
-#                     -download-peerlist=false \
-#                     -db-path=./src/gui/integration/test-fixtures/blockchain-development.db \
-#                     -db-read-only=true \
+                      -download-peerlist=false \
+                      -db-path=./src/gui/integration/test-fixtures/blockchain-development.db \
+                      -db-read-only=true \
                       -rpc-interface=true \
                       -rpc-interface-addr=$IP_ADDR \
                       -rpc-interface-port=$RPC_PORT \
-                      -launch-browser=true \
+                      -launch-browser=false \
                       -data-dir="$DATA_DIR" \
                       -wallet-dir="$WALLET_DIR" 2>&1 >/dev/null
 
