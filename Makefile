@@ -147,24 +147,20 @@ lint: ## Run linters. Use make install-linters first.
 
 check: lint test integration-test-stable integration-test-disable-wallet-api integration-test-disable-seed-api ## Run tests and linters
 
-#integration-test-stable: ## Run stable integration tests
-#	./ci-scripts/integration-test-stable.sh
-#
-#integration-test-live: ## Run live integration tests
-#	./ci-scripts/integration-test-live.sh
-#
-#integration-test-live-wallet: ## Run live integration tests with wallet
-#	./ci-scripts/integration-test-live.sh -w
-#
-#integration-test-disable-wallet-api: ## Run disable wallet api integration tests
-#	./ci-scripts/integration-test-disable-wallet-api.sh
-#
-#integration-test-disable-seed-api: ## Run enable seed api integration test
-#	./ci-scripts/integration-test-disable-seed-api.sh
+
 
 ## BEGIN CI TESTS ##
 integration-test-stable: ## Run stable integration tests
 	./ci-scripts/integration-test-stable.sh
+
+integration-test-live-wallet: ## Run live integration tests with wallet
+	./ci-scripts/integration-test-live.sh -w
+
+integration-test-disable-wallet-api: ## Run disable wallet api integration tests
+	./ci-scripts/integration-test-disable-wallet-api.sh
+
+integration-test-disable-seed-api: ## Run enable seed api integration test
+	./ci-scripts/integration-test-disable-seed-api.sh
 
 integration-test-live: build-start ## Run live integration tests
 	./ci-scripts/integration-test-live.sh
@@ -226,7 +222,7 @@ format:  # Formats the code. Must have goimports installed (use make install-lin
 	goimports -w -local github.com/mdllife/mdl ./lib
 
 install-deps-ui:  ## Install the UI dependencies
-	cd $(GUI_STATIC_DIR) && npm install
+	cd $(GUI_STATIC_DIR) && yarn
 
 lint-ui:  ## Lint the UI code
 	cd $(GUI_STATIC_DIR) && npm run lint

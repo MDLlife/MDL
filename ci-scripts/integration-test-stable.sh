@@ -18,6 +18,8 @@ UPDATE=""
 VERBOSE=""
 # run go test with -run flag
 RUN_TESTS=""
+# run wallet tests
+TEST_WALLET=""
 
 COMMIT=$(git rev-parse HEAD)
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -30,6 +32,7 @@ usage () {
   echo "-r <string>  -- Run test with -run flag"
   echo "-u <boolean> -- Update stable testdata"
   echo "-v <boolean> -- Run test with -v flag"
+  echo "-w <boolean> -- Run wallet tests"
   exit 1
 }
 
@@ -42,6 +45,7 @@ while getopts "h?t:r:uvw" args; do
     r ) RUN_TESTS="-run ${OPTARG}";;
     u ) UPDATE="--update";;
     v ) VERBOSE="-v";;
+    w ) TEST_WALLET="--test-wallet"
   esac
 done
 
@@ -64,17 +68,17 @@ go build -o "$BINARY" -ldflags "${GOLDFLAGS}" $PWD/cmd/mdl/mdl.go
 echo "starting mdl ($PWD/mdl-integration) node in background with http listener on $HOST"
 
 $PWD/mdl-integration -disable-networking=true \
-                      -web-interface-addr=$IP_ADDR \
                       -web-interface-port=$PORT \
                       -download-peerlist=false \
                       -db-path=./src/gui/integration/test-fixtures/blockchain-development.db \
                       -db-read-only=true \
                       -rpc-interface=true \
-                      -rpc-interface-addr=$IP_ADDR \
                       -rpc-interface-port=$RPC_PORT \
                       -launch-browser=false \
                       -data-dir="$DATA_DIR" \
-                      -wallet-dir="$WALLET_DIR" &
+                      -enable-wallet-api=true \
+                      -wallet-dir="$WALLET_DIR" \
+                      -enable-seed-api=true &
 MDL_PID=$!
 
 echo "mdl node pid=$MDL_PID"
@@ -88,7 +92,7 @@ set +e
 if [[ -z $TEST || $TEST = "gui" ]]; then
 
 MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST \
-    go test ./src/gui/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
+    go test ./src/gui/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS  $TEST_WALLET
 
 GUI_FAIL=$?
 
@@ -97,7 +101,7 @@ fi
 if [[ -z $TEST  || $TEST = "cli" ]]; then
 
 MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR \
-    go test ./src/api/cli/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
+    go test ./src/api/cli/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS  $TEST_WALLET
 
 CLI_FAIL=$?
 
