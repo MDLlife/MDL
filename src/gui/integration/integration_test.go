@@ -34,10 +34,10 @@ import (
 	"github.com/MDLlife/MDL/src/wallet"
 )
 
-/* Runs HTTP API tests against a running skycoin node
+/* Runs HTTP API tests against a running mdl node
 
 Set envvar MDL_INTEGRATION_TESTS=1 to enable them
-Set MDL_NODE_HOST to the node's address (defaults to http://127.0.0.1:6420)
+Set MDL_NODE_HOST to the node's address (defaults to http://127.0.0.1:8320)
 Set MDL_INTEGRATION_TEST_MODE to either "stable" or "live" (defaults to "stable")
 
 Each test has two modes:
@@ -75,7 +75,7 @@ var testLiveWallet = flag.Bool("test-live-wallet", false, "run live wallet tests
 func nodeAddress() string {
 	addr := os.Getenv("MDL_NODE_HOST")
 	if addr == "" {
-		return "http://127.0.0.1:6420"
+		return "http://127.0.0.1:8320"
 	}
 	return addr
 }
@@ -226,7 +226,7 @@ func TestLiveCoinSupply(t *testing.T) {
 	require.NotEmpty(t, cs.CurrentSupply)
 	require.NotEmpty(t, cs.TotalSupply)
 	require.NotEmpty(t, cs.MaxSupply)
-	require.Equal(t, "100000000.000000", cs.MaxSupply)
+	require.Equal(t, "1000000000.000000", cs.MaxSupply)
 	require.NotEmpty(t, cs.CurrentCoinHourSupply)
 	require.NotEmpty(t, cs.TotalCoinHourSupply)
 	require.Equal(t, 100, len(cs.UnlockedAddresses)+len(cs.LockedAddresses))

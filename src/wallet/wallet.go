@@ -97,6 +97,9 @@ const (
 	// WalletTimestampFormat  wallet timestamp layout
 	WalletTimestampFormat = "2006_01_02"
 
+	// CoinTypeBitcoin bitcoin type
+	CoinTypeMDL CoinType = "mdl"
+
 	// CoinTypeSkycoin skycoin type
 	CoinTypeSkycoin CoinType = "skycoin"
 	// CoinTypeBitcoin bitcoin type
@@ -123,7 +126,7 @@ type CoinType string
 
 // Options options that could be used when creating a wallet
 type Options struct {
-	Coin       CoinType   // coin type, skycoin, bitcoin, etc.
+	Coin       CoinType   // coin type, mdl, skycoin, bitcoin, etc.
 	Label      string     // wallet label.
 	Seed       string     // wallet seed.
 	Encrypt    bool       // whether the wallet need to be encrypted.
@@ -279,7 +282,7 @@ func newWallet(wltName string, opts Options, bg BalanceGetter) (*Wallet, error) 
 
 	coin := opts.Coin
 	if coin == "" {
-		coin = CoinTypeSkycoin
+		coin = CoinTypeMDL
 	}
 
 	w := &Wallet{

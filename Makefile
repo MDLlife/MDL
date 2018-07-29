@@ -9,10 +9,10 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 GUI_STATIC_DIR = src/gui/static
 
-PORT="46430"
-RPC_PORT="46420"
+PORT="8320"
+RPC_PORT="8330"
 
-IP_ADDR="0.0.0.0"
+IP_ADDR="127.0.0.1"
 
 RPC_ADDR="$IP_ADDR:$RPC_PORT"
 
@@ -236,14 +236,23 @@ test-ui:  ## Run UI tests
 	cd $(GUI_STATIC_DIR) && npm run e2e
 
 build-ui:  ## Builds the UI
-	cd $(GUI_STATIC_DIR) && npm run build
+	cd $(GUI_STATIC_DIR) && yarn && npm run build
+
+clean-ui:  ## Builds the UI
+	rm $(GUI_STATIC_DIR)/dist/* || true
 
 release: ## Build electron apps, the builds are located in electron/release folder.
-	cd $(ELECTRON_DIR) && ./build.sh
+	cd $(ELECTRON_DIR) && yarn && ./build.sh
 	@echo release files are in the folder of electron/release
 
 clean-release: ## Clean dist files and delete all builds in electron/release
-	rm $(ELECTRON_DIR)/release/*
+	rm $(ELECTRON_DIR)/release/* || true
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+release-all: ## clean and GUI_STATIC_DIR; clean and build release
+	make clean-ui;
+	make build-ui;
+	make clean-release;
+	make release;

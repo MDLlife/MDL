@@ -51,7 +51,7 @@ func FromString(b string) (uint64, error) {
 		return 0, ErrNegativeValue
 	}
 
-	// Skycoins have a maximum of 6 decimal places
+	// MDL have a maximum of 6 decimal places
 	if d.Exponent() < -Exponent {
 		return 0, ErrTooManyDecimals
 	}

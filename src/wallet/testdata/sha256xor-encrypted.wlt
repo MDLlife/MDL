@@ -1,6 +1,6 @@
 {
     "meta": {
-        "coin": "skycoin",
+        "coin": "mdl",
         "cryptoType": "sha256-xor",
         "encrypted": "true",
         "filename": "sha256xor-encrypted.wlt",

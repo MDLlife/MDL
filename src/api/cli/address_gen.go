@@ -49,7 +49,7 @@ func addressGenCmd() gcli.Command {
 			if c.Bool("bitcoin") {
 				coinType = wallet.CoinTypeBitcoin
 			} else {
-				coinType = wallet.CoinTypeSkycoin
+				coinType = wallet.CoinTypeMDL
 			}
 
 			seed := c.String("seed")

@@ -162,7 +162,7 @@ export class BuyComponent implements OnInit {
     switch (this.form.value.coin_type) {
       case "BTC": return this.config.supported[0].exchange_rate;
       case "ETH": return this.config.supported[1].exchange_rate;
-      case "SKY": return this.config.supported[2].exchange_rate;
+      case "MDL": return this.config.supported[2].exchange_rate;
       case "WAVES": return this.config.supported[3].exchange_rate;
     }
     return "1"

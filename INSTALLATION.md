@@ -1,6 +1,6 @@
 # Installing go
 
-Skycoin supports go1.9+.  The preferred version is go1.10.
+MDL supports go1.9+.  The preferred version is go1.10.
 
 ## For OSX
 First you need to have `homebrew` installed, if you don't have it yet.

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleExecutable</key>
-    <string>Skycoin</string>
+    <string>MDL</string>
     <key>CFBundleIdentifier</key>
     <string>life.MDL</string>
     <key>CFBundleInfoDictionaryVersion</key>
