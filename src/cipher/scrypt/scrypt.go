@@ -10,6 +10,7 @@ package scrypt // import "github.com/MDLlife/MDL/src/cipher/scrypt"
 import (
 	"crypto/sha256"
 	"errors"
+
 	"github.com/MDLlife/MDL/src/cipher/pbkdf2"
 )
 

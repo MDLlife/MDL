@@ -516,4 +516,3 @@ func VerifyTransactionHoursSpending(headTime uint64, uxIn UxArray, uxOut UxArray
 	}
 	return nil
 }
-

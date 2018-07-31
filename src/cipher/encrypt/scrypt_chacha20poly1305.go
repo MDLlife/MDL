@@ -11,8 +11,8 @@ import (
 	"math"
 
 	"github.com/MDLlife/MDL/src/cipher"
-	"github.com/MDLlife/MDL/src/cipher/scrypt"
 	"github.com/MDLlife/MDL/src/cipher/chacha20poly1305"
+	"github.com/MDLlife/MDL/src/cipher/scrypt"
 )
 
 const (
