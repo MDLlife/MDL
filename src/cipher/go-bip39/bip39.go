@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/MDLlife/MDL/src/cipher"
-
 )
 
 // Some bitwise operands for working with big.Ints

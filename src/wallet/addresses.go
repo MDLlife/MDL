@@ -50,7 +50,7 @@ func CreateAddresses(coinType CoinType, seed string, genCount int, hideSecretKey
 	return wallet, nil
 }
 
-// GetMDLWalletEntry returns a ReadableEntry in MDL format
+// GetSkycoinWalletEntry returns a ReadableEntry in MDL format
 func GetSkycoinWalletEntry(pub cipher.PubKey, sec cipher.SecKey) ReadableEntry {
 	return ReadableEntry{
 		Address: cipher.AddressFromPubKey(pub).String(),

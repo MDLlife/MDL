@@ -63,7 +63,7 @@ var (
 		"208.110.84.122:7800",
 		"69.90.132.231:7800",
 		"76.74.178.136:7800",
-		"64.34.218.31:7800"	}
+		"64.34.218.31:7800"}
 )
 
 // Config records the node's configuration
@@ -277,9 +277,9 @@ var devConfig = Config{
 	RPCInterfaceAddr: "127.0.0.1",
 	RPCThreadNum:     5,
 
-	LaunchBrowser: true,
+	LaunchBrowser: false,
 	// Data directory holds app data -- defaults to ~/.mdl
-	DataDirectory: ".mdl",
+	DataDirectory: filepath.Join(home, ".mdl"),
 	// Web GUI static resources
 	GUIDirectory: "./src/gui/static/",
 	// Logging
