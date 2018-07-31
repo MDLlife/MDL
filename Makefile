@@ -189,6 +189,16 @@ integration-test-live-cli: build-start ## Run live integration tests
 integration-test-all-cli: ## Run live integration tests
 	./ci-scripts/integration-test-all.sh -t cli
 
+integration-test-server:
+	go build -o /opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
+	/opt/gocode/src/github.com/MDLlife/MDL/cmd/mdl/mdl.go;
+	/opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
+	-disable-networking=true -web-interface-port=8320 -download-peerlist=false \
+	-db-path=./src/gui/integration/test-fixtures/blockchain-development.db -db-read-only=true \
+	-rpc-interface=true -rpc-interface-port=8330 -launch-browser=false \
+	-data-dir=/tmp/mdl-data-dir.cm5WDM -enable-wallet-api=true \
+	-wallet-dir=/tmp/mdl-data-dir.cm5WDM/wallets -enable-seed-api=true;
+
 build-start: stop
 	nohup ./ci-scripts/build-start.sh  2>&1 >/dev/null &
 
