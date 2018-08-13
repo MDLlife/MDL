@@ -5,12 +5,13 @@ import { environment } from '../../environments/environment';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import { Address, GetWalletsResponseEntry, GetWalletsResponseWallet, PostWalletNewAddressResponse, Transaction, Wallet } from '../app.datatypes';
+import {
+  Address, GetWalletsResponseEntry, GetWalletsResponseWallet, PostWalletNewAddressResponse, Transaction, Version,
+  Wallet
+} from '../app.datatypes';
 
 @Injectable()
 export class ApiService {
-
-  csrfError: boolean;
 
   private url = environment.nodeUrl;
 
@@ -32,6 +33,10 @@ export class ApiService {
       })));
   }
 
+  getVersion(): Observable<Version> {
+    return this.get('version');
+  }
+
   getWalletNewSeed(): Observable<string> {
     return this.get('wallet/newSeed')
       .map(response => response.seed);
@@ -42,10 +47,9 @@ export class ApiService {
       .map((response: GetWalletsResponseWallet[]) => {
         const wallets: Wallet[] = [];
         response.forEach(wallet => {
-          wallets.push({
+          wallets.push(<Wallet>{
             label: wallet.meta.label,
             filename: wallet.meta.filename,
-            seed: wallet.meta.seed,
             coins: null,
             hours: null,
             addresses: wallet.entries.map((entry: GetWalletsResponseEntry) => {
@@ -53,35 +57,56 @@ export class ApiService {
                 address: entry.address,
                 coins: null,
                 hours: null,
-              }
+              };
             }),
-          })
+            encrypted: wallet.meta.encrypted,
+          });
         });
         return wallets;
       });
   }
 
-  postWalletCreate(label: string, seed: string, scan: number): Observable<Wallet> {
-    return this.post('wallet/create', { label: label, seed: seed, scan: scan })
-      .map(response => ({
-        label: response.meta.label,
-        filename: response.meta.filename,
-        seed: response.meta.seed,
-        coins: null,
-        hours: null,
-        addresses: [ { address: response.entries[0].address, coins: null, hours: null } ],
-      }))
+  getWalletSeed(wallet: Wallet, password: string): Observable<string> {
+    return this.post('wallet/seed', { id: wallet.filename, password })
+      .map(response => response.seed);
   }
 
-  postWalletNewAddress(wallet: Wallet): Observable<Address> {
-    return this.post('wallet/newAddress', { id: wallet.filename })
+  postWalletCreate(label: string, seed: string, scan: number, password: string): Observable<Wallet> {
+    const params = { label, seed, scan };
+
+    if (password) {
+      params['password'] = password;
+      params['encrypt'] = true;
+    }
+
+    return this.post('wallet/create', params)
+      .map(response => ({
+          label: response.meta.label,
+          filename: response.meta.filename,
+          coins: null,
+          hours: null,
+          addresses: response.entries.map(entry => ({ address: entry.address, coins: null, hours: null })),
+          encrypted: response.meta.encrypted,
+        }));
+  }
+
+  postWalletNewAddress(wallet: Wallet, password?: string): Observable<Address> {
+    return this.post('wallet/newAddress', { id: wallet.filename, password })
       .map((response: PostWalletNewAddressResponse) => ({ address: response.addresses[0], coins: null, hours: null }));
+  }
+
+  postWalletToggleEncryption(wallet: Wallet, password: string) {
+    return this.post('wallet/' + (wallet.encrypted ? 'decrypt' : 'encrypt'), { id: wallet.filename, password });
   }
 
   get(url, params = null, options = {}) {
     return this.http.get(this.getUrl(url, params), this.returnRequestOptions(options))
       .map((res: any) => res.json())
       .catch((error: any) => Observable.throw(error || 'Server error'));
+  }
+
+  getCsrf() {
+    return this.get('csrf').map(response => response.csrf_token);
   }
 
   post(url, params = {}, options: any = {}) {
@@ -99,18 +124,10 @@ export class ApiService {
     options.headers = this.getHeaders();
 
     if (additionalOptions.csrf) {
-      options.headers.append('X-CSRF-Token', additionalOptions.csrf)
+      options.headers.append('X-CSRF-Token', additionalOptions.csrf);
     }
 
     return options;
-  }
-
-  testBackend() {
-    this.getCsrf().subscribe(null, () => this.csrfError = true);
-  }
-
-  private getCsrf() {
-    return this.get('csrf').map(response => response.csrf_token);
   }
 
   private getHeaders() {
@@ -124,7 +141,7 @@ export class ApiService {
       return '';
     }
 
-    return Object.keys(parameters).reduce((array,key) => {
+    return Object.keys(parameters).reduce((array, key) => {
       array.push(key + '=' + encodeURIComponent(parameters[key]));
       return array;
     }, []).join('&');

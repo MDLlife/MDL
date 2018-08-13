@@ -4,8 +4,9 @@ import (
 	"errors"
 	"math"
 
-	logging "github.com/op/go-logging"
 	"github.com/shopspring/decimal"
+
+	logging "github.com/MDLlife/MDL/src/util/logging"
 )
 
 const (
@@ -50,7 +51,7 @@ func FromString(b string) (uint64, error) {
 		return 0, ErrNegativeValue
 	}
 
-	// Skycoins have a maximum of 6 decimal places
+	// MDL have a maximum of 6 decimal places
 	if d.Exponent() < -Exponent {
 		return 0, ErrTooManyDecimals
 	}
@@ -61,7 +62,7 @@ func FromString(b string) (uint64, error) {
 	// Check that there are no decimal places remaining. This error should not
 	// occur, because of the earlier check of Exponent()
 	if e.Exponent() < 0 {
-		logger.Critical("Balance still has decimals after converting to droplets: %s", b)
+		logger.Critical().Errorf("Balance still has decimals after converting to droplets: %s", b)
 		return 0, ErrTooManyDecimals
 	}
 

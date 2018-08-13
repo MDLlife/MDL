@@ -159,16 +159,16 @@ func testCliTransactionCommands() {
 		os.Exit(1)
 	}
 
-	txId := strings.TrimSpace(string(cliOut))
+	txID := strings.TrimSpace(string(cliOut))
 	// validate the txId
-	_, err = cipher.SHA256FromHex(txId)
+	_, err = cipher.SHA256FromHex(txID)
 	if err != nil {
 		fmt.Fprint(os.Stderr, fmt.Sprintf("There was an error running %v command: %v\n", cliArgs[0], string(cliOut)))
 		os.Exit(1)
 	}
 
 	// use the txId from to test transaction
-	cliArgs = []string{"transaction", txId}
+	cliArgs = []string{"transaction", txID}
 	if cliOut, err = exec.Command(cliName, cliArgs...).CombinedOutput(); err != nil {
 		fmt.Fprint(os.Stderr, fmt.Sprintf("There was an error running %v command: %v\n", cliArgs[0], string(cliOut)))
 		os.Exit(1)
@@ -195,19 +195,19 @@ func testCliSendCommands() {
 	}
 
 	// send many
-	sendJsonMap := make([]map[string]string, len(testAddrs))
+	sendJSONMap := make([]map[string]string, len(testAddrs))
 	for i := range testAddrs {
-		sendJsonMap[i] = map[string]string{
+		sendJSONMap[i] = map[string]string{
 			"addr":  testAddrs[i],
 			"coins": "0.001",
 		}
 	}
-	sendJson, err := json.Marshal(sendJsonMap)
+	sendJSON, err := json.Marshal(sendJSONMap)
 	if err != nil {
 		fmt.Fprint(os.Stderr, fmt.Sprintf("Unable to marshal send many json string: %v\n", err))
 	}
 
-	cliArgs = []string{"send", "-f", wltFile, "-m", string(sendJson)}
+	cliArgs = []string{"send", "-f", wltFile, "-m", string(sendJSON)}
 	if cliOut, err = exec.Command(cliName, cliArgs...).CombinedOutput(); err != nil {
 		fmt.Fprint(os.Stderr, fmt.Sprintf("There was an error running %v many command: %v\n", cliArgs[0], string(cliOut)))
 		os.Exit(1)

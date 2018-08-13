@@ -1,7 +1,6 @@
 package webrpc
 
 import (
-	"log"
 	"sort"
 	"strings"
 	"testing"
@@ -12,7 +11,12 @@ import (
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/coin"
 	"github.com/MDLlife/MDL/src/testutil"
+	"github.com/MDLlife/MDL/src/util/logging"
 	"github.com/MDLlife/MDL/src/visor"
+)
+
+var (
+	log = logging.MustGetLogger("webrpc_test")
 )
 
 // Tests are setup as subtests, to retain a single *WebRPC instance for scaffolding

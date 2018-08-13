@@ -7,7 +7,7 @@ import (
 	"github.com/MDLlife/MDL/src/cipher"
 )
 
-// CreateAddresses genCount addresses deterministically from seed.  coinType is either CoinTypeBitcoin or CoinTypeSkycoin.
+// CreateAddresses genCount addresses deterministically from seed.  coinType is either CoinTypeBitcoin or CoinTypeMDL.
 // hideSecretKey will hide the secret key from the output.
 func CreateAddresses(coinType CoinType, seed string, genCount int, hideSecretKey bool) (*ReadableWallet, error) {
 	if genCount < 1 {
@@ -34,8 +34,6 @@ func CreateAddresses(coinType CoinType, seed string, genCount int, hideSecretKey
 		switch coinType {
 		case CoinTypeBitcoin:
 			entry = GetBitcoinWalletEntry(pub, sec)
-		case CoinTypeSkycoin:
-			entry = GetSkycoinWalletEntry(pub, sec)
 		case CoinTypeMDL:
 			entry = GetMDLWalletEntry(pub, sec)
 		default:
@@ -52,7 +50,7 @@ func CreateAddresses(coinType CoinType, seed string, genCount int, hideSecretKey
 	return wallet, nil
 }
 
-// GetSkycoinWalletEntry returns a ReadableEntry in Skycoin format
+// GetSkycoinWalletEntry returns a ReadableEntry in MDL format
 func GetSkycoinWalletEntry(pub cipher.PubKey, sec cipher.SecKey) ReadableEntry {
 	return ReadableEntry{
 		Address: cipher.AddressFromPubKey(pub).String(),

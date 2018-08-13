@@ -3,13 +3,13 @@
 # Tests a single module
 # Use it like this:
 #   cd src/testme
-#   MDLPATH=/path/to/skycoinrepo ../../scripts/test-coverage.sh
+#   MDLPATH=/path/to/mdlrepo ../../scripts/test-coverage.sh
 # Coverage will open up in html
 # You don't need to do this if you are not symlinking the repo into $GOPATH
 # I recommend you put MDLPATH in ~/.bashrc
 # Example:
-# If skycoin repo is located at
-#   /home/user/repos/skycoin
+# If mdl repo is located at
+#   /home/user/repos/mdl
 # Then $MDLPATH will be
 #   /home/user/repos
 

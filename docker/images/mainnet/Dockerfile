@@ -1,37 +1,31 @@
-# skycoin build
-# reference https://github.com/skycoin/skycoin
-FROM golang:1.9 AS build
+# mdllife build
+# reference https://github.com/mdllife/mdl
+FROM golang:1.10 AS build
 
-ENV MDL_VERSION=0.1.0
+ARG MDL_VERSION
 
-# dirs
-RUN mkdir -p $GOPATH/src/github.com/mdllife/mdl
+COPY . $GOPATH/src/github.com/mdllife/mdl
 
-# clone
-RUN wget -c https://github.com/mdllife/mdl/archive/v${MDL_VERSION}.tar.gz
+# This code checks if MDL_VERSION is set and checkouts to that version if
+# so. The git stash line prevents the build to fail if there are any uncommited
+# changes in the working copy. It won't affect the host working copy.
+RUN sh -c \
+    'if test ${MDL_VERSION};then \
+        echo "Revision is set to: "${MDL_VERSION}; \
+        cd $GOPATH/src/github.com/mdllife/mdl; \
+        git stash; \
+        git checkout ${MDL_VERSION}; \
+     fi'
 
-# uncompress
-RUN tar zxf v${MDL_VERSION}.tar.gz -C $GOPATH/src/github.com/mdllife/mdl/ --strip-components=1
+RUN cd $GOPATH/src/github.com/mdllife/mdl && \
+  CGO_ENABLED=0 GOOS=linux go install -a -installsuffix cgo ./...
 
-# install cli
-RUN cd $GOPATH/src/github.com/mdllife/mdl/cmd/cli && \
-  CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /go/bin/skycoin-cli .
-
-# install skycoin
-RUN cd $GOPATH/src/github.com/mdllife/mdl/cmd/skycoin && \
-  CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /go/bin/mdl .
-
-# install address_gen
-RUN cd $GOPATH/src/github.com/mdllife/mdl/cmd/address_gen && \
-  CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /go/bin/address_gen .
-
-
-# skycoin image
+# mdllife image
 FROM alpine:3.7
 
 ENV COIN="mdl" \
-    RPC_ADDR="0.0.0.0:6430" \
-    DATA_DIR="/root/.$COIN" \
+    RPC_ADDR="0.0.0.0:8330" \
+    DATA_DIR="/data/.$COIN" \
     WALLET_DIR="/wallet" \
     WALLET_NAME="$COIN_cli.wlt"
 
@@ -39,12 +33,15 @@ ENV COIN="mdl" \
 COPY --from=build /go/bin/* /usr/bin/
 
 # copy assets
-COPY --from=build /go/src/github.com/mdllife/mdl/src/gui/static /usr/local/mdl/static
+COPY --from=build /go/src/github.com/mdllife/mdl/src/gui/static /usr/local/mdl/src/gui/static
+
+# copy launcher
+COPY docker_launcher.sh /usr/local/bin
 
 # volumes
 VOLUME $WALLET_DIR
 VOLUME $DATA_DIR
 
-EXPOSE 6000 6420 6430
+EXPOSE 6000 8320 8330
 
-CMD ["/usr/bin/mdl", "--gui-dir=/usr/local/mdl/static", "--web-interface-addr=0.0.0.0"]
+ENTRYPOINT ["docker_launcher.sh", "--web-interface-addr=0.0.0.0", "--rpc-interface-addr=0.0.0.0", "--gui-dir=/usr/local/mdl/src/gui/static"]

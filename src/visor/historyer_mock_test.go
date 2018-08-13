@@ -20,7 +20,7 @@ type historyerMock struct {
 	mock.Mock
 }
 
-func NewHistoryerMock() *historyerMock {
+func newHistoryerMock() *historyerMock {
 	return &historyerMock{}
 }
 
@@ -78,33 +78,6 @@ func (m *historyerMock) GetAddrUxOuts(p0 cipher.Address) ([]*historydb.UxOut, er
 	switch res := ret.Get(0).(type) {
 	case nil:
 	case []*historydb.UxOut:
-		r0 = res
-	default:
-		panic(fmt.Sprintf("unexpected type: %v", res))
-	}
-
-	var r1 error
-	switch res := ret.Get(1).(type) {
-	case nil:
-	case error:
-		r1 = res
-	default:
-		panic(fmt.Sprintf("unexpected type: %v", res))
-	}
-
-	return r0, r1
-
-}
-
-// GetLastTxs mocked method
-func (m *historyerMock) GetLastTxs() ([]*historydb.Transaction, error) {
-
-	ret := m.Called()
-
-	var r0 []*historydb.Transaction
-	switch res := ret.Get(0).(type) {
-	case nil:
-	case []*historydb.Transaction:
 		r0 = res
 	default:
 		panic(fmt.Sprintf("unexpected type: %v", res))

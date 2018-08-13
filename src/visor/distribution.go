@@ -3,7 +3,7 @@ package visor
 import "github.com/MDLlife/MDL/src/coin"
 
 const (
-	// MaxCoinSupply is the maximum supply of skycoins
+	// MaxCoinSupply is the maximum supply of MDL
 	MaxCoinSupply uint64 = 1e9 // 1,000,000,000
 
 	// DistributionAddressesTotal is the number of distribution addresses

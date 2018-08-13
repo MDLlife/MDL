@@ -396,7 +396,7 @@ func (bc Blockchain) GetBlocks(start, end uint64) []coin.SignedBlock {
 	for i := start; i <= end; i++ {
 		b, err := bc.store.GetBlockBySeq(i)
 		if err != nil {
-			logger.Error("%v", err)
+			logger.Error(err)
 			return []coin.SignedBlock{}
 		}
 
@@ -501,7 +501,7 @@ func (bc Blockchain) processTransactions(txs coin.Transactions) (coin.Transactio
 					}
 				}
 			}
-			uxHashes[h] = byte(1)
+			uxHashes[h] = struct{}{}
 		}
 	}
 
