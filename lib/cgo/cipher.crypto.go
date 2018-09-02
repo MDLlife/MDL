@@ -1,7 +1,7 @@
 package main
 
 import (
-	cipher "github.com/skycoin/skycoin/src/cipher"
+	cipher "github.com/MDLlife/MDL/src/cipher"
 
 	"reflect"
 	"unsafe"

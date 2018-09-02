@@ -8,12 +8,12 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/cipher/encoder"
-	"github.com/skycoin/skycoin/src/coin"
-	"github.com/skycoin/skycoin/src/daemon/gnet"
-	"github.com/skycoin/skycoin/src/daemon/pex"
-	"github.com/skycoin/skycoin/src/util"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher/encoder"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/daemon/gnet"
+	"github.com/MDLlife/MDL/src/daemon/pex"
+	"github.com/MDLlife/MDL/src/util"
 	"github.com/stretchr/testify/require"
 )
 

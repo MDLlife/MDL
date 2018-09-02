@@ -1,7 +1,7 @@
 package main
 
 import (
-	webrpc "github.com/skycoin/skycoin/src/api/webrpc"
+	webrpc "github.com/MDLlife/MDL/src/api/webrpc"
 )
 
 /*

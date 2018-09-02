@@ -9,10 +9,10 @@ import (
 
 	"log"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/util/file"
-	"github.com/skycoin/skycoin/src/visor"
-	"github.com/skycoin/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/util/file"
+	"github.com/MDLlife/MDL/src/visor"
+	"github.com/MDLlife/MDL/src/wallet"
 )
 
 var (

@@ -10,11 +10,11 @@ import (
 
 	mock "github.com/stretchr/testify/mock"
 
-	cipher "github.com/skycoin/skycoin/src/cipher"
-	coin "github.com/skycoin/skycoin/src/coin"
-	gnet "github.com/skycoin/skycoin/src/daemon/gnet"
-	pex "github.com/skycoin/skycoin/src/daemon/pex"
-	visor "github.com/skycoin/skycoin/src/visor"
+	cipher "github.com/MDLlife/MDL/src/cipher"
+	coin "github.com/MDLlife/MDL/src/coin"
+	gnet "github.com/MDLlife/MDL/src/daemon/gnet"
+	pex "github.com/MDLlife/MDL/src/daemon/pex"
+	visor "github.com/MDLlife/MDL/src/visor"
 )
 
 // DaemonerMock mock

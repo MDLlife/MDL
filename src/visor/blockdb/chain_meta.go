@@ -1,7 +1,7 @@
 package blockdb
 
 import (
-	"github.com/skycoin/skycoin/src/visor/dbutil"
+	"github.com/MDLlife/MDL/src/visor/dbutil"
 )
 
 var (

@@ -12,9 +12,9 @@ import "C"
 import (
 	"unsafe"
 
-	webrpc "github.com/skycoin/skycoin/src/api/webrpc"
-	cli "github.com/skycoin/skycoin/src/cli"
-	wallet "github.com/skycoin/skycoin/src/wallet"
+	webrpc "github.com/MDLlife/MDL/src/api/webrpc"
+	cli "github.com/MDLlife/MDL/src/cli"
+	wallet "github.com/MDLlife/MDL/src/wallet"
 )
 
 type Handle uint64

@@ -10,9 +10,9 @@ import (
 
 	mock "github.com/stretchr/testify/mock"
 
-	cipher "github.com/skycoin/skycoin/src/cipher"
-	coin "github.com/skycoin/skycoin/src/coin"
-	dbutil "github.com/skycoin/skycoin/src/visor/dbutil"
+	cipher "github.com/MDLlife/MDL/src/cipher"
+	coin "github.com/MDLlife/MDL/src/coin"
+	dbutil "github.com/MDLlife/MDL/src/visor/dbutil"
 )
 
 // UnspentPoolerMock mock

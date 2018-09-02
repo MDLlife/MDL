@@ -3,10 +3,10 @@ package main
 import (
 	"unsafe"
 
-	cipher "github.com/skycoin/skycoin/src/cipher"
-	cli "github.com/skycoin/skycoin/src/cli"
-	coin "github.com/skycoin/skycoin/src/coin"
-	wallet "github.com/skycoin/skycoin/src/wallet"
+	cipher "github.com/MDLlife/MDL/src/cipher"
+	cli "github.com/MDLlife/MDL/src/cli"
+	coin "github.com/MDLlife/MDL/src/coin"
+	wallet "github.com/MDLlife/MDL/src/wallet"
 )
 
 /*

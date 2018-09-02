@@ -13,11 +13,11 @@ import (
 	"reflect"
 	"unsafe"
 
-	"github.com/skycoin/skycoin/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher"
 )
 
 /**
- * Functions in github.com/skycoin/skycoin/src/cipher/address.go
+ * Functions in github.com/MDLlife/MDL/src/cipher/address.go
  */
 
 //export SKY_cipher_DecodeBase58Address

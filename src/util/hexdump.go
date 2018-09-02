@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/skycoin/skycoin/src/cipher/encoder"
+	"github.com/MDLlife/MDL/src/cipher/encoder"
 )
 
 // Annotation : Denotes a chunk of data to be dumped

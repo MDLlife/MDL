@@ -12,17 +12,17 @@ import (
 	"sync"
 	"time"
 
-	"github.com/skycoin/skycoin/src/api"
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/coin"
-	"github.com/skycoin/skycoin/src/daemon"
-	"github.com/skycoin/skycoin/src/util/apputil"
-	"github.com/skycoin/skycoin/src/util/browser"
-	"github.com/skycoin/skycoin/src/util/cert"
-	"github.com/skycoin/skycoin/src/util/logging"
-	"github.com/skycoin/skycoin/src/visor"
-	"github.com/skycoin/skycoin/src/visor/dbutil"
-	"github.com/skycoin/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/api"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/daemon"
+	"github.com/MDLlife/MDL/src/util/apputil"
+	"github.com/MDLlife/MDL/src/util/browser"
+	"github.com/MDLlife/MDL/src/util/cert"
+	"github.com/MDLlife/MDL/src/util/logging"
+	"github.com/MDLlife/MDL/src/visor"
+	"github.com/MDLlife/MDL/src/visor/dbutil"
+	"github.com/MDLlife/MDL/src/wallet"
 )
 
 // Coin represents a fiber coin instance

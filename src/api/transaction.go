@@ -8,13 +8,13 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/coin"
-	"github.com/skycoin/skycoin/src/daemon"
-	"github.com/skycoin/skycoin/src/visor"
-	"github.com/skycoin/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/daemon"
+	"github.com/MDLlife/MDL/src/visor"
+	"github.com/MDLlife/MDL/src/wallet"
 
-	wh "github.com/skycoin/skycoin/src/util/http" //http,json helpers
+	wh "github.com/MDLlife/MDL/src/util/http" //http,json helpers
 )
 
 // Returns pending transactions

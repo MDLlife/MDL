@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/skycoin/skycoin/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher"
 	//http,json helpers
 )
 

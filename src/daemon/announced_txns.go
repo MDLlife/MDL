@@ -3,8 +3,8 @@ package daemon
 import (
 	"sync"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/util/utc"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/util/utc"
 )
 
 type announcedTxnsCache struct {

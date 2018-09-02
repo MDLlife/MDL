@@ -1,7 +1,7 @@
 package wallet
 
 import (
-	"bytes"
+	bytes "bytes"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -97,6 +97,9 @@ const (
 
 	// WalletTimestampFormat  wallet timestamp layout
 	WalletTimestampFormat = "2006_01_02"
+
+	// CoinTypeMDL mdl type
+	CoinTypeMDL CoinType = "mdl"
 
 	// CoinTypeSkycoin skycoin type
 	CoinTypeSkycoin CoinType = "skycoin"
