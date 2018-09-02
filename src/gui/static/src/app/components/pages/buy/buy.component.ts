@@ -1,17 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PurchaseService } from '../../../services/purchase.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { WalletService } from '../../../services/wallet.service';
 import { Address, PurchaseOrder, Wallet } from '../../../app.datatypes';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ButtonComponent } from '../../layout/button/button.component';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-buy',
   templateUrl: './buy.component.html',
-  styleUrls: ['./buy.component.scss']
+  styleUrls: ['./buy.component.scss'],
 })
-export class BuyComponent implements OnInit {
+export class BuyComponent implements OnInit, OnDestroy {
   @ViewChild('button') button: ButtonComponent;
   @ViewChild('refresh') refresh: ButtonComponent;
 
@@ -23,6 +24,8 @@ export class BuyComponent implements OnInit {
   form: FormGroup;
   order: PurchaseOrder;
   wallets: Wallet[];
+
+  private subscription: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -37,9 +40,13 @@ export class BuyComponent implements OnInit {
 
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
   checkStatus() {
     this.button.setLoading();
-    this.purchaseService.scan(this.order.recipient_address).first().subscribe(
+    this.purchaseService.scan(this.order.recipient_address).subscribe(
       response => {
         this.button.setSuccess();
         this.order.status = response.status;
@@ -63,18 +70,12 @@ export class BuyComponent implements OnInit {
       coin_type: ['', Validators.required],
     });
 
-    this.form.controls.wallet.valueChanges.subscribe(filename => {
-      if (this.form.value.coin_type === '') return;
-      const wallet = this.wallets.find(wallet => wallet.filename === filename);
+    this.subscription = this.form.get('wallet').valueChanges.subscribe(filename => {
+      const wallet = this.wallets.find(wlt => wlt.filename === filename);
       console.log('changing wallet value', filename);
       this.purchaseService.generate(wallet, this.form.value.coin_type).subscribe(
         order => this.saveData(order),
-        err => {
-          this.snackBar.open(err._body);
-          setTimeout(() => {
-            this.snackBar.dismiss();
-          }, 5000)
-        }
+        error => this.snackBar.open(error.toString()),
       );
     });
 
@@ -126,14 +127,14 @@ export class BuyComponent implements OnInit {
     this.loadConfig();
     this.loadOrder();
 
-    this.walletService.all().subscribe(wallets => {
+    this.subscription.add(this.walletService.all().subscribe(wallets => {
       this.wallets = wallets;
 
       if (this.order) {
         this.form.controls.wallet.setValue(this.order.filename, { emitEvent: false });
         this.form.controls.coin_type.setValue(this.order.coin_type, { emitEvent: false });
       }
-    });
+    }));
   }
 
   private loadOrder() {
@@ -154,7 +155,7 @@ export class BuyComponent implements OnInit {
   private updateOrder() {
     this.purchaseService.scan(this.order.recipient_address).first().subscribe(
       response => this.order.status = response.status,
-      error => console.log(error)
+      error => console.log(error),
     );
   }
 

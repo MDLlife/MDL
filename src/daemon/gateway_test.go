@@ -65,9 +65,6 @@ func TestFbyHashes(t *testing.T) {
 		}
 	}
 
-	type args struct {
-		hashes []string
-	}
 	tests := []struct {
 		name    string
 		hashes  []string
@@ -404,7 +401,7 @@ func TestGateway_GetWalletBalance(t *testing.T) {
 					EnableWalletAPI: tc.enableWalletAPI,
 				},
 			}
-			res, err := gw.GetWalletBalance(tc.walletID)
+			res, _, err := gw.GetWalletBalance(tc.walletID)
 			if tc.err != nil {
 				require.Equal(t, tc.err, err)
 				return

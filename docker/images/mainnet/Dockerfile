@@ -1,7 +1,9 @@
-# mdllife build
-# reference https://github.com/mdllife/mdl
-FROM golang:1.10 AS build
-
+# skycoin build
+# reference https://github.com/skycoin/skycoin
+ARG IMAGE_FROM=busybox
+FROM golang:1.10.1-stretch AS build
+ARG ARCH=amd64
+ARG GOARM
 ARG MDL_VERSION
 
 COPY . $GOPATH/src/github.com/mdllife/mdl
@@ -27,6 +29,7 @@ ENV COIN="mdl" \
     RPC_ADDR="0.0.0.0:8330" \
     DATA_DIR="/data/.$COIN" \
     WALLET_DIR="/wallet" \
+    USE_CSRF="1" \
     WALLET_NAME="$COIN_cli.wlt"
 
 # copy all the binaries
@@ -36,7 +39,10 @@ COPY --from=build /go/bin/* /usr/bin/
 COPY --from=build /go/src/github.com/mdllife/mdl/src/gui/static /usr/local/mdl/src/gui/static
 
 # copy launcher
-COPY docker_launcher.sh /usr/local/bin
+COPY docker_launcher.sh /usr/local/bin/docker_launcher.sh
+
+#Copy certificates
+COPY --from=build /etc/ssl/certs /etc/ssl/certs
 
 # volumes
 VOLUME $WALLET_DIR

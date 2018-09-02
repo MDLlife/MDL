@@ -6,7 +6,7 @@ import (
 	"github.com/MDLlife/MDL/src/util/logging"
 )
 
-// Elapser measures time elapsed for an operation
+// Elapser measures time elapsed for an operation. It is not thread-safe, use a different elapser per thread.
 type Elapser struct {
 	name             *string
 	startTime        time.Time

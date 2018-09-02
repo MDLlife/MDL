@@ -62,13 +62,13 @@
             to receive your MDL, it depends on the crypto you've choosen as well as business of its blockchain. If something went wrong, please contact us at support@mdl.life.
           </p>
           <span class="-status">
-            Status: {{ order.status | tellerStatus }}
+            {{ 'buy.status-button' | translate }} {{ order.status | tellerStatus | translate }}
           </span>
           <app-button #button (action)="checkStatus()" class="primary">
-            Check Status
+            {{ 'buy.check-status-button' | translate }}
           </app-button>
           <app-button #button (action)="removeOrder()">
-            New Order
+            {{ 'buy.new-order-button' | translate }}
           </app-button>
         </div>
       </div>

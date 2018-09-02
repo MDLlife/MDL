@@ -2,6 +2,8 @@ package visor
 
 import "github.com/MDLlife/MDL/src/coin"
 
+// Note: parameters.go contains many constants used in this file
+// they are the ones generated from the fiber config file.
 const (
 	// MaxCoinSupply is the maximum supply of MDL
 	MaxCoinSupply uint64 = 1e9 // 1,000,000,000
