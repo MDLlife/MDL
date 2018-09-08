@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MDLlife/MDL/src/api/cli"
+	"github.com/MDLlife/MDL/src/cli"
 )
 
 func main() {

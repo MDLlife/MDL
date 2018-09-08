@@ -214,6 +214,7 @@ func TestNewWallet(t *testing.T) {
 			"test.wlt",
 			Options{
 				Label:    "wallet1",
+				Coin:     CoinTypeMDL,
 				Seed:     "testseed123",
 				Encrypt:  true,
 				Password: []byte("pwd"),

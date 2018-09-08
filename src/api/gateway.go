@@ -9,6 +9,7 @@ import (
 	"github.com/MDLlife/MDL/src/wallet"
 )
 
+//go:generate go install
 //go:generate goautomock -template=testify Gatewayer
 
 // Gatewayer interface for Gateway methods

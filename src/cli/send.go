@@ -37,10 +37,10 @@ func sendCmd() gcli.Command {
 				Usage: `[changeAddress] Specify change address, by default the from address or
 				the wallet's coinbase address will be used`,
 			},
-			// gcli.StringFlag{
-			// 	Name:  "p",
-			// 	Usage: "[password] Password for address or wallet.",
-			// },
+			gcli.StringFlag{
+				Name:  "p",
+				Usage: "[password] Wallet password",
+			},
 			gcli.StringFlag{
 				Name: "m",
 				Usage: `[send to many] use JSON string to set multiple recive addresses and coins,

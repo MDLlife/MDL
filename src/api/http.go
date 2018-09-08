@@ -13,12 +13,12 @@ import (
 
 	"github.com/NYTimes/gziphandler"
 
-	"github.com/MDLlife/MDL/api/webrpc"
-	"github.com/MDLlife/MDL/cipher"
-	"github.com/MDLlife/MDL/daemon"
-	"github.com/MDLlife/MDL/util/file"
-	wh "github.com/MDLlife/MDL/util/http"
-	"github.com/MDLlife/MDL/util/logging"
+	"github.com/MDLlife/MDL/src/api/webrpc"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/daemon"
+	"github.com/MDLlife/MDL/src/util/file"
+	wh "github.com/MDLlife/MDL/src/util/http"
+	"github.com/MDLlife/MDL/src/util/logging"
 )
 
 var (

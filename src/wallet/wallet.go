@@ -1,7 +1,7 @@
 package wallet
 
 import (
-	bytes "bytes"
+	"bytes"
 	"errors"
 	"fmt"
 	"io/ioutil"

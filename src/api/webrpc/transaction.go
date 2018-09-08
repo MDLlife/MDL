@@ -6,7 +6,7 @@ import (
 
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/coin"
-	"github.com/MDLlife/MDL/src/visor"
+	"github.com/MDLlife/MDL/src/daemon"
 )
 
 // TxnResult wraps the daemon.TransactionResult

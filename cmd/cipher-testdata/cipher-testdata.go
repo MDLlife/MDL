@@ -8,10 +8,10 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/cipher/go-bip39"
-	"github.com/skycoin/skycoin/src/cipher/testsuite"
-	"github.com/skycoin/skycoin/src/util/file"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher/go-bip39"
+	"github.com/MDLlife/MDL/src/cipher/testsuite"
+	"github.com/MDLlife/MDL/src/util/file"
 )
 
 const (
