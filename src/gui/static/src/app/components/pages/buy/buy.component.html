@@ -2,53 +2,37 @@
 <div class="-background-container">
   <div class="container">
     <div [formGroup]="form" class="-paper" *ngIf="config">
-      <div class="-available flex-fill">
-        <h2 >Available Now: {{available}} MDL</h2>
-        <app-button #refresh (action)="refreshConfig()">Refresh</app-button>
-      </div>
       <div class="-step">
         <div class="-number">
           <span class="primary-gradient-background">1</span>
         </div>
         <div class="-instructions flex-fill">
-          <h3>Choose your MDL wallet</h3>
-          <p>This is your MDL wallet. You will find your MDL Tokens here once the transaction is confirmed.</p>
+          <h3>{{ 'buy.deposit-location' | translate }}</h3>
+          <p>{{ 'buy.deposit-location-desc' | translate }}</p>
           <div class="form-field">
-            <select formControlName="wallet" id="wallet" class="-wallet" required>
-              <option disabled selected>Make a choice</option>
-              <option *ngFor="let wallet of wallets" [value]="wallet.filename">
-                {{ wallet.label }} - <span class="-coins">{{ wallet.coins }} MDL</span>
-              </option>
-            </select>
+            <div class="-select">
+              <select formControlName="wallet" id="wallet" class="-wallet" required>
+                <option disabled selected>{{ 'buy.make-choice' | translate }}</option>
+                <option *ngFor="let wallet of wallets" [value]="wallet.filename">
+                  {{ wallet.label }} - <span class="-coins">{{ wallet.coins }} {{ 'common.coin-id' | translate }}</span>
+                </option>
+              </select>
+            </div>
           </div>
-          <p>Choose your preferred payment method. Please be aware that some methods can temporarily be disabled.</p>
-          <div class="form-field">
-            <select formControlName="coin_type" id="coin_type" class="-coin_type" required>
-              <option value="" selected>Please choose your favourite crypto ;)</option>
-              <option *ngFor="let method of supported" [value]="method.name" [disabled]="!method.enabled">
-                {{method.label}} (1 {{method.name}} = {{method.exchange_rate}} MDL)
-              </option>
-            </select>
-          </div>
-          <span class="-subtitle">
-          Each time a new MDL address is selected, a new {{ form.value.coin_type }} address is generated. A single MDL address can
-          have up to {{config.max_bound_addrs}} {{form.value.coin_type}} addresses assigned to it.
-        </span>
+          <span class="-subtitle">{{ 'buy.wallets-desc' | translate }}</span>
         </div>
       </div>
-      <div class="-step" *ngIf="order && form.value.coin_type != ''">
+      <div class="-step" *ngIf="order">
         <div class="-number">
           <span class="primary-gradient-background">2</span>
         </div>
         <div class="-instructions flex-fill">
-          <h3>Send {{form.value.coin_type}}</h3>
-          <p>
-            Send {{form.value.coin_type}} to the address below. After enough confirmations on the blockchain, you will receive MDL tokens to the wallet
-            selected above at the current rate of <span>{{ currentCoinPrice() }} MDL = 1 {{form.value.coin_type}}</span>.
-          </p>
+          <h3>{{ 'buy.send' | translate }}</h3>
+          <p>{{ 'buy.send-desc' | translate:{rate: config.sky_btc_exchange_rate} }}</p>
           <span class="-address">
           {{ order.deposit_address }}
           </span>
+          <span class="-subtitle">{{ 'buy.fraction-warning' | translate }}</span>
         </div>
       </div>
       <div class="-step" *ngIf="order">
@@ -56,11 +40,8 @@
           <span class="primary-gradient-background">3</span>
         </div>
         <div class="-instructions flex-fill">
-          <h3>Receive MDL</h3>
-          <p>
-            After sending your deposit, you'll receive your MDL tokens. It may take anywhere between 30 minutes or several hours
-            to receive your MDL, it depends on the crypto you've choosen as well as business of its blockchain. If something went wrong, please contact us at support@mdl.life.
-          </p>
+          <h3>{{ 'buy.receive' | translate }}</h3>
+          <p>{{ 'buy.receive-desc' | translate }}</p>
           <span class="-status">
             {{ 'buy.status-button' | translate }} {{ order.status | tellerStatus | translate }}
           </span>
@@ -73,6 +54,6 @@
         </div>
       </div>
     </div>
-    <img src="../../../../assets/img/mdltoken.png" class="-background-image">
+    <img src="../../../../assets/img/otc-background.jpg" class="-background-image">
   </div>
 </div>

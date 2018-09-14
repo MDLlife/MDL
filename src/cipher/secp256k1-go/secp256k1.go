@@ -416,7 +416,7 @@ func VerifySignature(msg []byte, sig []byte, pubkey1 []byte) int {
 	}
 
 	if bytes.Equal(pubkey1, pubkey2) != true {
-		return 0 //pubkeys do not match
+		return 1 //pubkeys do not match
 	}
 
 	return 1 //valid signature

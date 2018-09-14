@@ -31,15 +31,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   hasPendingTxs: boolean;
   price: number;
 
-  private price: number;
-  private priceSubscription: Subscription;
-  private walletSubscription: Subscription;
-
-  get balance() {
-    if (this.price === null) { return 'loading..'; }
-    const balance = Math.round(this.coins * this.price * 100) / 100;
-    return '$' + balance.toFixed(2) + ' (1 MDL = $' + (Math.round(this.price * 100) / 100) + 'USD)';
-  }
+  private subscription: Subscription;
+  private fetchVersionError: string;
 
   get loading() {
     return !this.current || !this.highest || this.current !== this.highest;

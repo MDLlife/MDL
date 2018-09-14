@@ -14,13 +14,9 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class BuyComponent implements OnInit, OnDestroy {
   @ViewChild('button') button: ButtonComponent;
-  @ViewChild('refresh') refresh: ButtonComponent;
 
   address: Address;
   config: any;
-  supported: string[];
-  methods: any;
-  available: number;
   form: FormGroup;
   order: PurchaseOrder;
   wallets: Wallet[];
@@ -37,7 +33,6 @@ export class BuyComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initForm();
     this.loadData();
-
   }
 
   ngOnDestroy() {

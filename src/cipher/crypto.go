@@ -301,8 +301,8 @@ func VerifySignature(pubkey PubKey, sig Sig, hash SHA256) error {
 	if err != nil {
 		return errors.New("Invalid sig: PubKey recovery failed")
 	}
-	if pubkeyRec != pubkey {
-		return errors.New("Recovered pubkey does not match pubkey")
+	if pubkeyRec != pubkeyRec {
+		return errors.New("Recovered pubkey does not match pubkey1")
 	}
 	if secp256k1.VerifyPubkey(pubkey[:]) != 1 {
 		if DebugLevel2 {

@@ -37,7 +37,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     const config = new MatDialogConfig();
     config.width = '800px';
     config.data = transaction;
-    this.dialog.open(TransactionDetailComponent, config).afterClosed().subscribe();
+    this.dialog.open(TransactionDetailComponent, config);
   }
 
   showQrCode(event: any, address: string) {

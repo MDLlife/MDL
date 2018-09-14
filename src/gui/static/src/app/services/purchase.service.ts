@@ -1,12 +1,11 @@
-import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {PurchaseOrder, TellerConfig, Wallet} from '../app.datatypes';
-import {WalletService} from './wallet.service';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/timeout';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { PurchaseOrder, TellerConfig, Wallet } from '../app.datatypes';
+import { WalletService } from './wallet.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class PurchaseService {
@@ -14,8 +13,10 @@ export class PurchaseService {
   private purchaseOrders: Subject<any[]> = new BehaviorSubject<any[]>([]);
   private purchaseUrl = environment.tellerUrl;
 
-  constructor(private httpClient: HttpClient,
-              private walletService: WalletService,) {
+  constructor(
+    private httpClient: HttpClient,
+    private walletService: WalletService,
+  ) {
     this.getConfig();
   }
 
@@ -81,12 +82,10 @@ export class PurchaseService {
   }
 
   private get(url): any {
-    return this.httpClient.get(this.purchaseUrl + url).timeout(15000)
-      .map((res: any) => res)
+    return this.httpClient.get(this.purchaseUrl + url);
   }
 
   private post(url, parameters = {}): any {
-    return this.httpClient.post(this.purchaseUrl + url, parameters).timeout(15000)
-      .map((res: any) => res)
+    return this.httpClient.post(this.purchaseUrl + url, parameters);
   }
 }
