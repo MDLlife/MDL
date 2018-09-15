@@ -57,10 +57,10 @@ func main() {
 		BlockchainSeckeyStr: BlockchainSeckeyStr,
 		DefaultConnections:  DefaultConnections,
 		PeerListURL:         "https://downloads.skycoin.net/blockchain/peers.txt",
-		Port:                6000,
-		WebInterfacePort:    6420,
-		DataDirectory:       "$HOME/.skycoin",
-		ProfileCPUFile:      "skycoin.prof",
+		Port:                7800,
+		WebInterfacePort:    8320,
+		DataDirectory:       "$HOME/.mdl",
+		ProfileCPUFile:      "mdl.prof",
 	})
 
 	// create a new fiber coin instance
