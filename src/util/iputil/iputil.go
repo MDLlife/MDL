@@ -43,5 +43,9 @@ func SplitAddr(addr string) (string, uint16, error) {
 	if err != nil {
 		return pts[0], 0, fmt.Errorf("Invalid port in %s", addr)
 	}
+
+	if port64 != 7800 && port64 != 8330 && port64 != 8320 {
+		return pts[0], 0, fmt.Errorf("Invalid port in %s", addr)
+	}
 	return pts[0], uint16(port64), nil
 }
