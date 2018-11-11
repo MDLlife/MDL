@@ -1,4 +1,4 @@
-package skycoin
+package mdl
 
 import (
 	"flag"
@@ -19,7 +19,7 @@ var (
 	help = false
 )
 
-// Config records skycoin node and build config
+// Config records mdl node and build config
 type Config struct {
 	Node  NodeConfig
 	Build visor.BuildInfo
@@ -85,7 +85,7 @@ type NodeConfig struct {
 	// If true, print the configured client web interface address and exit
 	PrintWebInterfaceAddress bool
 
-	// Data directory holds app data -- defaults to ~/.skycoin
+	// Data directory holds app data -- defaults to ~/.mdl
 	DataDirectory string
 	// GUI directory contains assets for the HTML interface
 	GUIDirectory string
@@ -182,11 +182,11 @@ func NewNodeConfig(mode string, node NodeParameters) *NodeConfig {
 		//gnet uses this for TCP incoming and outgoing
 		Port: node.Port,
 		// MaxOutgoingConnections is the maximum outgoing connections allowed.
-		MaxOutgoingConnections: 8,
+		MaxOutgoingConnections: 16,
 		// MaxDefaultOutgoingConnections is the maximum default outgoing connections allowed.
 		MaxDefaultPeerOutgoingConnections: 1,
-		DownloadPeerList:                  true,
-		PeerListURL:                       node.PeerListURL,
+		DownloadPeerList:                  false,
+		PeerListURL:                       "",//node.PeerListURL,
 		// How often to make outgoing connections, in seconds
 		OutgoingConnectionsRate: time.Second * 5,
 		PeerlistSize:            65535,
@@ -339,8 +339,8 @@ func (c *Config) register() {
 
 	flag.BoolVar(&c.Node.LaunchBrowser, "launch-browser", c.Node.LaunchBrowser, "launch system default webbrowser at client startup")
 	flag.BoolVar(&c.Node.PrintWebInterfaceAddress, "print-web-interface-address", c.Node.PrintWebInterfaceAddress, "print configured web interface address and exit")
-	flag.StringVar(&c.Node.DataDirectory, "data-dir", c.Node.DataDirectory, "directory to store app data (defaults to ~/.skycoin)")
-	flag.StringVar(&c.Node.DBPath, "db-path", c.Node.DBPath, "path of database file (defaults to ~/.skycoin/data.db)")
+	flag.StringVar(&c.Node.DataDirectory, "data-dir", c.Node.DataDirectory, "directory to store app data (defaults to ~/.mdl)")
+	flag.StringVar(&c.Node.DBPath, "db-path", c.Node.DBPath, "path of database file (defaults to ~/.mdl/data.db)")
 	flag.BoolVar(&c.Node.DBReadOnly, "db-read-only", c.Node.DBReadOnly, "open bolt db read-only")
 	flag.BoolVar(&c.Node.ProfileCPU, "profile-cpu", c.Node.ProfileCPU, "enable cpu profiling")
 	flag.StringVar(&c.Node.ProfileCPUFile, "profile-cpu-file", c.Node.ProfileCPUFile, "where to write the cpu profile file")
@@ -364,7 +364,7 @@ func (c *Config) register() {
 	flag.StringVar(&c.Node.GenesisSignatureStr, "genesis-signature", c.Node.GenesisSignatureStr, "genesis block signature")
 	flag.Uint64Var(&c.Node.GenesisTimestamp, "genesis-timestamp", c.Node.GenesisTimestamp, "genesis block timestamp")
 
-	flag.StringVar(&c.Node.WalletDirectory, "wallet-dir", c.Node.WalletDirectory, "location of the wallet files. Defaults to ~/.skycoin/wallet/")
+	flag.StringVar(&c.Node.WalletDirectory, "wallet-dir", c.Node.WalletDirectory, "location of the wallet files. Defaults to ~/.mdl/wallet/")
 	flag.IntVar(&c.Node.MaxOutgoingConnections, "max-outgoing-connections", c.Node.MaxOutgoingConnections, "The maximum outgoing connections allowed")
 	flag.IntVar(&c.Node.MaxDefaultPeerOutgoingConnections, "max-default-peer-outgoing-connections", c.Node.MaxDefaultPeerOutgoingConnections, "The maximum default peer outgoing connections allowed")
 	flag.IntVar(&c.Node.PeerlistSize, "peerlist-size", c.Node.PeerlistSize, "The peer list size")

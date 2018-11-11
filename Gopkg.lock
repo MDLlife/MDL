@@ -103,6 +103,20 @@
   version = "v1.0.5"
 
 [[projects]]
+  name = "github.com/skycoin/skycoin"
+  packages = [
+    "src/cipher",
+    "src/cipher/base58",
+    "src/cipher/encoder",
+    "src/cipher/ripemd160",
+    "src/cipher/secp256k1-go",
+    "src/cipher/secp256k1-go/secp256k1-go2",
+    "src/coin"
+  ]
+  revision = "5dcee17dd30b6f57d4711495934fa722a32e60a5"
+  version = "v0.24.1"
+
+[[projects]]
   name = "github.com/spf13/afero"
   packages = [
     ".",
@@ -205,6 +219,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "54b60e7f81ba03cf22a9cf957d47f75b9f1592aa729980b6e4af3c208344cbbf"
+  inputs-digest = "46503e448bb0be264fa25938b32e731a2f5fc0060a8b4d53b28ae7e1b28f0b11"
   solver-name = "gps-cdcl"
   solver-version = 1

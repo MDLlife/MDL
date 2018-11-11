@@ -451,13 +451,13 @@ func TestVerifyAddress(t *testing.T) {
 		errMsg string
 	}{
 		{
-			"valid skycoin address",
+			"valid mdl address",
 			"2Kg3eRXUhY6hrDZvNGB99DKahtrPDQ1W9vN",
 			nil,
 			"",
 		},
 		{
-			"invalid skycoin address",
+			"invalid mdl address",
 			"2KG9eRXUhx6hrDZvNGB99DKahtrPDQ1W9vn",
 			errors.New("exit status 1"),
 			"Invalid checksum",
@@ -1049,12 +1049,12 @@ func TestStableShowConfig(t *testing.T) {
 	// reimplementing cli.LoadConfig to compare values
 	require.NotEmpty(t, ret.WalletDir)
 	require.NotEmpty(t, ret.DataDir)
-	require.True(t, strings.HasSuffix(ret.WalletDir, ".skycoin/wallets"))
-	require.True(t, strings.HasSuffix(ret.DataDir, ".skycoin"))
+	require.True(t, strings.HasSuffix(ret.WalletDir, ".mdl/wallets"))
+	require.True(t, strings.HasSuffix(ret.DataDir, ".mdl"))
 	require.True(t, strings.HasPrefix(ret.WalletDir, ret.DataDir))
 
-	ret.WalletDir = "IGNORED/.skycoin/wallets"
-	ret.DataDir = "IGNORED/.skycoin"
+	ret.WalletDir = "IGNORED/.mdl/wallets"
+	ret.DataDir = "IGNORED/.mdl"
 
 	goldenFile := "show-config.golden"
 	if useCSRF(t) {
@@ -1093,8 +1093,8 @@ func TestLiveShowConfig(t *testing.T) {
 	// reimplementing cli.LoadConfig to compare values
 	require.NotEmpty(t, ret.WalletDir)
 	require.NotEmpty(t, ret.DataDir)
-	require.True(t, strings.HasSuffix(ret.WalletDir, ".skycoin/wallets"))
-	require.True(t, strings.HasSuffix(ret.DataDir, ".skycoin"))
+	require.True(t, strings.HasSuffix(ret.WalletDir, ".mdl/wallets"))
+	require.True(t, strings.HasSuffix(ret.DataDir, ".mdl"))
 	require.True(t, strings.HasPrefix(ret.WalletDir, ret.DataDir))
 
 	walletName := os.Getenv("WALLET_NAME")
@@ -1106,7 +1106,7 @@ func TestLiveShowConfig(t *testing.T) {
 
 	coin := os.Getenv("COIN")
 	if coin == "" {
-		coin = "skycoin"
+		coin = "mdl"
 	}
 	require.Equal(t, coin, ret.Coin)
 
@@ -1703,7 +1703,7 @@ func TestLiveSend(t *testing.T) {
 				return []string{"send", "-a", w.Entries[2].Address.String(),
 					w.Entries[1].Address.String(), "1"}
 			},
-			errMsg:  []byte("Error: Transaction has zero coinhour fee. See 'skycoin-cli send --help'"),
+			errMsg:  []byte("Error: Transaction has zero coinhour fee. See 'mdl-cli send --help'"),
 			checkTx: func(t *testing.T, txid string) {},
 		},
 	}
@@ -1751,7 +1751,7 @@ func TestLiveSend(t *testing.T) {
 
 	// Send with too small decimal value
 	// CLI send is a litte bit slow, almost 300ms each. so we only test 20 invalid decimal coin.
-	errMsg := []byte("Error: invalid amount, too many decimal places. See 'skycoin-cli send --help'")
+	errMsg := []byte("Error: invalid amount, too many decimal places. See 'mdl-cli send --help'")
 	for i := uint64(1); i < uint64(20); i++ {
 		v, err := droplet.ToString(i)
 		require.NoError(t, err)
@@ -1883,7 +1883,7 @@ func TestLiveCreateAndBroadcastRawTransaction(t *testing.T) {
 	}
 
 	// Send with too small decimal value
-	errMsg := []byte("Error: invalid amount, too many decimal places. See 'skycoin-cli createRawTransaction --help'")
+	errMsg := []byte("Error: invalid amount, too many decimal places. See 'mdl-cli createRawTransaction --help'")
 	for i := uint64(1); i < uint64(20); i++ {
 		v, err := droplet.ToString(i)
 		require.NoError(t, err)

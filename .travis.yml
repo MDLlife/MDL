@@ -23,7 +23,7 @@ env:
     - BUILD_DIR: build
     - BUILDLIB_DIR: $BUILD_DIR/libskycoin
     - LIB_DIR: lib
-    - BUILD_UI_TRAVIS_DIR: HOME/.skycoin-ui-travis
+    - BUILD_UI_TRAVIS_DIR: HOME/.mdl-ui-travis
 
 cache:
   directories:
@@ -42,7 +42,7 @@ install:
   - go get github.com/gz-c/gox
   # Install dependences for building wallet
   - if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_PULL_REQUEST" == false ]]; then sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils && nvm install 8; fi
-  - if [[ ! -d $GOPATH/src/github.com/MDLlife/MDL ]]; then mkdir -p $GOPATH/src/github.com/skycoin; ln -s $TRAVIS_BUILD_DIR $GOPATH/src/github.com/MDLlife/MDL; fi
+  - if [[ ! -d $GOPATH/src/github.com/MDLlife/MDL ]]; then mkdir -p $GOPATH/src/github.com/mdl; ln -s $TRAVIS_BUILD_DIR $GOPATH/src/github.com/MDLlife/MDL; fi
   - cd $GOPATH/src/github.com/MDLlife/MDL
   - go get -t ./...
   - make install-linters

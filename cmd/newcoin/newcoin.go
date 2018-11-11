@@ -9,7 +9,7 @@ import (
 
 	"github.com/urfave/cli"
 
-	"github.com/MDLlife/MDL/src/skycoin"
+	"github.com/MDLlife/MDL/src/mdl"
 	"github.com/MDLlife/MDL/src/util/logging"
 )
 
@@ -71,7 +71,7 @@ func createCoinCommand() cli.Command {
 			cli.StringFlag{
 				Name:  "coin",
 				Usage: "name of the coin to create",
-				Value: "skycoin",
+				Value: "mdl",
 			},
 			cli.StringFlag{
 				Name:  "template-dir, td",
@@ -129,7 +129,7 @@ func createCoinCommand() cli.Command {
 
 			// -- parse template and create new coin.go and visor parameters.go -- //
 
-			config, err := skycoin.NewParameters(configFile, configDir)
+			config, err := mdl.NewParameters(configFile, configDir)
 			if err != nil {
 				log.Errorf("failed to create new fiber coin config")
 				return err

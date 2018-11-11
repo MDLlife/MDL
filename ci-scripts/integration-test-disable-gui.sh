@@ -1,5 +1,5 @@
 #!/bin/bash
-# Runs "disable-gui"-mode tests against a skycoin node configured with -enable-gui=false
+# Runs "disable-gui"-mode tests against a mdl node configured with -enable-gui=false
 # and /api/v1/api endpoint should return 404 Not Found error
 
 # Set Script Name variable
@@ -15,7 +15,7 @@ RPC_PORT="$PORT"
 HOST="http://127.0.0.1:$PORT"
 RPC_ADDR="http://127.0.0.1:$RPC_PORT"
 MODE="disable-gui"
-BINARY="skycoin-integration"
+BINARY="mdl-integration"
 TEST=""
 RUN_TESTS=""
 # run go test with -v flag
@@ -50,13 +50,13 @@ if [[ ! "$DATA_DIR" ]]; then
   exit 1
 fi
 
-# Compile the skycoin node
+# Compile the mdl node
 # We can't use "go run" because this creates two processes which doesn't allow us to kill it at the end
-echo "compiling skycoin"
+echo "compiling mdl"
 go build -o "$BINARY" cmd/skycoin/skycoin.go
 
-# Run skycoin node with pinned blockchain database
-echo "starting skycoin node in background with http listener on $HOST"
+# Run mdl node with pinned blockchain database
+echo "starting mdl node in background with http listener on $HOST"
 
 ./skycoin-integration -disable-networking=true \
                       -web-interface-port=$PORT \
@@ -72,7 +72,7 @@ echo "starting skycoin node in background with http listener on $HOST"
                       -enable-gui=false&
 SKYCOIN_PID=$!
 
-echo "skycoin node pid=$SKYCOIN_PID"
+echo "mdl node pid=$SKYCOIN_PID"
 
 echo "sleeping for startup"
 sleep 3
@@ -89,9 +89,9 @@ API_FAIL=$?
 
 fi
 
-echo "shutting down skycoin node"
+echo "shutting down mdl node"
 
-# Shutdown skycoin node
+# Shutdown mdl node
 kill -s SIGINT $SKYCOIN_PID
 wait $SKYCOIN_PID
 

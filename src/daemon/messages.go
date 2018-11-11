@@ -30,7 +30,7 @@ import (
 // reference interface
 type MessageConfig struct {
 	Prefix  gnet.MessagePrefix
-	Message interface{}
+Message interface{}
 }
 
 // NewMessageConfig creates message config

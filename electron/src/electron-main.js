@@ -54,15 +54,15 @@ function startMDL() {
   var exe = (() => {
     switch (process.platform) {
       case 'darwin':
-        return path.join(appPath, '../../Resources/app/skycoin');
+        return path.join(appPath, '../../Resources/app/mdl');
       case 'win32':
         // Use only the relative path on windows due to short path length
         // limits
-        return './resources/app/skycoin.exe';
+        return './resources/app/mdl.exe';
       case 'linux':
-        return path.join(path.dirname(appPath), './resources/app/skycoin');
+        return path.join(path.dirname(appPath), './resources/app/mdl');
       default:
-        return './resources/app/skycoin';
+        return './resources/app/mdl';
     }
   })()
         switch (process.platform) {

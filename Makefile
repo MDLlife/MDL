@@ -63,7 +63,7 @@ endif
 else
   LDLIBS = $(LIBC_LIBS)
   LDPATH=$(shell printenv LD_LIBRARY_PATH)
-  LDPATHVAR=LD_LIBRARY_PATH
+  LDPATHVAR=LD_LIBRARY_PATHTestUnspentMaybeBuildIndexesNoIndexNoHead
   LDFLAGS=$(LIBC_FLAGS)
 endif
 

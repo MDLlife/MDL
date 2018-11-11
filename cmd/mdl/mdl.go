@@ -3,7 +3,7 @@ package main
 import (
 	_ "net/http/pprof"
 
-	"github.com/MDLlife/MDL/src/skycoin"
+	"github.com/MDLlife/MDL/src/mdl"
 	"github.com/MDLlife/MDL/src/util/logging"
 	"github.com/MDLlife/MDL/src/visor"
 )
@@ -48,7 +48,7 @@ var (
 
 func main() {
 	// get node config
-	nodeConfig := skycoin.NewNodeConfig(ConfigMode, skycoin.NodeParameters{
+	nodeConfig := mdl.NewNodeConfig(ConfigMode, mdl.NodeParameters{
 		GenesisSignatureStr: GenesisSignatureStr,
 		GenesisAddressStr:   GenesisAddressStr,
 		GenesisCoinVolume:   GenesisCoinVolume,
@@ -56,7 +56,7 @@ func main() {
 		BlockchainPubkeyStr: BlockchainPubkeyStr,
 		BlockchainSeckeyStr: BlockchainSeckeyStr,
 		DefaultConnections:  DefaultConnections,
-		PeerListURL:         "https://downloads.skycoin.net/blockchain/peers.txt",
+		PeerListURL:         "",
 		Port:                7800,
 		WebInterfacePort:    8320,
 		DataDirectory:       "$HOME/.mdl",
@@ -64,8 +64,8 @@ func main() {
 	})
 
 	// create a new fiber coin instance
-	coin := skycoin.NewCoin(
-		skycoin.Config{
+	coin := mdl.NewCoin(
+		mdl.Config{
 			Node: *nodeConfig,
 			Build: visor.BuildInfo{
 				Version: Version,

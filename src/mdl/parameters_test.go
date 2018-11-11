@@ -1,4 +1,4 @@
-package skycoin
+package mdl
 
 import (
 	"testing"
@@ -29,7 +29,7 @@ func TestNewParameters(t *testing.T) {
 				"139.162.7.132:6000",
 			},
 			Port:             6000,
-			PeerListURL:      "https://downloads.skycoin.net/blockchain/peers.txt",
+			PeerListURL:      "",
 			WebInterfacePort: 6420,
 		},
 		Build: BuildParameters{

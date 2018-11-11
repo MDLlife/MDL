@@ -1,5 +1,5 @@
 #!/bin/bash
-# Runs UI e2e tests against a skycoin node configured with a pinned database
+# Runs UI e2e tests against a mdl node configured with a pinned database
 
 # Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
@@ -12,7 +12,7 @@ done
 
 RPC_ADDR="127.0.0.1:$PORT"
 HOST="http://127.0.0.1:$PORT"
-BINARY="skycoin-integration"
+BINARY="mdl-integration"
 E2E_PROXY_CONFIG=$(mktemp -t e2e-proxy.config.XXXXXX.js)
 
 COMMIT=$(git rev-parse HEAD)
@@ -56,13 +56,13 @@ cat >"${WALLET_DIR}/test_wallet.wlt" <<EOL
 }
 EOL
 
-# Compile the skycoin node
+# Compile the mdl node
 # We can't use "go run" because this creates two processes which doesn't allow us to kill it at the end
-echo "compiling skycoin"
+echo "compiling mdl"
 go build -o "$BINARY" -ldflags "${GOLDFLAGS}" cmd/skycoin/skycoin.go
 
-# Run skycoin node with pinned blockchain database
-echo "starting skycoin node in background with http listener on $HOST"
+# Run mdl node with pinned blockchain database
+echo "starting mdl node in background with http listener on $HOST"
 
 ./skycoin-integration -disable-networking=true \
                       -web-interface-port=$PORT \
@@ -76,7 +76,7 @@ echo "starting skycoin node in background with http listener on $HOST"
                       -enable-seed-api=true &
 SKYCOIN_PID=$!
 
-echo "skycoin node pid=$SKYCOIN_PID"
+echo "mdl node pid=$SKYCOIN_PID"
 
 echo "sleeping for startup"
 sleep 3
@@ -106,9 +106,9 @@ E2E_PROXY_CONFIG=$E2E_PROXY_CONFIG npm --prefix="./src/gui/static" run e2e-choos
 
 RESULT=$?
 
-echo "shutting down skycoin node"
+echo "shutting down mdl node"
 
-# Shutdown skycoin node
+# Shutdown mdl node
 kill -s SIGINT $SKYCOIN_PID
 wait $SKYCOIN_PID
 

@@ -56,7 +56,7 @@
                 ]
             },
             {
-                "from": "./skycoin/",
+                "from": "./mdl/",
                 "to": "./app/dist/"
             }
         ],

@@ -1,4 +1,4 @@
-package skycoin
+package mdl
 
 import (
 	"fmt"
@@ -108,9 +108,9 @@ func NewParameters(configName, appDir string) (Parameters, error) {
 
 func setDefaults() {
 	// node defaults
-	viper.SetDefault("node.genesis_coin_volume", 100e12)
-	viper.SetDefault("node.port", 6000)
-	viper.SetDefault("node.web_interface_port", 6420)
+	viper.SetDefault("node.genesis_coin_volume", 1000e12)
+	viper.SetDefault("node.port", 7800)
+	viper.SetDefault("node.web_interface_port", 8320)
 
 	// build defaults
 	viper.SetDefault("build.commit", "")

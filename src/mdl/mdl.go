@@ -1,4 +1,4 @@
-package skycoin
+package mdl
 
 import (
 	"flag"
@@ -98,7 +98,7 @@ func (c *Coin) Run() {
 	c.logger.Infof("Opening database %s", dconf.Visor.DBPath)
 	db, err = visor.OpenDB(dconf.Visor.DBPath, c.config.Node.DBReadOnly)
 	if err != nil {
-		c.logger.Errorf("Database failed to open: %v. Is another skycoin instance running?", err)
+		c.logger.Errorf("Database failed to open: %v. Is another mdl instance running?", err)
 		return
 	}
 

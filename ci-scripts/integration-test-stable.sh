@@ -1,5 +1,5 @@
 #!/bin/bash
-# Runs "stable"-mode tests against a skycoin node configured with a pinned database
+# Runs "stable"-mode tests against a mdl node configured with a pinned database
 # "stable" mode tests assume the blockchain data is static, in order to check API responses more precisely
 # $TEST defines which test to run i.e, cli or api; If empty both are run
 

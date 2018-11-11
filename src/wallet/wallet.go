@@ -101,8 +101,8 @@ const (
 	// CoinTypeMDL mdl type
 	CoinTypeMDL CoinType = "mdl"
 
-	// CoinTypeSkycoin skycoin type
-	CoinTypeSkycoin CoinType = "skycoin"
+	// CoinTypeSkycoin mdl type
+	CoinTypeSkycoin CoinType = "mdl"
 	// CoinTypeBitcoin bitcoin type
 	CoinTypeBitcoin CoinType = "bitcoin"
 )
@@ -127,7 +127,7 @@ type CoinType string
 
 // Options options that could be used when creating a wallet
 type Options struct {
-	Coin       CoinType   // coin type, mdl, skycoin, bitcoin, etc.
+	Coin       CoinType   // coin type, mdl, mdl, bitcoin, etc.
 	Label      string     // wallet label.
 	Seed       string     // wallet seed.
 	Encrypt    bool       // whether the wallet need to be encrypted.
