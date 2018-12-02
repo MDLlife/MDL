@@ -19,7 +19,7 @@ export class PriceService {
         this.http.get(`https://api.coinmarketcap.com/v2/ticker/${this.CMC_TICKER_ID}/`)
           .map(response => response.json())
           .subscribe(response => this.ngZone.run(() => {
-            this.price.next(response.data.quotes.USD.price);
+            this.price.next(0.05);
           }));
       });
     });

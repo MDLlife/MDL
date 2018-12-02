@@ -4,9 +4,9 @@ import { ISubscription } from 'rxjs/Subscription';
 import { DoubleButtonActive } from '../../layout/double-button/double-button.component';
 
 @Component({
-  selector: 'app-send-mdl',
-  templateUrl: './send-mdl.component.html',
-  styleUrls: ['./send-mdl.component.scss'],
+  selector: 'app-send-skycoin',
+  templateUrl: './send-skycoin.component.html',
+  styleUrls: ['./send-skycoin.component.scss'],
 })
 export class SendSkycoinComponent implements OnDestroy {
   showForm = true;

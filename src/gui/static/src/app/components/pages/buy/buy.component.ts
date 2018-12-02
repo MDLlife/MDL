@@ -14,9 +14,13 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class BuyComponent implements OnInit, OnDestroy {
   @ViewChild('button') button: ButtonComponent;
+  @ViewChild('refresh') refresh: ButtonComponent;
 
   address: Address;
   config: any;
+  supported: string[];
+  methods: any;
+  available: number;
   form: FormGroup;
   order: PurchaseOrder;
   wallets: Wallet[];
@@ -66,6 +70,7 @@ export class BuyComponent implements OnInit, OnDestroy {
     });
 
     this.subscription = this.form.get('wallet').valueChanges.subscribe(filename => {
+      if (this.form.value.coin_type === '') return;
       const wallet = this.wallets.find(wlt => wlt.filename === filename);
       console.log('changing wallet value', filename);
       this.purchaseService.generate(wallet, this.form.value.coin_type).subscribe(
@@ -75,6 +80,7 @@ export class BuyComponent implements OnInit, OnDestroy {
     });
 
     this.form.controls.coin_type.valueChanges.subscribe(type => {
+
       if (this.order) this.order.coin_type = type;
       if (type === '') return;
       if (this.form.value.wallet === '') return;
@@ -133,7 +139,7 @@ export class BuyComponent implements OnInit, OnDestroy {
   }
 
   private loadOrder() {
-    //if (this.form.value.coin_type === '' || this.form.value.coin_type === '') return;
+    // if (this.form.value.coin_type === '' || this.form.value.coin_type === '') return;
 
     const order: PurchaseOrder = JSON.parse(window.localStorage.getItem('purchaseOrder'));
     if (order) {
@@ -158,7 +164,7 @@ export class BuyComponent implements OnInit, OnDestroy {
     switch (this.form.value.coin_type) {
       case "BTC": return this.config.supported[0].exchange_rate;
       case "ETH": return this.config.supported[1].exchange_rate;
-      case "MDL": return this.config.supported[2].exchange_rate;
+      case "SKY": return this.config.supported[2].exchange_rate;
       case "WAVES": return this.config.supported[3].exchange_rate;
     }
     return "1"

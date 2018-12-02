@@ -1,6 +1,6 @@
 {
   "common": {
-    "coin-id": "SKY",
+    "coin-id": "MDL",
     "coin-hours": "Coin Hours",
     "loading": "Loading...",
     "new": "New",
@@ -19,14 +19,14 @@
     "wallets": "Wallets",
     "send": "Send",
     "history": "History",
-    "buy-coin": "Buy Skycoin",
+    "buy-coin": "Buy MDL",
     "network": "Networking",
     "blockchain": "Blockchain",
     "outputs": "Outputs",
     "transactions": "Transactions",
     "pending-txs": "Pending Transactions",
     "backup": "Backup Wallet",
-    "explorer": "Skycoin Explorer",
+    "explorer": "MDL Explorer",
     "seed": "Wallet Seed",
     "qrcode": "QR Code"
   },
@@ -56,32 +56,38 @@
   },
 
   "buy": {
-    "deposit-address": "Choose an address to generate a BTC deposit link for:",
+    "deposit-address": "Choose an address to generate a Selected Coin deposit link for:",
     "select-address": "Select address",
     "generate": "Generate",
     "deposit-location": "Deposit Location",
-    "deposit-location-desc": "Choose a wallet where you'd like us to deposit your Skycoin after we receive your Bitcoin.",
+    "deposit-location-desc": "Choose a wallet where you'd like us to deposit your MDL after we receive your Selected Coin.",
     "make-choice": "Make a choice",
-    "wallets-desc": "Each time a new wallet and address are selected, a new BTC address is generated. A single Skycoin address can have up to 5 BTC addresses assigned to it.",
-    "send": "Send Bitcoin",
-    "send-desc": "Send Bitcoin to the address below. Once received, we will deposit the Skycoin to a new address in the wallet selected above at the current rate of {{ rate }} SKY/BTC.",
-    "fraction-warning": "Only send multiple of the SKY/BTC rate! Skycoin is sent in whole number; fractional SKY is not sent!",
-    "receive": "Receive Sky",
-    "receive-desc": "After receiving your Bitcoin, we'll send you your Skycoin. It may take anywhere between 20 minutes and an hour to receive your SKY.",
+    "wallets-desc": "Each time a new wallet and address are selected, a new Selected Coin address is generated. A single MDL address can have up to 5 Selected Coin addresses assigned to it.",
+    "send": "Send Selected Coin",
+    "send-desc": "Send Selected Coin to the address below. Once received, we will deposit the MDL to a new address in the wallet selected above at the current rate of {{ rate }} MDL/Selected Coin.",
+    "fraction-warning": "Only send multiple of the MDL/(Selected Coin) rate! MDL is sent in whole number; fractional MDL is not sent!",
+    "receive": "Receive MDL",
+    "receive-desc": "After receiving your Selected Coin, we'll send you your MDL. It may take anywhere between 20 minutes and an hour to receive your MDL.",
     "status-button": "Status:",
     "check-status-button": "Check Status",
-    "new-order-button": "New Order"
+    "new-order-button": "New Order",
+    "refresh": "Refresh",
+    "available-now": "Available Now:",
+    "choose-preference": "Choose your preferred payment method. Please be aware that some methods can temporarily be disabled.",
+    "choose": "Please choose your favourite crypto ;)",
+    "send-coin":"Send",
+    "send-coin-text-1": "to the address below. After enough confirmations on the blockchain, you will receive MDL tokens to the wallet selected above at the current rate of"
   },
 
   "wizard": {
-    "wallet-desc": "If you don't have a Skycoin wallet, use the generated seed to create a new one. If you already have a wallet, toggle over to \"Load Wallet\" and enter your seed.",
+    "wallet-desc": "If you don't have a MDL wallet, use the generated seed to create a new one. If you already have a wallet, toggle over to \"Load Wallet\" and enter your seed.",
     "encrypt-desc": "Increase security of your wallet by encrypting it. By entering a password below, your wallet will be encrypted. Only those with the password will be able access the wallet and remove funds.",
     "finish-button": "Finish",
     "back-button": "Back",
 
     "confirm": {
       "title": "Safeguard your seed!",
-      "desc": "We want to make sure that you wrote down your seed and stored it in a safe place. If you forget your seed, you WILL NOT be able to recover your Skycoin wallet!",
+      "desc": "We want to make sure that you wrote down your seed and stored it in a safe place. If you forget your seed, you WILL NOT be able to recover your MDL wallet!",
       "checkbox": "It’s safe, I swear.",
       "button": "Continue"
     }
@@ -194,8 +200,8 @@
     "blocks": "Number of blocks",
     "time": "Timestamp of last block",
     "hash": "Hash of last block",
-    "current-supply": "Current SKY supply",
-    "total-supply": "Total SKY supply",
+    "current-supply": "Current MDL supply",
+    "total-supply": "Total MDL supply",
     "current-coinhour-supply": "Current Coin Hours supply",
     "total-coinhour-supply": "Total Coin Hours supply"
   },
@@ -238,7 +244,7 @@
     "done": "Completed",
     "waiting-confirm": "Waiting for confirmation",
     "waiting-deposit": "Waiting for Bitcoin deposit",
-    "waiting-send": "Waiting to send Skycoin",
+    "waiting-send": "Waiting to send MDL",
     "unknown": "Unknown"
   }
 }

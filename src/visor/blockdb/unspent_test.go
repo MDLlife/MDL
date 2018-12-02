@@ -1095,7 +1095,7 @@ func setupNoUnspentAddrIndexDB(t *testing.T) (*dbutil.DB, func()) {
 	// copy it to a temp file and open a database around the temp file
 	dbFilename := "./testdata/blockchain-180.no-unspent-addr-index.db"
 
-	fmt.Printf("Cutting hair"+ dbFilename)
+	fmt.Printf("setupNoUnspentAddrIndexDB, "+ dbFilename)
 
 	dbFile, err := os.Open(dbFilename)
 	require.NoError(t, err)
