@@ -25,7 +25,7 @@ export class QrCodeComponent implements OnInit {
 
   ngOnInit() {
     const qrcode = new QRCode(this.qr.nativeElement, {
-      text: `skycoin:${this.data.address}`,
+      text: `mdl:${this.data.address}`,
       width: this.size,
       height: this.size,
       colorDark: this.colordark,
