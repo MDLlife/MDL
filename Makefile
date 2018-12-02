@@ -23,8 +23,24 @@ RPC_ADDR="$IP_ADDR:$RPC_PORT"
 # Electron files directory
 ELECTRON_DIR = electron
 
+# ./src folder does not have code
+# ./src/api folder does not have code
+# ./src/util folder does not have code
+# ./src/ciper/* are libraries manually vendored by cipher that do not need coverage
+# ./src/gui/static* are static assets
+# */testdata* folders do not have code
+# ./src/consensus/example has no buildable code
+PACKAGES = $(shell find ./src -type d -not -path '\./src' \
+    							      -not -path '\./src/api' \
+    							      -not -path '\./src/util' \
+    							      -not -path '\./src/consensus/example' \
+    							      -not -path '\./src/gui/static*' \
+    							      -not -path '\./src/cipher/*' \
+    							      -not -path '*/testdata*' \
+    							      -not -path '*/test-fixtures*')
+
 # Compilation output
-BUILD_DIR = build
+BUILD_DIR = dist
 BUILDLIB_DIR = $(BUILD_DIR)/libskycoin
 LIB_DIR = lib
 LIB_FILES = $(shell find ./lib/cgo -type f -name "*.go")
@@ -67,15 +83,36 @@ else
   LDFLAGS=$(LIBC_FLAGS)
 endif
 
-run:  ## Run the skycoin node. To add arguments, do 'make ARGS="--foo" run'.
-	./run.sh ${ARGS}
+run:  ## Run the MDL node. To add arguments, do 'make ARGS="--foo" run'.
+	go run cmd/mdl/mdl.go \
+	    -web-interface=true \
+        -web-interface-addr=${IP_ADDR} \
+        -web-interface-port=${PORT} \
+        -gui-dir="${DIR}/src/gui/static/" \
+        -launch-browser=true \
+        -enable-wallet-api=true \
+        -rpc-interface=true \
+        -log-level=debug \
+        -download-peerlist=false \
+        -enable-seed-api=true \
+        -disable-csrf=false \
+        $@
 
 run-help: ## Show MDL node help
 	@go run cmd/mdl/mdl.go --help
 
 test: ## Run tests for MDL
 	go test ./cmd/... -timeout=5m
-	go test ./src/... -timeout=5m
+	go test ./src/api/... -timeout=5m
+	go test ./src/cipher/... -timeout=5m
+	go test ./src/coin/... -timeout=5m
+	go test ./src/consensus/... -timeout=5m
+	go test ./src/daemon/... -timeout=5m
+	go test ./src/gui/... -timeout=5m
+	go test ./src/testutil/... -timeout=5m
+	go test ./src/util/... -timeout=5m
+	go test ./src/visor/... -timeout=5m
+	go test ./src/wallet/... -timeout=5m
 
 test-386: ## Run tests for MDL with GOARCH=386
 	GOARCH=386 go test ./cmd/... -timeout=5m
@@ -150,32 +187,60 @@ check: lint test integration-test-stable integration-test-stable-disable-csrf in
 
 ## BEGIN CI TESTS ##
 integration-test-stable: ## Run stable integration tests
-	./ci-scripts/integration-test-stable.sh -c
-
-integration-test-stable-disable-csrf: ## Run stable integration tests with CSRF disabled
 	./ci-scripts/integration-test-stable.sh
-
-integration-test-live: ## Run live integration tests
-	./ci-scripts/integration-test-live.sh -c
 
 integration-test-live-wallet: ## Run live integration tests with wallet
 	./ci-scripts/integration-test-live.sh -w
 
-integration-test-live-disable-csrf: ## Run live integration tests against a node with CSRF disabled
-	./ci-scripts/integration-test-live.sh
-
 integration-test-disable-wallet-api: ## Run disable wallet api integration tests
 	./ci-scripts/integration-test-disable-wallet-api.sh
 
-integration-test-enable-seed-api: ## Run enable seed api integration test
-	./ci-scripts/integration-test-enable-seed-api.sh
+integration-test-disable-seed-api: ## Run enable seed api integration test
+	./ci-scripts/integration-test-disable-seed-api.sh
 
-integration-test-disable-gui:
-	./ci-scripts/integration-test-disable-gui.sh
+integration-test-live: build-start ## Run live integration tests
+	./ci-scripts/integration-test-live.sh
+	./ci-scripts/stop.sh
+
+integration-test-all: ## Run live integration tests
+	./ci-scripts/integration-test-all.sh
+
+integration-test-stable-gui: ## Run stable integration tests
+	./ci-scripts/integration-test-stable.sh -t gui
+
+integration-test-live-gui: build-start ## Run live integration tests
+	./ci-scripts/integration-test-live.sh -t gui
+	./ci-scripts/stop.sh
+
+integration-test-all-gui: ## Run live integration tests
+	./ci-scripts/integration-test-all.sh -t gui
+
+integration-test-stable-cli: ## Run stable integration tests
+	./ci-scripts/integration-test-stable.sh -t cli
+
+integration-test-live-cli: build-start ## Run live integration tests
+	./ci-scripts/integration-test-live.sh -t cli
+	./ci-scripts/stop.sh
+
+integration-test-all-cli: ## Run live integration tests
+	./ci-scripts/integration-test-all.sh -t cli
+
+integration-test-server:
+	go build -o /opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
+	/opt/gocode/src/github.com/MDLlife/MDL/cmd/mdl/mdl.go;
+	/opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
+	-disable-networking=true -web-interface-port=8320 -download-peerlist=false \
+	-db-path=./src/gui/integration/test-fixtures/blockchain-development.db -db-read-only=true \
+	-rpc-interface=true -rpc-interface-port=8330 -launch-browser=false \
+	-data-dir=/tmp/mdl-data-dir.cm5WDM -enable-wallet-api=true \
+	-wallet-dir=/tmp/mdl-data-dir.cm5WDM/wallets -enable-seed-api=true;
 
 cover: ## Runs tests on ./src/ with HTML code coverage
-	go test -cover -coverprofile=cover.out -coverpkg=github.com/skycoin/skycoin/... ./src/...
-	go tool cover -html=cover.out
+	@echo "mode: count" > coverage-all.out
+	$(foreach pkg,$(PACKAGES),\
+		go test -coverprofile=coverage.out $(pkg);\
+		tail -n +2 coverage.out >> coverage-all.out;)
+	go tool cover -html=coverage-all.out
 
 install-linters: ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
@@ -205,6 +270,9 @@ test-ui:  ## Run UI tests
 test-ui-e2e:  ## Run UI e2e tests
 	./ci-scripts/ui-e2e.sh
 
+clean-ui:  ## Builds the UI
+	rm $(GUI_STATIC_DIR)/dist/* || true
+
 build-ui:  ## Builds the UI
 	cd $(GUI_STATIC_DIR) && npm run build
 
@@ -212,11 +280,17 @@ build-ui-travis:  ## Builds the UI for travis
 	cd $(GUI_STATIC_DIR) && npm run build-travis
 
 release: ## Build electron apps, the builds are located in electron/release folder.
-	cd $(ELECTRON_DIR) && ./build.sh
+	cd $(ELECTRON_DIR) && yarn && ./build.sh
 	@echo release files are in the folder of electron/release
 
 clean-release: ## Clean dist files and delete all builds in electron/release
-	rm $(ELECTRON_DIR)/release/*
+	rm $(ELECTRON_DIR)/release/* || true
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+release-all: ## clean and GUI_STATIC_DIR; clean and build release
+	make clean-ui;
+	make build-ui;
+	make clean-release;
+	make release;

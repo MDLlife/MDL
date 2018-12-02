@@ -21,6 +21,7 @@ ELN_OUTPUT="${ELN_OUTPUT_BASE}/${ELN_VERSION}"
 if [ -n "$1" ]; then
     GOX_OSARCH="$1"
 else
+#    GOX_OSARCH="linux/amd64"
     GOX_OSARCH="linux/amd64 linux/arm windows/amd64 windows/386 darwin/amd64"
 fi
 

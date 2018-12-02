@@ -71,7 +71,7 @@ export class PurchaseService {
   }
 
   scan(address: string) {
-    return this.get('status?skyaddr=' + address)
+    return this.get('status?mdladdr=' + address)
       .map((response: any) => {
         if (!response.statuses || response.statuses.length > 1) {
           throw new Error('too many purchase orders found');

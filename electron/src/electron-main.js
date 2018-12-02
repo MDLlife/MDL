@@ -65,19 +65,6 @@ function startMDL() {
         return './resources/app/mdl';
     }
   })()
-        switch (process.platform) {
-  case 'darwin':
-    return path.join(appPath, '../../Resources/app/mdl');
-  case 'win32':
-    // Use only the relative path on windows due to short path length
-    // limits
-    return './resources/app/mdl.exe';
-  case 'linux':
-    return path.join(path.dirname(appPath), './resources/app/mdl');
-  default:
-    return './resources/app/mdl';
-  }
-})()
 
   var args = [
     '-launch-browser=false',
