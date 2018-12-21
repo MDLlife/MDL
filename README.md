@@ -10,6 +10,7 @@ MDL is a token used in MDL Talent Hub platform. It's based on [MDL](https://mdl.
 
 MDL improves on Bitcoin in too many ways to be addressed here. Read their website and [blog](https://blog.mdl.wtf) instead.
 
+Skycoin is a small part of OP Redecentralize and OP Darknet Plan.
 
 ## Links
 
@@ -20,15 +21,15 @@ MDL improves on Bitcoin in too many ways to be addressed here. Read their websit
 
 ## Table of Contents
 
-<!-- MarkdownTOC depth="5" autolink="true" bracket="round" -->
+<!-- MarkdownTOC levels="1,2,3,4,5" autolink="true" bracket="round" -->
 
 - [Changelog](#changelog)
 - [Installation](#installation)
-    - [Go 1.9+ Installation and Setup](#go-19-installation-and-setup)
-    - [Go get MDL](#go-get-mdl)
-    - [Run MDL from the command line](#run-mdl-from-the-command-line)
-    - [Show MDL node options](#show-mdl-node-options)
-    - [Run MDL with options](#run-mdl-with-options)
+    - [Go 1.10+ Installation and Setup](#go-110-installation-and-setup)
+    - [Go get skycoin](#go-get-skycoin)
+    - [Run Skycoin from the command line](#run-skycoin-from-the-command-line)
+    - [Show Skycoin node options](#show-skycoin-node-options)
+    - [Run Skycoin with options](#run-skycoin-with-options)
     - [Docker image](#docker-image)
     - [Building your own images](#building-your-own-images)
 - [API Documentation](#api-documentation)
@@ -46,7 +47,7 @@ MDL improves on Bitcoin in too many ways to be addressed here. Read their websit
         - [Stable Integration Tests](#stable-integration-tests)
         - [Live Integration Tests](#live-integration-tests)
         - [Debugging Integration Tests](#debugging-integration-tests)
-        - [Update golden files in integration test-fixtures](#update-golden-files-in-integration-test-fixtures)
+        - [Update golden files in integration testdata](#update-golden-files-in-integration-testdata)
     - [Formatting](#formatting)
     - [Code Linting](#code-linting)
     - [Dependency Management](#dependency-management)
@@ -64,11 +65,11 @@ MDL improves on Bitcoin in too many ways to be addressed here. Read their websit
 
 ## Installation
 
-MDL supports go1.9+.  The preferred version is go1.10.
+MDL supports go1.10+.
 
-### Go 1.9+ Installation and Setup
+### Go 1.10+ Installation and Setup
 
-[Golang 1.9+ Installation/Setup](./INSTALLATION.md)
+[Golang 1.10+ Installation/Setup](./INSTALLATION.md)
 
 ### Go get MDL
 
@@ -154,13 +155,17 @@ Access the API: [http://localhost:6420/version](http://localhost:6420/version).
 
 ### Building your own images
 
+[Building your own images](docker/images/mainnet/README.md).
 There is a Dockerfile in docker/images/mainnet that you can use to build your
 own image. By default it will build your working copy, but if you pass the
 MDL_VERSION build argument to the `docker build` command, it will checkout
 to the branch, a tag or a commit you specify on that variable.
 
-Example
+### Development image
 
+The [skycoin/skycoindev-cli docker image](docker/images/dev-cli/README.md) is provided in order to make
+easy to start developing Skycoin. It comes with the compiler, linters, debugger
+and the vim editor among other tools.
 ```sh
 $ git clone https://github.com/mdl/mdl
 $ cd mdl
@@ -182,7 +187,7 @@ $ docker build -f docker/images/mainnet/Dockerfile \
 
 ### REST API
 
-[REST API](src/gui/README.md).
+[REST API](src/api/README.md).
 
 ### JSON-RPC 2.0 API
 
@@ -228,21 +233,27 @@ We have two branches: `master` and `develop`.
 
 ### Modules
 
-* `/src/cipher` - cryptography library
-* `/src/coin` - the blockchain
-* `/src/daemon` - networking and wire protocol
-* `/src/visor` - the top level, client
-* `/src/gui` - the web wallet and json client interface
-* `/src/wallet` - the private key storage library
-* `/src/api/webrpc` - JSON-RPC 2.0 API
-* `/src/api/cli` - CLI library
+* `api` - REST API interface
+* `api/webrpc` - JSON-RPC 2.0 API [deprecated]
+* `cipher` - cryptographic library
+* `cli` - CLI library
+* `coin` - blockchain data structures
+* `daemon` - top-level application manager, combining all components (networking, database, wallets)
+* `daemon/gnet` - networking library
+* `daemon/pex` - peer management
+* `visor` - top-level blockchain database layer
+* `visor/blockdb` - low-level blockchain database layer
+* `visor/historydb` - low-level blockchain database layer for historical blockchain metadata
+* `wallet` - wallet file management
 
 ### Client libraries
 
 MDL implements client libraries which export core functionality for usage from
 other programming languages. Read the corresponding README file for further details.
 
-* `lib/cgo/` - libskycoin C client library ( [read more](lib/cgo/README.md) )
+* `lib/cgo/` - libskycoin C client library ( [overview](lib/cgo/README.md), [API reference](docs/libc/API.md) )
+
+For further details run `make docs` to generate documetation and read the corresponding README and API references.
 
 ### Running Tests
 
@@ -279,8 +290,13 @@ The `-v` option, show verbose logs.
 
 #### Live Integration Tests
 
-The live integration tests run against a live runnning MDL node, so before running the test, we
-need to start a MDL node.
+The live integration tests run against a live runnning skycoin node, so before running the test, we
+need to start a skycoin node. Since the `cli` integration test requires the rpc interface enabled,
+we should start node with `rpc-interface`:
+
+```sh
+./run.sh -launch-browser=false -rpc-interface
+```
 
 After the MDL node is up, run the following command to start the live tests:
 
@@ -330,7 +346,7 @@ For exampe: if we only want to test `TestStableAddressBalance` and see the resul
 ./ci-scripts/integration-test-stable.sh -v -r TestStableAddressBalance
 ```
 
-#### Update golden files in integration test-fixtures
+#### Update golden files in integration testdata
 
 Golden files are expected data responses from the CLI or HTTP API saved to disk.
 When the tests are run, their output is compared to the golden files.
@@ -382,8 +398,6 @@ If you change the dependencies, you should update them as needed with `dep ensur
 
 Use `dep help` for instructions on vendoring a specific version of a dependency, or updating them.
 
-After adding a new dependency (with `dep ensure`), run `dep prune` to remove any unnecessary subpackages from the dependency.
-
 When updating or initializing, `dep` will find the latest version of a dependency that will compile.
 
 Examples:
@@ -392,29 +406,52 @@ Initialize all dependencies:
 
 ```sh
 dep init
-dep prune
 ```
 
 Update all dependencies:
 
 ```sh
 dep ensure -update -v
-dep prune
 ```
 
 Add a single dependency (latest version):
 
 ```sh
 dep ensure github.com/foo/bar
-dep prune
 ```
 
 Add a single dependency (more specific version), or downgrade an existing dependency:
 
 ```sh
 dep ensure github.com/foo/bar@tag
-dep prune
 ```
+
+### Configuration Modes
+There are 4 configuration modes in which you can run a skycoin node:
+- Development Desktop Daemon
+- Server Daemon
+- Electron Desktop Client
+- Standalone Desktop Client
+
+#### Development Desktop Daemon Mode
+This mode is configured via `run.sh`
+```bash
+$ ./run.sh
+```
+
+#### Server Daemon Mode
+The default settings for a skycoin node are chosen for `Server Daemon`, which is typically run from source.
+This mode is usually preferred to be run with security options, though `-disable-csrf` is normal for server daemon mode, it is left enabled by default.
+```bash
+$ go run cmd/skycoin/skycoin.go
+```
+
+#### Electron Desktop Client Mode
+This mode configures itself via electron-main.js
+
+#### Standalone Desktop Client Mode
+This mode is configured by compiling with `STANDALONE_CLIENT` build tag.
+The configuration is handled in `cmd/skycoin/skycoin.go`
 
 ### Wallet GUI Development
 
@@ -427,16 +464,18 @@ Instructions for doing this:
 ### Releases
 
 0. If the `master` branch has commits that are not in `develop` (e.g. due to a hotfix applied to `master`), merge `master` into `develop`
-1. Compile the `src/gui/dist/` to make sure that it is up to date (see [Wallet GUI Development README](src/gui/static/README.md))
+1. Compile the `src/gui/static/dist/` to make sure that it is up to date (see [Wallet GUI Development README](src/gui/static/README.md))
 2. Update all version strings in the repo (grep for them) to the new version
 3. Update `CHANGELOG.md`: move the "unreleased" changes to the version and add the date
 4. Merge these changes to `develop`
 5. Follow the steps in [pre-release testing](#pre-release-testing)
 6. Make a PR merging `develop` into `master`
 7. Review the PR and merge it
-8. Tag the master branch with the version number. Version tags start with `v`, e.g. `v0.20.0`. Sign the tag. Example: `git tag -as v0.20.0 $COMMIT_ID`.
+8. Tag the master branch with the version number. Version tags start with `v`, e.g. `v0.20.0`.
+    Sign the tag. If you have your GPG key in github, creating a release on the Github website will automatically tag the release.
+    It can be tagged from the command line with `git tag -as v0.20.0 $COMMIT_ID`, but Github will not recognize it as a "release".
 9. Make sure that the client runs properly from the `master` branch
-10. Create the release builds from the `master` branch (see [Create Release builds](electron/README.md))
+10. Release builds are created and uploaded by travis. To do it manually, checkout the `master` branch and follow the [create release builds](electron/README.md) instructions.
 
 If there are problems discovered after merging to master, start over, and increment the 3rd version number.
 For example, `v0.20.0` becomes `v0.20.1`, for minor fixes.
