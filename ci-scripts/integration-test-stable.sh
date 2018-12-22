@@ -1,15 +1,25 @@
 #!/bin/bash
 # Runs "stable"-mode tests against a mdl node configured with a pinned database
 # "stable" mode tests assume the blockchain data is static, in order to check API responses more precisely
-# $TEST defines which test to run i.e, cli or gui; If empty both are run
+# $TEST defines which test to run i.e, cli or api; If empty both are run
 
-#Set Script Name variable
+# Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
 PORT="8320"
 RPC_PORT="8330"
 IP_ADDR="127.0.0.1"
 HOST="http://$IP_ADDR:$PORT"
 RPC_ADDR="$IP_ADDR:$RPC_PORT"
+
+# Find unused port
+PORT="1024"
+while $(lsof -Pi :$PORT -sTCP:LISTEN -t >/dev/null) ; do
+    PORT=$((PORT+1))
+done
+
+RPC_PORT="$PORT"
+HOST="http://127.0.0.1:$PORT"
+RPC_ADDR="http://127.0.0.1:$RPC_PORT"
 MODE="stable"
 BINARY="$PWD/mdl-integration"
 TEST=""
@@ -20,6 +30,9 @@ VERBOSE=""
 RUN_TESTS=""
 # run wallet tests
 TEST_WALLET=""
+# run tests with csrf enabled
+USE_CSRF=""
+DISABLE_CSRF="-disable-csrf"
 
 COMMIT=$(git rev-parse HEAD)
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -28,15 +41,15 @@ GOLDFLAGS="-X main.Commit=${COMMIT} -X main.Branch=${BRANCH}"
 usage () {
   echo "Usage: $SCRIPT"
   echo "Optional command line arguments"
-  echo "-t <string>  -- Test to run, gui or cli; empty runs both tests"
+  echo "-t <string>  -- Test to run, api or cli; empty runs both tests"
   echo "-r <string>  -- Run test with -run flag"
   echo "-u <boolean> -- Update stable testdata"
   echo "-v <boolean> -- Run test with -v flag"
-  echo "-w <boolean> -- Run wallet tests"
+  echo "-c <boolean> -- Run tests with CSRF enabled"
   exit 1
 }
 
-while getopts "h?t:r:uvw" args; do
+while getopts "h?t:r:uvc" args; do
   case $args in
     h|\?)
         usage;
@@ -45,7 +58,7 @@ while getopts "h?t:r:uvw" args; do
     r ) RUN_TESTS="-run ${OPTARG}";;
     u ) UPDATE="--update";;
     v ) VERBOSE="-v";;
-    w ) TEST_WALLET="--test-wallet"
+    c ) USE_CSRF="1"; DISABLE_CSRF="";
   esac
 done
 
@@ -70,15 +83,14 @@ echo "starting mdl ($PWD/mdl-integration) node in background with http listener 
 $PWD/mdl-integration -disable-networking=true \
                       -web-interface-port=$PORT \
                       -download-peerlist=false \
-                      -db-path=./src/gui/integration/test-fixtures/blockchain-development.db \
+                      -db-path=./src/api/integration/testdata/blockchain-180.db \
                       -db-read-only=true \
                       -rpc-interface=true \
-                      -rpc-interface-port=$RPC_PORT \
                       -launch-browser=false \
                       -data-dir="$DATA_DIR" \
                       -enable-wallet-api=true \
                       -wallet-dir="$WALLET_DIR" \
-                      -enable-seed-api=true &
+                      $DISABLE_CSRF &
 MDL_PID=$!
 
 echo "mdl node pid=$MDL_PID"
@@ -89,19 +101,19 @@ echo "done sleeping"
 
 set +e
 
-if [[ -z $TEST || $TEST = "gui" ]]; then
+if [[ -z $TEST || $TEST = "api" ]]; then
 
 MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST \
-    go test ./src/gui/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS  $TEST_WALLET
+    go test ./src/api/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
 
-GUI_FAIL=$?
+API_FAIL=$?
 
 fi
 
 if [[ -z $TEST  || $TEST = "cli" ]]; then
 
 MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR \
-    go test ./src/api/cli/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS  $TEST_WALLET
+    go test ./src/cli/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
 
 CLI_FAIL=$?
 
@@ -117,8 +129,8 @@ wait $MDL_PID
 rm "$BINARY"
 
 
-if [[ (-z $TEST || $TEST = "gui") && $GUI_FAIL -ne 0 ]]; then
-  exit $GUI_FAIL
+if [[ (-z $TEST || $TEST = "api") && $API_FAIL -ne 0 ]]; then
+  exit $API_FAIL
 elif [[ (-z $TEST || $TEST = "cli") && $CLI_FAIL -ne 0 ]]; then
   exit $CLI_FAIL
 else

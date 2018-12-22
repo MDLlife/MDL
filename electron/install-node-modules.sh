@@ -8,7 +8,8 @@ SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 pushd "$SCRIPTDIR" >/dev/null
 
+npm install
 cd src/
-yarn
+npm install
 
 popd >/dev/null

@@ -9,6 +9,7 @@ const PROXY_CONFIG = {
     "bypass": function (req) {
       req.headers["host"] = '127.0.0.1:8320';
       req.headers["referer"] = 'http://127.0.0.1:8320';
+      req.headers["origin"] = 'http://127.0.0.1:8320';
     }
 },
   "/teller/*": {

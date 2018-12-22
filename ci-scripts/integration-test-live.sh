@@ -21,6 +21,8 @@ VERBOSE=""
 RUN_TESTS=""
 # run wallet tests
 TEST_LIVE_WALLET=""
+# run tests with csrf enabled
+USE_CSRF=""
 FAILFAST=""
 
 
@@ -31,16 +33,17 @@ echo "done sleeping"
 usage () {
   echo "Usage: $SCRIPT"
   echo "Optional command line arguments"
-  echo "-t <string>  -- Test to run, gui or cli; empty runs both tests"
+  echo "-t <string>  -- Test to run, api or cli; empty runs both tests"
   echo "-r <string>  -- Run test with -run flag"
   echo "-u <boolean> -- Update stable testdata"
   echo "-v <boolean> -- Run test with -v flag"
   echo "-w <boolean> -- Run wallet tests."
   echo "-f <boolean> -- Run test with -failfast flag"
+  echo "-c <boolean> -- Run tests with CSRF enabled. If not set, node must be run with -disable-csrf"
   exit 1
 }
 
-while getopts "h?t:r:uvwf" args; do
+while getopts "h?t:r:uvwfc" args; do
 case $args in
     h|\?)
         usage;
@@ -50,7 +53,8 @@ case $args in
     u ) UPDATE="--update";;
     v ) VERBOSE="-v";;
     w ) TEST_LIVE_WALLET="--test-live-wallet";;
-    f ) FAILFAST="-failfast"
+    f ) FAILFAST="-failfast";;
+    c ) USE_CSRF="1"
   esac
 done
 
@@ -58,23 +62,25 @@ set -euxo pipefail
 
 echo "checking if mdl node is running"
 
-http_proxy="" https_proxy="" wget -O- $HOST 2>&1 >/dev/null
+HEALTH="$HOST/api/v1/health"
+
+http_proxy="" https_proxy="" wget -O- $HEALTH 2>&1 >/dev/null
 
 if [ ! $? -eq 0 ]; then
     echo "MDL node is not running on $HOST"
     exit 1
 fi
 
-if [[ -z $TEST || $TEST = "gui" ]]; then
+if [[ -z $TEST || $TEST = "api" ]]; then
 
 MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST \
-    go test ./src/gui/integration/... $FAILFAST $UPDATE -timeout=$TIMEOUT $VERBOSE $RUN_TESTS $TEST_LIVE_WALLET
+    go test ./src/api/integration/... $FAILFAST $UPDATE -timeout=$TIMEOUT $VERBOSE $RUN_TESTS $TEST_LIVE_WALLET
 
 fi
 
 if [[ -z $TEST || $TEST = "cli" ]]; then
 
 MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR MDL_NODE_HOST=$HOST \
-    go test ./src/api/cli/integration/... $FAILFAST $UPDATE -timeout=$TIMEOUT $VERBOSE $RUN_TESTS $TEST_LIVE_WALLET
+    go test ./src/cli/integration/... $FAILFAST $UPDATE -timeout=$TIMEOUT $VERBOSE $RUN_TESTS $TEST_LIVE_WALLET
 
 fi
