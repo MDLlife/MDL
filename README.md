@@ -1,4 +1,4 @@
-[![mdl logo](https://github.com/MDLlife/MDL/raw/testnet/mdl.png)](https://mdl.life)
+[![mdl logo](https://avatars3.githubusercontent.com/u/32588034?s=400&u=66bd3c250fc20d6a6044f50a911aba46683e0e20&v=4)](https://mdl.life)
 
 # MDL
 
@@ -6,9 +6,9 @@
 [![GoDoc](https://godoc.org/github.com/MDLlife/MDL?status.svg)](https://godoc.org/github.com/MDLlife/MDL)
 [![Go Report Card](https://goreportcard.com/badge/github.com/MDLLife/MDL)](https://goreportcard.com/report/github.com/MDLLife/MDL)
 
-MDL is a token used in MDL Talent Hub platform. It's based on [MDL](https://mdl.wtf)'s code base.
+MDL is a token used in [MDL Talent Hub platform](https://mdl.live). It's based on [Skycoin](https://skycoin.io)'s code base.
 
-MDL improves on Bitcoin in too many ways to be addressed here. Read their website and [blog](https://blog.mdl.wtf) instead.
+MDL & Skycoin improve on Bitcoin in too many ways to be addressed here. Read their [website](https://mdl.life) and [blog](https://blog.skycoin.net) instead.
 
 Skycoin is a small part of OP Redecentralize and OP Darknet Plan.
 
@@ -16,8 +16,10 @@ Skycoin is a small part of OP Redecentralize and OP Darknet Plan.
 
 * [MDL Talent Hub](http://mdl.life)
 * [MDL Blog](https://mdl.wtf)
+* [MDL The Platform](https://mdl.live)
 * [MDL Blockchain Explorer](https://explorer.mdl.wtf)
-* [MDL Development Telegram Channel](https://t.me/MDL_Talent_Hub)
+* [MDL Community Telegram Channel](https://t.me/MDL_Talent_Hub)
+* [MDL Games & Tournaments Telegram Channel](https://t.me/mdlgamesandtournaments)
 
 ## Table of Contents
 
