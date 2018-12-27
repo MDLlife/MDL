@@ -3,7 +3,7 @@
   <div class="container">
     <div [formGroup]="form" class="-paper" *ngIf="config">
       <div class="-available flex-fill">
-        <h2>{{ 'buy.available-now' | translate }} {{available}} MDL</h2>
+        <h2>{{ 'buy.available-now' | translate }} {{ available  | number:'1.0-6' }} MDL</h2>
         <app-button #refresh (action)="refreshConfig()">{{ 'buy.refresh' | translate }}</app-button>
       </div>
       <div class="-step">
