@@ -206,6 +206,7 @@ func (c *Coin) Run() error {
 	c.logger.Infof("Max decimals for user transactions is %d", params.UserVerifyTxn.MaxDropletPrecision)
 
 	d, err = daemon.NewDaemon(dconf, db)
+
 	if err != nil {
 		c.logger.Error(err)
 		retErr = err
