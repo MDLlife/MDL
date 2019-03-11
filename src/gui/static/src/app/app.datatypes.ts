@@ -1,11 +1,12 @@
+import { BigNumber } from 'bignumber.js';
 /**
  * Internal Objects
  */
 
 export class Address {
   address: string;
-  coins: number;
-  hours: number;
+  coins: BigNumber = new BigNumber('0');
+  hours: BigNumber = new BigNumber('0');
   copying?: boolean; // Optional parameter indicating whether the address is being copied to clipboard
   outputs?: any;
 }
@@ -31,12 +32,12 @@ export class TellerConfig {
 }
 
 export class Transaction {
-  balance: number;
+  balance: BigNumber = new BigNumber('0');
   inputs: any[];
   outputs: any[];
   txid: string;
-  hoursSent?: number;
-  hoursBurned?: number;
+  hoursSent?: BigNumber;
+  hoursBurned?: BigNumber;
 }
 
 export class PreviewTransaction extends Transaction {
@@ -59,14 +60,16 @@ export class Version {
 export class Wallet {
   label: string;
   filename: string;
-  // seed: string;
-  coins: number;
-  hours: number;
+  coins: BigNumber = new BigNumber('0');
+  hours: BigNumber = new BigNumber('0');
   addresses: Address[];
   visible?: boolean;
   encrypted: boolean;
   hideEmpty?: boolean;
   opened?: boolean;
+  isHardware?: boolean;
+  hasHwSecurityWarnings?: boolean;
+  stopShowingHwSecurityPopup?: boolean;
 }
 
 export class Connection {
@@ -74,6 +77,23 @@ export class Connection {
   address: string;
   listen_port: number;
   source?: string;
+}
+
+export interface Output {
+  address: string;
+  coins: BigNumber;
+  hash: string;
+  calculated_hours: BigNumber;
+}
+
+export interface ConfirmationData {
+  text: string;
+  headerText: string;
+  checkboxText?: string;
+  confirmButtonText: string;
+  cancelButtonText?: string;
+  redTitle?: boolean;
+  disableDismiss?: boolean;
 }
 
 /**
@@ -96,7 +116,6 @@ export class PostWalletNewAddressResponse {
 export class GetWalletsResponseMeta {
   label: string;
   filename: string;
-  seed: string;
   encrypted: boolean;
 }
 

@@ -1,3 +1,6 @@
+/*
+cli is a command line client for interacting with a mdl node and offline wallet management
+*/
 package main
 
 import (
@@ -14,14 +17,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	app, err := cli.NewApp(cfg)
+	skyCLI, err := cli.NewCLI(cfg)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	if err := app.Run(os.Args); err != nil {
-		fmt.Println(err)
+	if err := skyCLI.Execute(); err != nil {
 		os.Exit(1)
 	}
 }

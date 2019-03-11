@@ -11,11 +11,12 @@ while $(lsof -Pi :$PORT -sTCP:LISTEN -t >/dev/null) ; do
     PORT=$((PORT+1))
 done
 
+COIN="${COIN:-mdl}"
 RPC_PORT="$PORT"
 HOST="http://127.0.0.1:$PORT"
 RPC_ADDR="http://127.0.0.1:$RPC_PORT"
 MODE="disable-gui"
-BINARY="mdl-integration"
+BINARY="${COIN}-integration-disable-gui.test"
 TEST=""
 RUN_TESTS=""
 # run go test with -v flag
@@ -40,9 +41,17 @@ while getopts "h?t:r:v" args; do
   esac
 done
 
+COVERAGEFILE="coverage/${BINARY}.coverage.out"
+if [ -f "${COVERAGEFILE}" ]; then
+    rm "${COVERAGEFILE}"
+fi
+
 set -euxo pipefail
 
-DATA_DIR=$(mktemp -d -t skycoin-data-dir.XXXXXX)
+CMDPKG=$(go list ./cmd/${COIN})
+COVERPKG=$(dirname $(dirname ${CMDPKG}))
+
+DATA_DIR=$(mktemp -d -t ${COIN}-data-dir.XXXXXX)
 WALLET_DIR="${DATA_DIR}/wallets"
 
 if [[ ! "$DATA_DIR" ]]; then
@@ -51,28 +60,33 @@ if [[ ! "$DATA_DIR" ]]; then
 fi
 
 # Compile the mdl node
-# We can't use "go run" because this creates two processes which doesn't allow us to kill it at the end
-echo "compiling mdl"
-go build -o "$BINARY" cmd/skycoin/skycoin.go
+# We can't use "go run" because that creates two processes which doesn't allow us to kill it at the end
+echo "compiling $COIN with coverage"
+go test -c -tags testrunmain -o "$BINARY" -coverpkg="${COVERPKG}/..." ./cmd/${COIN}/
+
+mkdir -p coverage/
 
 # Run mdl node with pinned blockchain database
-echo "starting mdl node in background with http listener on $HOST"
+echo "starting $COIN node in background with http listener on $HOST"
 
-./skycoin-integration -disable-networking=true \
-                      -web-interface-port=$PORT \
-                      -download-peerlist=false \
-                      -db-path=./src/api/integration/testdata/blockchain-180.db \
-                      -db-read-only=true \
-                      -rpc-interface=true \
-                      -launch-browser=false \
-                      -data-dir="$DATA_DIR" \
-                      -wallet-dir="$WALLET_DIR" \
-                      -enable-wallet-api=true \
-                      -enable-seed-api=true \
-                      -enable-gui=false&
-SKYCOIN_PID=$!
+./"$BINARY" -disable-networking=true \
+            -web-interface-port=$PORT \
+            -download-peerlist=false \
+            -db-path=./src/api/integration/testdata/blockchain-180.db \
+            -db-read-only=true \
+            -launch-browser=false \
+            -data-dir="$DATA_DIR" \
+            -wallet-dir="$WALLET_DIR" \
+            -enable-all-api-sets=true \
+            -enable-api-sets=DEPRECATED_WALLET_SPEND,INSECURE_WALLET_SEED \
+            -enable-gui=false \
+            -test.run "^TestRunMain$" \
+            -test.coverprofile="${COVERAGEFILE}" \
+            &
 
-echo "mdl node pid=$SKYCOIN_PID"
+MDL_PID=$!
+
+echo "$COIN node pid=$MDL_PID"
 
 echo "sleeping for startup"
 sleep 3
@@ -82,18 +96,18 @@ set +e
 
 if [[ -z $TEST || $TEST = "api" ]]; then
 
-SKYCOIN_INTEGRATION_TESTS=1 SKYCOIN_INTEGRATION_TEST_MODE=$MODE SKYCOIN_NODE_HOST=$HOST WALLET_DIR=$WALLET_DIR \
+MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST WALLET_DIR=$WALLET_DIR \
     go test ./src/api/integration/... -timeout=30s $VERBOSE $RUN_TESTS
 
 API_FAIL=$?
 
 fi
 
-echo "shutting down mdl node"
+echo "shutting down $COIN node"
 
 # Shutdown mdl node
-kill -s SIGINT $SKYCOIN_PID
-wait $SKYCOIN_PID
+kill -s SIGINT $MDL_PID
+wait $MDL_PID
 
 rm "$BINARY"
 

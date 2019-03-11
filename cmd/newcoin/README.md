@@ -8,7 +8,7 @@ This tool can be used to create a new fiber coin easily from a config file.
 ## Install
 
 ```bash
-$ cd $GOPATH/src/github.com/skycoin/skycoin/cmd/newcoin
+$ cd $GOPATH/src/github.com/MDLlife/MDL/cmd/newcoin
 $ go install ./...
 ```
 
@@ -45,7 +45,7 @@ $ newcoin createcoin [command options]
 
 ```
 OPTIONS:
-   --coin value                             name of the coin to create (default: "skycoin")
+   --coin value                             name of the coin to create (default: "mdl")
    --template-dir value, --td value         template directory path (default: "./template")
    --coin-template-file value, --ct value   coin template file (default: "coin.template")
    --visor-template-file value, --vt value  visor template file (default: "visor_parameters.template")

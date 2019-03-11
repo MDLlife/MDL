@@ -5,13 +5,13 @@ import (
 	"strings"
 
 	"github.com/MDLlife/MDL/src/cipher"
-	"github.com/MDLlife/MDL/src/daemon"
+	"github.com/MDLlife/MDL/src/readable"
 	"github.com/MDLlife/MDL/src/visor"
 )
 
 // OutputsResult the output json format
 type OutputsResult struct {
-	Outputs visor.ReadableOutputSet `json:"outputs"`
+	Outputs readable.UnspentOutputsSummary `json:"outputs"`
 }
 
 func getOutputsHandler(req Request, gateway Gatewayer) Response {
@@ -29,17 +29,26 @@ func getOutputsHandler(req Request, gateway Gatewayer) Response {
 	}
 
 	// validate those addresses
-	for _, a := range addrs {
-		if _, err := cipher.DecodeBase58Address(a); err != nil {
+	realAddrs := make([]cipher.Address, len(addrs))
+	for i, a := range addrs {
+		addr, err := cipher.DecodeBase58Address(a)
+		if err != nil {
 			return MakeErrorResponse(ErrCodeInvalidParams, fmt.Sprintf("invalid address: %v", a))
 		}
+		realAddrs[i] = addr
 	}
 
-	outs, err := gateway.GetUnspentOutputs(daemon.FbyAddresses(addrs))
+	summary, err := gateway.GetUnspentOutputsSummary([]visor.OutputsFilter{visor.FbyAddresses(realAddrs)})
 	if err != nil {
 		logger.Errorf("get unspent outputs failed: %v", err)
-		return MakeErrorResponse(ErrCodeInternalError, fmt.Sprintf("gateway.GetUnspentOutputs failed: %v", err))
+		return MakeErrorResponse(ErrCodeInternalError, fmt.Sprintf("gateway.GetUnspentOutputsSummary failed: %v", err))
 	}
 
-	return makeSuccessResponse(req.ID, OutputsResult{*outs})
+	rSummary, err := readable.NewUnspentOutputsSummary(summary)
+	if err != nil {
+		logger.Error(err.Error())
+		return MakeErrorResponse(ErrCodeInternalError, ErrMsgInternalError)
+	}
+
+	return makeSuccessResponse(req.ID, OutputsResult{*rSummary})
 }

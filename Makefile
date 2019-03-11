@@ -90,11 +90,11 @@ run:  ## Run the MDL node. To add arguments, do 'make ARGS="--foo" run'.
         -web-interface-port=${PORT} \
         -gui-dir="${DIR}/src/gui/static/" \
         -launch-browser=true \
-        -enable-wallet-api=true \
+        -enable-all-api-sets=true \
+        -enable-gui=true \
         -rpc-interface=true \
         -log-level=debug \
         -download-peerlist=false \
-        -enable-seed-api=true \
         -disable-csrf=false \
         $@
 
@@ -105,11 +105,11 @@ test: ## Run tests for MDL
 	go test ./cmd/... -timeout=5m
 	go test ./src/api/... -timeout=5m
 	go test ./src/cipher/... -timeout=5m
+	go test ./src/cli/... -timeout=5m
 	go test ./src/coin/... -timeout=5m
 	go test ./src/consensus/... -timeout=5m
 	go test ./src/daemon/... -timeout=5m
-	go test ./src/gui/... -timeout=5m
-	go test ./src/testutil/... -timeout=5m
+	go test ./src/mdl/... -timeout=5m
 	go test ./src/util/... -timeout=5m
 	go test ./src/visor/... -timeout=5m
 	go test ./src/wallet/... -timeout=5m
@@ -187,7 +187,7 @@ check: lint test integration-test-stable integration-test-stable-disable-csrf in
 
 ## BEGIN CI TESTS ##
 integration-test-stable: ## Run stable integration tests
-	./ci-scripts/integration-test-stable.sh
+	./ci-scripts/integration-test-stable.sh -u
 
 integration-test-live-wallet: ## Run live integration tests with wallet
 	./ci-scripts/integration-test-live.sh -w

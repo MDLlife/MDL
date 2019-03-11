@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/boltdb/bolt"
-	gcli "github.com/urfave/cli"
+	"github.com/spf13/cobra"
 
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/util/apputil"
@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	genesisPubkey = "0328c576d3f420e7682058a981173a4b374c7cc5ff55bf394d3cf57059bbe6456a"
+	genesisPubkey = "025d096499390a1924969f0991b1e0fd5f37c9ec54f7830f10fa8d911a51bb1e4b"
 )
 
 // wrapDB calls dbutil.WrapDB and disables all logging
@@ -29,23 +29,22 @@ func wrapDB(db *bolt.DB) *dbutil.DB {
 	return wdb
 }
 
-func checkdbCmd() gcli.Command {
-	name := "checkdb"
-	return gcli.Command{
-		Name:         name,
-		Usage:        "Verify the database",
-		ArgsUsage:    "[db path]",
-		Description:  "If no argument is specificed, the default data.db in $HOME/.$COIN/ will be checked.",
-		OnUsageError: onCommandUsageError(name),
-		Action:       checkdb,
+func checkdbCmd() *cobra.Command {
+	return &cobra.Command{
+		Short: "Verify the database",
+		Use:   "checkdb [db path]",
+		Long: `Checks if the given database file contains valid mdl blockchain data.
+    If no argument is specificed, the default data.db in $HOME/.$COIN/ will be checked.`,
+		Args:                  cobra.ExactArgs(1),
+		DisableFlagsInUseLine: true,
+		SilenceUsage:          true,
+		RunE:                  checkdb,
 	}
 }
 
-func checkdb(c *gcli.Context) error {
-	cfg := ConfigFromContext(c)
-
+func checkdb(c *cobra.Command, args []string) error {
 	// get db path
-	dbpath, err := resolveDBPath(cfg, c.Args().First())
+	dbpath, err := resolveDBPath(cliConfig, args[0])
 	if err != nil {
 		return err
 	}
@@ -68,12 +67,11 @@ func checkdb(c *gcli.Context) error {
 		return fmt.Errorf("decode blockchain pubkey failed: %v", err)
 	}
 
-	quit := QuitChanFromContext(c)
 	go func() {
-		apputil.CatchInterrupt(quit)
+		apputil.CatchInterrupt(quitChan)
 	}()
 
-	if err := visor.CheckDatabase(wrapDB(db), pubkey, quit); err != nil {
+	if err := visor.CheckDatabase(wrapDB(db), pubkey, quitChan); err != nil {
 		if err == visor.ErrVerifyStopped {
 			return nil
 		}

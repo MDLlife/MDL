@@ -1,16 +1,26 @@
+/*
+mdl daemon
+*/
 package main
 
+/*
+CODE GENERATED AUTOMATICALLY WITH FIBER COIN CREATOR
+AVOID EDITING THIS MANUALLY
+*/
+
 import (
+	"flag"
 	_ "net/http/pprof"
+	"os"
 
 	"github.com/MDLlife/MDL/src/mdl"
+	"github.com/MDLlife/MDL/src/readable"
 	"github.com/MDLlife/MDL/src/util/logging"
-	"github.com/MDLlife/MDL/src/visor"
 )
 
 var (
 	// Version of the node. Can be set by -ldflags
-	Version = "0.24.1"
+	Version = "0.25.1"
 	// Commit ID. Can be set by -ldflags
 	Commit = ""
 	// Branch name. Can be set by -ldflags
@@ -20,9 +30,10 @@ var (
 	// Can be set by -ldflags
 	ConfigMode = ""
 
-	help = false
-
 	logger = logging.MustGetLogger("main")
+
+	// CoinName name of coin
+	CoinName = "mdl"
 
 	// GenesisSignatureStr hex string of genesis signature
 	GenesisSignatureStr = "97f68c5564c8526a77a26c54e48c005c18ee76a92a7d0ee397a2e3bd25e5c74a1630952716f3281362f8b2baf22139282ab6b2f3d0e5ee825a69690e76d4401e00"
@@ -43,42 +54,61 @@ var (
 		"208.110.84.122:7800",
 		"69.90.132.231:7800",
 		"76.74.178.136:7800",
-		"64.34.218.31:7800"}
-)
+		"64.34.218.31:7800",
+	}
 
-func main() {
-	// get node config
-	nodeConfig := mdl.NewNodeConfig(ConfigMode, mdl.NodeParameters{
-		GenesisSignatureStr: GenesisSignatureStr,
-		GenesisAddressStr:   GenesisAddressStr,
-		GenesisCoinVolume:   GenesisCoinVolume,
-		GenesisTimestamp:    GenesisTimestamp,
-		BlockchainPubkeyStr: BlockchainPubkeyStr,
-		BlockchainSeckeyStr: BlockchainSeckeyStr,
-		DefaultConnections:  DefaultConnections,
-		PeerListURL:         "",
-		Port:                7800,
-		WebInterfacePort:    8320,
-		DataDirectory:       "$HOME/.mdl",
-		ProfileCPUFile:      "mdl.prof",
+	nodeConfig = mdl.NewNodeConfig(ConfigMode, mdl.NodeParameters{
+		CoinName:                       CoinName,
+		GenesisSignatureStr:            GenesisSignatureStr,
+		GenesisAddressStr:              GenesisAddressStr,
+		GenesisCoinVolume:              GenesisCoinVolume,
+		GenesisTimestamp:               GenesisTimestamp,
+		BlockchainPubkeyStr:            BlockchainPubkeyStr,
+		BlockchainSeckeyStr:            BlockchainSeckeyStr,
+		DefaultConnections:             DefaultConnections,
+		PeerListURL:                    "",
+		Port:                           7800,
+		WebInterfacePort:               8320,
+		DataDirectory:                  "$HOME/.mdl",
+		UnconfirmedBurnFactor:          2,
+		UnconfirmedMaxTransactionSize:  32768,
+		UnconfirmedMaxDropletPrecision: 3,
+		CreateBlockBurnFactor:          2,
+		CreateBlockMaxTransactionSize:  32768,
+		CreateBlockMaxDropletPrecision: 3,
+		MaxBlockSize:                   32768,
 	})
 
+	parseFlags = true
+)
+
+func init() {
+	nodeConfig.RegisterFlags()
+}
+
+func main() {
+	if parseFlags {
+		flag.Parse()
+	}
+
 	// create a new fiber coin instance
-	coin := mdl.NewCoin(
-		mdl.Config{
-			Node: *nodeConfig,
-			Build: visor.BuildInfo{
-				Version: Version,
-				Commit:  Commit,
-				Branch:  Branch,
-			},
+	coin := mdl.NewCoin(mdl.Config{
+		Node: nodeConfig,
+		Build: readable.BuildInfo{
+			Version: Version,
+			Commit:  Commit,
+			Branch:  Branch,
 		},
-		logger,
-	)
+	}, logger)
 
 	// parse config values
-	coin.ParseConfig()
+	if err := coin.ParseConfig(); err != nil {
+		logger.Error(err)
+		os.Exit(1)
+	}
 
 	// run fiber coin node
-	coin.Run()
+	if err := coin.Run(); err != nil {
+		os.Exit(1)
+	}
 }

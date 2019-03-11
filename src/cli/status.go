@@ -1,53 +1,52 @@
 package cli
 
 import (
-	gcli "github.com/urfave/cli"
+	cobra "github.com/spf13/cobra"
 
-	"github.com/MDLlife/MDL/src/api/webrpc"
+	"github.com/MDLlife/MDL/src/api"
 )
 
 // StatusResult is printed by cli status command
 type StatusResult struct {
-	webrpc.StatusResult
-	RPCAddress string `json:"webrpc_address"`
-	UseCSRF    bool   `json:"use_csrf"`
+	Status api.HealthResponse `json:"status"`
+	Config ConfigStatus       `json:"cli_config"`
 }
 
-func statusCmd() gcli.Command {
-	name := "status"
-	return gcli.Command{
-		Name:         name,
-		Usage:        "Check the status of current mdl node",
-		ArgsUsage:    " ",
-		OnUsageError: onCommandUsageError(name),
-		Action: func(c *gcli.Context) error {
-			rpcClient := RPCClientFromContext(c)
-			status, err := rpcClient.GetStatus()
+// ConfigStatus contains the configuration parameters loaded by the cli
+type ConfigStatus struct {
+	RPCAddress string `json:"webrpc_address"`
+}
+
+func statusCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:                   "status",
+		Short:                 "Check the status of current mdl node",
+		DisableFlagsInUseLine: true,
+		SilenceUsage:          true,
+		Args:                  cobra.NoArgs,
+		RunE: func(c *cobra.Command, args []string) error {
+			status, err := apiClient.Health()
 			if err != nil {
 				return err
 			}
 
-			cfg := ConfigFromContext(c)
-
 			return printJSON(StatusResult{
-				StatusResult: *status,
-				RPCAddress:   cfg.RPCAddress,
-				UseCSRF:      cfg.UseCSRF,
+				Status: *status,
+				Config: ConfigStatus{
+					RPCAddress: cliConfig.RPCAddress,
+				},
 			})
 		},
 	}
 }
 
-func showConfigCmd() gcli.Command {
-	name := "showConfig"
-	return gcli.Command{
-		Name:         name,
-		Usage:        "Show cli configuration",
-		ArgsUsage:    " ",
-		OnUsageError: onCommandUsageError(name),
-		Action: func(c *gcli.Context) error {
-			cfg := ConfigFromContext(c)
-			return printJSON(cfg)
+func showConfigCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:                   "showConfig",
+		Short:                 "Show cli configuration",
+		DisableFlagsInUseLine: true,
+		RunE: func(c *cobra.Command, args []string) error {
+			return printJSON(cliConfig)
 		},
 	}
 }

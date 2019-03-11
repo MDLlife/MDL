@@ -5,8 +5,8 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = libskycoin
-PROJECT_NUMBER         = 0.24.1-develop
-PROJECT_BRIEF          = "Skycoin C client library"
+PROJECT_NUMBER         = 0.25.0-develop
+PROJECT_BRIEF          = "MDL C client library"
 PROJECT_LOGO           = ./docs/assets/sky.libc.jpg
 OUTPUT_DIRECTORY       = ./docs/libc
 CREATE_SUBDIRS         = NO
@@ -212,10 +212,10 @@ HTML_DYNAMIC_MENUS     = YES
 HTML_DYNAMIC_SECTIONS  = NO
 HTML_INDEX_NUM_ENTRIES = 100
 GENERATE_DOCSET        = NO
-DOCSET_FEEDNAME        = "Skycoin C library docs"
+DOCSET_FEEDNAME        = "MDL C library docs"
 DOCSET_BUNDLE_ID       = net.skycoin.skycoin
 DOCSET_PUBLISHER_ID    = net.skycoin
-DOCSET_PUBLISHER_NAME  = Skycoin
+DOCSET_PUBLISHER_NAME  = MDL
 GENERATE_HTMLHELP      = NO
 CHM_FILE               =
 HHC_LOCATION           =

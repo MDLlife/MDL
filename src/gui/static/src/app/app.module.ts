@@ -7,7 +7,7 @@ import { WalletService } from './services/wallet.service';
 import { WalletsComponent } from './components/pages/wallets/wallets.component';
 import { CreateWalletComponent } from './components/pages/wallets/create-wallet/create-wallet.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SendSkycoinComponent } from './components/pages/send-skycoin/send-skycoin.component';
+import { SendMDLComponent } from './components/pages/send-mdl/send-mdl.component';
 import { DateFromNowPipe } from './pipes/date-from-now.pipe';
 import { RouterModule } from '@angular/router';
 import { BlockchainService } from './services/blockchain.service';
@@ -51,7 +51,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatSliderModule } from '@angular/material';
+import { MatSliderModule, MatAutocompleteModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { AppService } from './services/app.service';
@@ -63,14 +63,33 @@ import { DoubleButtonComponent } from './components/layout/double-button/double-
 import { SeedModalComponent } from './components/pages/settings/backup/seed-modal/seed-modal.component';
 import { OnboardingComponent } from './components/pages/onboarding/onboarding.component';
 import { DontsavepasswordDirective } from './directives/dontsavepassword.directive';
-import { SendFormComponent } from './components/pages/send-skycoin/send-form/send-form.component';
-import { SendVerifyComponent } from './components/pages/send-skycoin/send-preview/send-preview.component';
-import { TransactionInfoComponent } from './components/pages/send-skycoin/send-preview/transaction-info/transaction-info.component';
-import { SendFormAdvancedComponent } from './components/pages/send-skycoin/send-form-advanced/send-form-advanced.component';
+import { SendFormComponent } from './components/pages/send-mdl/send-form/send-form.component';
+import { SendVerifyComponent } from './components/pages/send-mdl/send-preview/send-preview.component';
+import { TransactionInfoComponent } from './components/pages/send-mdl/send-preview/transaction-info/transaction-info.component';
+import { SendFormAdvancedComponent } from './components/pages/send-mdl/send-form-advanced/send-form-advanced.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { AppTranslateLoader } from './app.translate-loader';
 import { NavBarService } from './services/nav-bar.service';
 import { LoadingContentComponent } from './components/layout/loading-content/loading-content.component';
+import { NumberOfAddressesComponent } from './components/pages/wallets/number-of-addresses/number-of-addresses';
+import { SelectAddressComponent } from './components/pages/send-mdl/send-form-advanced/select-address/select-address';
+import { CreateWalletFormComponent } from './components/pages/wallets/create-wallet/create-wallet-form/create-wallet-form.component';
+import { ResetPasswordComponent } from './components/pages/reset-password/reset-password.component';
+import { HwWalletService } from './services/hw-wallet.service';
+import { HwOptionsDialogComponent } from './components/layout/hardware-wallet/hw-options-dialog/hw-options-dialog.component';
+import { HwWipeDialogComponent } from './components/layout/hardware-wallet/hw-wipe-dialog/hw-wipe-dialog.component';
+import { HwAddedDialogComponent } from './components/layout/hardware-wallet/hw-added-dialog/hw-added-dialog.component';
+import { HwGenerateSeedDialogComponent } from './components/layout/hardware-wallet/hw-generate-seed-dialog/hw-generate-seed-dialog.component';
+import { HwBackupDialogComponent } from './components/layout/hardware-wallet/hw-backup-dialog/hw-backup-dialog.component';
+import { ConfirmationComponent } from './components/layout/confirmation/confirmation.component';
+import { HwMessageComponent } from './components/layout/hardware-wallet/hw-message/hw-message.component';
+import { HwPinDialogComponent } from './components/layout/hardware-wallet/hw-pin-dialog/hw-pin-dialog.component';
+import { HwChangePinDialogComponent } from './components/layout/hardware-wallet/hw-change-pin-dialog/hw-change-pin-dialog.component';
+import { HwPinHelpDialogComponent } from './components/layout/hardware-wallet/hw-pin-help-dialog/hw-pin-help-dialog.component';
+import { HwRestoreSeedDialogComponent } from './components/layout/hardware-wallet/hw-restore-seed-dialog/hw-restore-seed-dialog.component';
+import { HwSeedWordDialogComponent } from './components/layout/hardware-wallet/hw-seed-word-dialog/hw-seed-word-dialog.component';
+import { Bip39WordListService } from './services/bip39-word-list.service';
+import { HwDialogBaseComponent } from './components/layout/hardware-wallet/hw-dialog-base.component';
 
 
 const ROUTES = [
@@ -86,7 +105,7 @@ const ROUTES = [
   },
   {
     path: 'send',
-    component: SendSkycoinComponent,
+    component: SendMDLComponent,
     canActivate: [WizardGuardService],
   },
   {
@@ -129,6 +148,10 @@ const ROUTES = [
     path: 'wizard',
     component: OnboardingComponent,
   },
+  {
+    path: 'reset/:id',
+    component: ResetPasswordComponent,
+  },
 ];
 
 @NgModule({
@@ -148,7 +171,7 @@ const ROUTES = [
     OutputsComponent,
     PendingTransactionsComponent,
     QrCodeComponent,
-    SendSkycoinComponent,
+    SendMDLComponent,
     TellerStatusPipe,
     TopBarComponent,
     TransactionDetailComponent,
@@ -170,17 +193,47 @@ const ROUTES = [
     TransactionInfoComponent,
     SendFormAdvancedComponent,
     LoadingContentComponent,
+    NumberOfAddressesComponent,
+    SelectAddressComponent,
+    CreateWalletFormComponent,
+    ResetPasswordComponent,
+    HwOptionsDialogComponent,
+    HwWipeDialogComponent,
+    HwAddedDialogComponent,
+    HwGenerateSeedDialogComponent,
+    HwBackupDialogComponent,
+    ConfirmationComponent,
+    HwMessageComponent,
+    HwPinDialogComponent,
+    HwChangePinDialogComponent,
+    HwPinHelpDialogComponent,
+    HwRestoreSeedDialogComponent,
+    HwSeedWordDialogComponent,
+    HwDialogBaseComponent,
   ],
   entryComponents: [
     AddDepositAddressComponent,
     CreateWalletComponent,
     ChangeNameComponent,
     QrCodeComponent,
-    SendSkycoinComponent,
+    SendMDLComponent,
     TransactionDetailComponent,
     OnboardingSafeguardComponent,
     PasswordDialogComponent,
     SeedModalComponent,
+    NumberOfAddressesComponent,
+    SelectAddressComponent,
+    HwOptionsDialogComponent,
+    HwWipeDialogComponent,
+    HwAddedDialogComponent,
+    HwGenerateSeedDialogComponent,
+    HwBackupDialogComponent,
+    ConfirmationComponent,
+    HwPinDialogComponent,
+    HwChangePinDialogComponent,
+    HwPinHelpDialogComponent,
+    HwRestoreSeedDialogComponent,
+    HwSeedWordDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -204,6 +257,7 @@ const ROUTES = [
     MatTooltipModule,
     MatCheckboxModule,
     MatSliderModule,
+    MatAutocompleteModule,
     NoopAnimationsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(ROUTES, { useHash: true }),
@@ -224,6 +278,8 @@ const ROUTES = [
     PurchaseService,
     WalletService,
     WizardGuardService,
+    HwWalletService,
+    Bip39WordListService,
   ],
   bootstrap: [AppComponent],
 })

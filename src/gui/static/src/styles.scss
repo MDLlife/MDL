@@ -1,55 +1,57 @@
 @import 'theme/variables';
 @import 'theme/tables';
+@import 'theme/_modals';
 @import '~bootstrap/scss/bootstrap-grid.scss';
+@import '~bootstrap/scss/utilities/_display.scss';
 
 /* You can add global styles to this file, and also import other style files */
 //@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import 'app/app.theme.scss';
 
 @font-face {
-  font-family: 'Skycoin';
+  font-family: 'MDL';
   font-style: normal;
   font-weight: 300;
-  src: url('assets/fonts/skycoin/Skycoin-Light.woff2') format('woff2'),
-  url('assets/fonts/skycoin/Skycoin-Light.woff') format('woff');
+  src: url('assets/fonts/mdl/MDL-Light.woff2') format('woff2'),
+  url('assets/fonts/mdl/MDL-Light.woff') format('woff');
 }
 @font-face {
-  font-family: 'Skycoin';
+  font-family: 'MDL';
   font-style: italic;
   font-weight: 300;
-  src: url('assets/fonts/skycoin/Skycoin-LightItalic.woff2') format('woff2'),
-  url('assets/fonts/skycoin/Skycoin-LightItalic.woff') format('woff');
+  src: url('assets/fonts/mdl/MDL-LightItalic.woff2') format('woff2'),
+  url('assets/fonts/mdl/MDL-LightItalic.woff') format('woff');
 }
 @font-face {
-  font-family: 'Skycoin';
+  font-family: 'MDL';
   font-style: normal;
   font-weight: 400;
-  src: url('assets/fonts/skycoin/Skycoin-Regular.woff2') format('woff2'),
-  url('assets/fonts/skycoin/Skycoin-Regular.woff') format('woff');
+  src: url('assets/fonts/mdl/MDL-Regular.woff2') format('woff2'),
+  url('assets/fonts/mdl/MDL-Regular.woff') format('woff');
 }
 @font-face {
-  font-family: 'Skycoin';
+  font-family: 'MDL';
   font-style: italic;
   font-weight: 400;
-  src: url('assets/fonts/skycoin/Skycoin-RegularItalic.woff2') format('woff2'),
-  url('assets/fonts/skycoin/Skycoin-RegularItalic.woff') format('woff');
+  src: url('assets/fonts/mdl/MDL-RegularItalic.woff2') format('woff2'),
+  url('assets/fonts/mdl/MDL-RegularItalic.woff') format('woff');
 }
 @font-face {
-  font-family: 'Skycoin';
+  font-family: 'MDL';
   font-style: normal;
   font-weight: 700;
-  src: url('assets/fonts/skycoin/Skycoin-Bold.woff2') format('woff2'),
-  url('assets/fonts/skycoin/Skycoin-Bold.woff') format('woff');
+  src: url('assets/fonts/mdl/MDL-Bold.woff2') format('woff2'),
+  url('assets/fonts/mdl/MDL-Bold.woff') format('woff');
 }
 @font-face {
-  font-family: 'Skycoin';
+  font-family: 'MDL';
   font-style: italic;
   font-weight: 700;
-  src: url('assets/fonts/skycoin/Skycoin-BoldItalic.woff2') format('woff2'),
-  url('assets/fonts/skycoin/Skycoin-BoldItalic.woff') format('woff');
+  src: url('assets/fonts/mdl/MDL-BoldItalic.woff2') format('woff2'),
+  url('assets/fonts/mdl/MDL-BoldItalic.woff') format('woff');
 }
 
-$mat-font-family: Skycoin, sans-serif;
+$mat-font-family: MDL, sans-serif;
 $white: #FBFBFB;
 
 $primary-color: #0072ff;
@@ -115,6 +117,21 @@ button.active {
 mat-spinner.in-button .mat-spinner path {
   stroke: #000;
   opacity: 0.3;
+}
+
+mat-spinner.in-button {
+  display: inline-block;
+  margin-left: 10px;
+  
+  &.small {
+    height: 18px !important;
+    width: 18px !important;
+  
+    svg {
+      height: 18px !important;
+      width: 18px !important;
+    }
+  }
 }
 
 snack-bar-container {
@@ -243,6 +260,42 @@ mat-spinner.in-button svg {
 }
 
 /**
+Alerts
+ */
+
+.alert-box {
+  color: $red;
+  font-size: 12px;
+  padding: 0 10px;
+  line-height: 1.5;
+  background-color: #ffdede;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+
+  .title {
+    font-size: 20px;
+  }
+
+  mat-icon {
+    margin-right: 10px;
+    animation: alert-blinking 1s linear infinite;
+  }
+
+  mat-checkbox {
+    margin-top: 10px;
+    display: inline-block;
+  }
+}
+
+@keyframes alert-blinking {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+/**
 On-boarding components
  */
 
@@ -255,6 +308,12 @@ On-boarding components
   background: -o-linear-gradient(bottom right, $gradient-blue-dark, $gradient-blue-light); /* For Opera 11.1 to 12.0 */
   background: -moz-linear-gradient(bottom right, $gradient-blue-dark, $gradient-blue-light); /* For Firefox 3.6 to 15 */
   background: linear-gradient(to bottom right, $gradient-blue-dark, $gradient-blue-light); /* Standard syntax */
+
+  .row-container {
+    max-width: 450px;
+    width: 80%;
+    margin: 0px auto;
+  }
 
   label {
     color: white;
@@ -332,7 +391,7 @@ On-boarding components
   background-color: #fefefe;
 
   .mat-menu-item {
-    font-family: Skycoin;
+    font-family: MDL;
     line-height: 50px;
   }
 
@@ -352,4 +411,18 @@ On-boarding components
   &:hover {
     opacity: 1;
   }
+}
+
+.mat-dialog-content {
+  max-height: 90vh !important;
+}
+
+@media (max-height: 600px) {
+  .mat-dialog-content {
+    max-height: 80vh !important;
+  }
+}
+
+.mouse-disabled {
+  pointer-events: none;
 }

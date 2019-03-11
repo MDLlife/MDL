@@ -3,25 +3,20 @@ package cli
 import (
 	"fmt"
 
-	gcli "github.com/urfave/cli"
+	gcli "github.com/spf13/cobra"
 )
 
-func broadcastTxCmd() gcli.Command {
-	name := "broadcastTransaction"
-	return gcli.Command{
-		Name:         name,
-		Usage:        "Broadcast a raw transaction to the network",
-		ArgsUsage:    "[raw transaction]",
-		OnUsageError: onCommandUsageError(name),
-		Action: func(c *gcli.Context) error {
-			rawtx := c.Args().First()
-			if rawtx == "" {
-				gcli.ShowSubcommandHelp(c)
-				return nil
-			}
+func broadcastTxCmd() *gcli.Command {
+	return &gcli.Command{
+		Short:                 "Broadcast a raw transaction to the network",
+		Use:                   "broadcastTransaction [raw transaction]",
+		Args:                  gcli.ExactArgs(1),
+		DisableFlagsInUseLine: true,
+		SilenceUsage:          true,
+		RunE: func(c *gcli.Command, args []string) error {
+			rawtx := args[0]
 
-			rpcClient := RPCClientFromContext(c)
-			txid, err := rpcClient.InjectTransactionString(rawtx)
+			txid, err := apiClient.InjectEncodedTransaction(rawtx)
 			if err != nil {
 				return err
 			}
@@ -30,5 +25,5 @@ func broadcastTxCmd() gcli.Command {
 			return nil
 		},
 	}
-	// Commands = append(Commands, cmd)
+
 }

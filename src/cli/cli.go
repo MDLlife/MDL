@@ -1,7 +1,8 @@
 /*
-Package cli implements an interface for creating a CLI application.
+Package cli implements the CLI cmd's methods.
+
 Includes methods for manipulating wallets files and interacting with the
-webrpc API to query a mdl node's status.
+REST API to query a mdl node's status.
 */
 package cli
 
@@ -11,22 +12,24 @@ import (
 	"fmt"
 	"net/url"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"syscall"
 
 	"os"
 
-	gcli "github.com/urfave/cli"
+	"github.com/spf13/cobra"
 	"golang.org/x/crypto/ssh/terminal"
 
-	"github.com/MDLlife/MDL/src/api/webrpc"
+	"github.com/MDLlife/MDL/src/api"
 	"github.com/MDLlife/MDL/src/util/file"
 )
 
-const (
+var (
 	// Version is the CLI Version
-	Version           = "0.24.1"
+	Version = "0.25.1"
+)
+
+const (
 	walletExt         = ".wlt"
 	defaultCoin       = "mdl"
 	defaultWalletName = "$COIN_cli" + walletExt
@@ -38,53 +41,37 @@ const (
 var (
 	envVarsHelp = fmt.Sprintf(`ENVIRONMENT VARIABLES:
     RPC_ADDR: Address of RPC node. Must be in scheme://host format. Default "%s"
+    RPC_USER: Username for RPC API, if enabled in the RPC.
+    RPC_PASS: Password for RPC API, if enabled in the RPC.
     COIN: Name of the coin. Default "%s"
-    USE_CSRF: Set to 1 or true if the remote node has CSRF enabled. Default false (unset)
-    WALLET_DIR: Directory where wallets are stored. This value is overriden by any subcommand flag specifying a wallet filename, if that filename includes a path. Default "%s"
-    WALLET_NAME: Name of wallet file (without path). This value is overriden by any subcommand flag specifying a wallet filename. Default "%s"
+    WALLET_DIR: Directory where wallets are stored. This value is overridden by any subcommand flag specifying a wallet filename, if that filename includes a path. Default "%s"
+    WALLET_NAME: Name of wallet file (without path). This value is overridden by any subcommand flag specifying a wallet filename. Default "%s"
     DATA_DIR: Directory where everything is stored. Default "%s"`, defaultRPCAddress, defaultCoin, defaultWalletDir, defaultWalletName, defaultDataDir)
 
-	commandHelpTemplate = fmt.Sprintf(`USAGE:
-        {{.HelpName}}{{if .VisibleFlags}} [command options]{{end}} {{if .ArgsUsage}}{{.ArgsUsage}}{{else}}[arguments...]{{end}}{{if .Category}}
-
-CATEGORY:
-        {{.Category}}{{end}}{{if .Description}}
+	helpTemplate = fmt.Sprintf(`USAGE:{{if .Runnable}}
+  {{.UseLine}}{{end}}{{if .HasAvailableSubCommands}}
+  {{.CommandPath}} [command] [flags] [arguments...]{{end}}{{with (or .Long .Short)}}
 
 DESCRIPTION:
-        {{.Description}}{{end}}{{if .VisibleFlags}}
+    {{. | trimTrailingWhitespaces}}{{end}}{{if .HasExample}}
 
-OPTIONS:
-        {{range .VisibleFlags}}{{.}}
-        {{end}}{{end}}
-%s
-`, envVarsHelp)
+EXAMPLES:
+{{.Example}}{{end}}{{if .HasAvailableSubCommands}}
 
-	appHelpTemplate = fmt.Sprintf(`NAME:
-   {{.Name}}{{if .Usage}} - {{.Usage}}{{end}}
+COMMANDS:{{range .Commands}}{{if (or .IsAvailableCommand (eq .Name "help"))}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{end}}{{if .HasAvailableLocalFlags}}
 
-USAGE:
-   {{if .UsageText}}{{.UsageText}}{{else}}{{.HelpName}} {{if .VisibleFlags}}[global options]{{end}}{{if .Commands}} command [command options]{{end}} {{if .ArgsUsage}}{{.ArgsUsage}}{{else}}[arguments...]{{end}}{{end}}{{if .Version}}{{if not .HideVersion}}
+FLAGS:
+{{.LocalFlags.FlagUsages | trimTrailingWhitespaces}}{{end}}{{if .HasAvailableInheritedFlags}}
 
-VERSION:
-   {{.Version}}{{end}}{{end}}{{if .Description}}
+GLOBAL FLAGS:
+{{.InheritedFlags.FlagUsages | trimTrailingWhitespaces}}{{end}}{{if .HasHelpSubCommands}}
 
-DESCRIPTION:
-   {{.Description}}{{end}}{{if len .Authors}}
+Additional help topics:{{range .Commands}}{{if .IsAdditionalHelpTopicCommand}}
+  {{rpad .CommandPath .CommandPathPadding}} {{.Short}}{{end}}{{end}}{{end}}{{if .HasAvailableSubCommands}}
 
-AUTHOR{{with $length := len .Authors}}{{if ne 1 $length}}S{{end}}{{end}}:
-   {{range $index, $author := .Authors}}{{if $index}}
-   {{end}}{{$author}}{{end}}{{end}}{{if .VisibleCommands}}
+Use "{{.CommandPath}} [command] --help" for more information about a command.{{end}}
 
-COMMANDS:{{range .VisibleCategories}}{{if .Name}}
-   {{.Name}}:{{end}}{{range .VisibleCommands}}
-     {{join .Names ", "}}{{"\t"}}{{.Usage}}{{end}}{{end}}{{end}}{{if .VisibleFlags}}
-
-GLOBAL OPTIONS:
-   {{range $index, $option := .VisibleFlags}}{{if $index}}
-   {{end}}{{$option}}{{end}}{{end}}{{if .Copyright}}
-
-COPYRIGHT:
-   {{.Copyright}}{{end}}
 %s
 `, envVarsHelp)
 
@@ -96,20 +83,21 @@ COPYRIGHT:
 	ErrJSONMarshal = errors.New("json marshal failed")
 )
 
-// App Wraps the app so that main package won't use the raw App directly,
-// which will cause import issue
-type App struct {
-	gcli.App
-}
+var (
+	cliConfig Config
+	apiClient *api.Client
+	quitChan  = make(chan struct{})
+)
 
 // Config cli's configuration struct
 type Config struct {
-	WalletDir  string `json:"wallet_directory"`
-	WalletName string `json:"wallet_name"`
-	DataDir    string `json:"data_directory"`
-	Coin       string `json:"coin"`
-	RPCAddress string `json:"rpc_address"`
-	UseCSRF    bool   `json:"use_csrf"`
+	WalletDir   string `json:"wallet_directory"`
+	WalletName  string `json:"wallet_name"`
+	DataDir     string `json:"data_directory"`
+	Coin        string `json:"coin"`
+	RPCAddress  string `json:"rpc_address"`
+	RPCUsername string `json:"-"`
+	RPCPassword string `json:"-"`
 }
 
 // LoadConfig loads config from environment, prior to parsing CLI flags
@@ -129,6 +117,9 @@ func LoadConfig() (Config, error) {
 	if _, err := url.Parse(rpcAddr); err != nil {
 		return Config{}, errors.New("RPC_ADDR must be in scheme://host format")
 	}
+
+	rpcUser := os.Getenv("RPC_USER")
+	rpcPass := os.Getenv("RPC_PASS")
 
 	home := file.UserHome()
 
@@ -153,23 +144,15 @@ func LoadConfig() (Config, error) {
 	if !strings.HasSuffix(wltName, walletExt) {
 		return Config{}, ErrWalletName
 	}
-	var useCSRF bool
-	useCSRFStr := os.Getenv("USE_CSRF")
-	if useCSRFStr != "" {
-		var err error
-		useCSRF, err = strconv.ParseBool(useCSRFStr)
-		if err != nil {
-			return Config{}, errors.New("Invalid USE_CSRF value, must be interpretable as a boolean e.g. 0, 1, true, false")
-		}
-	}
 
 	return Config{
-		WalletDir:  wltDir,
-		WalletName: wltName,
-		DataDir:    dataDir,
-		Coin:       coin,
-		RPCAddress: rpcAddr,
-		UseCSRF:    useCSRF,
+		WalletDir:   wltDir,
+		WalletName:  wltName,
+		DataDir:     dataDir,
+		Coin:        coin,
+		RPCAddress:  rpcAddr,
+		RPCUsername: rpcUser,
+		RPCPassword: rpcPass,
 	}, nil
 }
 
@@ -224,108 +207,63 @@ func resolveDBPath(cfg Config, db string) (string, error) {
 	return absDB, nil
 }
 
-// NewApp creates an app instance
-func NewApp(cfg Config) (*App, error) {
-	gcli.AppHelpTemplate = appHelpTemplate
-	gcli.SubcommandHelpTemplate = commandHelpTemplate
-	gcli.CommandHelpTemplate = commandHelpTemplate
+// NewCLI creates a cli instance
+func NewCLI(cfg Config) (*cobra.Command, error) {
+	apiClient = api.NewClient(cfg.RPCAddress)
+	apiClient.SetAuth(cfg.RPCUsername, cfg.RPCPassword)
 
-	gcliApp := gcli.NewApp()
-	app := &App{
-		App: *gcliApp,
+	cliConfig = cfg
+
+	skyCLI := &cobra.Command{
+		Short: fmt.Sprintf("The %s command line interface", cfg.Coin),
+		Use:   fmt.Sprintf("%s-cli", cfg.Coin),
 	}
 
-	commands := []gcli.Command{
-		addPrivateKeyCmd(cfg),
+	commands := []*cobra.Command{
+		addPrivateKeyCmd(),
 		addressBalanceCmd(),
 		addressGenCmd(),
+		fiberAddressGenCmd(),
 		addressOutputsCmd(),
 		blocksCmd(),
 		broadcastTxCmd(),
 		checkdbCmd(),
-		createRawTxCmd(cfg),
+		createRawTxCmd(),
 		decodeRawTxCmd(),
-		generateAddrsCmd(cfg),
-		generateWalletCmd(cfg),
+		decryptWalletCmd(),
+		encryptWalletCmd(),
 		lastBlocksCmd(),
 		listAddressesCmd(),
 		listWalletsCmd(),
 		sendCmd(),
 		showConfigCmd(),
+		showSeedCmd(),
 		statusCmd(),
 		transactionCmd(),
 		verifyAddressCmd(),
 		versionCmd(),
-		walletBalanceCmd(cfg),
+		walletCreateCmd(),
+		walletAddAddressesCmd(),
+		walletBalanceCmd(),
 		walletDirCmd(),
 		walletHisCmd(),
-		walletOutputsCmd(cfg),
-		encryptWalletCmd(cfg),
-		decryptWalletCmd(cfg),
-		showSeedCmd(cfg),
+		walletOutputsCmd(),
+		richlistCmd(),
+		addressTransactionsCmd(),
 	}
 
-	app.Name = fmt.Sprintf("%s-cli", cfg.Coin)
-	app.Version = Version
-	app.Usage = fmt.Sprintf("the %s command line interface", cfg.Coin)
-	app.Commands = commands
-	app.EnableBashCompletion = true
-	app.OnUsageError = func(context *gcli.Context, err error, isSubcommand bool) error {
-		fmt.Fprintf(context.App.Writer, "Error: %v\n\n", err)
-		gcli.ShowAppHelp(context)
-		return nil
-	}
-	app.CommandNotFound = func(ctx *gcli.Context, command string) {
-		tmp := fmt.Sprintf("{{.HelpName}}: '%s' is not a {{.HelpName}} command. See '{{.HelpName}} --help'.\n", command)
-		gcli.HelpPrinter(app.Writer, tmp, app)
-		gcli.OsExiter(1)
-	}
+	skyCLI.Version = Version
+	skyCLI.SuggestionsMinimumDistance = 1
+	skyCLI.AddCommand(commands...)
 
-	rpcClient, err := webrpc.NewClient(cfg.RPCAddress)
-	if err != nil {
-		return nil, err
-	}
-	rpcClient.UseCSRF = cfg.UseCSRF
+	skyCLI.SetHelpTemplate(helpTemplate)
+	skyCLI.SetUsageTemplate(helpTemplate)
 
-	app.Metadata = map[string]interface{}{
-		"config":   cfg,
-		"rpc":      rpcClient,
-		"quitChan": make(chan struct{}),
-	}
-
-	return app, nil
+	return skyCLI, nil
 }
 
-// Run starts the app
-func (app *App) Run(args []string) error {
-	return app.App.Run(args)
-}
-
-// RPCClientFromContext returns a webrpc.Client from a urfave/cli Context
-func RPCClientFromContext(c *gcli.Context) *webrpc.Client {
-	return c.App.Metadata["rpc"].(*webrpc.Client)
-}
-
-// ConfigFromContext returns a Config from a urfave/cli Context
-func ConfigFromContext(c *gcli.Context) Config {
-	return c.App.Metadata["config"].(Config)
-}
-
-// QuitChanFromContext returns a chan struct{} from a urfave/cli Context
-func QuitChanFromContext(c *gcli.Context) chan struct{} {
-	return c.App.Metadata["quitChan"].(chan struct{})
-}
-
-func onCommandUsageError(command string) gcli.OnUsageErrorFunc {
-	return func(c *gcli.Context, err error, isSubcommand bool) error {
-		fmt.Fprintf(c.App.Writer, "Error: %v\n\n", err)
-		gcli.ShowCommandHelp(c, command)
-		return nil
-	}
-}
-
-func errorWithHelp(c *gcli.Context, err error) {
-	fmt.Fprintf(c.App.Writer, "Error: %v. See '%s %s --help'\n\n", err, c.App.HelpName, c.Command.Name)
+func printHelp(c *cobra.Command) {
+	c.Printf("See '%s %s --help'\n", c.Parent().Name(), c.Name())
 }
 
 func formatJSON(obj interface{}) ([]byte, error) {
@@ -351,7 +289,7 @@ func printJSON(obj interface{}) error {
 func readPasswordFromTerminal() ([]byte, error) {
 	// Promotes to enter the wallet password
 	fmt.Fprint(os.Stdout, "enter password:")
-	bp, err := terminal.ReadPassword(int(syscall.Stdin))
+	bp, err := terminal.ReadPassword(int(syscall.Stdin)) // nolint: unconvert
 	if err != nil {
 		return nil, err
 	}
@@ -366,9 +304,17 @@ type WalletLoadError struct {
 	error
 }
 
+func (e WalletLoadError) Error() string {
+	return fmt.Sprintf("Load wallet failed: %v", e.error)
+}
+
 // WalletSaveError is returned if a wallet could not be saved
 type WalletSaveError struct {
 	error
+}
+
+func (e WalletSaveError) Error() string {
+	return fmt.Sprintf("Save wallet failed: %v", e.error)
 }
 
 // PasswordReader is an interface for getting password

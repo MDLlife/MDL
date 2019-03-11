@@ -1,14 +1,14 @@
 'use strict'
 
-const { app, Menu, BrowserWindow, dialog, shell, session } = require('electron');
+const { app, Menu, BrowserWindow, shell, session } = require('electron');
 
 const path = require('path');
 
 const childProcess = require('child_process');
 
-const cwd = require('process').cwd();
-
 const axios = require('axios');
+
+const hwCode = require('./hardware-wallet');
 
 // This adds refresh and devtools console keybindings
 // Page can refresh with cmd+r, ctrl+r, F5
@@ -19,13 +19,21 @@ require('electron-context-menu')({});
 
 global.eval = function() { throw new Error('bad!!'); }
 
-const defaultURL = 'http://127.0.0.1:8320/';
 let currentURL;
+let showErrorCalled = false;
+let splashLoaded = false
+
+// Detect if the code is running with the "dev" arg. The "dev" arg is added when running npm
+// start. If this is true, a local node will not be started, but one is expected to be running,
+// the contents served in http://localhost:4200 will be displayed and it will be allowed to
+// reload the URLs using the Electron window, so that it is easier to test the changes made to
+// the UI using npm start.
+let dev = process.argv.find(arg => arg === 'dev') ? true : false;
 
 // Force everything localhost, in case of a leak
-// app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1, EXCLUDE api.coinmarketcap.com, api.github.com, ito.mdl.wtf, explorer.mdl.wtf');
-// app.commandLine.appendSwitch('ssl-version-fallback-min', 'tls1.2');
-// app.commandLine.appendSwitch('--no-proxy-server');
+app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1, EXCLUDE api.coinmarketcap.com');
+app.commandLine.appendSwitch('ssl-version-fallback-min', 'tls1.2');
+app.commandLine.appendSwitch('--no-proxy-server');
 app.setAsDefaultProtocolClient('mdl');
 
 
@@ -37,93 +45,123 @@ let win;
 var mdl = null;
 
 function startMDL() {
-  console.log('Starting mdl from electron');
+  if (!dev) {
+    console.log('Starting mdl from electron');
 
-  if (mdl) {
-    console.log('mdl already running');
-    app.emit('mdl-ready');
-    return
-  }
-
-  var reset = () => {
-    mdl = null;
-  }
-
-  // Resolve mdl binary location
-  var appPath = app.getPath('exe');
-  var exe = (() => {
-    switch (process.platform) {
-      case 'darwin':
-        return path.join(appPath, '../../Resources/app/mdl');
-      case 'win32':
-        // Use only the relative path on windows due to short path length
-        // limits
-        return './resources/app/mdl.exe';
-      case 'linux':
-        return path.join(path.dirname(appPath), './resources/app/mdl');
-      default:
-        return './resources/app/mdl';
-    }
-  })()
-
-  var args = [
-    '-launch-browser=false',
-    '-gui-dir=' + path.dirname(exe),
-    '-color-log=false', // must be disabled for web interface detection
-    '-logtofile=true',
-    '-download-peerlist=true',
-    '-enable-seed-api=true',
-    '-enable-wallet-api=true',
-    '-rpc-interface=false',
-    '-disable-csrf=false',
-    '-reset-corrupt-db=true',
-    '-enable-gui=true',
-    '-web-interface-port=0' // random port assignment
-    // will break
-    // broken (automatically generated certs do not work):
-    // '-web-interface-https=true',
-  ]
-  mdl = childProcess.spawn(exe, args);
-
-  createWindow();
-
-  mdl.on('error', (e) => {
-    dialog.showErrorBox('Failed to start mdl', e.toString());
-    app.quit();
-  });
-
-  mdl.stdout.on('data', (data) => {
-    console.log(data.toString());
-    // Scan for the web URL string
-    if (currentURL) {
+    if (mdl) {
+      console.log('MDL already running');
+      app.emit('mdl-ready');
       return
     }
 
-    const marker = 'Starting web interface on ';
+    var reset = () => {
+      mdl = null;
+    }
 
-    data.toString().split("\n").forEach(line => {
-      if (line.indexOf(marker) !== -1) {
-        currentURL = 'http://' + line.split(marker)[1].trim();
-        app.emit('mdl-ready', { url: currentURL });
+    // Resolve mdl binary location
+    var appPath = app.getPath('exe');
+    var exe = (() => {
+      switch (process.platform) {
+        case 'darwin':
+          return path.join(appPath, '../../Resources/app/mdl');
+        case 'win32':
+          // Use only the relative path on windows due to short path length
+          // limits
+          return './resources/app/mdl.exe';
+        case 'linux':
+          return path.join(path.dirname(appPath), './resources/app/mdl');
+        default:
+          return './resources/app/mdl';
       }
+    })()
+
+    var args = [
+      '-launch-browser=false',
+      '-gui-dir=' + path.dirname(exe),
+      '-color-log=false', // must be disabled for web interface detection
+      '-logtofile=true',
+      '-download-peerlist=true',
+      '-enable-all-api-sets=true',
+      '-enable-api-sets=INSECURE_WALLET_SEED',
+      '-rpc-interface=false',
+      '-disable-csrf=false',
+      '-reset-corrupt-db=true',
+      '-enable-gui=true',
+      '-web-interface-port=0' // random port assignment
+      // will break
+      // broken (automatically generated certs do not work):
+      // '-web-interface-https=true',
+    ]
+    mdl = childProcess.spawn(exe, args);
+
+    createWindow();
+
+    mdl.on('error', (e) => {
+      showError();
+      app.quit();
     });
-  });
 
-  mdl.stderr.on('data', (data) => {
-    console.log(data.toString());
-  });
+    mdl.stdout.on('data', (data) => {
+      console.log(data.toString());
+      if (currentURL) {
+        return
+      }
 
-  mdl.on('close', (code) => {
-    // log.info('mdl closed');
-    console.log('mdl closed');
-  reset();
-});
+      const marker = 'Starting web interface on ';
 
-  mdl.on('exit', (code) => {
-    // log.info('mdl exited');
-    console.log('mdl exited');
-  reset();
-});
+      data.toString().split('\n').forEach(line => {
+        if (line.indexOf(marker) !== -1) {
+          currentURL = 'http://' + line.split(marker)[1].trim();
+		  var id = setInterval(function() {
+			// wait till the splash page loading is finished
+			if (splashLoaded) {
+			  app.emit('mdl-ready', { url: currentURL });
+			  clearInterval(id);
+			}
+		  }, 500);
+        }
+      });
+    });
+
+    mdl.stderr.on('data', (data) => {
+      console.log(data.toString());
+    });
+
+    mdl.on('close', (code) => {
+      // log.info('MDL closed');
+      console.log('MDL closed');
+      showError();
+      reset();
+    });
+
+    mdl.on('exit', (code) => {
+      // log.info('MDL exited');
+      console.log('MDL exited');
+      showError();
+      reset();
+    });
+
+  } else {
+    // If in dev mode, simply open the dev server URL.
+    currentURL = 'http://localhost:4200/';
+    app.emit('mdl-ready', { url: currentURL });
+
+    axios
+      .get('http://localhost:4200/api/v1/wallets/folderName')
+      .then(response => {
+        walletsFolder = response.data.address;
+        hwCode.setWalletsFolderPath(walletsFolder);
+      })
+      .catch(() => {});
+  }
+}
+
+function showError() {
+  if (win) {
+    showErrorCalled = true;
+    win.loadURL('file://' + process.resourcesPath + '/app/dist/assets/error-alert/index.html');
+    console.log('Showing the error message');
+  }
 }
 
 function createWindow(url) {
@@ -146,14 +184,28 @@ function createWindow(url) {
     webPreferences: {
       webgl: false,
       webaudio: false,
-      contextIsolation: true,
+      contextIsolation: false,
       webviewTag: false,
       nodeIntegration: false,
       nodeIntegrationInWorker: false,
       allowRunningInsecureContent: false,
       webSecurity: true,
       plugins: false,
+      preload: __dirname + '/electron-api.js',
     },
+  });
+  hwCode.setWinRef(win);
+
+  win.webContents.on('did-finish-load', function() {
+	if (!splashLoaded) {
+	  splashLoaded = true;
+	}
+  });
+
+  win.webContents.on('did-fail-load', function() {
+    if (!showErrorCalled) {
+      showError();
+    }
   });
 
   // patch out eval
@@ -163,10 +215,6 @@ function createWindow(url) {
   const ses = win.webContents.session
   ses.clearCache(function () {
     console.log('Cleared the caching of the MDL wallet.');
-  });
-
-  ses.clearStorageData([], function() {
-    console.log('Cleared the stored cached data');
   });
 
   if (url) {
@@ -184,12 +232,16 @@ function createWindow(url) {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     win = null;
+    hwCode.setWinRef(win);
   });
 
-  win.webContents.on('will-navigate', function(e, url) {
-    e.preventDefault();
-    require('electron').shell.openExternal(url);
-  });
+  // If in dev mode, allow to open URLs.
+  if (!dev) {
+    win.webContents.on('will-navigate', function(e, url) {
+      e.preventDefault();
+      require('electron').shell.openExternal(url);
+    });
+  }
 
   // create application's main menu
   var template = [{
@@ -202,24 +254,36 @@ function createWindow(url) {
   }, {
     label: 'Edit',
     submenu: [
-      { label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
-      { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
+      { label: 'Undo', accelerator: 'CmdOrCtrl+Z', role: 'undo' },
+      { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', role: 'redo' },
       { type: 'separator' },
-      { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
-      { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
-      { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
-      { label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' }
+      { label: 'Cut', accelerator: 'CmdOrCtrl+X', role: 'cut' },
+      { label: 'Copy', accelerator: 'CmdOrCtrl+C', role: 'copy' },
+      { label: 'Paste', accelerator: 'CmdOrCtrl+V', role: 'paste' },
+      { label: 'Select All', accelerator: 'CmdOrCtrl+A', role: 'selectall' }
     ]
   }, {
     label: 'Show',
     submenu: [
       {
         label: 'Wallets folder',
-        click: () => shell.showItemInFolder(walletsFolder),
+        click: () => {
+          if (walletsFolder) {
+            shell.showItemInFolder(walletsFolder)
+          } else {
+            shell.showItemInFolder(path.join(app.getPath("home"), '.mdl', 'wallets'));
+          }
+        },
       },
       {
         label: 'Logs folder',
-        click: () => shell.showItemInFolder(walletsFolder.replace('wallets', 'logs')),
+        click: () => {
+          if (walletsFolder) {
+            shell.showItemInFolder(walletsFolder.replace('wallets', 'logs'))
+          } else {
+            shell.showItemInFolder(path.join(app.getPath("home"), '.mdl', 'logs'));
+          }
+        },
       },
       {
         label: 'DevTools',
@@ -276,7 +340,10 @@ app.on('mdl-ready', (e) => {
 
   axios
     .get(e.url + '/api/v1/wallets/folderName')
-    .then(response => walletsFolder = response.data.address)
+    .then(response => {
+      walletsFolder = response.data.address;
+      hwCode.setWalletsFolderPath(walletsFolder);
+    })
     .catch(() => {});
 });
 

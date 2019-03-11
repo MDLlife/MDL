@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strconv"
 
-	gcli "github.com/urfave/cli"
+	gcli "github.com/spf13/cobra"
 
-	"github.com/MDLlife/MDL/src/api/webrpc"
 	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/readable"
 	"github.com/MDLlife/MDL/src/util/droplet"
 	"github.com/MDLlife/MDL/src/wallet"
 )
@@ -18,8 +18,8 @@ type Balance struct {
 	Hours string `json:"hours"`
 }
 
-// AddressBalance represents an address's balance
-type AddressBalance struct {
+// AddressBalances represents an address's balance
+type AddressBalances struct {
 	Confirmed Balance `json:"confirmed"`
 	Spendable Balance `json:"spendable"`
 	Expected  Balance `json:"expected"`
@@ -28,62 +28,58 @@ type AddressBalance struct {
 
 // BalanceResult represents an set of addresses' balances
 type BalanceResult struct {
-	Confirmed Balance          `json:"confirmed"`
-	Spendable Balance          `json:"spendable"`
-	Expected  Balance          `json:"expected"`
-	Addresses []AddressBalance `json:"addresses"`
+	Confirmed Balance           `json:"confirmed"`
+	Spendable Balance           `json:"spendable"`
+	Expected  Balance           `json:"expected"`
+	Addresses []AddressBalances `json:"addresses"`
 }
 
-func walletBalanceCmd(cfg Config) gcli.Command {
-	name := "walletBalance"
-	return gcli.Command{
-		Name:      name,
-		Usage:     "Check the balance of a wallet",
-		ArgsUsage: "[wallet]",
-		Description: fmt.Sprintf(`Check balance of specific wallet, the default
-		wallet (%s) will be
-		used if no wallet was specified, use ENV 'WALLET_NAME'
-		to update default wallet file name, and 'WALLET_DIR' to update
-		the default wallet directory`, cfg.FullWalletPath()),
-		OnUsageError: onCommandUsageError(name),
-		Action:       checkWltBalance,
+func walletBalanceCmd() *gcli.Command {
+	return &gcli.Command{
+		Short: "Check the balance of a wallet",
+		Use:   "walletBalance [wallet]",
+		Long: fmt.Sprintf(`Check balance of specific wallet, the default
+    wallet (%s) will be
+	used if no wallet was specified, use ENV 'WALLET_NAME'
+	to update default wallet file name, and 'WALLET_DIR' to update
+	the default wallet directory`, cliConfig.FullWalletPath()),
+		Args:                  gcli.MaximumNArgs(1),
+		DisableFlagsInUseLine: true,
+		RunE:                  checkWltBalance,
 	}
 }
 
-func addressBalanceCmd() gcli.Command {
-	name := "addressBalance"
-	return gcli.Command{
-		Name:      name,
-		Usage:     "Check the balance of specific addresses",
-		ArgsUsage: "[addresses]",
-		Description: `Check balance of specific addresses, join multiple addresses with space.
-		example: addressBalance "$addr1 $addr2 $addr3"`,
-		OnUsageError: onCommandUsageError(name),
-		Action:       addrBalance,
+func addressBalanceCmd() *gcli.Command {
+	return &gcli.Command{
+		Short: "Check the balance of specific addresses",
+		Use:   "addressBalance [addresses]",
+		Long: `Check balance of specific addresses, join multiple addresses with space.
+    example: addressBalance "$addr1 $addr2 $addr3"`,
+		Args:                  gcli.MinimumNArgs(1),
+		DisableFlagsInUseLine: true,
+		SilenceUsage:          true,
+		RunE:                  addrBalance,
 	}
 }
 
-func checkWltBalance(c *gcli.Context) error {
-	cfg := ConfigFromContext(c)
-	rpcClient := RPCClientFromContext(c)
-
+func checkWltBalance(c *gcli.Command, args []string) error {
 	var w string
-	if c.NArg() > 0 {
-		w = c.Args().First()
+	if len(args) > 0 {
+		w = args[0]
 	}
 
 	var err error
-	w, err = resolveWalletPath(cfg, w)
+	w, err = resolveWalletPath(cliConfig, w)
 	if err != nil {
 		return err
 	}
 
-	balRlt, err := CheckWalletBalance(rpcClient, w)
+	balRlt, err := CheckWalletBalance(apiClient, w)
 	switch err.(type) {
 	case nil:
 	case WalletLoadError:
-		errorWithHelp(c, err)
-		return nil
+		printHelp(c)
+		return err
 	default:
 		return err
 	}
@@ -91,19 +87,20 @@ func checkWltBalance(c *gcli.Context) error {
 	return printJSON(balRlt)
 }
 
-func addrBalance(c *gcli.Context) error {
-	rpcClient := RPCClientFromContext(c)
+func addrBalance(c *gcli.Command, args []string) error {
+	numArgs := len(args)
 
-	addrs := make([]string, c.NArg())
+	addrs := make([]string, numArgs)
+
 	var err error
-	for i := 0; i < c.NArg(); i++ {
-		addrs[i] = c.Args().Get(i)
+	for i := 0; i < numArgs; i++ {
+		addrs[i] = args[i]
 		if _, err = cipher.DecodeBase58Address(addrs[i]); err != nil {
 			return fmt.Errorf("invalid address: %v, err: %v", addrs[i], err)
 		}
 	}
 
-	balRlt, err := GetBalanceOfAddresses(rpcClient, addrs)
+	balRlt, err := GetBalanceOfAddresses(apiClient, addrs)
 	if err != nil {
 		return err
 	}
@@ -114,7 +111,7 @@ func addrBalance(c *gcli.Context) error {
 // PUBLIC
 
 // CheckWalletBalance returns the total and individual balances of addresses in a wallet file
-func CheckWalletBalance(c *webrpc.Client, walletFile string) (*BalanceResult, error) {
+func CheckWalletBalance(c GetOutputser, walletFile string) (*BalanceResult, error) {
 	wlt, err := wallet.Load(walletFile)
 	if err != nil {
 		return nil, WalletLoadError{err}
@@ -130,8 +127,8 @@ func CheckWalletBalance(c *webrpc.Client, walletFile string) (*BalanceResult, er
 }
 
 // GetBalanceOfAddresses returns the total and individual balances of a set of addresses
-func GetBalanceOfAddresses(c *webrpc.Client, addrs []string) (*BalanceResult, error) {
-	outs, err := c.GetUnspentOutputs(addrs)
+func GetBalanceOfAddresses(c GetOutputser, addrs []string) (*BalanceResult, error) {
+	outs, err := c.OutputsForAddresses(addrs)
 	if err != nil {
 		return nil, err
 	}
@@ -139,7 +136,7 @@ func GetBalanceOfAddresses(c *webrpc.Client, addrs []string) (*BalanceResult, er
 	return getBalanceOfAddresses(outs, addrs)
 }
 
-func getBalanceOfAddresses(outs *webrpc.OutputsResult, addrs []string) (*BalanceResult, error) {
+func getBalanceOfAddresses(outs *readable.UnspentOutputsSummary, addrs []string) (*BalanceResult, error) {
 	addrsMap := make(map[string]struct{}, len(addrs))
 	for _, a := range addrs {
 		addrsMap[a] = struct{}{}
@@ -150,7 +147,7 @@ func getBalanceOfAddresses(outs *webrpc.OutputsResult, addrs []string) (*Balance
 	}, len(addrs))
 
 	// Count confirmed balances
-	for _, o := range outs.Outputs.HeadOutputs {
+	for _, o := range outs.HeadOutputs {
 		if _, ok := addrsMap[o.Address]; !ok {
 			return nil, fmt.Errorf("Found address %s in GetUnspentOutputs result, but this address wasn't requested", o.Address)
 		}
@@ -168,7 +165,7 @@ func getBalanceOfAddresses(outs *webrpc.OutputsResult, addrs []string) (*Balance
 	}
 
 	// Count spendable balances
-	for _, o := range outs.Outputs.SpendableOutputs() {
+	for _, o := range outs.SpendableOutputs() {
 		if _, ok := addrsMap[o.Address]; !ok {
 			return nil, fmt.Errorf("Found address %s in GetUnspentOutputs result, but this address wasn't requested", o.Address)
 		}
@@ -186,7 +183,7 @@ func getBalanceOfAddresses(outs *webrpc.OutputsResult, addrs []string) (*Balance
 	}
 
 	// Count predicted balances
-	for _, o := range outs.Outputs.ExpectedOutputs() {
+	for _, o := range outs.ExpectedOutputs() {
 		if _, ok := addrsMap[o.Address]; !ok {
 			return nil, fmt.Errorf("Found address %s in GetUnspentOutputs result, but this address wasn't requested", o.Address)
 		}
@@ -217,7 +214,7 @@ func getBalanceOfAddresses(outs *webrpc.OutputsResult, addrs []string) (*Balance
 
 	var totalConfirmed, totalSpendable, totalExpected wallet.Balance
 	balRlt := &BalanceResult{
-		Addresses: make([]AddressBalance, len(addrs)),
+		Addresses: make([]AddressBalances, len(addrs)),
 	}
 
 	for i, a := range addrs {

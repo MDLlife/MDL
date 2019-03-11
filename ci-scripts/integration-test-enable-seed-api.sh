@@ -1,21 +1,22 @@
 #!/bin/bash
-# Runs "disable-seed-api"-mode tests against a mdl node configured with -enable-seed-api=false
-# and /wallet/seed api endpoint should return coresponding seed
+# Runs "enable-seed-api"-mode tests against a mdl node configured with -enable-seed-api=true
+# and /api/v1/wallet/seed api endpoint should return coresponding seed
 
 # Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
 
 # Find unused port
-PORT="46422"
+PORT="1024"
 while $(lsof -Pi :$PORT -sTCP:LISTEN -t >/dev/null) ; do
     PORT=$((PORT+1))
 done
 
+COIN=${COIN:-mdl}
 RPC_PORT="$PORT"
 HOST="http://127.0.0.1:$PORT"
-RPC_ADDR="127.0.0.1:$RPC_PORT"
-MODE="disable-seed-api"
-BINARY="mdl-integration"
+RPC_ADDR="http://127.0.0.1:$RPC_PORT"
+MODE="enable-seed-api"
+BINARY="${COIN}-integration-enable-seed-api.test"
 TEST=""
 RUN_TESTS=""
 # run go test with -v flag
@@ -39,6 +40,11 @@ while getopts "h?t:r:v" args; do
     r ) RUN_TESTS="-run ${OPTARG}";;
   esac
 done
+
+COVERAGEFILE="coverage/${BINARY}.coverage.out"
+if [ -f "${COVERAGEFILE}" ]; then
+    rm "${COVERAGEFILE}"
+fi
 
 set -euxo pipefail
 
@@ -68,7 +74,7 @@ echo "starting mdl node in background with http listener on $HOST"
                       -data-dir="$DATA_DIR" \
                       -wallet-dir="$WALLET_DIR" \
                       -enable-wallet-api=true \
-                      -enable-seed-api=false &
+                      -enable-seed-api=true &
 MDL_PID=$!
 
 echo "mdl node pid=$MDL_PID"
@@ -103,6 +109,35 @@ echo "shutting down mdl node"
 # Shutdown mdl node
 kill -s SIGINT $MDL_PID
 wait $MDL_PID
+CMDPKG=$(go list ./cmd/${COIN})
+COVERPKG=$(dirname $(dirname ${CMDPKG}))
+
+DATA_DIR=$(mktemp -d -t ${COIN}-data-dir.XXXXXX)
+# Compile the mdl node
+# We can't use "go run" because that creates two processes which doesn't allow us to kill it at the end
+echo "compiling $COIN with coverage"
+go test -c -tags testrunmain -o "$BINARY" -coverpkg="${COVERPKG}/..." ./cmd/${COIN}/
+
+mkdir -p coverage/
+# Run mdl node with pinned blockchain database
+echo "starting $COIN node in background with http listener on $HOST"
+./"$BINARY" -disable-networking=true \
+            -web-interface-port=$PORT \
+            -download-peerlist=false \
+            -db-path=./src/api/integration/testdata/blockchain-180.db \
+            -db-read-only=true \
+            -launch-browser=false \
+            -data-dir="$DATA_DIR" \
+            -wallet-dir="$WALLET_DIR" \
+            -enable-all-api-sets=true \
+            -enable-api-sets=DEPRECATED_WALLET_SPEND,INSECURE_WALLET_SEED \
+            -test.run "^TestRunMain$" \
+            -test.coverprofile="${COVERAGEFILE}" \
+            &
+
+MDL_PID=$!
+echo "$COIN node pid=$MDL_PID"
+echo "shutting down $COIN node"
 
 rm "$BINARY"
 

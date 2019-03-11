@@ -8,6 +8,7 @@ package main
 import (
 	"fmt"
 	mathrand "math/rand"
+
 	//
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/cipher/secp256k1-go"
