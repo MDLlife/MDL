@@ -94,7 +94,7 @@ func validateAddress(ipPort string, allowLocalhost bool) (string, error) {
 		return "", ErrPortTooLow
 	}
 
-	//// TODO refactor and merge with v26 permanent solution when ready
+	// TODO refactor and merge with v26 permanent solution when ready
 	if port != 7800 && port != 8330 && port != 8320 {
 		return "", ErrPortTooLow
 	}

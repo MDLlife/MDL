@@ -237,13 +237,13 @@ func NewNodeConfig(mode string, node NodeParameters) NodeConfig {
 		//gnet uses this for TCP incoming and outgoing
 		Port: node.Port,
 		// MaxConnections is the maximum number of total connections allowed
-		MaxConnections: 256,
+		MaxConnections: 128,
 		// MaxOutgoingConnections is the maximum outgoing connections allowed
-		MaxOutgoingConnections: 80,
+		MaxOutgoingConnections: 8,
 		// MaxDefaultOutgoingConnections is the maximum default outgoing connections allowed
-		MaxDefaultPeerOutgoingConnections: 10,
-		DownloadPeerList:                  false,
-		PeerListURL:                       "",//node.PeerListURL,
+		MaxDefaultPeerOutgoingConnections: 1,
+		DownloadPeerList:                  true,
+		PeerListURL:                       node.PeerListURL,
 		// How often to make outgoing connections, in seconds
 		OutgoingConnectionsRate: time.Second * 5,
 		PeerlistSize:            65535,
@@ -273,7 +273,7 @@ func NewNodeConfig(mode string, node NodeParameters) NodeConfig {
 		LogToFile:       false,
 		DisablePingPong: false,
 
-		VerifyDB:       false,
+		VerifyDB:       true,
 		ResetCorruptDB: false,
 
 		// Blockchain/transaction validation

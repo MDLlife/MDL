@@ -38,7 +38,7 @@ type PoolConfig struct {
 // NewPoolConfig creates pool config
 func NewPoolConfig() PoolConfig {
 	return PoolConfig{
-		port:                              6677,
+		port:                              7800,
 		address:                           "",
 		DialTimeout:                       time.Second * 30,
 		MessageHandlingRate:               time.Millisecond * 50,

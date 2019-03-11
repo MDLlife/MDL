@@ -92,6 +92,7 @@ run:  ## Run the MDL node. To add arguments, do 'make ARGS="--foo" run'.
         -launch-browser=true \
         -enable-all-api-sets=true \
         -enable-gui=true \
+        -verify-db=true \
         -rpc-interface=true \
         -log-level=debug \
         -download-peerlist=false \
