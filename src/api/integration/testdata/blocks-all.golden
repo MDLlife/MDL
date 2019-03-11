@@ -8,7 +8,8 @@
 				"timestamp": 1516848705,
 				"fee": 0,
 				"version": 0,
-				"tx_body_hash": "321115903d517a7286205a719384a6d45c2a50e0880d346e4b27f573ed78cef7"
+				"tx_body_hash": "321115903d517a7286205a719384a6d45c2a50e0880d346e4b27f573ed78cef7",
+				"ux_hash": "0000000000000000000000000000000000000000000000000000000000000000"
 			},
 			"body": {
 				"txns": [
@@ -40,7 +41,8 @@
 				"timestamp": 1516866501,
 				"fee": 999999999999900,
 				"version": 0,
-				"tx_body_hash": "8b2b69ab2c7d6a8a9038f7516fd466814c1b6025f4ddfa2209f3f450934c045e"
+				"tx_body_hash": "8b2b69ab2c7d6a8a9038f7516fd466814c1b6025f4ddfa2209f3f450934c045e",
+				"ux_hash": "7e6854f345b99764d0dcea5404d82c5d83c1a9668b9c17ba7d8dbd0c2e4721aa"
 			},
 			"body": {
 				"txns": [
@@ -670,7 +672,8 @@
 				"timestamp": 1518546895,
 				"fee": 1,
 				"version": 0,
-				"tx_body_hash": "73f68a37d7ff20a8227ba87b20394f62244de18d01b22853c5472cb4d0391875"
+				"tx_body_hash": "73f68a37d7ff20a8227ba87b20394f62244de18d01b22853c5472cb4d0391875",
+				"ux_hash": "718d28e59c4484514fa231fd1bf72025352fbe03b7fde5c7e94c40911b3e56e4"
 			},
 			"body": {
 				"txns": [
@@ -706,7 +709,8 @@
 				"timestamp": 1518547065,
 				"fee": 2333880556,
 				"version": 0,
-				"tx_body_hash": "27e278dcca65fef06a9b32b572a4bea9950ac678898ef1a0e62204f527b4abb0"
+				"tx_body_hash": "27e278dcca65fef06a9b32b572a4bea9950ac678898ef1a0e62204f527b4abb0",
+				"ux_hash": "08239f9cb292032157a1855bb2735401c650735a3859a13d5a71ad45c68d6fb4"
 			},
 			"body": {
 				"txns": [
@@ -742,7 +746,8 @@
 				"timestamp": 1518547185,
 				"fee": 2334116667,
 				"version": 0,
-				"tx_body_hash": "1cac43a971f13e83077b9225373201ec9318d79dca4783559d58a69e57d388c7"
+				"tx_body_hash": "1cac43a971f13e83077b9225373201ec9318d79dca4783559d58a69e57d388c7",
+				"ux_hash": "751cd4232785c91bc9753f50ddc1f04d15c149e8f6c9a9436744500ed3e3da41"
 			},
 			"body": {
 				"txns": [
@@ -778,7 +783,8 @@
 				"timestamp": 1518547225,
 				"fee": 2334283334,
 				"version": 0,
-				"tx_body_hash": "39e7b6a6f22c3fceb84107f8327604e7b3a628bcf7e6fe20ed1425f233802cb9"
+				"tx_body_hash": "39e7b6a6f22c3fceb84107f8327604e7b3a628bcf7e6fe20ed1425f233802cb9",
+				"ux_hash": "236a0ce7c545de4790b15798340ac3efafb524f719826cfbf0570fe75e1ead97"
 			},
 			"body": {
 				"txns": [
@@ -814,7 +820,8 @@
 				"timestamp": 1518547265,
 				"fee": 2334338889,
 				"version": 0,
-				"tx_body_hash": "45a9a981951764111cb7b150694488227e93747514f4946ec5ca10ae99c36edf"
+				"tx_body_hash": "45a9a981951764111cb7b150694488227e93747514f4946ec5ca10ae99c36edf",
+				"ux_hash": "75df4be9a3c68df29ed3ba4146b2b46427119b2654dbf04cccb619df098eb663"
 			},
 			"body": {
 				"txns": [
@@ -850,7 +857,8 @@
 				"timestamp": 1518547345,
 				"fee": 2334394445,
 				"version": 0,
-				"tx_body_hash": "f36a396607fc374c7faf71285d4bf407bb9921f74273cdd873c85c7be069238d"
+				"tx_body_hash": "f36a396607fc374c7faf71285d4bf407bb9921f74273cdd873c85c7be069238d",
+				"ux_hash": "c90ff31b2f5e6f4ff0104cbe7af003713e26e73989289e0bb0741fc6267f8187"
 			},
 			"body": {
 				"txns": [
@@ -886,7 +894,8 @@
 				"timestamp": 1518547435,
 				"fee": 2334505556,
 				"version": 0,
-				"tx_body_hash": "8e1b944996bc96fedd73c25efdeb7545ceff6bdd42b45c91f9e0f0f10e28bb66"
+				"tx_body_hash": "8e1b944996bc96fedd73c25efdeb7545ceff6bdd42b45c91f9e0f0f10e28bb66",
+				"ux_hash": "b8c061acb00ea8f9d37cc42a9b9c28db9770036c28a7b69496bd73a04b45f8cb"
 			},
 			"body": {
 				"txns": [
@@ -922,7 +931,8 @@
 				"timestamp": 1518547475,
 				"fee": 2334630556,
 				"version": 0,
-				"tx_body_hash": "f39b1db2bcccd95f7ea4e2cb0d8aa9634e838b7352214474e09cb781ea823d98"
+				"tx_body_hash": "f39b1db2bcccd95f7ea4e2cb0d8aa9634e838b7352214474e09cb781ea823d98",
+				"ux_hash": "1ebea7da396453214356a2c5df485bfcb0ee1a78d7f45ac2ccdcda4fab6a8a79"
 			},
 			"body": {
 				"txns": [
@@ -958,7 +968,8 @@
 				"timestamp": 1518547525,
 				"fee": 2334686112,
 				"version": 0,
-				"tx_body_hash": "44e585d494c29f9a758ea40e0de80e5c8ca447faa49174ed98f630fa5148fed9"
+				"tx_body_hash": "44e585d494c29f9a758ea40e0de80e5c8ca447faa49174ed98f630fa5148fed9",
+				"ux_hash": "12a0bf77e96806e04d5cae1ecfd5580120f00183a0524e2354c937581f97e738"
 			},
 			"body": {
 				"txns": [
@@ -994,7 +1005,8 @@
 				"timestamp": 1518547575,
 				"fee": 2334755556,
 				"version": 0,
-				"tx_body_hash": "6c46c893d1ddeaef3eacbbb030d9932b6a3c6d3e3b7a8588f2d26ade74be01cc"
+				"tx_body_hash": "6c46c893d1ddeaef3eacbbb030d9932b6a3c6d3e3b7a8588f2d26ade74be01cc",
+				"ux_hash": "21a8e55c16231ca9703ee9096e36040de38e7d0559af02a81cb38d5294eb8841"
 			},
 			"body": {
 				"txns": [
@@ -1030,7 +1042,8 @@
 				"timestamp": 1518611415,
 				"fee": 2334825001,
 				"version": 0,
-				"tx_body_hash": "eb3be7123b0558cdf91ca5345b762f63b1497b851e3568243c588b50db35cffe"
+				"tx_body_hash": "eb3be7123b0558cdf91ca5345b762f63b1497b851e3568243c588b50db35cffe",
+				"ux_hash": "94893d96c5c11ba1c7d1792cc4dc9f902cff2f5f8e35e0cababc241096abaa1a"
 			},
 			"body": {
 				"txns": [
@@ -1066,7 +1079,8 @@
 				"timestamp": 1518611645,
 				"fee": 2423491667,
 				"version": 0,
-				"tx_body_hash": "37e1159cf7438ec1b0bd784d11c4f436000441fe9159847144f8a3cb33f55a45"
+				"tx_body_hash": "37e1159cf7438ec1b0bd784d11c4f436000441fe9159847144f8a3cb33f55a45",
+				"ux_hash": "95b9864ff84660202b301f3dcfc17fa74c2d1193391c854fc461f021379b0bce"
 			},
 			"body": {
 				"txns": [
@@ -1102,7 +1116,8 @@
 				"timestamp": 1518611815,
 				"fee": 2423811112,
 				"version": 0,
-				"tx_body_hash": "054778e988e2c26e25b8a6d70f9aef9621da98301dc539d2b94837de9251f4cd"
+				"tx_body_hash": "054778e988e2c26e25b8a6d70f9aef9621da98301dc539d2b94837de9251f4cd",
+				"ux_hash": "0a6bc5d69302b7f884b0276f9f208a1c0111cf6a66e1f596d0ba6fbebca4c20a"
 			},
 			"body": {
 				"txns": [
@@ -1138,7 +1153,8 @@
 				"timestamp": 1518611855,
 				"fee": 2424047223,
 				"version": 0,
-				"tx_body_hash": "c191926e3207a029d4d72c6470098f54b96890ac50fc194f11ac921c79ff8520"
+				"tx_body_hash": "c191926e3207a029d4d72c6470098f54b96890ac50fc194f11ac921c79ff8520",
+				"ux_hash": "a0e2e8d88d59edad87827cd353fd71fe3b307e24cbaebf98d1c1b4ab2de2ebcf"
 			},
 			"body": {
 				"txns": [
@@ -1174,7 +1190,8 @@
 				"timestamp": 1518611905,
 				"fee": 2424102778,
 				"version": 0,
-				"tx_body_hash": "56609c2e6acfe50f7fce21380a6316deeb9ad71460e5af4306d59b5e11f9bc14"
+				"tx_body_hash": "56609c2e6acfe50f7fce21380a6316deeb9ad71460e5af4306d59b5e11f9bc14",
+				"ux_hash": "f39cd3915163738db9361a2091d76ff327f0abf77e6eb95858a809e46e410057"
 			},
 			"body": {
 				"txns": [
@@ -1210,7 +1227,8 @@
 				"timestamp": 1518611955,
 				"fee": 2424172223,
 				"version": 0,
-				"tx_body_hash": "51ec91d5c930c748ba84da2730ba211e083b9ac1bd7f8d88f4f8825777a8ed78"
+				"tx_body_hash": "51ec91d5c930c748ba84da2730ba211e083b9ac1bd7f8d88f4f8825777a8ed78",
+				"ux_hash": "5232586769ce1d911cacdfeaa9c93ffde77e087c87bf1ed5b41b24e42700c106"
 			},
 			"body": {
 				"txns": [
@@ -1246,7 +1264,8 @@
 				"timestamp": 1518611985,
 				"fee": 2424241667,
 				"version": 0,
-				"tx_body_hash": "18354dead7530f7038fa59cd92ba5ea081491b7e39db16ab2f9eeb4c76c11412"
+				"tx_body_hash": "18354dead7530f7038fa59cd92ba5ea081491b7e39db16ab2f9eeb4c76c11412",
+				"ux_hash": "747ec08ed5c637d35398e1d15ab61e8aa0088a2bb3c89a914d0fe38c179b43ea"
 			},
 			"body": {
 				"txns": [
@@ -1282,7 +1301,8 @@
 				"timestamp": 1518612025,
 				"fee": 2424283334,
 				"version": 0,
-				"tx_body_hash": "01f980af887493a864607b75c725ea2ce8d710a53a6cf1346329ed6e9d33f143"
+				"tx_body_hash": "01f980af887493a864607b75c725ea2ce8d710a53a6cf1346329ed6e9d33f143",
+				"ux_hash": "ccb0033b848c4bb4dc05e693d8219e3c1b479fd75efdc3706d82dc3fbccff856"
 			},
 			"body": {
 				"txns": [
@@ -1318,7 +1338,8 @@
 				"timestamp": 1518612075,
 				"fee": 2424338889,
 				"version": 0,
-				"tx_body_hash": "c34ca6cb960cbe6a50dbde0f06100de7908f34ff9f9285ba9e7355ea8cf41444"
+				"tx_body_hash": "c34ca6cb960cbe6a50dbde0f06100de7908f34ff9f9285ba9e7355ea8cf41444",
+				"ux_hash": "58d8695ee460ff2cc22d3300b7cc95088562b2eb1715b72bd53c59b6f0af8836"
 			},
 			"body": {
 				"txns": [
@@ -1354,7 +1375,8 @@
 				"timestamp": 1518612105,
 				"fee": 2424408334,
 				"version": 0,
-				"tx_body_hash": "26abbb16d9d633bf85058cbfafb90edbf0e567a48cd3c89474ff3d7421cceab6"
+				"tx_body_hash": "26abbb16d9d633bf85058cbfafb90edbf0e567a48cd3c89474ff3d7421cceab6",
+				"ux_hash": "1db5352e8dfef51d8e0d09aa107cd5e054bf3894f811c0603cd4538b2d6d9bfe"
 			},
 			"body": {
 				"txns": [
@@ -1390,7 +1412,8 @@
 				"timestamp": 1518612135,
 				"fee": 2424450001,
 				"version": 0,
-				"tx_body_hash": "c08ec94326af2f9a7a66e5339ecf5ed728de20abefaa51a019f8e8f328b5776b"
+				"tx_body_hash": "c08ec94326af2f9a7a66e5339ecf5ed728de20abefaa51a019f8e8f328b5776b",
+				"ux_hash": "cfaa5a64f447bcb0dcab43461d5534d481470e101610cd8bb915bfcac7ef80a0"
 			},
 			"body": {
 				"txns": [
@@ -1426,7 +1449,8 @@
 				"timestamp": 1518612185,
 				"fee": 2424491667,
 				"version": 0,
-				"tx_body_hash": "137bc66bb4e5ae74807cfac4334e2c0201488983f3a844debeae7e764272a67f"
+				"tx_body_hash": "137bc66bb4e5ae74807cfac4334e2c0201488983f3a844debeae7e764272a67f",
+				"ux_hash": "153096772a23471f1e69e12908523fa108e043f0317acc0aea49d62682633aa9"
 			},
 			"body": {
 				"txns": [
@@ -1462,7 +1486,8 @@
 				"timestamp": 1518612215,
 				"fee": 2424561112,
 				"version": 0,
-				"tx_body_hash": "f7fd1a9710dd3d6d537ecbbeaa87aab8fb70d97610b18db22ce510edcd9b6c56"
+				"tx_body_hash": "f7fd1a9710dd3d6d537ecbbeaa87aab8fb70d97610b18db22ce510edcd9b6c56",
+				"ux_hash": "e32e93c45b1c7cfe86d6ee06a6de58156a4443988746fe95e75a02d231e21cc0"
 			},
 			"body": {
 				"txns": [
@@ -1498,7 +1523,8 @@
 				"timestamp": 1518612255,
 				"fee": 2424602778,
 				"version": 0,
-				"tx_body_hash": "aa4edb2593961972056d3640dea0ade77ed0a921bf2c8f22c5a61bb19f221191"
+				"tx_body_hash": "aa4edb2593961972056d3640dea0ade77ed0a921bf2c8f22c5a61bb19f221191",
+				"ux_hash": "c8c42b1551351f2cc958b9475f722c3a9e3c7d6af1587f79fcbbd1fbcc5755e1"
 			},
 			"body": {
 				"txns": [
@@ -1534,7 +1560,8 @@
 				"timestamp": 1518612285,
 				"fee": 2424658334,
 				"version": 0,
-				"tx_body_hash": "5e61f5474eda1bd9387a2a685889cfa4a9ef9b560484a76609c24a41b69d1694"
+				"tx_body_hash": "5e61f5474eda1bd9387a2a685889cfa4a9ef9b560484a76609c24a41b69d1694",
+				"ux_hash": "6627a4ccabeaf0c06a986c3bce59fc37d03c26022c0b88edc296697aea9a8391"
 			},
 			"body": {
 				"txns": [
@@ -1570,7 +1597,8 @@
 				"timestamp": 1518612325,
 				"fee": 2424700001,
 				"version": 0,
-				"tx_body_hash": "c4dd0925a87fc52d87c3ba510cc8ab8141122a3a60d6ff50d2fd49fb9a7b0de6"
+				"tx_body_hash": "c4dd0925a87fc52d87c3ba510cc8ab8141122a3a60d6ff50d2fd49fb9a7b0de6",
+				"ux_hash": "22f4aeb46ff37339e72a156626f64fb3b5ce0782b690fa2622c0b3f301f750a0"
 			},
 			"body": {
 				"txns": [
@@ -1606,7 +1634,8 @@
 				"timestamp": 1518612355,
 				"fee": 2424755556,
 				"version": 0,
-				"tx_body_hash": "677097d5617173a25660bf75464405c2a68a6df286e4b976f31a7c78bb756020"
+				"tx_body_hash": "677097d5617173a25660bf75464405c2a68a6df286e4b976f31a7c78bb756020",
+				"ux_hash": "44a50a462fe9e0c8dc153a26185558e54e84e183ffa401600fc84bb53bc2593f"
 			},
 			"body": {
 				"txns": [
@@ -1642,7 +1671,8 @@
 				"timestamp": 1518612385,
 				"fee": 2424797223,
 				"version": 0,
-				"tx_body_hash": "ecfed9cdbac2a5952a367d96fd2251d356a7de112c48a8807f0d16a8b479c971"
+				"tx_body_hash": "ecfed9cdbac2a5952a367d96fd2251d356a7de112c48a8807f0d16a8b479c971",
+				"ux_hash": "8af157d5512d8e9d766df5086d7ae92333470945f6e6fd64f84c2be2188d1a40"
 			},
 			"body": {
 				"txns": [
@@ -1678,7 +1708,8 @@
 				"timestamp": 1518612415,
 				"fee": 2424838889,
 				"version": 0,
-				"tx_body_hash": "1b9931e6f4030be199e8620d16b51f6a89e4942a748c5c868eef26ef01a1e871"
+				"tx_body_hash": "1b9931e6f4030be199e8620d16b51f6a89e4942a748c5c868eef26ef01a1e871",
+				"ux_hash": "4eb4be249f46941012b7ad90e9248e978b48af5466d2b351707af8cbaef2d6a8"
 			},
 			"body": {
 				"txns": [
@@ -1714,7 +1745,8 @@
 				"timestamp": 1518612475,
 				"fee": 2424880556,
 				"version": 0,
-				"tx_body_hash": "9f49cb2ffbf3836f45fd2579d25f3841e21a7c36a3f8fb54607be1ba07a11a4e"
+				"tx_body_hash": "9f49cb2ffbf3836f45fd2579d25f3841e21a7c36a3f8fb54607be1ba07a11a4e",
+				"ux_hash": "454a3f5aab5cb5649ca52d583d9179c53bff2f6985d3803aca4e86b9e3b36aea"
 			},
 			"body": {
 				"txns": [
@@ -1750,7 +1782,8 @@
 				"timestamp": 1518612735,
 				"fee": 2424963889,
 				"version": 0,
-				"tx_body_hash": "02d6958d5bfd96ed9b0b1e76e9d1f30827c045eedf4bb4d2feb438252c9de005"
+				"tx_body_hash": "02d6958d5bfd96ed9b0b1e76e9d1f30827c045eedf4bb4d2feb438252c9de005",
+				"ux_hash": "9710febe769e68c25c499e5df4bf83e314107cc30b03f41060ba317022111652"
 			},
 			"body": {
 				"txns": [
@@ -1786,7 +1819,8 @@
 				"timestamp": 1518612765,
 				"fee": 2425325001,
 				"version": 0,
-				"tx_body_hash": "59825bf5605eda25fa17436789cfb96ef03c260d5c79b694b07645d79ba2d8ab"
+				"tx_body_hash": "59825bf5605eda25fa17436789cfb96ef03c260d5c79b694b07645d79ba2d8ab",
+				"ux_hash": "c93a27074d399d1027b76cd5c19280137e981a107e01b6b5156981732e1ab31c"
 			},
 			"body": {
 				"txns": [
@@ -1822,7 +1856,8 @@
 				"timestamp": 1518612795,
 				"fee": 2425366667,
 				"version": 0,
-				"tx_body_hash": "2942b8160640c29ca95ad5abecbbbf87d90e95da6173f825a304a482b8fb85f9"
+				"tx_body_hash": "2942b8160640c29ca95ad5abecbbbf87d90e95da6173f825a304a482b8fb85f9",
+				"ux_hash": "8277a363dd290c52d4832b314ab540a7aa1aef2b6f656f011a415689d5379b69"
 			},
 			"body": {
 				"txns": [
@@ -1858,7 +1893,8 @@
 				"timestamp": 1518612835,
 				"fee": 2425408334,
 				"version": 0,
-				"tx_body_hash": "d0f9ddd513fc6a78d753b9e594e3b034a26ecf68e91b3676c85c18168c733010"
+				"tx_body_hash": "d0f9ddd513fc6a78d753b9e594e3b034a26ecf68e91b3676c85c18168c733010",
+				"ux_hash": "f1f997c827dfd492349ed84bb2d3bc2e5d627083f46586fee3e5c8a910bfb372"
 			},
 			"body": {
 				"txns": [
@@ -1894,7 +1930,8 @@
 				"timestamp": 1518612875,
 				"fee": 2425463889,
 				"version": 0,
-				"tx_body_hash": "54d806041ac4e1db19b3c6ecba84959f99b55e65700bc519d1a8b339e0bade1b"
+				"tx_body_hash": "54d806041ac4e1db19b3c6ecba84959f99b55e65700bc519d1a8b339e0bade1b",
+				"ux_hash": "57ad4de571ed81da8a7f0da9dda970296b44bb4d7e144db2e812fcb41eb41ed6"
 			},
 			"body": {
 				"txns": [
@@ -1930,7 +1967,8 @@
 				"timestamp": 1518612905,
 				"fee": 2425519445,
 				"version": 0,
-				"tx_body_hash": "c9d83f60a4ee498c9de8e15193f049dd9b014107a6ce6d3e3f445a9f509160a6"
+				"tx_body_hash": "c9d83f60a4ee498c9de8e15193f049dd9b014107a6ce6d3e3f445a9f509160a6",
+				"ux_hash": "8980e899262dc0df08f2333cda8f2a1ae9926d35938fbb70f8fa7c54c868a8be"
 			},
 			"body": {
 				"txns": [
@@ -1966,7 +2004,8 @@
 				"timestamp": 1518612945,
 				"fee": 2425561112,
 				"version": 0,
-				"tx_body_hash": "fe6b74ec768eae7fb8dc2be382ceb61556443e8cec9e007b8baaf5852804740d"
+				"tx_body_hash": "fe6b74ec768eae7fb8dc2be382ceb61556443e8cec9e007b8baaf5852804740d",
+				"ux_hash": "bd6f2e986feed3467ffa7bc16710ad66a7df1a36dd4e8edd58763e78fb857c7e"
 			},
 			"body": {
 				"txns": [
@@ -2002,7 +2041,8 @@
 				"timestamp": 1518612975,
 				"fee": 2425616667,
 				"version": 0,
-				"tx_body_hash": "d63090cf04225dbc6e053fc9cba6ea10c2705e042ec22a77656812a585dcb6cd"
+				"tx_body_hash": "d63090cf04225dbc6e053fc9cba6ea10c2705e042ec22a77656812a585dcb6cd",
+				"ux_hash": "170f45365b29b0a2d2a306d115c3942348ae83636f8e9ff83890247747a950e8"
 			},
 			"body": {
 				"txns": [
@@ -2038,7 +2078,8 @@
 				"timestamp": 1518613005,
 				"fee": 2425658334,
 				"version": 0,
-				"tx_body_hash": "634f988a5942b32210f8f2c425e6b85e582e3c6f590309e63f1bad73f013d271"
+				"tx_body_hash": "634f988a5942b32210f8f2c425e6b85e582e3c6f590309e63f1bad73f013d271",
+				"ux_hash": "e6c6dd7ce5fd60ed3a3488a9c28470a8d0fbdacab7a318ed9dc05dad6479bf47"
 			},
 			"body": {
 				"txns": [
@@ -2074,7 +2115,8 @@
 				"timestamp": 1518613065,
 				"fee": 2425700001,
 				"version": 0,
-				"tx_body_hash": "b8ad6f5c1d919af9b7510f58d45a8202cc407aad7967089a615d0f8984ca19cf"
+				"tx_body_hash": "b8ad6f5c1d919af9b7510f58d45a8202cc407aad7967089a615d0f8984ca19cf",
+				"ux_hash": "74f592ae0b680ebeb4d80a47fe0883e8ab51eba86192ffa8899911d0c7a7f875"
 			},
 			"body": {
 				"txns": [
@@ -2110,7 +2152,8 @@
 				"timestamp": 1518613095,
 				"fee": 2425783334,
 				"version": 0,
-				"tx_body_hash": "0270b94bedbc589d5807d1bf35f67ebd0346cc41758f7183e512c8f9699df3f4"
+				"tx_body_hash": "0270b94bedbc589d5807d1bf35f67ebd0346cc41758f7183e512c8f9699df3f4",
+				"ux_hash": "ae938a6d3fc9c0204b6790238cc9d0259511ef8e3687aaeeeec4193e2255cd57"
 			},
 			"body": {
 				"txns": [
@@ -2146,7 +2189,8 @@
 				"timestamp": 1518613145,
 				"fee": 2425825001,
 				"version": 0,
-				"tx_body_hash": "3f41af74158177cf1b1bcd56b18fb8cd51cbe1c895195d05fab99078d033f687"
+				"tx_body_hash": "3f41af74158177cf1b1bcd56b18fb8cd51cbe1c895195d05fab99078d033f687",
+				"ux_hash": "015b725f3bb32fb7f29269fb3761638df0bc641427ce8d5464f130a34dc4332d"
 			},
 			"body": {
 				"txns": [
@@ -2182,7 +2226,8 @@
 				"timestamp": 1518613165,
 				"fee": 2425894445,
 				"version": 0,
-				"tx_body_hash": "61761a2bdade2d9b2ab4b95b7ab07c9accf09812850d476f6f17846badfd0ffb"
+				"tx_body_hash": "61761a2bdade2d9b2ab4b95b7ab07c9accf09812850d476f6f17846badfd0ffb",
+				"ux_hash": "b455b810b3c4be512136387b07926dc69c0af917cb67356428e25b2dcd34cd5e"
 			},
 			"body": {
 				"txns": [
@@ -2218,7 +2263,8 @@
 				"timestamp": 1518613195,
 				"fee": 2425922223,
 				"version": 0,
-				"tx_body_hash": "54f16d6f2e928e1a3146472fecb4afc1632552a8b5aa61ed545d37e83261e64b"
+				"tx_body_hash": "54f16d6f2e928e1a3146472fecb4afc1632552a8b5aa61ed545d37e83261e64b",
+				"ux_hash": "bed4380e09d4626db50d6f81c8ed9e28912e721e4d4f2d7284f3600ec90fe71e"
 			},
 			"body": {
 				"txns": [
@@ -2254,7 +2300,8 @@
 				"timestamp": 1518613245,
 				"fee": 2425963889,
 				"version": 0,
-				"tx_body_hash": "41feff5ff452f20a48e8af28f14b652db7f3ddf125e9efb4943afbf72a82489e"
+				"tx_body_hash": "41feff5ff452f20a48e8af28f14b652db7f3ddf125e9efb4943afbf72a82489e",
+				"ux_hash": "22b5857a5456c407f2d9749caf50728a1a84f6c615e8c65bb58b0c2646e7871e"
 			},
 			"body": {
 				"txns": [
@@ -2290,7 +2337,8 @@
 				"timestamp": 1518613275,
 				"fee": 2426033334,
 				"version": 0,
-				"tx_body_hash": "14cc0aaf4c16e7e7f79183bcfc3413d4a969a0a602cf2581edf9c4539abd8815"
+				"tx_body_hash": "14cc0aaf4c16e7e7f79183bcfc3413d4a969a0a602cf2581edf9c4539abd8815",
+				"ux_hash": "92e64b198cb9bc69bc88293e2bddb2bc6f39ba7189cf83e419f919b8fb8d8e2a"
 			},
 			"body": {
 				"txns": [
@@ -2326,7 +2374,8 @@
 				"timestamp": 1518613305,
 				"fee": 2426075001,
 				"version": 0,
-				"tx_body_hash": "d9c4a063e60a1023d51559ecbf13197c0b8d53947b549392d8a1c5270d31de32"
+				"tx_body_hash": "d9c4a063e60a1023d51559ecbf13197c0b8d53947b549392d8a1c5270d31de32",
+				"ux_hash": "c1aff1ffe458b954fa02cb641cb37f17544065a765b60aa04003bd6079b3208a"
 			},
 			"body": {
 				"txns": [
@@ -2362,7 +2411,8 @@
 				"timestamp": 1518613335,
 				"fee": 2426116667,
 				"version": 0,
-				"tx_body_hash": "3441d651da0b25ac0ec2e4e88092ef418ecb71348ddf1b65b03603c054ffc4be"
+				"tx_body_hash": "3441d651da0b25ac0ec2e4e88092ef418ecb71348ddf1b65b03603c054ffc4be",
+				"ux_hash": "b91bbe85f5922587cce1bde864c56964fd3d017e4dc45309e313089d15b2d4df"
 			},
 			"body": {
 				"txns": [
@@ -2398,7 +2448,8 @@
 				"timestamp": 1518613385,
 				"fee": 2426158334,
 				"version": 0,
-				"tx_body_hash": "e329c6e76f4900e92f966747f128b71d5bbfe9d4cc952337c026375d6c172a2e"
+				"tx_body_hash": "e329c6e76f4900e92f966747f128b71d5bbfe9d4cc952337c026375d6c172a2e",
+				"ux_hash": "a768e0b309d98a779f674124ea178666956f23dc9131882b5841574d62082df2"
 			},
 			"body": {
 				"txns": [
@@ -2434,7 +2485,8 @@
 				"timestamp": 1518613445,
 				"fee": 2426227778,
 				"version": 0,
-				"tx_body_hash": "5bd428967793eb948361122842d9f1317fd2e97706449f0e3eab1469534d24d0"
+				"tx_body_hash": "5bd428967793eb948361122842d9f1317fd2e97706449f0e3eab1469534d24d0",
+				"ux_hash": "6fe940de731b0428fc4ea8f1685e9c433f7262c5477e2ad79a42e8dbea9de04f"
 			},
 			"body": {
 				"txns": [
@@ -2470,7 +2522,8 @@
 				"timestamp": 1518614185,
 				"fee": 2426311112,
 				"version": 0,
-				"tx_body_hash": "6d1d547ea21ded39a9d82e451b07df36d5ffafcf71a65e8751b2617101bd2536"
+				"tx_body_hash": "6d1d547ea21ded39a9d82e451b07df36d5ffafcf71a65e8751b2617101bd2536",
+				"ux_hash": "1a62c760b5113823a85cdf283a531c57bae5c8190149ef0d2aaa08c2884f563a"
 			},
 			"body": {
 				"txns": [
@@ -2506,7 +2559,8 @@
 				"timestamp": 1518614215,
 				"fee": 2427338889,
 				"version": 0,
-				"tx_body_hash": "036c942e752c5b5fddae5d1a32efe6f388f13b97a5b9070fbb37574106e77571"
+				"tx_body_hash": "036c942e752c5b5fddae5d1a32efe6f388f13b97a5b9070fbb37574106e77571",
+				"ux_hash": "56d394d92d954d783a016857d585227f625a8a64e534784692614ac5998399b8"
 			},
 			"body": {
 				"txns": [
@@ -2542,7 +2596,8 @@
 				"timestamp": 1518614265,
 				"fee": 2427380556,
 				"version": 0,
-				"tx_body_hash": "26c4230864276876a6ee0afb225eb727cc9ede4b1422360d7c3659a0c1a90604"
+				"tx_body_hash": "26c4230864276876a6ee0afb225eb727cc9ede4b1422360d7c3659a0c1a90604",
+				"ux_hash": "767fb30b879f708f64ce4b28cc8a2a24815b5e5cc407103d9de87d5cfc36234b"
 			},
 			"body": {
 				"txns": [
@@ -2578,7 +2633,8 @@
 				"timestamp": 1518614285,
 				"fee": 2427450001,
 				"version": 0,
-				"tx_body_hash": "eaceec7341223eeec250c0060714cd9575d3a63a0c11e91c7bb8f2b5e0ef0455"
+				"tx_body_hash": "eaceec7341223eeec250c0060714cd9575d3a63a0c11e91c7bb8f2b5e0ef0455",
+				"ux_hash": "a2f68c0829f3a9e93048f014a51b65884f0906fb8d4acbbecaca5d7f02f0c7c7"
 			},
 			"body": {
 				"txns": [
@@ -2614,7 +2670,8 @@
 				"timestamp": 1518614325,
 				"fee": 2427477778,
 				"version": 0,
-				"tx_body_hash": "5a086cb6aa358f9f5f936881359745357aa3e9f4867dc2cd92503ac907fadcda"
+				"tx_body_hash": "5a086cb6aa358f9f5f936881359745357aa3e9f4867dc2cd92503ac907fadcda",
+				"ux_hash": "e67553472647d6513e5341b679083b391ea17c121c7a65b9c680995234dc213f"
 			},
 			"body": {
 				"txns": [
@@ -2650,7 +2707,8 @@
 				"timestamp": 1518614365,
 				"fee": 2427533334,
 				"version": 0,
-				"tx_body_hash": "db7c077a46da3d2ae0557aa72ca838da572970c895af377a5ee2898022b74a52"
+				"tx_body_hash": "db7c077a46da3d2ae0557aa72ca838da572970c895af377a5ee2898022b74a52",
+				"ux_hash": "dc74adffc7a7c8e778976fe38ae8f44bae8f6fd8ea31650b4ccbc35fef043a51"
 			},
 			"body": {
 				"txns": [
@@ -2686,7 +2744,8 @@
 				"timestamp": 1518614395,
 				"fee": 2427588889,
 				"version": 0,
-				"tx_body_hash": "e21fb2952e389dafd16cb1942661423a625182d4002f4c7e4827336b2487f311"
+				"tx_body_hash": "e21fb2952e389dafd16cb1942661423a625182d4002f4c7e4827336b2487f311",
+				"ux_hash": "2dc0695e1ea079f41fdcec37c595b7b8ce10461bed40e07b06b17f73d3e91337"
 			},
 			"body": {
 				"txns": [
@@ -2722,7 +2781,8 @@
 				"timestamp": 1518614425,
 				"fee": 2427630556,
 				"version": 0,
-				"tx_body_hash": "0e3c2f04ebda30d7d334849588040b7b9c58e8f1e4686a32534afa9d74376860"
+				"tx_body_hash": "0e3c2f04ebda30d7d334849588040b7b9c58e8f1e4686a32534afa9d74376860",
+				"ux_hash": "fd3fc10871dbbabb72d155dac1357552961d417e856cd99e17aaf0b61acb122e"
 			},
 			"body": {
 				"txns": [
@@ -2758,7 +2818,8 @@
 				"timestamp": 1518614445,
 				"fee": 2427672223,
 				"version": 0,
-				"tx_body_hash": "69ebfac8d32a3d69e011cc801713c0632ffd4ee5d95ae0ed7758903420cf908c"
+				"tx_body_hash": "69ebfac8d32a3d69e011cc801713c0632ffd4ee5d95ae0ed7758903420cf908c",
+				"ux_hash": "4bfc445427a16a8231c1adf59847b529ad29f3322109a1cf9d8bb98d0792f860"
 			},
 			"body": {
 				"txns": [
@@ -2794,7 +2855,8 @@
 				"timestamp": 1518614495,
 				"fee": 2427700001,
 				"version": 0,
-				"tx_body_hash": "12a37f5aca23aa6a06866f83e97d63fc64965422e9175d1ec84e0fafa3a0d938"
+				"tx_body_hash": "12a37f5aca23aa6a06866f83e97d63fc64965422e9175d1ec84e0fafa3a0d938",
+				"ux_hash": "4bbe57b8b36c007b5e5bef3b40f10a7dea2a486c97f121de73d0e49b4e127ff5"
 			},
 			"body": {
 				"txns": [
@@ -2830,7 +2892,8 @@
 				"timestamp": 1518614525,
 				"fee": 2427769445,
 				"version": 0,
-				"tx_body_hash": "971d35addab9067c8a78df4f2e0e9f9e9f42b093c5d60c422728f7e77de3f60d"
+				"tx_body_hash": "971d35addab9067c8a78df4f2e0e9f9e9f42b093c5d60c422728f7e77de3f60d",
+				"ux_hash": "bcac145eb7d7963eb382d755d9a1ad83b31fdf8607399434243202b782d5022e"
 			},
 			"body": {
 				"txns": [
@@ -2866,7 +2929,8 @@
 				"timestamp": 1518614575,
 				"fee": 2427811112,
 				"version": 0,
-				"tx_body_hash": "4796ad291385ab0451cdee24388c40c7048e9fdc85e19cb23e8c9faa4a48fe61"
+				"tx_body_hash": "4796ad291385ab0451cdee24388c40c7048e9fdc85e19cb23e8c9faa4a48fe61",
+				"ux_hash": "c136544e79c155b7eb92349be305e6537c45aa54f26ff9ff6e14bd4c506e7f2c"
 			},
 			"body": {
 				"txns": [
@@ -2902,7 +2966,8 @@
 				"timestamp": 1518614595,
 				"fee": 2427880556,
 				"version": 0,
-				"tx_body_hash": "f62165ddf72eac8d4bd6356d0251cddde1cc9104d65222be6d437eba75471420"
+				"tx_body_hash": "f62165ddf72eac8d4bd6356d0251cddde1cc9104d65222be6d437eba75471420",
+				"ux_hash": "7a85cbdf8fbe03aa2525dc72a5c45aa1e8246981ce010d1321a9d855e9bf8245"
 			},
 			"body": {
 				"txns": [
@@ -2938,7 +3003,8 @@
 				"timestamp": 1518614625,
 				"fee": 2427908334,
 				"version": 0,
-				"tx_body_hash": "414aa94c4bd821abead1740cedfa0c4a340e8ae432f29ba7922e601abb58758e"
+				"tx_body_hash": "414aa94c4bd821abead1740cedfa0c4a340e8ae432f29ba7922e601abb58758e",
+				"ux_hash": "215612d785a613da56c0e852b042a0c926745f514f18332987313c490bb3df9f"
 			},
 			"body": {
 				"txns": [
@@ -2974,7 +3040,8 @@
 				"timestamp": 1518614655,
 				"fee": 2427950001,
 				"version": 0,
-				"tx_body_hash": "8ab903c3714e04171320913fef7784b510731ad92b750c82c0373418004fc00f"
+				"tx_body_hash": "8ab903c3714e04171320913fef7784b510731ad92b750c82c0373418004fc00f",
+				"ux_hash": "7d392f9783b76ea9e67d2a7a9a6a1ac717645576156910e4974d49a42efc23ec"
 			},
 			"body": {
 				"txns": [
@@ -3010,7 +3077,8 @@
 				"timestamp": 1518614685,
 				"fee": 2427991667,
 				"version": 0,
-				"tx_body_hash": "d8288309af5436763967726e6d58ed5202fb1191413d1aa61104b56b07d858b4"
+				"tx_body_hash": "d8288309af5436763967726e6d58ed5202fb1191413d1aa61104b56b07d858b4",
+				"ux_hash": "70b73727ba4b91aa4cdfef5a37b99e0229db4c02acb592dc25d8363aedc537a4"
 			},
 			"body": {
 				"txns": [
@@ -3046,7 +3114,8 @@
 				"timestamp": 1518614705,
 				"fee": 2428033334,
 				"version": 0,
-				"tx_body_hash": "af2395affd7f628924f9f43d77dc159cf8ae2c78bf2ab7c98ab17d2255e1cf6f"
+				"tx_body_hash": "af2395affd7f628924f9f43d77dc159cf8ae2c78bf2ab7c98ab17d2255e1cf6f",
+				"ux_hash": "61518d3c5f30f2c0353e474a465447bbf657200971fef28b41a4c76c1636aa18"
 			},
 			"body": {
 				"txns": [
@@ -3082,7 +3151,8 @@
 				"timestamp": 1518614745,
 				"fee": 2428061112,
 				"version": 0,
-				"tx_body_hash": "e2ba410c5743781aac4d4acfc3fbff3515b1318d19648f17a79548660c45843d"
+				"tx_body_hash": "e2ba410c5743781aac4d4acfc3fbff3515b1318d19648f17a79548660c45843d",
+				"ux_hash": "ba533936c31a48e0348c8c99803416194567df938546ce746dc2cab0fa78a0a8"
 			},
 			"body": {
 				"txns": [
@@ -3118,7 +3188,8 @@
 				"timestamp": 1518614775,
 				"fee": 2428116667,
 				"version": 0,
-				"tx_body_hash": "cb3c488bb61f51657d8b9f16dd78c450e96ab937f00e2ce134f851006fb3c863"
+				"tx_body_hash": "cb3c488bb61f51657d8b9f16dd78c450e96ab937f00e2ce134f851006fb3c863",
+				"ux_hash": "24e7fd50c9cb6910fce59bb595d1f44a2451019cac7c44de4b58cb056535dc31"
 			},
 			"body": {
 				"txns": [
@@ -3154,7 +3225,8 @@
 				"timestamp": 1518614825,
 				"fee": 2428158334,
 				"version": 0,
-				"tx_body_hash": "b8053d4282b87f52d262ec455b0b0e224a519618dbdddaeb33043cdfbeaaa883"
+				"tx_body_hash": "b8053d4282b87f52d262ec455b0b0e224a519618dbdddaeb33043cdfbeaaa883",
+				"ux_hash": "4ab958c899567d0a989adb22f0710dd55728ec067b3bdeddcb915dedcb53ea4a"
 			},
 			"body": {
 				"txns": [
@@ -3190,7 +3262,8 @@
 				"timestamp": 1518614845,
 				"fee": 2428227778,
 				"version": 0,
-				"tx_body_hash": "0284671449d826375267daf049cb3dd7b116a306d81a3179ea462e7cfcdbe717"
+				"tx_body_hash": "0284671449d826375267daf049cb3dd7b116a306d81a3179ea462e7cfcdbe717",
+				"ux_hash": "adcd66f2a242ce17769dcaeb6ea7b0fc167ff95e91d07e49f1b71e1c1ece2c11"
 			},
 			"body": {
 				"txns": [
@@ -3226,7 +3299,8 @@
 				"timestamp": 1518614875,
 				"fee": 2428255556,
 				"version": 0,
-				"tx_body_hash": "04e1303fef6b4c8ac0be6cf90533e5afbdc948e43fabfbd017bdd7bf0c9405ee"
+				"tx_body_hash": "04e1303fef6b4c8ac0be6cf90533e5afbdc948e43fabfbd017bdd7bf0c9405ee",
+				"ux_hash": "45f26e9c4e1954fbd46d723886b746db09237ec130566ebb4fe1a54f9d9e5594"
 			},
 			"body": {
 				"txns": [
@@ -3262,7 +3336,8 @@
 				"timestamp": 1518614895,
 				"fee": 2428297223,
 				"version": 0,
-				"tx_body_hash": "d45a0b039b13b2e4a3c0220d0058d05b3dfbcec4fa25df9c35f63e727c925f9e"
+				"tx_body_hash": "d45a0b039b13b2e4a3c0220d0058d05b3dfbcec4fa25df9c35f63e727c925f9e",
+				"ux_hash": "f057bdf3bc509896797c00a5c7b8874e29fbafde2eb7de39860597a0fac55a2e"
 			},
 			"body": {
 				"txns": [
@@ -3298,7 +3373,8 @@
 				"timestamp": 1518614935,
 				"fee": 2428325001,
 				"version": 0,
-				"tx_body_hash": "ccee93c8ad2d844a0a9108be34d7063e0d041f813355440553a8fc53a66a5a91"
+				"tx_body_hash": "ccee93c8ad2d844a0a9108be34d7063e0d041f813355440553a8fc53a66a5a91",
+				"ux_hash": "ddbc90eef8d48fd81b142fb84b9129347f7bcd56baf0182842cca40ae1d5e50d"
 			},
 			"body": {
 				"txns": [
@@ -3334,7 +3410,8 @@
 				"timestamp": 1518614975,
 				"fee": 2428380556,
 				"version": 0,
-				"tx_body_hash": "3e229c1ea0d7ea6013e9313e70d7acd4814f39f91ea0edc3cdffb6201bcadada"
+				"tx_body_hash": "3e229c1ea0d7ea6013e9313e70d7acd4814f39f91ea0edc3cdffb6201bcadada",
+				"ux_hash": "bea4befbef80f5545c17a38e2874dc701f2d4b8f8c4a156a8ffdf14a0fe96935"
 			},
 			"body": {
 				"txns": [
@@ -3370,7 +3447,8 @@
 				"timestamp": 1518615005,
 				"fee": 2428436112,
 				"version": 0,
-				"tx_body_hash": "7d7b062d7a3f20dde19d9fe7736dde59b9b01498dceb205c7e84aea4f6e6104c"
+				"tx_body_hash": "7d7b062d7a3f20dde19d9fe7736dde59b9b01498dceb205c7e84aea4f6e6104c",
+				"ux_hash": "95abf668af11d37cc56cd81d581fc7717c5614e34e3b3af3a80ba1b2574934ab"
 			},
 			"body": {
 				"txns": [
@@ -3406,7 +3484,8 @@
 				"timestamp": 1518615035,
 				"fee": 2428477778,
 				"version": 0,
-				"tx_body_hash": "015cd9f6bd44268c3ad93fffd0ec2b7c3a11428ae6b641a415adf20e3e122cb9"
+				"tx_body_hash": "015cd9f6bd44268c3ad93fffd0ec2b7c3a11428ae6b641a415adf20e3e122cb9",
+				"ux_hash": "55e159c5f914bd0d19afff81ed22f55cc3e1496fbec15e366c71320b86ea9fff"
 			},
 			"body": {
 				"txns": [
@@ -3442,7 +3521,8 @@
 				"timestamp": 1518615055,
 				"fee": 2428519445,
 				"version": 0,
-				"tx_body_hash": "7ff4816a70ac8b845809681fc3641c4ecc788af37ec31bd18af40ad0adc6056d"
+				"tx_body_hash": "7ff4816a70ac8b845809681fc3641c4ecc788af37ec31bd18af40ad0adc6056d",
+				"ux_hash": "7428e5ba7065cce171d10ec5e1ed0434d29d42479b392cf6c1efa26ef03596ec"
 			},
 			"body": {
 				"txns": [
@@ -3478,7 +3558,8 @@
 				"timestamp": 1518615085,
 				"fee": 2428547223,
 				"version": 0,
-				"tx_body_hash": "aaf7d588cd546d22fdbfb73ab163e4be0c2de71580942f8055c28939c756d567"
+				"tx_body_hash": "aaf7d588cd546d22fdbfb73ab163e4be0c2de71580942f8055c28939c756d567",
+				"ux_hash": "6c611b95d53cb5e4365ca7a5749e067597236b3d7ee5e939576afdfe139e882f"
 			},
 			"body": {
 				"txns": [
@@ -3514,7 +3595,8 @@
 				"timestamp": 1518615105,
 				"fee": 2428588889,
 				"version": 0,
-				"tx_body_hash": "88037cdf7fdccda983fdadb08aeea8bc258229ca6558ad516b0b3c4a34eaab6b"
+				"tx_body_hash": "88037cdf7fdccda983fdadb08aeea8bc258229ca6558ad516b0b3c4a34eaab6b",
+				"ux_hash": "37e739a5b4696d709fc75f2b1f5f2ef22efe2293a1d9b0b9d9a821a3afe27a0f"
 			},
 			"body": {
 				"txns": [
@@ -3550,7 +3632,8 @@
 				"timestamp": 1518615745,
 				"fee": 2428616667,
 				"version": 0,
-				"tx_body_hash": "39eb104609fcd161977c29aac4b403823481cb6b3a4362bf30407fc8164e418f"
+				"tx_body_hash": "39eb104609fcd161977c29aac4b403823481cb6b3a4362bf30407fc8164e418f",
+				"ux_hash": "d612d379c6b0736d6edc49b0ae629e1060dbb5d6c4fa7763cf56d765838e0512"
 			},
 			"body": {
 				"txns": [
@@ -3586,7 +3669,8 @@
 				"timestamp": 1518615785,
 				"fee": 2429505556,
 				"version": 0,
-				"tx_body_hash": "806dec0c47a5a29ed123b48950c9bf81d7a60296f5c4d6473ecd97a2f3f4bf11"
+				"tx_body_hash": "806dec0c47a5a29ed123b48950c9bf81d7a60296f5c4d6473ecd97a2f3f4bf11",
+				"ux_hash": "4bd7df4d57db532e5fe7cf2f5071940742550c9b66d7462f284e8ff3a516ca17"
 			},
 			"body": {
 				"txns": [
@@ -3622,7 +3706,8 @@
 				"timestamp": 1518615815,
 				"fee": 2429561112,
 				"version": 0,
-				"tx_body_hash": "4b3d7ad2572a854fb32649afccd9bba3e9fd678c55dd89478e42bd73c282b19d"
+				"tx_body_hash": "4b3d7ad2572a854fb32649afccd9bba3e9fd678c55dd89478e42bd73c282b19d",
+				"ux_hash": "e1622538eb0ae0abf635de7685dd219fbf10473ce8a2ff890aad8ec64b973fbf"
 			},
 			"body": {
 				"txns": [
@@ -3658,7 +3743,8 @@
 				"timestamp": 1518615855,
 				"fee": 2429602778,
 				"version": 0,
-				"tx_body_hash": "f7badb7a8f7f0a00d87917ba13c979e0d264ee534afe10836e646dced05991cf"
+				"tx_body_hash": "f7badb7a8f7f0a00d87917ba13c979e0d264ee534afe10836e646dced05991cf",
+				"ux_hash": "666d908b8d96b4bb48f613e58cedf3ccabc32b5bb9a88c791fa3eb4fd9585bd6"
 			},
 			"body": {
 				"txns": [
@@ -3694,7 +3780,8 @@
 				"timestamp": 1518615895,
 				"fee": 2429658334,
 				"version": 0,
-				"tx_body_hash": "eccd556f990304d2ac66c87cbd33ec24935296dfe666fc6043d740c42ee22085"
+				"tx_body_hash": "eccd556f990304d2ac66c87cbd33ec24935296dfe666fc6043d740c42ee22085",
+				"ux_hash": "f16b25f1f164eb28bc1bf84ac8fc498b367429ea90ce0ed851848d9220f1fe4d"
 			},
 			"body": {
 				"txns": [
@@ -3730,7 +3817,8 @@
 				"timestamp": 1518615945,
 				"fee": 2429713889,
 				"version": 0,
-				"tx_body_hash": "072a418129d01781598187ecefba5c7aa4e0e0926385ac9aa506bd3bd45ac7c5"
+				"tx_body_hash": "072a418129d01781598187ecefba5c7aa4e0e0926385ac9aa506bd3bd45ac7c5",
+				"ux_hash": "b232cba77b121be76d59a1ac9c623fad5f1d0d16c696b25c1c295dd825ae831e"
 			},
 			"body": {
 				"txns": [
@@ -3766,7 +3854,8 @@
 				"timestamp": 1518615995,
 				"fee": 2429783334,
 				"version": 0,
-				"tx_body_hash": "f352f53edb52604d1ee3b4db3cf8edf6a301eb8bf96bd983f87588544c2cec37"
+				"tx_body_hash": "f352f53edb52604d1ee3b4db3cf8edf6a301eb8bf96bd983f87588544c2cec37",
+				"ux_hash": "16639274802ac43abc71348408c74fd23ef23921dcd255a425a08703c17b4ba9"
 			},
 			"body": {
 				"txns": [
@@ -3802,7 +3891,8 @@
 				"timestamp": 1518616025,
 				"fee": 2429852778,
 				"version": 0,
-				"tx_body_hash": "40845efabd875635f92f14c3db68394ea984c469142013cca467ae51344acb99"
+				"tx_body_hash": "40845efabd875635f92f14c3db68394ea984c469142013cca467ae51344acb99",
+				"ux_hash": "bba0b0af96ad9c4dadc42c43c9aad0e4c9e41689d72d93644d0859efdbb5fbe1"
 			},
 			"body": {
 				"txns": [
@@ -3838,7 +3928,8 @@
 				"timestamp": 1518616045,
 				"fee": 2429894445,
 				"version": 0,
-				"tx_body_hash": "bcdf1b7bd3f7b8e97e85e02260a3e5b21a12c5edceb40a65cab470214618c984"
+				"tx_body_hash": "bcdf1b7bd3f7b8e97e85e02260a3e5b21a12c5edceb40a65cab470214618c984",
+				"ux_hash": "5dc47b72f266b33693e6eae583acb55e3f59fe891d74296e14a6a72acdd62287"
 			},
 			"body": {
 				"txns": [
@@ -3874,7 +3965,8 @@
 				"timestamp": 1518616095,
 				"fee": 2429922223,
 				"version": 0,
-				"tx_body_hash": "97c709b9001f670b61bcb02daa22297e0a41f671886beac27523b6f2b00382e5"
+				"tx_body_hash": "97c709b9001f670b61bcb02daa22297e0a41f671886beac27523b6f2b00382e5",
+				"ux_hash": "8b4b502a1307ef52e71f79986bcb02ec290bf0e6003d8e1832412ff0ce0e516c"
 			},
 			"body": {
 				"txns": [
@@ -3910,7 +4002,8 @@
 				"timestamp": 1518616125,
 				"fee": 2429991667,
 				"version": 0,
-				"tx_body_hash": "dab63dac9e421ccb489a03fcaf9f4c0cdce9ad5990ecafd0895a694cf29dc65f"
+				"tx_body_hash": "dab63dac9e421ccb489a03fcaf9f4c0cdce9ad5990ecafd0895a694cf29dc65f",
+				"ux_hash": "4457654a43e1226e229a60b9fc2fdc6860706d90a736086d61db293041814ea0"
 			},
 			"body": {
 				"txns": [
@@ -3946,7 +4039,8 @@
 				"timestamp": 1518616155,
 				"fee": 2430033334,
 				"version": 0,
-				"tx_body_hash": "048c0dc67bbf55c729f5d65b66df17d5065e411cc3a0197114109791a8d3bba2"
+				"tx_body_hash": "048c0dc67bbf55c729f5d65b66df17d5065e411cc3a0197114109791a8d3bba2",
+				"ux_hash": "dd68c698e2d0c37e3d636f3da1d734651e2a1e1938208af9130dfea4503ef3bd"
 			},
 			"body": {
 				"txns": [
@@ -3982,7 +4076,8 @@
 				"timestamp": 1518616185,
 				"fee": 2430075001,
 				"version": 0,
-				"tx_body_hash": "586ff4f5501b0597302362624ff8949280454477bab9a419abfdb6d4aabaa20a"
+				"tx_body_hash": "586ff4f5501b0597302362624ff8949280454477bab9a419abfdb6d4aabaa20a",
+				"ux_hash": "eecd71b631ae1f98e287eb859835a261bc1035cbf2ccff5840d16a4fc926eccf"
 			},
 			"body": {
 				"txns": [
@@ -4018,7 +4113,8 @@
 				"timestamp": 1518616205,
 				"fee": 2430116667,
 				"version": 0,
-				"tx_body_hash": "2b1da4d76b9c157536afad1dffa2ba4126edfab726a5cee9e798516055b4f046"
+				"tx_body_hash": "2b1da4d76b9c157536afad1dffa2ba4126edfab726a5cee9e798516055b4f046",
+				"ux_hash": "e8264b3796faa8289ecb1e813aba1f29779ebf254b349cfcbb766c4e9aca55a1"
 			},
 			"body": {
 				"txns": [
@@ -4054,7 +4150,8 @@
 				"timestamp": 1518616315,
 				"fee": 2430144445,
 				"version": 0,
-				"tx_body_hash": "87a23503f1903b6815e9d3d7dd128d7228f17fb0a64d3b62c4592af91d1522fd"
+				"tx_body_hash": "87a23503f1903b6815e9d3d7dd128d7228f17fb0a64d3b62c4592af91d1522fd",
+				"ux_hash": "07378cf06e540497b0993269eadff3d4b4d439c217ac5f986c784363774a5c68"
 			},
 			"body": {
 				"txns": [
@@ -4090,7 +4187,8 @@
 				"timestamp": 1518616375,
 				"fee": 2430297223,
 				"version": 0,
-				"tx_body_hash": "7c19957455569b4a7200ea9b6ca3d6803f79e9ea8c09f635be80ceb50e24e09d"
+				"tx_body_hash": "7c19957455569b4a7200ea9b6ca3d6803f79e9ea8c09f635be80ceb50e24e09d",
+				"ux_hash": "0604194fd9bf437a4f694e7c3b0c1661aaddc395cad9e33f600b111cfa3d7fd6"
 			},
 			"body": {
 				"txns": [
@@ -4126,7 +4224,8 @@
 				"timestamp": 1518616415,
 				"fee": 2430380556,
 				"version": 0,
-				"tx_body_hash": "3bc705341a7a44d7c33c00aa78edc2f6eb6524560789de8d4caf280e73e2dcf8"
+				"tx_body_hash": "3bc705341a7a44d7c33c00aa78edc2f6eb6524560789de8d4caf280e73e2dcf8",
+				"ux_hash": "18d35dd38e56662d065d35dd89031386a70ab549d2b1e31d993fe1a45937c55c"
 			},
 			"body": {
 				"txns": [
@@ -4162,7 +4261,8 @@
 				"timestamp": 1518616465,
 				"fee": 2430436112,
 				"version": 0,
-				"tx_body_hash": "c609716b3fe99c26bee16533b41d41167f8d0abb4015bcf83c890abe98917d03"
+				"tx_body_hash": "c609716b3fe99c26bee16533b41d41167f8d0abb4015bcf83c890abe98917d03",
+				"ux_hash": "1e155bef86c3475b9249db629e18755cae7692a5cbd24fd59c36fd9c1aeb3c2d"
 			},
 			"body": {
 				"txns": [
@@ -4198,7 +4298,8 @@
 				"timestamp": 1518616515,
 				"fee": 2430505556,
 				"version": 0,
-				"tx_body_hash": "4fae8b5efb2d18e7cb3b1bda8395a3030a8d55463aec4b499a03ad4f4a390b6a"
+				"tx_body_hash": "4fae8b5efb2d18e7cb3b1bda8395a3030a8d55463aec4b499a03ad4f4a390b6a",
+				"ux_hash": "27ecf40b52320e85f2dd2ed5a2e993f65727f2a2a0f731fb8ad39c36b4ff0bc8"
 			},
 			"body": {
 				"txns": [
@@ -4234,7 +4335,8 @@
 				"timestamp": 1518616555,
 				"fee": 2430575001,
 				"version": 0,
-				"tx_body_hash": "1b2c060c632848d6bf75914139913c12dc698d63a930151d0e8d3992f21b3b33"
+				"tx_body_hash": "1b2c060c632848d6bf75914139913c12dc698d63a930151d0e8d3992f21b3b33",
+				"ux_hash": "eafb13813ca7cd599093ee9f2b51cbb9050373af5db1c437a71eaf232083c381"
 			},
 			"body": {
 				"txns": [
@@ -4270,7 +4372,8 @@
 				"timestamp": 1518634285,
 				"fee": 96750000,
 				"version": 0,
-				"tx_body_hash": "4ecb06d6ab31469d9d14887ea640a0ccab816bfabd57fdb73cc802426462eaee"
+				"tx_body_hash": "4ecb06d6ab31469d9d14887ea640a0ccab816bfabd57fdb73cc802426462eaee",
+				"ux_hash": "e4624b43137e573925c3fa68ecf66442c0b19f972a2f719719c96345ba18c80d"
 			},
 			"body": {
 				"txns": [
@@ -4312,7 +4415,8 @@
 				"timestamp": 1518634525,
 				"fee": 24187500,
 				"version": 0,
-				"tx_body_hash": "5c22e90cac707e9f3e2403867bb8b1a0a758ff6235fc89ca4b1810634fdc6e67"
+				"tx_body_hash": "5c22e90cac707e9f3e2403867bb8b1a0a758ff6235fc89ca4b1810634fdc6e67",
+				"ux_hash": "4ccdc4c4c2ce4b8c73274b4bed2ed5d564eb6e28242c7dead61aa2149e49a056"
 			},
 			"body": {
 				"txns": [
@@ -4354,7 +4458,8 @@
 				"timestamp": 1518634595,
 				"fee": 6046875,
 				"version": 0,
-				"tx_body_hash": "0b1a76b9706839ccd65f5bfb9bfb7b9bc12dd1d3a388599aacb3f0e987325016"
+				"tx_body_hash": "0b1a76b9706839ccd65f5bfb9bfb7b9bc12dd1d3a388599aacb3f0e987325016",
+				"ux_hash": "272db8183cdada5940003178e14c6565017690c2046767cf78071cbbaac019d6"
 			},
 			"body": {
 				"txns": [
@@ -4396,7 +4501,8 @@
 				"timestamp": 1518642825,
 				"fee": 1511719,
 				"version": 0,
-				"tx_body_hash": "256e0e0fffc731160bbfea9fef56fb1a1bdcd9618df9436031a6a8ad7b77d938"
+				"tx_body_hash": "256e0e0fffc731160bbfea9fef56fb1a1bdcd9618df9436031a6a8ad7b77d938",
+				"ux_hash": "8f925d83d90199e8b111d0c3e1b3a6cd15b6c38f5b9f4918965080538083fb73"
 			},
 			"body": {
 				"txns": [
@@ -4438,7 +4544,8 @@
 				"timestamp": 1518643015,
 				"fee": 377930,
 				"version": 0,
-				"tx_body_hash": "bbf8179bb139433eaa6ecc5458fb2fc2347624b34bfeded89d4ce733961a8066"
+				"tx_body_hash": "bbf8179bb139433eaa6ecc5458fb2fc2347624b34bfeded89d4ce733961a8066",
+				"ux_hash": "80973c6b48a61914d698680743e41b2df54f260830826d8cef8ee6dc08ed1781"
 			},
 			"body": {
 				"txns": [
@@ -4480,7 +4587,8 @@
 				"timestamp": 1518687275,
 				"fee": 94483,
 				"version": 0,
-				"tx_body_hash": "876a59d34949a15c57c26c045382c11966ff97130cfcd8de2137039d2afce9a1"
+				"tx_body_hash": "876a59d34949a15c57c26c045382c11966ff97130cfcd8de2137039d2afce9a1",
+				"ux_hash": "5601fbd4841d3e8ea4ac2935f4f10259923cb0b235af75650be7886816a88be2"
 			},
 			"body": {
 				"txns": [
@@ -4522,7 +4630,8 @@
 				"timestamp": 1518690085,
 				"fee": 23621,
 				"version": 0,
-				"tx_body_hash": "85de4a35bd2560a813cb85f148b8b3347156e4b3b9168d2a1e24c876c2081183"
+				"tx_body_hash": "85de4a35bd2560a813cb85f148b8b3347156e4b3b9168d2a1e24c876c2081183",
+				"ux_hash": "0b0ccb54f10611016f44b9f827e6c2184f417a813efd5baa56601815c6ebcb31"
 			},
 			"body": {
 				"txns": [
@@ -4564,7 +4673,8 @@
 				"timestamp": 1519993775,
 				"fee": 6047639,
 				"version": 0,
-				"tx_body_hash": "a14bbc57cdb135b0015ce5e668f5a86f60a1e3293d18ebb6fb183aeb6cd46114"
+				"tx_body_hash": "a14bbc57cdb135b0015ce5e668f5a86f60a1e3293d18ebb6fb183aeb6cd46114",
+				"ux_hash": "31c4bdeea122707e67cba2cde0a3ca0b6343fa692803ff7cb30eb93b4ada79c9"
 			},
 			"body": {
 				"txns": [
@@ -4606,7 +4716,8 @@
 				"timestamp": 1520143875,
 				"fee": 1511910,
 				"version": 0,
-				"tx_body_hash": "c135e57bb3c30748731c1c4148babac8fef4351cc28f93d1dc633a51c4926751"
+				"tx_body_hash": "c135e57bb3c30748731c1c4148babac8fef4351cc28f93d1dc633a51c4926751",
+				"ux_hash": "8e2b76c2e7141ed3cf47248f1d97fd1748a52c5068faf5e22abf20b85155c252"
 			},
 			"body": {
 				"txns": [
@@ -4648,7 +4759,8 @@
 				"timestamp": 1520501895,
 				"fee": 377978,
 				"version": 0,
-				"tx_body_hash": "5e7f3505865b69aff361594e2e0760cbabce08f97b0afaf122457d9e470846b1"
+				"tx_body_hash": "5e7f3505865b69aff361594e2e0760cbabce08f97b0afaf122457d9e470846b1",
+				"ux_hash": "1deb60545696a57a7eb6672560320c434f5fd9bbad59856a171291a6e4233910"
 			},
 			"body": {
 				"txns": [
@@ -4690,7 +4802,8 @@
 				"timestamp": 1520521315,
 				"fee": 378126,
 				"version": 0,
-				"tx_body_hash": "d1a61e15ca5d7b8f230501e565245b4d82dcab6bfbc8eee2ec6a99cc03679977"
+				"tx_body_hash": "d1a61e15ca5d7b8f230501e565245b4d82dcab6bfbc8eee2ec6a99cc03679977",
+				"ux_hash": "b076fb16d6c82f7e844ad998bab72d237e8aa73a6ddead9821f3fa288e43bcba"
 			},
 			"body": {
 				"txns": [
@@ -4732,7 +4845,8 @@
 				"timestamp": 1520521695,
 				"fee": 189063,
 				"version": 0,
-				"tx_body_hash": "fe12747fa82c2db318294feaf7c66e51f25bf98eeba94450b215cbcd5dd115a3"
+				"tx_body_hash": "fe12747fa82c2db318294feaf7c66e51f25bf98eeba94450b215cbcd5dd115a3",
+				"ux_hash": "63af23cbd8f43180d454e5d3b2010505af3b8fbc768c70e5163ffc013b6555cd"
 			},
 			"body": {
 				"txns": [
@@ -4774,7 +4888,8 @@
 				"timestamp": 1520521965,
 				"fee": 1,
 				"version": 0,
-				"tx_body_hash": "050909c81789777d23461836a0f22b842fc08d1af34773a9cb44b7b2afe272e6"
+				"tx_body_hash": "050909c81789777d23461836a0f22b842fc08d1af34773a9cb44b7b2afe272e6",
+				"ux_hash": "5cfc2b19dbd955385a3e8b83e694ca911ad1c2b662bb65ee0150241628c1fb36"
 			},
 			"body": {
 				"txns": [
@@ -4810,7 +4925,8 @@
 				"timestamp": 1520522795,
 				"fee": 1,
 				"version": 0,
-				"tx_body_hash": "4433b973748a4156b11294126238af04a43684d3ce48d60686738012e3a5a5ca"
+				"tx_body_hash": "4433b973748a4156b11294126238af04a43684d3ce48d60686738012e3a5a5ca",
+				"ux_hash": "8704ce450f5bf42468f373635ae2717aca1543d99faeba8c068694add237f547"
 			},
 			"body": {
 				"txns": [
@@ -4846,7 +4962,8 @@
 				"timestamp": 1520523705,
 				"fee": 94531,
 				"version": 0,
-				"tx_body_hash": "a1f88a288f70ee008a99d28bc64b1f461c0b6454b04f058120521391e4c58cf0"
+				"tx_body_hash": "a1f88a288f70ee008a99d28bc64b1f461c0b6454b04f058120521391e4c58cf0",
+				"ux_hash": "5461ae0f9f1e7bb8a11e732bd9cf469712b28738b0396d55199a3133c36e1538"
 			},
 			"body": {
 				"txns": [
@@ -4888,7 +5005,8 @@
 				"timestamp": 1520605905,
 				"fee": 94751,
 				"version": 0,
-				"tx_body_hash": "7fedede25290bd0663219c5783f3991cd4b23d7f1475b557632586ccd87c4969"
+				"tx_body_hash": "7fedede25290bd0663219c5783f3991cd4b23d7f1475b557632586ccd87c4969",
+				"ux_hash": "5ae734be33c594b52533fa443ed3834ddf5182b903ecc713eb35fe1a285d6db0"
 			},
 			"body": {
 				"txns": [

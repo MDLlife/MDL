@@ -114,7 +114,7 @@ func TestIntroductionMessage(t *testing.T) {
 					ConnectionDetails: ConnectionDetails{
 						ListenPort: 6000,
 						UserAgent: useragent.Data{
-							Coin:    "mdl",
+							Coin:    "skycoin",
 							Version: "0.24.1",
 						},
 						UnconfirmedVerifyTxn: params.VerifyTxn{
@@ -126,7 +126,7 @@ func TestIntroductionMessage(t *testing.T) {
 				},
 			},
 			userAgent: useragent.Data{
-				Coin:    "mdl",
+				Coin:    "skycoin",
 				Version: "0.24.1",
 			},
 			unconfirmedVerifyTxn: params.VerifyTxn{
@@ -138,7 +138,7 @@ func TestIntroductionMessage(t *testing.T) {
 				Mirror:          10001,
 				ListenPort:      6000,
 				ProtocolVersion: 1,
-				Extra: newIntroductionMessageExtra(pubkey, "mdl:0.24.1", params.VerifyTxn{
+				Extra: newIntroductionMessageExtra(pubkey, "skycoin:0.24.1", params.VerifyTxn{
 					BurnFactor:          4,
 					MaxTransactionSize:  32768,
 					MaxDropletPrecision: 3,
@@ -157,7 +157,7 @@ func TestIntroductionMessage(t *testing.T) {
 					ConnectionDetails: ConnectionDetails{
 						ListenPort: 6000,
 						UserAgent: useragent.Data{
-							Coin:    "mdl",
+							Coin:    "skycoin",
 							Version: "0.24.1",
 						},
 						UnconfirmedVerifyTxn: params.VerifyTxn{
@@ -169,7 +169,7 @@ func TestIntroductionMessage(t *testing.T) {
 				},
 			},
 			userAgent: useragent.Data{
-				Coin:    "mdl",
+				Coin:    "skycoin",
 				Version: "0.24.1",
 			},
 			unconfirmedVerifyTxn: params.VerifyTxn{
@@ -181,7 +181,7 @@ func TestIntroductionMessage(t *testing.T) {
 				Mirror:          10001,
 				ListenPort:      6000,
 				ProtocolVersion: 1,
-				Extra: append(newIntroductionMessageExtra(pubkey, "mdl:0.24.1", params.VerifyTxn{
+				Extra: append(newIntroductionMessageExtra(pubkey, "skycoin:0.24.1", params.VerifyTxn{
 					BurnFactor:          4,
 					MaxTransactionSize:  32768,
 					MaxDropletPrecision: 3,
@@ -201,7 +201,7 @@ func TestIntroductionMessage(t *testing.T) {
 				Mirror:          10001,
 				ListenPort:      6000,
 				ProtocolVersion: 1,
-				Extra: newIntroductionMessageExtra(pubkey2, "mdl:0.24.1", params.VerifyTxn{
+				Extra: newIntroductionMessageExtra(pubkey2, "skycoin:0.24.1", params.VerifyTxn{
 					BurnFactor:          4,
 					MaxTransactionSize:  32768,
 					MaxDropletPrecision: 3,
@@ -253,7 +253,7 @@ func TestIntroductionMessage(t *testing.T) {
 				Mirror:          10001,
 				ListenPort:      6000,
 				ProtocolVersion: 1,
-				Extra:           append(append(pubkey[:], []byte{5, 0, 0, 0, 32, 32, 32, 32, 1}...), encoder.SerializeString("mdl:0241")...),
+				Extra:           append(append(pubkey[:], []byte{5, 0, 0, 0, 32, 32, 32, 32, 1}...), encoder.SerializeString("skycoin:0241")...),
 			},
 		},
 		{
@@ -269,7 +269,7 @@ func TestIntroductionMessage(t *testing.T) {
 				Mirror:          10001,
 				ListenPort:      6000,
 				ProtocolVersion: 1,
-				Extra:           append(append(pubkey[:], []byte{1, 0, 0, 0, 32, 32, 32, 32, 1}...), encoder.SerializeString("mdl:0.24.1")...),
+				Extra:           append(append(pubkey[:], []byte{1, 0, 0, 0, 32, 32, 32, 32, 1}...), encoder.SerializeString("skycoin:0.24.1")...),
 			},
 		},
 		{
@@ -285,7 +285,7 @@ func TestIntroductionMessage(t *testing.T) {
 				Mirror:          10001,
 				ListenPort:      6000,
 				ProtocolVersion: 1,
-				Extra:           append(append(pubkey[:], []byte{2, 0, 0, 0, 1, 0, 0, 0, 1}...), encoder.SerializeString("mdl:0.24.1")...),
+				Extra:           append(append(pubkey[:], []byte{2, 0, 0, 0, 1, 0, 0, 0, 1}...), encoder.SerializeString("skycoin:0.24.1")...),
 			},
 		},
 		{
@@ -301,7 +301,7 @@ func TestIntroductionMessage(t *testing.T) {
 				Mirror:          10001,
 				ListenPort:      6000,
 				ProtocolVersion: 1,
-				Extra:           append(append(pubkey[:], []byte{2, 0, 0, 0, 32, 32, 32, 32, 8}...), encoder.SerializeString("mdl:0.24.1")...),
+				Extra:           append(append(pubkey[:], []byte{2, 0, 0, 0, 32, 32, 32, 32, 8}...), encoder.SerializeString("skycoin:0.24.1")...),
 			},
 		},
 		{
@@ -340,7 +340,7 @@ func TestIntroductionMessage(t *testing.T) {
 					ConnectionDetails: ConnectionDetails{
 						ListenPort: 6000,
 						UserAgent: useragent.Data{
-							Coin:    "mdl",
+							Coin:    "skycoin",
 							Version: "0.24.1",
 							Remark:  "foo",
 						},
@@ -348,7 +348,7 @@ func TestIntroductionMessage(t *testing.T) {
 				},
 			},
 			userAgent: useragent.Data{
-				Coin:    "mdl",
+				Coin:    "skycoin",
 				Version: "0.24.1",
 				Remark:  "foo",
 			},
@@ -361,7 +361,7 @@ func TestIntroductionMessage(t *testing.T) {
 				Mirror:          10001,
 				ProtocolVersion: 1,
 				ListenPort:      6000,
-				Extra: newIntroductionMessageExtra(pubkey, "mdl:0.24.1(foo)", params.VerifyTxn{
+				Extra: newIntroductionMessageExtra(pubkey, "skycoin:0.24.1(foo)", params.VerifyTxn{
 					BurnFactor:          4,
 					MaxTransactionSize:  32768,
 					MaxDropletPrecision: 3,
@@ -419,7 +419,7 @@ func TestIntroductionMessage(t *testing.T) {
 				ProtocolVersion:    int32(tc.mockValue.protocolVersion),
 				MinProtocolVersion: int32(tc.mockValue.minProtocolVersion),
 				UserAgent: useragent.Data{
-					Coin:    "mdl",
+					Coin:    "skycoin",
 					Version: "0.24.1",
 				},
 				Mirror:           tc.mockValue.mirror,
@@ -486,7 +486,7 @@ func TestMessageEncodeDecode(t *testing.T) {
 				Mirror:          99998888,
 				ListenPort:      8888,
 				ProtocolVersion: 12341234,
-				Extra: newIntroductionMessageExtra(introPubKey, "mdl:0.25.0(foo)", params.VerifyTxn{
+				Extra: newIntroductionMessageExtra(introPubKey, "skycoin:0.25.0(foo)", params.VerifyTxn{
 					BurnFactor:          2,
 					MaxTransactionSize:  32768,
 					MaxDropletPrecision: 3,

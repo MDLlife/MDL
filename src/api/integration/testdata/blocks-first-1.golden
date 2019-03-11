@@ -8,7 +8,8 @@
 				"timestamp": 1516866501,
 				"fee": 999999999999900,
 				"version": 0,
-				"tx_body_hash": "8b2b69ab2c7d6a8a9038f7516fd466814c1b6025f4ddfa2209f3f450934c045e"
+				"tx_body_hash": "8b2b69ab2c7d6a8a9038f7516fd466814c1b6025f4ddfa2209f3f450934c045e",
+				"ux_hash": "7e6854f345b99764d0dcea5404d82c5d83c1a9668b9c17ba7d8dbd0c2e4721aa"
 			},
 			"body": {
 				"txns": [

@@ -6,7 +6,8 @@
 		"timestamp": 1520605905,
 		"fee": 94751,
 		"version": 0,
-		"tx_body_hash": "7fedede25290bd0663219c5783f3991cd4b23d7f1475b557632586ccd87c4969"
+		"tx_body_hash": "7fedede25290bd0663219c5783f3991cd4b23d7f1475b557632586ccd87c4969",
+		"ux_hash": "5ae734be33c594b52533fa443ed3834ddf5182b903ecc713eb35fe1a285d6db0"
 	},
 	"unspents": 114,
 	"unconfirmed": 0

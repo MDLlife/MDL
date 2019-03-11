@@ -111,19 +111,19 @@ func TestValidateAddress(t *testing.T) {
 			err:            ErrInvalidAddress,
 		},
 		{
-			addr:           "112.32.32.14:1024",
+			addr:           "112.32.32.14:7800",
 			allowLocalhost: false,
 		},
 		{
-			addr:           "112.32.32.14:10000",
+			addr:           "112.32.32.14:7800",
 			allowLocalhost: false,
 		},
 		{
-			addr:           "112.32.32.14:65535",
+			addr:           "112.32.32.14:7800",
 			allowLocalhost: false,
 		},
 		{
-			addr:           "127.0.0.1:8888",
+			addr:           "127.0.0.1:7800",
 			allowLocalhost: true,
 		},
 		{
@@ -132,13 +132,13 @@ func TestValidateAddress(t *testing.T) {
 			err:            ErrNoLocalhost,
 		},
 		{
-			addr:           "11.22.33.44:8080",
+			addr:           "11.22.33.44:7800",
 			allowLocalhost: false,
 		},
 		{
-			addr:           " 11.22.33.44:8080\n",
+			addr:           " 11.22.33.44:7800\n",
 			allowLocalhost: false,
-			cleanAddr:      "11.22.33.44:8080",
+			cleanAddr:      "11.22.33.44:7800",
 		},
 	}
 
@@ -1463,13 +1463,13 @@ func TestPexIsFull(t *testing.T) {
 
 	require.False(t, pex.IsFull())
 
-	err := pex.AddPeer("11.22.33.44:5555")
+	err := pex.AddPeer("11.22.33.44:7800")
 	require.NoError(t, err)
 	require.False(t, pex.IsFull())
 
 	pex.Config.Max = 2
 	require.False(t, pex.IsFull())
-	err = pex.AddPeer("33.44.55.66:5555")
+	err = pex.AddPeer("33.44.55.66:7800")
 	require.NoError(t, err)
 	require.True(t, pex.IsFull())
 
@@ -1478,12 +1478,12 @@ func TestPexIsFull(t *testing.T) {
 }
 
 func TestParseRemotePeerList(t *testing.T) {
-	body := `11.22.33.44:5555
-66.55.44.33:2020
+	body := `11.22.33.44:7800
+66.55.44.33:7800
 # comment
 
 127.0.0.1:8080
-  54.54.32.32:7899
+  54.54.32.32:7800
 11.33.11.33
 22.44.22.44:99
 `
@@ -1491,9 +1491,9 @@ func TestParseRemotePeerList(t *testing.T) {
 	peers := parseRemotePeerList(body)
 	require.Len(t, peers, 3)
 	require.Equal(t, []string{
-		"11.22.33.44:5555",
-		"66.55.44.33:2020",
-		"54.54.32.32:7899",
+		"11.22.33.44:7800",
+		"66.55.44.33:7800",
+		"54.54.32.32:7800",
 	}, peers)
 }
 
@@ -1507,55 +1507,55 @@ func TestParseLocalPeerList(t *testing.T) {
 	}{
 		{
 			name: "valid, no localhost",
-			body: `11.22.33.44:5555
-66.55.44.33:2020
+			body: `11.22.33.44:7800
+66.55.44.33:7800
 # comment
 
-  54.54.32.32:7899
+  54.54.32.32:7800
 `,
 			peers: []string{
-				"11.22.33.44:5555",
-				"66.55.44.33:2020",
-				"54.54.32.32:7899",
+				"11.22.33.44:7800",
+				"66.55.44.33:7800",
+				"54.54.32.32:7800",
 			},
 			allowLocalhost: false,
 		},
 
 		{
 			name: "valid, localhost",
-			body: `11.22.33.44:5555
-66.55.44.33:2020
+			body: `11.22.33.44:7800
+66.55.44.33:7800
 # comment
 
-127.0.0.1:8080
-  54.54.32.32:7899
+127.0.0.1:7800
+  54.54.32.32:7800
 `,
 			peers: []string{
-				"11.22.33.44:5555",
-				"66.55.44.33:2020",
-				"127.0.0.1:8080",
-				"54.54.32.32:7899",
+				"11.22.33.44:7800",
+				"66.55.44.33:7800",
+				"127.0.0.1:7800",
+				"54.54.32.32:7800",
 			},
 			allowLocalhost: true,
 		},
 
 		{
 			name: "invalid, contains localhost but no localhost allowed",
-			body: `11.22.33.44:5555
-66.55.44.33:2020
+			body: `11.22.33.44:7800
+66.55.44.33:7800
 # comment
 
-127.0.0.1:8080
-  54.54.32.32:7899
+127.0.0.1:7800
+  54.54.32.32:7800
 `,
-			err:            fmt.Errorf("Peers list has invalid address 127.0.0.1:8080: %v", ErrNoLocalhost),
+			err:            fmt.Errorf("Peers list has invalid address 127.0.0.1:7800: %v", ErrNoLocalhost),
 			allowLocalhost: false,
 		},
 
 		{
 			name: "invalid, bad address",
-			body: `11.22.33.44:5555
-66.55.44.33:2020
+			body: `11.22.33.44:7800
+66.55.44.33:7800
 # comment
 
   54.54.32.32:99

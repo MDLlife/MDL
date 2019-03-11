@@ -5,19 +5,23 @@
 
 # Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
+PORT="8320"
+RPC_PORT="8330"
+IP_ADDR="127.0.0.1"
+HOST="http://$IP_ADDR:$PORT"
+RPC_ADDR="$IP_ADDR:$RPC_PORT"
 
 # Find unused port
-PORT="1024"
 while $(lsof -Pi :$PORT -sTCP:LISTEN -t >/dev/null) ; do
     PORT=$((PORT+1))
 done
 
-COIN="${COIN:-mdl}"
-RPC_PORT="$PORT"
+COIN="mdl"
+#RPC_PORT="$PORT"
 HOST="http://127.0.0.1:$PORT"
 RPC_ADDR="http://127.0.0.1:$RPC_PORT"
 MODE="stable"
-BINARY="mdl-integration"
+BINARY="$PWD/mdl-integration"
 TEST=""
 UPDATE=""
 # run go test with -v flag
@@ -95,7 +99,7 @@ echo "starting $COIN node in background with http listener on $HOST"
 ./"$BINARY" -disable-networking=true \
             -web-interface-port=$PORT \
             -download-peerlist=false \
-            -db-path=./src/api/integration/testdata/$DB_FILE \
+            -db-path=./src/api/integration/testdata/blockchain-180.db \
             -db-read-only=true \
             -launch-browser=false \
             -data-dir="$DATA_DIR" \

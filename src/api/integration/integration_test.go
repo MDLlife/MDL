@@ -64,7 +64,7 @@ const (
 	testModeEnableSeedAPI    = "enable-seed-api"
 	testModeDisableGUI       = "disable-gui"
 
-	testFixturesDir = "/test-fixtures"
+	testFixturesDir = "testdata"
 )
 
 type TestData struct {
