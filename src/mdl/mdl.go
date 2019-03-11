@@ -135,12 +135,12 @@ func (c *Coin) Run() {
 			c.logger.Error(err)
 			goto earlyShutdown
 		}
-	}
 
-	fullAddress = fmt.Sprintf("%s://%s", scheme, webInterface.Addr())
-	c.logger.Critical().Infof("Full address: %s", fullAddress)
-	if c.config.Node.PrintWebInterfaceAddress {
-		fmt.Println(fullAddress)
+		fullAddress = fmt.Sprintf("%s://%s", scheme, webInterface.Addr())
+		c.logger.Critical().Infof("Full address: %s", fullAddress)
+		if c.config.Node.PrintWebInterfaceAddress {
+			fmt.Println(fullAddress)
+		}
 	}
 
 	wg.Add(1)
