@@ -16,11 +16,11 @@ export class PriceService {
   ) {
     this.ngZone.runOutsideAngular(() => {
       Observable.timer(0, 10 * 60 * 1000).subscribe(() => {
-        this.http.get(`https://api.coinmarketcap.com/v2/ticker/${this.CMC_TICKER_ID}/`)
-          .map(response => response.json())
-          .subscribe(response => this.ngZone.run(() => {
+        // this.http.get(`https://api.coinmarketcap.com/v2/ticker/${this.CMC_TICKER_ID}/`)
+        //   .map(response => response.json())
+        //   .subscribe(response => this.ngZone.run(() => {
             this.price.next(0.05);
-          }));
+          // }));
       });
     });
   }
