@@ -22,8 +22,8 @@ func addPrivateKeyCmd() *cobra.Command {
     history enabled your wallet encryption password can be recovered from the
     history log. If you do not include the "-p" option you will be prompted to
     enter your password after you enter your command.`, cliConfig.FullWalletPath()),
-		SilenceUsage:          true,
-		Args:                  cobra.MinimumNArgs(1),
+		SilenceUsage: true,
+		Args:         cobra.MinimumNArgs(1),
 		DisableFlagsInUseLine: true,
 		RunE: func(c *cobra.Command, args []string) error {
 			// get private key

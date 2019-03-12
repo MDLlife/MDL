@@ -89,7 +89,6 @@ func validateAddress(ipPort string, allowLocalhost bool) (string, error) {
 		return "", ErrInvalidAddress
 	}
 
-
 	if port < 1024 {
 		return "", ErrPortTooLow
 	}

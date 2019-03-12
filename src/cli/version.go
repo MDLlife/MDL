@@ -15,10 +15,10 @@ func versionCmd() *cobra.Command {
 		SilenceUsage: true,
 		RunE: func(c *cobra.Command, args []string) error {
 			var ver = struct {
-				MDL string `json:"mdl"`
-				Cli     string `json:"cli"`
-				RPC     string `json:"rpc"`
-				Wallet  string `json:"wallet"`
+				MDL    string `json:"mdl"`
+				Cli    string `json:"cli"`
+				RPC    string `json:"rpc"`
+				Wallet string `json:"wallet"`
 			}{
 				Version,
 				Version,

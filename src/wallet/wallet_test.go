@@ -1563,7 +1563,7 @@ func TestRemoveBackupFiles(t *testing.T) {
 				},
 			},
 			map[string]struct{}{
-				"t1.wlt": struct{}{},
+				"t1.wlt": {},
 			},
 		},
 		{
@@ -1583,8 +1583,8 @@ func TestRemoveBackupFiles(t *testing.T) {
 				},
 			},
 			map[string]struct{}{
-				"t1.wlt": struct{}{},
-				"t2.wlt": struct{}{},
+				"t1.wlt": {},
+				"t2.wlt": {},
 			},
 		},
 		{
@@ -1608,9 +1608,9 @@ func TestRemoveBackupFiles(t *testing.T) {
 				},
 			},
 			map[string]struct{}{
-				"t1.wlt": struct{}{},
-				"t2.wlt": struct{}{},
-				"t3.wlt": struct{}{},
+				"t1.wlt": {},
+				"t2.wlt": {},
+				"t3.wlt": {},
 			},
 		},
 		{
@@ -1638,9 +1638,9 @@ func TestRemoveBackupFiles(t *testing.T) {
 				},
 			},
 			map[string]struct{}{
-				"t1.wlt": struct{}{},
-				"t2.wlt": struct{}{},
-				"t3.wlt": struct{}{},
+				"t1.wlt": {},
+				"t2.wlt": {},
+				"t3.wlt": {},
 			},
 		},
 		{
@@ -1672,9 +1672,9 @@ func TestRemoveBackupFiles(t *testing.T) {
 				},
 			},
 			map[string]struct{}{
-				"t1.wlt": struct{}{},
-				"t2.wlt": struct{}{},
-				"t3.wlt": struct{}{},
+				"t1.wlt": {},
+				"t2.wlt": {},
+				"t3.wlt": {},
 			},
 		},
 		{
@@ -1698,10 +1698,10 @@ func TestRemoveBackupFiles(t *testing.T) {
 				},
 			},
 			map[string]struct{}{
-				"t1.wlt":     struct{}{},
-				"t2.wlt":     struct{}{},
-				"t3.wlt":     struct{}{},
-				"t4.wlt.bak": struct{}{},
+				"t1.wlt":     {},
+				"t2.wlt":     {},
+				"t3.wlt":     {},
+				"t4.wlt.bak": {},
 			},
 		},
 		{
@@ -1725,10 +1725,10 @@ func TestRemoveBackupFiles(t *testing.T) {
 				},
 			},
 			map[string]struct{}{
-				"t1.wlt":     struct{}{},
-				"t2.wlt":     struct{}{},
-				"t3.wlt":     struct{}{},
-				"t3.wlt.bak": struct{}{},
+				"t1.wlt":     {},
+				"t2.wlt":     {},
+				"t3.wlt":     {},
+				"t3.wlt.bak": {},
 			},
 		},
 		{
@@ -1760,11 +1760,11 @@ func TestRemoveBackupFiles(t *testing.T) {
 				},
 			},
 			map[string]struct{}{
-				"t1.wlt":     struct{}{},
-				"t2.wlt":     struct{}{},
-				"t2.wlt.bak": struct{}{},
-				"t3.wlt":     struct{}{},
-				"t3.wlt.bak": struct{}{},
+				"t1.wlt":     {},
+				"t2.wlt":     {},
+				"t2.wlt.bak": {},
+				"t3.wlt":     {},
+				"t3.wlt.bak": {},
 			},
 		},
 		{
@@ -1796,11 +1796,11 @@ func TestRemoveBackupFiles(t *testing.T) {
 				},
 			},
 			map[string]struct{}{
-				"t1.wlt":     struct{}{},
-				"t2.wlt":     struct{}{},
-				"t2.wlt.bak": struct{}{},
-				"t3.wlt":     struct{}{},
-				"t3.wlt.bak": struct{}{},
+				"t1.wlt":     {},
+				"t2.wlt":     {},
+				"t2.wlt.bak": {},
+				"t3.wlt":     {},
+				"t3.wlt.bak": {},
 			},
 		},
 	}
@@ -2113,7 +2113,7 @@ func TestCreateWalletParamsVerify(t *testing.T) {
 				To:            toManual,
 				Wallet: CreateTransactionWalletParams{
 					ID:        "foo.wlt",
-					Addresses: []cipher.Address{cipher.Address{}},
+					Addresses: []cipher.Address{{}},
 				},
 			},
 			err: "Wallet.Addresses must not contain the null address",

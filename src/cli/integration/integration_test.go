@@ -2504,10 +2504,10 @@ func TestVersion(t *testing.T) {
 	require.NoError(t, err)
 
 	var ver = struct {
-		MDL string `json:"mdl"`
-		Cli     string `json:"cli"`
-		RPC     string `json:"rpc"`
-		Wallet  string `json:"wallet"`
+		MDL    string `json:"mdl"`
+		Cli    string `json:"cli"`
+		RPC    string `json:"rpc"`
+		Wallet string `json:"wallet"`
 	}{}
 	err = json.NewDecoder(bytes.NewReader(output)).Decode(&ver)
 	require.NoError(t, err)

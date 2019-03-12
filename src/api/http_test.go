@@ -15,14 +15,14 @@ import (
 const configuredHost = "127.0.0.1:8320"
 
 var allAPISetsEnabled = map[string]struct{}{
-	EndpointsRead:                  struct{}{},
-	EndpointsTransaction:           struct{}{},
-	EndpointsStatus:                struct{}{},
-	EndpointsWallet:                struct{}{},
-	EndpointsInsecureWalletSeed:    struct{}{},
-	EndpointsDeprecatedWalletSpend: struct{}{},
-	EndpointsPrometheus:            struct{}{},
-	EndpointsNetCtrl:               struct{}{},
+	EndpointsRead:                  {},
+	EndpointsTransaction:           {},
+	EndpointsStatus:                {},
+	EndpointsWallet:                {},
+	EndpointsInsecureWalletSeed:    {},
+	EndpointsDeprecatedWalletSpend: {},
+	EndpointsPrometheus:            {},
+	EndpointsNetCtrl:               {},
 }
 
 func defaultMuxConfig() muxConfig {

@@ -69,8 +69,8 @@ func TestHealthHandler(t *testing.T) {
 				enableUnversionedAPI: true,
 				enableJSON20RPC:      true,
 				enabledAPISets: map[string]struct{}{
-					EndpointsStatus: struct{}{},
-					EndpointsRead:   struct{}{},
+					EndpointsStatus: {},
+					EndpointsRead:   {},
 				},
 			},
 			walletAPIEnabled: false,

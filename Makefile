@@ -178,13 +178,6 @@ lint: ## Run linters. Use make install-linters first.
 		-E unparam \
 		-E structcheck \
 		./...
-	# lib cgo can't use golint because it needs export directives in function docstrings that do not obey golint rules
-	golangci-lint run --no-config  --deadline=3m --concurrency=2 --disable-all --tests \
-		-E goimports \
-		-E varcheck \
-		-E unparam \
-		-E structcheck \
-		./lib/cgo/...
 
 check: lint test integration-test-stable integration-test-stable-disable-csrf integration-test-disable-wallet-api integration-test-disable-seed-api integration-test-enable-seed-api integration-test-disable-gui ## Run tests and linters
 
@@ -263,9 +256,9 @@ install-deps-libc: configure-build ## Install locally dependencies for testing l
 	cp -R $(BUILD_DIR)/usr/tmp/Criterion/include/* $(BUILD_DIR)/usr/include/
 
 format:  # Formats the code. Must have goimports installed (use make install-linters).
-	goimports -w -local github.com/mdllife/mdl ./cmd
-	goimports -w -local github.com/mdllife/mdl ./src
-	goimports -w -local github.com/mdllife/mdl ./lib
+	$(foreach pkg,$(PACKAGES),\
+		goimports -w -local github.com/MDLlife/MDL $(pkg);\
+		)
 
 install-deps-ui:  ## Install the UI dependencies
 	cd $(GUI_STATIC_DIR) && npm install

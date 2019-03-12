@@ -262,67 +262,67 @@ func TestPexLoadPeers(t *testing.T) {
 			name:     "load all",
 			filename: PeerCacheFilename,
 			peers: []Peer{
-				Peer{Addr: testPeers[0]},
-				Peer{Addr: testPeers[1]},
+				{Addr: testPeers[0]},
+				{Addr: testPeers[1]},
 			},
 			max:     2,
 			expectN: 2,
 			expectPeers: []Peer{
-				Peer{Addr: testPeers[0]},
-				Peer{Addr: testPeers[1]},
+				{Addr: testPeers[0]},
+				{Addr: testPeers[1]},
 			},
 		},
 		{
 			name:     "reach max",
 			filename: PeerCacheFilename,
 			peers: []Peer{
-				Peer{Addr: testPeers[0]},
-				Peer{Addr: testPeers[1]},
-				Peer{Addr: testPeers[2]},
+				{Addr: testPeers[0]},
+				{Addr: testPeers[1]},
+				{Addr: testPeers[2]},
 			},
 			max:     2,
 			expectN: 2,
 			expectPeers: []Peer{
-				Peer{Addr: testPeers[0]},
-				Peer{Addr: testPeers[1]},
-				Peer{Addr: testPeers[2]},
+				{Addr: testPeers[0]},
+				{Addr: testPeers[1]},
+				{Addr: testPeers[2]},
 			},
 		},
 		{
 			name:     "including invalid addr",
 			filename: PeerCacheFilename,
 			peers: []Peer{
-				Peer{Addr: wrongPortPeer},
-				Peer{Addr: testPeers[1]},
-				Peer{Addr: testPeers[2]},
+				{Addr: wrongPortPeer},
+				{Addr: testPeers[1]},
+				{Addr: testPeers[2]},
 			},
 			max:     2,
 			expectN: 2,
 			expectPeers: []Peer{
-				Peer{Addr: testPeers[1]},
-				Peer{Addr: testPeers[2]},
+				{Addr: testPeers[1]},
+				{Addr: testPeers[2]},
 			},
 		},
 		{
 			name:     "load all, fallback on oldPeerCacheFilename",
 			filename: oldPeerCacheFilename,
 			peers: []Peer{
-				Peer{Addr: testPeers[0]},
-				Peer{Addr: testPeers[1]},
+				{Addr: testPeers[0]},
+				{Addr: testPeers[1]},
 			},
 			max:     2,
 			expectN: 2,
 			expectPeers: []Peer{
-				Peer{Addr: testPeers[0]},
-				Peer{Addr: testPeers[1]},
+				{Addr: testPeers[0]},
+				{Addr: testPeers[1]},
 			},
 		},
 		{
 			name:     "no peers file",
 			filename: "foo.json",
 			peers: []Peer{
-				Peer{Addr: testPeers[0]},
-				Peer{Addr: testPeers[1]},
+				{Addr: testPeers[0]},
+				{Addr: testPeers[1]},
 			},
 			max:         2,
 			expectN:     0,
@@ -614,8 +614,8 @@ func TestPexTrustedPublic(t *testing.T) {
 
 			"none peer",
 			[]Peer{
-				Peer{Addr: testPeers[0]},
-				Peer{Addr: testPeers[1], Trusted: true, Private: true},
+				{Addr: testPeers[0]},
+				{Addr: testPeers[1], Trusted: true, Private: true},
 			},
 			[]Peer{},
 		},
@@ -623,23 +623,23 @@ func TestPexTrustedPublic(t *testing.T) {
 
 			"one trusted public peer",
 			[]Peer{
-				Peer{Addr: testPeers[0], Trusted: true, Private: false},
-				Peer{Addr: testPeers[1], Trusted: true, Private: true},
+				{Addr: testPeers[0], Trusted: true, Private: false},
+				{Addr: testPeers[1], Trusted: true, Private: true},
 			},
 			[]Peer{
-				Peer{Addr: testPeers[0], Trusted: true, Private: false},
+				{Addr: testPeers[0], Trusted: true, Private: false},
 			},
 		},
 		{
 
 			"all trust peer",
 			[]Peer{
-				Peer{Addr: testPeers[0], Trusted: true, Private: false},
-				Peer{Addr: testPeers[1], Trusted: true, Private: false},
+				{Addr: testPeers[0], Trusted: true, Private: false},
+				{Addr: testPeers[1], Trusted: true, Private: false},
 			},
 			[]Peer{
-				Peer{Addr: testPeers[0], Trusted: true, Private: false},
-				Peer{Addr: testPeers[1], Trusted: true, Private: false},
+				{Addr: testPeers[0], Trusted: true, Private: false},
+				{Addr: testPeers[1], Trusted: true, Private: false},
 			},
 		},
 	}
@@ -681,9 +681,9 @@ func TestPexRandomExchangeable(t *testing.T) {
 		{
 			name: "n=0 exchangeable=0",
 			peers: []Peer{
-				Peer{Addr: testPeers[0], Private: true, HasIncomingPort: true},
-				Peer{Addr: testPeers[1], Private: true, HasIncomingPort: true},
-				Peer{Addr: testPeers[2], Private: true, HasIncomingPort: true},
+				{Addr: testPeers[0], Private: true, HasIncomingPort: true},
+				{Addr: testPeers[1], Private: true, HasIncomingPort: true},
+				{Addr: testPeers[2], Private: true, HasIncomingPort: true},
 			},
 			n:           0,
 			expectN:     0,
@@ -692,36 +692,36 @@ func TestPexRandomExchangeable(t *testing.T) {
 		{
 			name: "n=0 exchangeable=1",
 			peers: []Peer{
-				Peer{Addr: testPeers[0], Private: false, HasIncomingPort: true},
-				Peer{Addr: testPeers[1], Private: true, HasIncomingPort: true},
-				Peer{Addr: testPeers[2], Private: true, HasIncomingPort: true},
+				{Addr: testPeers[0], Private: false, HasIncomingPort: true},
+				{Addr: testPeers[1], Private: true, HasIncomingPort: true},
+				{Addr: testPeers[2], Private: true, HasIncomingPort: true},
 			},
 			n:       0,
 			expectN: 1,
 			expectPeers: []Peer{
-				Peer{Addr: testPeers[0], Private: false, HasIncomingPort: true},
+				{Addr: testPeers[0], Private: false, HasIncomingPort: true},
 			},
 		},
 		{
 			name: "n=0 exchangeable=2",
 			peers: []Peer{
-				Peer{Addr: testPeers[0], Private: false, HasIncomingPort: true},
-				Peer{Addr: testPeers[1], Private: false, HasIncomingPort: true},
-				Peer{Addr: testPeers[2], Private: true, HasIncomingPort: true},
+				{Addr: testPeers[0], Private: false, HasIncomingPort: true},
+				{Addr: testPeers[1], Private: false, HasIncomingPort: true},
+				{Addr: testPeers[2], Private: true, HasIncomingPort: true},
 			},
 			n:       0,
 			expectN: 2,
 			expectPeers: []Peer{
-				Peer{Addr: testPeers[0], Private: false, HasIncomingPort: true},
-				Peer{Addr: testPeers[1], Private: false, HasIncomingPort: true},
+				{Addr: testPeers[0], Private: false, HasIncomingPort: true},
+				{Addr: testPeers[1], Private: false, HasIncomingPort: true},
 			},
 		},
 		{
 			name: "n=1 exchangeable=0",
 			peers: []Peer{
-				Peer{Addr: testPeers[0], Private: true, HasIncomingPort: true},
-				Peer{Addr: testPeers[1], Private: true, HasIncomingPort: true},
-				Peer{Addr: testPeers[2], Private: true, HasIncomingPort: true},
+				{Addr: testPeers[0], Private: true, HasIncomingPort: true},
+				{Addr: testPeers[1], Private: true, HasIncomingPort: true},
+				{Addr: testPeers[2], Private: true, HasIncomingPort: true},
 			},
 			n:           1,
 			expectN:     0,
@@ -730,28 +730,28 @@ func TestPexRandomExchangeable(t *testing.T) {
 		{
 			name: "n=1 exchangeable=1",
 			peers: []Peer{
-				Peer{Addr: testPeers[0], Private: false, HasIncomingPort: true},
-				Peer{Addr: testPeers[1], Private: false, HasIncomingPort: false},
-				Peer{Addr: testPeers[2], Private: true, HasIncomingPort: true},
+				{Addr: testPeers[0], Private: false, HasIncomingPort: true},
+				{Addr: testPeers[1], Private: false, HasIncomingPort: false},
+				{Addr: testPeers[2], Private: true, HasIncomingPort: true},
 			},
 			n:       1,
 			expectN: 1,
 			expectPeers: []Peer{
-				Peer{Addr: testPeers[0], Private: false, HasIncomingPort: true},
+				{Addr: testPeers[0], Private: false, HasIncomingPort: true},
 			},
 		},
 		{
 			name: "n=1 exchangeable=2",
 			peers: []Peer{
-				Peer{Addr: testPeers[0], Private: false, HasIncomingPort: true},
-				Peer{Addr: testPeers[1], Private: false, HasIncomingPort: true},
-				Peer{Addr: testPeers[2], Private: true, HasIncomingPort: true},
+				{Addr: testPeers[0], Private: false, HasIncomingPort: true},
+				{Addr: testPeers[1], Private: false, HasIncomingPort: true},
+				{Addr: testPeers[2], Private: true, HasIncomingPort: true},
 			},
 			n:       1,
 			expectN: 1,
 			expectPeers: []Peer{
-				Peer{Addr: testPeers[0], Private: false, HasIncomingPort: true},
-				Peer{Addr: testPeers[1], Private: false, HasIncomingPort: true},
+				{Addr: testPeers[0], Private: false, HasIncomingPort: true},
+				{Addr: testPeers[1], Private: false, HasIncomingPort: true},
 			},
 		},
 	}
@@ -798,7 +798,7 @@ func TestPeerRandomPublic(t *testing.T) {
 		{
 			"1 peer",
 			[]Peer{
-				Peer{Addr: testPeers[0]},
+				{Addr: testPeers[0]},
 			},
 			1,
 			1,
@@ -830,9 +830,9 @@ func TestPexRandomPublic(t *testing.T) {
 		{
 			"n=0 public=0",
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: true},
-				Peer{Addr: testPeers[1], Private: true},
-				Peer{Addr: testPeers[2], Private: true},
+				{Addr: testPeers[0], Private: true},
+				{Addr: testPeers[1], Private: true},
+				{Addr: testPeers[2], Private: true},
 			},
 			0,
 			0,
@@ -841,23 +841,23 @@ func TestPexRandomPublic(t *testing.T) {
 		{
 			"n=0 public=2",
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: false},
-				Peer{Addr: testPeers[1], Private: false},
-				Peer{Addr: testPeers[2], Private: true},
+				{Addr: testPeers[0], Private: false},
+				{Addr: testPeers[1], Private: false},
+				{Addr: testPeers[2], Private: true},
 			},
 			0,
 			2,
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: false},
-				Peer{Addr: testPeers[1], Private: false},
+				{Addr: testPeers[0], Private: false},
+				{Addr: testPeers[1], Private: false},
 			},
 		},
 		{
 			"n=1 public=0",
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: true},
-				Peer{Addr: testPeers[1], Private: true},
-				Peer{Addr: testPeers[2], Private: true},
+				{Addr: testPeers[0], Private: true},
+				{Addr: testPeers[1], Private: true},
+				{Addr: testPeers[2], Private: true},
 			},
 			1,
 			0,
@@ -866,23 +866,23 @@ func TestPexRandomPublic(t *testing.T) {
 		{
 			"n=1 public=2",
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: false},
-				Peer{Addr: testPeers[1], Private: false},
-				Peer{Addr: testPeers[2], Private: true},
+				{Addr: testPeers[0], Private: false},
+				{Addr: testPeers[1], Private: false},
+				{Addr: testPeers[2], Private: true},
 			},
 			1,
 			1,
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: false},
-				Peer{Addr: testPeers[1], Private: false},
+				{Addr: testPeers[0], Private: false},
+				{Addr: testPeers[1], Private: false},
 			},
 		},
 		{
 			"n=2 public=0",
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: true},
-				Peer{Addr: testPeers[1], Private: true},
-				Peer{Addr: testPeers[2], Private: true},
+				{Addr: testPeers[0], Private: true},
+				{Addr: testPeers[1], Private: true},
+				{Addr: testPeers[2], Private: true},
 			},
 			2,
 			0,
@@ -891,28 +891,28 @@ func TestPexRandomPublic(t *testing.T) {
 		{
 			"n=2 public=1",
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: false},
-				Peer{Addr: testPeers[1], Private: true},
-				Peer{Addr: testPeers[2], Private: true},
+				{Addr: testPeers[0], Private: false},
+				{Addr: testPeers[1], Private: true},
+				{Addr: testPeers[2], Private: true},
 			},
 			2,
 			1,
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: false},
+				{Addr: testPeers[0], Private: false},
 			},
 		},
 		{
 			"n=2 public=2",
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: false},
-				Peer{Addr: testPeers[1], Private: false},
-				Peer{Addr: testPeers[2], Private: true},
+				{Addr: testPeers[0], Private: false},
+				{Addr: testPeers[1], Private: false},
+				{Addr: testPeers[2], Private: true},
 			},
 			2,
 			2,
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: false},
-				Peer{Addr: testPeers[1], Private: false},
+				{Addr: testPeers[0], Private: false},
+				{Addr: testPeers[1], Private: false},
 			},
 		},
 	}
@@ -956,8 +956,8 @@ func TestPexTrusted(t *testing.T) {
 
 			"no trust peer",
 			[]Peer{
-				Peer{Addr: testPeers[0]},
-				Peer{Addr: testPeers[1]},
+				{Addr: testPeers[0]},
+				{Addr: testPeers[1]},
 			},
 			[]Peer{},
 		},
@@ -965,23 +965,23 @@ func TestPexTrusted(t *testing.T) {
 
 			"one trust peer",
 			[]Peer{
-				Peer{Addr: testPeers[0], Trusted: true},
-				Peer{Addr: testPeers[1]},
+				{Addr: testPeers[0], Trusted: true},
+				{Addr: testPeers[1]},
 			},
 			[]Peer{
-				Peer{Addr: testPeers[0], Trusted: true},
+				{Addr: testPeers[0], Trusted: true},
 			},
 		},
 		{
 
 			"all trust peer",
 			[]Peer{
-				Peer{Addr: testPeers[0], Trusted: true},
-				Peer{Addr: testPeers[1], Trusted: true},
+				{Addr: testPeers[0], Trusted: true},
+				{Addr: testPeers[1], Trusted: true},
 			},
 			[]Peer{
-				Peer{Addr: testPeers[0], Trusted: true},
-				Peer{Addr: testPeers[1], Trusted: true},
+				{Addr: testPeers[0], Trusted: true},
+				{Addr: testPeers[1], Trusted: true},
 			},
 		},
 	}
@@ -1021,8 +1021,8 @@ func TestPexPrivate(t *testing.T) {
 
 			"no private peer",
 			[]Peer{
-				Peer{Addr: testPeers[0]},
-				Peer{Addr: testPeers[1]},
+				{Addr: testPeers[0]},
+				{Addr: testPeers[1]},
 			},
 			[]Peer{},
 		},
@@ -1030,23 +1030,23 @@ func TestPexPrivate(t *testing.T) {
 
 			"one private peer",
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: true},
-				Peer{Addr: testPeers[1]},
+				{Addr: testPeers[0], Private: true},
+				{Addr: testPeers[1]},
 			},
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: true},
+				{Addr: testPeers[0], Private: true},
 			},
 		},
 		{
 
 			"all trust peer",
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: true},
-				Peer{Addr: testPeers[1], Private: true},
+				{Addr: testPeers[0], Private: true},
+				{Addr: testPeers[1], Private: true},
 			},
 			[]Peer{
-				Peer{Addr: testPeers[0], Private: true},
-				Peer{Addr: testPeers[1], Private: true},
+				{Addr: testPeers[0], Private: true},
+				{Addr: testPeers[1], Private: true},
 			},
 		},
 	}
@@ -1085,12 +1085,12 @@ func TestPexResetAllRetryTimes(t *testing.T) {
 		{
 			"all",
 			[]Peer{
-				Peer{Addr: testPeers[0], RetryTimes: 1},
-				Peer{Addr: testPeers[1], RetryTimes: 2},
+				{Addr: testPeers[0], RetryTimes: 1},
+				{Addr: testPeers[1], RetryTimes: 2},
 			},
 			[]Peer{
-				Peer{Addr: testPeers[0]},
-				Peer{Addr: testPeers[1]},
+				{Addr: testPeers[0]},
+				{Addr: testPeers[1]},
 			},
 		},
 	}
@@ -1124,25 +1124,25 @@ func TestPexIncreaseRetryTimes(t *testing.T) {
 		{
 			"addr not exist",
 			[]Peer{
-				Peer{Addr: testPeers[0]},
-				Peer{Addr: testPeers[1]},
+				{Addr: testPeers[0]},
+				{Addr: testPeers[1]},
 			},
 			testPeers[2],
 			map[string]Peer{
-				testPeers[0]: Peer{Addr: testPeers[0]},
-				testPeers[1]: Peer{Addr: testPeers[1]},
+				testPeers[0]: {Addr: testPeers[0]},
+				testPeers[1]: {Addr: testPeers[1]},
 			},
 		},
 		{
 			"ok",
 			[]Peer{
-				Peer{Addr: testPeers[0]},
-				Peer{Addr: testPeers[1]},
+				{Addr: testPeers[0]},
+				{Addr: testPeers[1]},
 			},
 			testPeers[0],
 			map[string]Peer{
-				testPeers[0]: Peer{Addr: testPeers[0], LastSeen: time.Now().UTC().Unix(), RetryTimes: 1},
-				testPeers[1]: Peer{Addr: testPeers[1]},
+				testPeers[0]: {Addr: testPeers[0], LastSeen: time.Now().UTC().Unix(), RetryTimes: 1},
+				testPeers[1]: {Addr: testPeers[1]},
 			},
 		},
 	}
@@ -1188,13 +1188,13 @@ func TestPexResetRetryTimes(t *testing.T) {
 		{
 			"reset one",
 			[]Peer{
-				Peer{Addr: testPeers[0], LastSeen: time.Now().UTC().Unix(), RetryTimes: 10},
-				Peer{Addr: testPeers[1], RetryTimes: 2},
+				{Addr: testPeers[0], LastSeen: time.Now().UTC().Unix(), RetryTimes: 10},
+				{Addr: testPeers[1], RetryTimes: 2},
 			},
 			testPeers[0],
 			[]Peer{
-				Peer{Addr: testPeers[0], LastSeen: time.Now().UTC().Unix()},
-				Peer{Addr: testPeers[1], RetryTimes: 2},
+				{Addr: testPeers[0], LastSeen: time.Now().UTC().Unix()},
+				{Addr: testPeers[1], RetryTimes: 2},
 			},
 		},
 	}

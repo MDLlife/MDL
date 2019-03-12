@@ -331,7 +331,7 @@ func print_stat(X []*MinimalConnectionManager,
 	iter int) {
 
 	n := 0
-	for i, _ := range X {
+	for i := range X {
 		n += X[i].GetNode().Incoming_block_count
 	}
 
@@ -450,7 +450,7 @@ func Simulate_compare_node_StateQueue(
 
 	if true {
 		keys := []int{}
-		for seqno, _ := range yyy {
+		for seqno := range yyy {
 			keys = append(keys, int(seqno))
 		}
 
@@ -550,7 +550,7 @@ func get_random_index_subset(N int, S int) []int {
 
 	keys := []int{}
 
-	for k, _ := range index_map {
+	for k := range index_map {
 		keys = append(keys, k)
 	}
 
@@ -603,7 +603,7 @@ func main() {
 			Cfg_simu_num_node, Cfg_simu_fanout_per_node,
 			Cfg_simu_fanout_per_node)
 
-		for i, _ := range X {
+		for i := range X {
 			cm := X[i]
 			for g := 0; g < Cfg_simu_fanout_per_node; g++ {
 				j := mathrand.Intn(Cfg_simu_num_node)
@@ -643,7 +643,7 @@ func main() {
 	// Connect. PROD: This should request connections. The
 	// connections can be accepted, rejected or never answered. Such
 	// replies are asynchronous. SIMU: we connect synchronously.
-	for i, _ := range X {
+	for i := range X {
 		X[i].RequestConnectionToAllMyPublisher()
 	}
 
@@ -753,7 +753,7 @@ func main() {
 	print_stat(X, iter)
 
 	if Cfg_debug_node_final_state {
-		for i, _ := range X {
+		for i := range X {
 			fmt.Printf("FILE_FinalState.txt|NODE i=%d ", i)
 			X[i].GetNode().Print()
 			fmt.Printf("\n")

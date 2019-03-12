@@ -8,9 +8,9 @@ import (
 
 func verifyAddressCmd() *cobra.Command {
 	return &cobra.Command{
-		Short:                 "Verify a mdl address",
-		Use:                   "verifyAddress [mdl address]",
-		Args:                  cobra.ExactArgs(1),
+		Short: "Verify a mdl address",
+		Use:   "verifyAddress [mdl address]",
+		Args:  cobra.ExactArgs(1),
 		DisableFlagsInUseLine: true,
 		SilenceUsage:          true,
 		RunE: func(c *cobra.Command, args []string) error {
