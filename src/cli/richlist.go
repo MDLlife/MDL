@@ -11,10 +11,10 @@ import (
 
 func richlistCmd() *cobra.Command {
 	return &cobra.Command{
-		Short: "Get mdl richlist",
-		Long:  "Returns top N address (default 20) balances (based on unspent outputs). Optionally include distribution addresses (exluded by default).",
-		Use:   "richlist [top N addresses (20 default)] [include distribution addresses (false default)]",
-		Args:  cobra.MaximumNArgs(2),
+		Short:                 "Get mdl richlist",
+		Long:                  "Returns top N address (default 20) balances (based on unspent outputs). Optionally include distribution addresses (exluded by default).",
+		Use:                   "richlist [top N addresses (20 default)] [include distribution addresses (false default)]",
+		Args:                  cobra.MaximumNArgs(2),
 		DisableFlagsInUseLine: true,
 		SilenceUsage:          true,
 		RunE:                  getRichlist,

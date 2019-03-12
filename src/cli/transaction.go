@@ -15,8 +15,8 @@ import (
 
 func transactionCmd() *cobra.Command {
 	return &cobra.Command{
-		Short: "Show detail info of specific transaction",
-		Use:   "transaction [transaction id]",
+		Short:                 "Show detail info of specific transaction",
+		Use:                   "transaction [transaction id]",
 		DisableFlagsInUseLine: true,
 		SilenceUsage:          true,
 		Args:                  cobra.MaximumNArgs(1),
@@ -46,8 +46,8 @@ func transactionCmd() *cobra.Command {
 
 func decodeRawTxCmd() *cobra.Command {
 	return &cobra.Command{
-		Short: "Decode raw transaction",
-		Use:   "decodeRawTransaction [raw transaction]",
+		Short:                 "Decode raw transaction",
+		Use:                   "decodeRawTransaction [raw transaction]",
 		DisableFlagsInUseLine: true,
 		SilenceUsage:          true,
 		Args:                  cobra.ExactArgs(1),

@@ -232,8 +232,8 @@ func NewDaemonConfig() DaemonConfig {
 		BlockCreationInterval:        10,
 		UnconfirmedRefreshRate:       time.Minute,
 		UnconfirmedRemoveInvalidRate: time.Minute,
-		Mirror:               rand.New(rand.NewSource(time.Now().UTC().UnixNano())).Uint32(),
-		UnconfirmedVerifyTxn: params.UserVerifyTxn,
+		Mirror:                       rand.New(rand.NewSource(time.Now().UTC().UnixNano())).Uint32(),
+		UnconfirmedVerifyTxn:         params.UserVerifyTxn,
 	}
 }
 

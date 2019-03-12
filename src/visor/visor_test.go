@@ -2957,10 +2957,10 @@ func TestVerifyTxnVerbose(t *testing.T) {
 			getArrayRet: inputs[:1],
 		},
 		{
-			name: "transaction violate soft constraints, transaction size bigger than max block size",
+			name:                   "transaction violate soft constraints, transaction size bigger than max block size",
 			maxUserTransactionSize: 1,
-			txn: txn,
-			err: ErrTxnViolatesSoftConstraint{errors.New("Transaction size bigger than max block size")},
+			txn:                    txn,
+			err:                    ErrTxnViolatesSoftConstraint{errors.New("Transaction size bigger than max block size")},
 
 			getArrayRet: inputs[:1],
 		},

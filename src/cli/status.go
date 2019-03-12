@@ -19,8 +19,8 @@ type ConfigStatus struct {
 
 func statusCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "status",
-		Short: "Check the status of current mdl node",
+		Use:                   "status",
+		Short:                 "Check the status of current mdl node",
 		DisableFlagsInUseLine: true,
 		SilenceUsage:          true,
 		Args:                  cobra.NoArgs,
@@ -42,8 +42,8 @@ func statusCmd() *cobra.Command {
 
 func showConfigCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "showConfig",
-		Short: "Show cli configuration",
+		Use:                   "showConfig",
+		Short:                 "Show cli configuration",
 		DisableFlagsInUseLine: true,
 		RunE: func(c *cobra.Command, args []string) error {
 			return printJSON(cliConfig)
