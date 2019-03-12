@@ -1,9 +1,9 @@
 {
-	"current_supply": "100.000000",
+	"current_supply": "560000000.000000",
 	"total_supply": "560000000.000000",
 	"max_supply": "1000000000.000000",
-	"current_coinhour_supply": "7442597",
-	"total_coinhour_supply": "444156776696",
+	"current_coinhour_supply": "100572019481",
+	"total_coinhour_supply": "100572019481",
 	"unlocked_distribution_addresses": [
 		"czQ5CFysUTYDNqB2usjjdvEKy8Y5Wpewyh",
 		"2dAGNzdgCPv4Shbe4A7hkNQEJL4jUF3ehcF",

@@ -5,31 +5,25 @@
 
 # Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
-PORT="8320"
-RPC_PORT="8330"
-IP_ADDR="127.0.0.1"
-HOST="http://$IP_ADDR:$PORT"
-RPC_ADDR="$IP_ADDR:$RPC_PORT"
 
 # Find unused port
+PORT="1024"
 while $(lsof -Pi :$PORT -sTCP:LISTEN -t >/dev/null) ; do
     PORT=$((PORT+1))
 done
 
-COIN="mdl"
-#RPC_PORT="$PORT"
+COIN="${COIN:-mdl}"
+RPC_PORT="$PORT"
 HOST="http://127.0.0.1:$PORT"
 RPC_ADDR="http://127.0.0.1:$RPC_PORT"
 MODE="stable"
-BINARY="$PWD/mdl-integration"
+NAME=""
 TEST=""
 UPDATE=""
 # run go test with -v flag
 VERBOSE=""
 # run go test with -run flag
 RUN_TESTS=""
-# run tests with csrf enabled
-USE_CSRF=""
 DISABLE_CSRF="-disable-csrf"
 USE_CSRF=""
 DB_NO_UNCONFIRMED=""
@@ -97,9 +91,13 @@ mkdir -p coverage/
 echo "starting $COIN node in background with http listener on $HOST"
 
 ./"$BINARY" -disable-networking=true \
+            -genesis-signature eb10468d10054d15f2b6f8946cd46797779aa20a7617ceb4be884189f219bc9a164e56a5b9f7bec392a804ff3740210348d73db77a37adb542a8e08d429ac92700 \
+            -genesis-address 2jBbGxZRGoQG1mqhPBnXnLTxK6oxsTf8os6 \
+            -blockchain-public-key 0328c576d3f420e7682058a981173a4b374c7cc5ff55bf394d3cf57059bbe6456a \
+            -db-path=./src/api/integration/testdata/blockchain-180.db \
             -web-interface-port=$PORT \
             -download-peerlist=false \
-            -db-path=./src/api/integration/testdata/blockchain-180.db \
+            -db-path=./src/api/integration/testdata/$DB_FILE \
             -db-read-only=true \
             -launch-browser=false \
             -data-dir="$DATA_DIR" \
@@ -146,7 +144,6 @@ echo "shutting down $COIN node"
 # Shutdown mdl node
 kill -s SIGINT $MDL_PID
 wait $MDL_PID
-NAME=""
 
 rm "$BINARY"
 
