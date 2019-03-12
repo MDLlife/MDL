@@ -19,8 +19,10 @@ IP_ADDR="127.0.0.1"
 
 RPC_ADDR="$IP_ADDR:$RPC_PORT"
 
-DATA_DIR=$(mktemp -d -t mdl-data-dir.XXXXXX)
-WALLET_DIR="${DATA_DIR}/wallets"
+COIN="${COIN:-mdl}"
+
+DATA_DIR=/tmp/tmp.Ict7RGVuhX
+WALLET_DIR=$(DATA_DIR)/wallets
 
 # Electron files directory
 ELECTRON_DIR = electron
@@ -221,6 +223,7 @@ integration-test-auth: ## Run stable tests with HTTP Basic auth enabled
 	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-auth.sh
 
 integration-test-server:
+	rm -rf $(DATA_DIR);
 	go build -o /opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
 	/opt/gocode/src/github.com/MDLlife/MDL/cmd/mdl/mdl.go;
 	/opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
@@ -228,18 +231,17 @@ integration-test-server:
 	-genesis-signature eb10468d10054d15f2b6f8946cd46797779aa20a7617ceb4be884189f219bc9a164e56a5b9f7bec392a804ff3740210348d73db77a37adb542a8e08d429ac92700 \
 	-genesis-address 2jBbGxZRGoQG1mqhPBnXnLTxK6oxsTf8os6 \
 	-blockchain-public-key 0328c576d3f420e7682058a981173a4b374c7cc5ff55bf394d3cf57059bbe6456a \
-	-db-path=./src/api/integration/testdata/blockchain-180.db \
 	-peerlist-url https://downloads.mdl.net/blockchain/peers.txt \
 	-web-interface-addr=$(IP_ADDR) \
 	-web-interface-port=$(PORT) \
 	-download-peerlist=false \
-	-db-path=./src/api/integration/testdata/blockchain-180.db \
+	-db-path=$(PWD)/src/api/integration/testdata/blockchain-180.db \
 	-db-read-only=true \
 	-rpc-interface=true \
 	-enable-all-api-sets=true \
 	-launch-browser=false \
-	-data-dir="$DATA_DIR" \
-	-wallet-dir="$WALLET_DIR" \
+	-data-dir=$(DATA_DIR) \
+	-wallet-dir=$(WALLET_DIR) \
 	-disable-csrf;
 
 cover: ## Runs tests on ./src/ with HTML code coverage

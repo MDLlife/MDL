@@ -62,5 +62,16 @@
 		}
 	],
 	"outgoing_outputs": [],
-	"incoming_outputs": []
+	"incoming_outputs": [
+		{
+			"hash": "32a060b2e2025cceb40f3f982c887952d3358d468db1719dd892eab575c14c14",
+			"time": 1431574528,
+			"block_seq": 180,
+			"src_tx": "701d23fd513bad325938ba56869f9faba19384a8ec3dd41833aff147eac53947",
+			"address": "212mwY3Dmey6vwnWpiph99zzCmopXTqeVEN",
+			"coins": "10000.000000",
+			"hours": 5716263,
+			"calculated_hours": 5716263
+		}
+	]
 }

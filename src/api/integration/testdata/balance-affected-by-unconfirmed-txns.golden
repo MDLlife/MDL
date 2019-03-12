@@ -5,7 +5,7 @@
 	},
 	"predicted": {
 		"coins": 616700000000,
-		"hours": 45935222
+		"hours": 11637641
 	},
 	"addresses": {
 		"212mwY3Dmey6vwnWpiph99zzCmopXTqeVEN": {
@@ -14,8 +14,8 @@
 				"hours": 205115
 			},
 			"predicted": {
-				"coins": 1000000000,
-				"hours": 205115
+				"coins": 11000000000,
+				"hours": 5921378
 			}
 		},
 		"R6aHqKWSQfvpdo2fGSrq4F1RYXkBWR9HHJ": {
@@ -24,8 +24,8 @@
 				"hours": 45730107
 			},
 			"predicted": {
-				"coins": 615700000000,
-				"hours": 45730107
+				"coins": 605700000000,
+				"hours": 5716263
 			}
 		}
 	}

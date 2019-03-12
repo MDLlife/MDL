@@ -216,12 +216,15 @@ func liveDisableNetworking(t *testing.T) bool {
 func loadGoldenFile(t *testing.T, filename string, testData TestData) {
 	require.NotEmpty(t, filename, "loadGoldenFile golden filename missing")
 
-	goldenFile := filepath.Join(testFixturesDir, filename)
+	currentDir, _ := os.Getwd()
+	currentDir = filepath.Join(currentDir, testFixturesDir)
+	goldenFile := filepath.Join(currentDir, filename)
 
 	if *update {
 		updateGoldenFile(t, goldenFile, testData.actual)
 	}
 
+	t.Log("loadGoldenFile, ", "goldenFile", goldenFile)
 	f, err := os.Open(goldenFile)
 	require.NoError(t, err)
 	defer f.Close()
