@@ -19,6 +19,8 @@ IP_ADDR="127.0.0.1"
 
 RPC_ADDR="$IP_ADDR:$RPC_PORT"
 
+DATA_DIR=$(mktemp -d -t mdl-data-dir.XXXXXX)
+WALLET_DIR="${DATA_DIR}/wallets"
 
 # Electron files directory
 ELECTRON_DIR = electron
@@ -184,56 +186,53 @@ lint: ## Run linters. Use make install-linters first.
 check: lint test integration-test-stable integration-test-stable-disable-csrf integration-test-disable-wallet-api integration-test-disable-seed-api integration-test-enable-seed-api integration-test-disable-gui ## Run tests and linters
 
 
+integration-test-all: ## Run live integration tests
+	./ci-scripts/integration-test-all.sh
 
-## BEGIN CI TESTS ##
 integration-test-stable: ## Run stable integration tests
+	./ci-scripts/integration-test-stable.sh -c
+
+integration-test-stable-disable-csrf: ## Run stable integration tests with CSRF disabled
 	./ci-scripts/integration-test-stable.sh
+
+integration-test-live: ## Run live integration tests
+	./ci-scripts/integration-test-live.sh -c
 
 integration-test-live-wallet: ## Run live integration tests with wallet
 	./ci-scripts/integration-test-live.sh -w
 
+integration-test-live-disable-csrf: ## Run live integration tests against a node with CSRF disabled
+	./ci-scripts/integration-test-live.sh
+
 integration-test-disable-wallet-api: ## Run disable wallet api integration tests
 	./ci-scripts/integration-test-disable-wallet-api.sh
 
-integration-test-disable-seed-api: ## Run enable seed api integration test
-	./ci-scripts/integration-test-disable-seed-api.sh
+integration-test-enable-seed-api: ## Run enable seed api integration test
+	./ci-scripts/integration-test-enable-seed-api.sh
 
-integration-test-live: build-start ## Run live integration tests
-	./ci-scripts/integration-test-live.sh
-	./ci-scripts/stop.sh
-
-integration-test-all: ## Run live integration tests
-	./ci-scripts/integration-test-all.sh
-
-integration-test-stable-gui: ## Run stable integration tests
-	./ci-scripts/integration-test-stable.sh -t gui
-
-integration-test-live-gui: build-start ## Run live integration tests
-	./ci-scripts/integration-test-live.sh -t gui
-	./ci-scripts/stop.sh
-
-integration-test-all-gui: ## Run live integration tests
-	./ci-scripts/integration-test-all.sh -t gui
-
-integration-test-stable-cli: ## Run stable integration tests
-	./ci-scripts/integration-test-stable.sh -t cli
-
-integration-test-live-cli: build-start ## Run live integration tests
-	./ci-scripts/integration-test-live.sh -t cli
-	./ci-scripts/stop.sh
-
-integration-test-all-cli: ## Run live integration tests
-	./ci-scripts/integration-test-all.sh -t cli
+integration-test-disable-gui:
+	./ci-scripts/integration-test-disable-gui.sh
 
 integration-test-server:
 	go build -o /opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
 	/opt/gocode/src/github.com/MDLlife/MDL/cmd/mdl/mdl.go;
 	/opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
-	-disable-networking=true -web-interface-port=8320 -download-peerlist=false \
-	-db-path=./src/gui/integration/test-fixtures/blockchain-development.db -db-read-only=true \
-	-rpc-interface=true -rpc-interface-port=8330 -launch-browser=false \
-	-data-dir=/tmp/mdl-data-dir.cm5WDM -enable-wallet-api=true \
-	-wallet-dir=/tmp/mdl-data-dir.cm5WDM/wallets -enable-seed-api=true;
+	-disable-networking=true \
+	-genesis-signature eb10468d10054d15f2b6f8946cd46797779aa20a7617ceb4be884189f219bc9a164e56a5b9f7bec392a804ff3740210348d73db77a37adb542a8e08d429ac92700 \
+	-genesis-address 2jBbGxZRGoQG1mqhPBnXnLTxK6oxsTf8os6 \
+	-master-public-key 0328c576d3f420e7682058a981173a4b374c7cc5ff55bf394d3cf57059bbe6456a \
+	-db-path=./src/api/integration/testdata/blockchain-180.db \
+	-peerlist-url https://downloads.mdl.net/blockchain/peers.txt \
+	-web-interface-addr=$(IP_ADDR) \
+	-web-interface-port=$(PORT) \
+	-download-peerlist=false \
+	-db-path=./src/api/integration/testdata/blockchain-180.db \
+	-db-read-only=true \
+	-rpc-interface=true \
+	-launch-browser=false \
+	-data-dir="$DATA_DIR" \
+	-wallet-dir="$WALLET_DIR" \
+	-disable-csrf;
 
 cover: ## Runs tests on ./src/ with HTML code coverage
 	@echo "mode: count" > coverage-all.out

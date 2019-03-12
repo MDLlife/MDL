@@ -42,7 +42,7 @@ done
 
 set -euxo pipefail
 
-DATA_DIR=$(mktemp -d -t skycoin-data-dir.XXXXXX)
+DATA_DIR=$(mktemp -d -t mdl-data-dir.XXXXXX)
 WALLET_DIR="${DATA_DIR}/wallets"
 
 if [[ ! "$DATA_DIR" ]]; then
@@ -53,12 +53,17 @@ fi
 # Compile the mdl node
 # We can't use "go run" because this creates two processes which doesn't allow us to kill it at the end
 echo "compiling mdl"
-go build -o "$BINARY" cmd/skycoin/skycoin.go
+go build -o "$BINARY" cmd/mdl/mdl.go
 
 # Run mdl node with pinned blockchain database
 echo "starting mdl node in background with http listener on $HOST"
 
-./skycoin-integration -disable-networking=true \
+./mdl-integration -disable-networking=true \
+                      -genesis-signature eb10468d10054d15f2b6f8946cd46797779aa20a7617ceb4be884189f219bc9a164e56a5b9f7bec392a804ff3740210348d73db77a37adb542a8e08d429ac92700 \
+                      -genesis-address 2jBbGxZRGoQG1mqhPBnXnLTxK6oxsTf8os6 \
+                      -master-public-key 0328c576d3f420e7682058a981173a4b374c7cc5ff55bf394d3cf57059bbe6456a \
+                      -db-path=./src/api/integration/testdata/blockchain-180.db \
+                      -peerlist-url https://downloads.mdl.net/blockchain/peers.txt \
                       -web-interface-port=$PORT \
                       -download-peerlist=false \
                       -db-path=./src/api/integration/testdata/blockchain-180.db \
@@ -70,9 +75,9 @@ echo "starting mdl node in background with http listener on $HOST"
                       -enable-wallet-api=true \
                       -enable-seed-api=true \
                       -enable-gui=false&
-SKYCOIN_PID=$!
+MDL_PID=$!
 
-echo "mdl node pid=$SKYCOIN_PID"
+echo "mdl node pid=$MDL_PID"
 
 echo "sleeping for startup"
 sleep 3
@@ -82,7 +87,7 @@ set +e
 
 if [[ -z $TEST || $TEST = "api" ]]; then
 
-SKYCOIN_INTEGRATION_TESTS=1 SKYCOIN_INTEGRATION_TEST_MODE=$MODE SKYCOIN_NODE_HOST=$HOST WALLET_DIR=$WALLET_DIR \
+MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST WALLET_DIR=$WALLET_DIR \
     go test ./src/api/integration/... -timeout=30s $VERBOSE $RUN_TESTS
 
 API_FAIL=$?
@@ -92,8 +97,8 @@ fi
 echo "shutting down mdl node"
 
 # Shutdown mdl node
-kill -s SIGINT $SKYCOIN_PID
-wait $SKYCOIN_PID
+kill -s SIGINT $MDL_PID
+wait $MDL_PID
 
 rm "$BINARY"
 

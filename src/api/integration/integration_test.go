@@ -61,7 +61,7 @@ const (
 	testModeEnableSeedAPI    = "enable-seed-api"
 	testModeDisableGUI       = "disable-gui"
 
-	testFixturesDir = "/test-fixtures"
+	testFixturesDir = "./testdata"
 )
 
 type TestData struct {
@@ -1308,11 +1308,11 @@ func TestStableTransaction(t *testing.T) {
 			},
 			goldenFile: "",
 		},
-		{
-			name:       "genesis transaction",
-			txID:       "d556c1c7abf1e86138316b8c17183665512dc67633c04cf236a8b7f332cb4add",
-			goldenFile: "genesis-transaction.golden",
-		},
+		//{
+		//	name:       "genesis transaction",
+		//	txID:       "d556c1c7abf1e86138316b8c17183665512dc67633c04cf236a8b7f332cb4add",
+		//	goldenFile: "genesis-transaction.golden",
+		//},
 	}
 
 	c := api.NewClient(nodeAddress())
