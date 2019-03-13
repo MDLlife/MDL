@@ -2,21 +2,25 @@ package cli
 
 import (
 	"encoding/hex"
-	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 
+	"github.com/MDLlife/MDL/src/params"
+	"github.com/MDLlife/MDL/src/readable"
 	"github.com/MDLlife/MDL/src/util/droplet"
 	"github.com/MDLlife/MDL/src/util/fee"
 
-	"github.com/MDLlife/MDL/src/api/webrpc"
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/coin"
 	"github.com/MDLlife/MDL/src/visor"
 	"github.com/MDLlife/MDL/src/wallet"
 
-	gcli "github.com/urfave/cli"
+	"encoding/csv"
+	"encoding/json"
+
+	"github.com/spf13/cobra"
 )
 
 var (
@@ -35,82 +39,66 @@ type sendAmountJSON struct {
 	Coins string `json:"coins"`
 }
 
-func createRawTxCmd(cfg Config) gcli.Command {
-	name := "createRawTransaction"
-	return gcli.Command{
-		Name:      name,
-		Usage:     "Create a raw transaction to be broadcast to the network later",
-		ArgsUsage: "[to address] [amount]",
-		Description: fmt.Sprintf(`
-  Note: The [amount] argument is the coins you will spend, 1 coins = 1e6 droplets.
+func createRawTxCmd() *cobra.Command {
+	createRawTxCmd := &cobra.Command{
+		Short: "Create a raw transaction to be broadcast to the network later",
+		Use:   "createRawTransaction [flags] [to address] [amount]",
+		Long: fmt.Sprintf(`Note: The [amount] argument is the coins you will spend, 1 coins = 1e6 droplets.
+    The default wallet (%s) will be used if no wallet and address was specified.
 
-		  The default wallet (%s) will be
-		  used if no wallet and address was specified.
+    If you are sending from a wallet the coins will be taken iteratively
+    from all addresses within the wallet starting with the first address until
+    the amount of the transaction is met.
 
+    Use caution when using the "-p" command. If you have command history enabled
+    your wallet encryption password can be recovered from the history log. If you
+    do not include the "-p" option you will be prompted to enter your password
+    after you enter your command.`, cliConfig.FullWalletPath()),
+		SilenceUsage: true,
+		Args:         cobra.MinimumNArgs(0),
+		RunE: func(c *cobra.Command, args []string) error {
+			jsonOutput, err := c.Flags().GetBool("json")
+			if err != nil {
+				return err
+			}
 
-        If you are sending from a wallet the coins will be taken iteratively
-        from all addresses within the wallet starting with the first address until
-        the amount of the transaction is met.
-
-        Use caution when using the "-p" command. If you have command history enabled
-        your wallet encryption password can be recovered from the history log. If you
-        do not include the "-p" option you will be prompted to enter your password
-        after you enter your command.`, cfg.FullWalletPath()),
-		Flags: []gcli.Flag{
-			gcli.StringFlag{
-				Name:  "f",
-				Usage: "[wallet file or path], From wallet",
-			},
-			gcli.StringFlag{
-				Name:  "a",
-				Usage: "[address] From address",
-			},
-			gcli.StringFlag{
-				Name: "c",
-				Usage: `[changeAddress] Specify different change address.
-				By default the from address or a wallets coinbase address will be used.`,
-			},
-			gcli.StringFlag{
-				Name: "m",
-				Usage: `[send to many] use JSON string to set multiple receive addresses and coins,
-				example: -m '[{"addr":"$addr1", "coins": "10.2"}, {"addr":"$addr2", "coins": "20"}]'`,
-			},
-			gcli.StringFlag{
-				Name:  "p",
-				Usage: "[password] Wallet password",
-			},
-			gcli.BoolFlag{
-				Name:  "json,j",
-				Usage: "Returns the results in JSON format.",
-			},
-		},
-		OnUsageError: onCommandUsageError(name),
-		Action: func(c *gcli.Context) error {
-			tx, err := createRawTxCmdHandler(c)
+			txn, err := createRawTxnCmdHandler(c, args)
 			switch err.(type) {
 			case nil:
 			case WalletLoadError:
-				errorWithHelp(c, err)
-			case WalletSaveError:
-				return errors.New("save wallet failed")
+				printHelp(c)
+				return err
 			default:
 				return err
 			}
 
-			rawTx := hex.EncodeToString(tx.Serialize())
+			rawTxn := hex.EncodeToString(txn.Serialize())
 
-			if c.Bool("json") {
+			if jsonOutput {
 				return printJSON(struct {
 					RawTx string `json:"rawtx"`
 				}{
-					RawTx: rawTx,
+					RawTx: rawTxn,
 				})
 			}
 
-			fmt.Println(rawTx)
+			fmt.Println(rawTxn)
+
 			return nil
 		},
 	}
+
+	createRawTxCmd.Flags().StringP("wallet-file", "f", "", "wallet file or path. If no path is specified your default wallet path will be used.")
+	createRawTxCmd.Flags().StringP("address", "a", "", "From address")
+	createRawTxCmd.Flags().StringP("change-address", "c", "", `Specify different change address.
+By default the from address or a wallets coinbase address will be used.`)
+	createRawTxCmd.Flags().StringP("many", "m", "", `use JSON string to set multiple receive addresses and coins,
+example: -m '[{"addr":"$addr1", "coins": "10.2"}, {"addr":"$addr2", "coins": "20"}]'`)
+	createRawTxCmd.Flags().StringP("password", "p", "", "Wallet password")
+	createRawTxCmd.Flags().BoolP("json", "j", false, "Returns the results in JSON format.")
+	createRawTxCmd.Flags().String("csv", "", "CSV file containing addresses and amounts to send")
+
+	return createRawTxCmd
 }
 
 type walletAddress struct {
@@ -118,10 +106,18 @@ type walletAddress struct {
 	Address string
 }
 
-func fromWalletOrAddress(c *gcli.Context) (walletAddress, error) {
-	cfg := ConfigFromContext(c)
+func fromWalletOrAddress(c *cobra.Command) (walletAddress, error) {
+	walletFile, err := c.Flags().GetString("wallet-file")
+	if err != nil {
+		return walletAddress{}, nil
+	}
 
-	wlt, err := resolveWalletPath(cfg, c.String("f"))
+	address, err := c.Flags().GetString("address")
+	if err != nil {
+		return walletAddress{}, nil
+	}
+
+	wlt, err := resolveWalletPath(cliConfig, walletFile)
 	if err != nil {
 		return walletAddress{}, err
 	}
@@ -130,7 +126,7 @@ func fromWalletOrAddress(c *gcli.Context) (walletAddress, error) {
 		Wallet: wlt,
 	}
 
-	wltAddr.Address = c.String("a")
+	wltAddr.Address = address
 	if wltAddr.Address == "" {
 		return wltAddr, nil
 	}
@@ -174,51 +170,129 @@ func getChangeAddress(wltAddr walletAddress, chgAddr string) (string, error) {
 	return chgAddr, nil
 }
 
-func getToAddresses(c *gcli.Context) ([]SendAmount, error) {
-	m := c.String("m")
-	if m != "" {
-		sas := []sendAmountJSON{}
-		if err := json.NewDecoder(strings.NewReader(m)).Decode(&sas); err != nil {
-			return nil, fmt.Errorf("invalid -m flag string, err:%v", err)
-		}
-		sendAmts := make([]SendAmount, 0, len(sas))
-		for _, sa := range sas {
-			amt, err := droplet.FromString(sa.Coins)
-			if err != nil {
-				return nil, fmt.Errorf("invalid coins value in -m flag string: %v", err)
-			}
-
-			sendAmts = append(sendAmts, SendAmount{
-				Addr:  sa.Addr,
-				Coins: amt,
-			})
-		}
-		return sendAmts, nil
+func getToAddresses(c *cobra.Command, args []string) ([]SendAmount, error) {
+	csvFile, err := c.Flags().GetString("csv")
+	if err != nil {
+		return nil, err
+	}
+	many, err := c.Flags().GetString("many")
+	if err != nil {
+		return nil, err
 	}
 
-	if c.NArg() < 2 {
-		return nil, errors.New("invalid argument")
+	if csvFile != "" && many != "" {
+		return nil, errors.New("-csv and -m cannot be combined")
 	}
 
-	toAddr := c.Args().First()
-	// validate address
+	if many != "" {
+		return parseSendAmountsFromJSON(many)
+	} else if csvFile != "" {
+		fields, err := openCSV(csvFile)
+		if err != nil {
+			return nil, err
+		}
+		return parseSendAmountsFromCSV(fields)
+	}
+
+	if len(args) < 2 {
+		return nil, fmt.Errorf("requires at least 2 arg(s), only received %d", len(args))
+	}
+
+	toAddr := args[0]
+
 	if _, err := cipher.DecodeBase58Address(toAddr); err != nil {
 		return nil, err
 	}
 
-	amt, err := getAmount(c)
+	amt, err := getAmount(args)
 	if err != nil {
 		return nil, err
 	}
-	return []SendAmount{{toAddr, amt}}, nil
+
+	return []SendAmount{{
+		Addr:  toAddr,
+		Coins: amt,
+	}}, nil
 }
 
-func getAmount(c *gcli.Context) (uint64, error) {
-	if c.NArg() < 2 {
-		return 0, errors.New("invalid argument")
+func openCSV(csvFile string) ([][]string, error) {
+	f, err := os.Open(csvFile)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	r := csv.NewReader(f)
+	return r.ReadAll()
+}
+
+func parseSendAmountsFromCSV(fields [][]string) ([]SendAmount, error) {
+	var sends []SendAmount
+	var errs []error
+	for i, f := range fields {
+		addr := f[0]
+
+		addr = strings.TrimSpace(addr)
+
+		if _, err := cipher.DecodeBase58Address(addr); err != nil {
+			err = fmt.Errorf("[row %d] Invalid address %s: %v", i, addr, err)
+			errs = append(errs, err)
+			continue
+		}
+
+		coins, err := droplet.FromString(f[1])
+		if err != nil {
+			err = fmt.Errorf("[row %d] Invalid amount %s: %v", i, f[1], err)
+			errs = append(errs, err)
+			continue
+		}
+
+		sends = append(sends, SendAmount{
+			Addr:  addr,
+			Coins: coins,
+		})
 	}
 
-	amount := c.Args().Get(1)
+	if len(errs) > 0 {
+		errMsgs := make([]string, len(errs))
+		for i, err := range errs {
+			errMsgs[i] = err.Error()
+		}
+
+		errMsg := strings.Join(errMsgs, "\n")
+
+		return nil, errors.New(errMsg)
+	}
+
+	return sends, nil
+}
+
+func parseSendAmountsFromJSON(m string) ([]SendAmount, error) {
+	sas := []sendAmountJSON{}
+
+	if err := json.NewDecoder(strings.NewReader(m)).Decode(&sas); err != nil {
+		return nil, fmt.Errorf("invalid -m flag string, err: %v", err)
+	}
+
+	sendAmts := make([]SendAmount, 0, len(sas))
+
+	for _, sa := range sas {
+		amt, err := droplet.FromString(sa.Coins)
+		if err != nil {
+			return nil, fmt.Errorf("invalid coins value in -m flag string: %v", err)
+		}
+
+		sendAmts = append(sendAmts, SendAmount{
+			Addr:  sa.Addr,
+			Coins: amt,
+		})
+	}
+
+	return sendAmts, nil
+}
+
+func getAmount(args []string) (uint64, error) {
+	amount := args[1]
 	amt, err := droplet.FromString(amount)
 	if err != nil {
 		return 0, fmt.Errorf("invalid amount: %v", err)
@@ -227,34 +301,64 @@ func getAmount(c *gcli.Context) (uint64, error) {
 	return amt, nil
 }
 
-func createRawTxCmdHandler(c *gcli.Context) (*coin.Transaction, error) {
-	rpcClient := RPCClientFromContext(c)
+// createRawTxArgs are encapsulated arguments for creating a transaction
+type createRawTxArgs struct {
+	WalletID      string
+	Address       string
+	ChangeAddress string
+	SendAmounts   []SendAmount
+	Password      PasswordReader
+}
 
+func parseCreateRawTxArgs(c *cobra.Command, args []string) (*createRawTxArgs, error) {
 	wltAddr, err := fromWalletOrAddress(c)
 	if err != nil {
 		return nil, err
 	}
 
-	chgAddr, err := getChangeAddress(wltAddr, c.String("c"))
+	changeAddress, err := c.Flags().GetString("change-address")
+	if err != nil {
+		return nil, err
+	}
+	chgAddr, err := getChangeAddress(wltAddr, changeAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	toAddrs, err := getToAddresses(c)
+	toAddrs, err := getToAddresses(c, args)
 	if err != nil {
 		return nil, err
 	}
-
 	if err := validateSendAmounts(toAddrs); err != nil {
 		return nil, err
 	}
 
-	pr := NewPasswordReader([]byte(c.String("p")))
-	if wltAddr.Address == "" {
-		return CreateRawTxFromWallet(rpcClient, wltAddr.Wallet, chgAddr, toAddrs, pr)
+	password, err := c.Flags().GetString("password")
+	if err != nil {
+		return nil, err
+	}
+	pr := NewPasswordReader([]byte(password))
+
+	return &createRawTxArgs{
+		WalletID:      wltAddr.Wallet,
+		Address:       wltAddr.Address,
+		ChangeAddress: chgAddr,
+		SendAmounts:   toAddrs,
+		Password:      pr,
+	}, nil
+}
+
+func createRawTxnCmdHandler(c *cobra.Command, args []string) (*coin.Transaction, error) {
+	parsedArgs, err := parseCreateRawTxArgs(c, args)
+	if err != nil {
+		return nil, err
 	}
 
-	return CreateRawTxFromAddress(rpcClient, wltAddr.Address, wltAddr.Wallet, chgAddr, toAddrs, pr)
+	if parsedArgs.Address == "" {
+		return CreateRawTxFromWallet(apiClient, parsedArgs.WalletID, parsedArgs.ChangeAddress, parsedArgs.SendAmounts, parsedArgs.Password)
+	}
+
+	return CreateRawTxFromAddress(apiClient, parsedArgs.Address, parsedArgs.WalletID, parsedArgs.ChangeAddress, parsedArgs.SendAmounts, parsedArgs.Password)
 }
 
 func validateSendAmounts(toAddrs []SendAmount) error {
@@ -280,7 +384,7 @@ func validateSendAmounts(toAddrs []SendAmount) error {
 // PUBLIC
 
 // CreateRawTxFromWallet creates a transaction from any address or combination of addresses in a wallet
-func CreateRawTxFromWallet(c *webrpc.Client, walletFile, chgAddr string, toAddrs []SendAmount, pr PasswordReader) (*coin.Transaction, error) {
+func CreateRawTxFromWallet(c GetOutputser, walletFile, chgAddr string, toAddrs []SendAmount, pr PasswordReader) (*coin.Transaction, error) {
 	// check change address
 	cAddr, err := cipher.DecodeBase58Address(chgAddr)
 	if err != nil {
@@ -334,7 +438,7 @@ func CreateRawTxFromWallet(c *webrpc.Client, walletFile, chgAddr string, toAddrs
 }
 
 // CreateRawTxFromAddress creates a transaction from a specific address in a wallet
-func CreateRawTxFromAddress(c *webrpc.Client, addr, walletFile, chgAddr string, toAddrs []SendAmount, pr PasswordReader) (*coin.Transaction, error) {
+func CreateRawTxFromAddress(c GetOutputser, addr, walletFile, chgAddr string, toAddrs []SendAmount, pr PasswordReader) (*coin.Transaction, error) {
 	// check if the address is in the default wallet.
 	wlt, err := wallet.Load(walletFile)
 	if err != nil {
@@ -390,24 +494,29 @@ func CreateRawTxFromAddress(c *webrpc.Client, addr, walletFile, chgAddr string, 
 	return CreateRawTx(c, wlt, []string{addr}, chgAddr, toAddrs, password)
 }
 
+// GetOutputser implements unspent output querying
+type GetOutputser interface {
+	OutputsForAddresses([]string) (*readable.UnspentOutputsSummary, error)
+}
+
 // CreateRawTx creates a transaction from a set of addresses contained in a loaded *wallet.Wallet
-func CreateRawTx(c *webrpc.Client, wlt *wallet.Wallet, inAddrs []string, chgAddr string, toAddrs []SendAmount, password []byte) (*coin.Transaction, error) {
+func CreateRawTx(c GetOutputser, wlt *wallet.Wallet, inAddrs []string, chgAddr string, toAddrs []SendAmount, password []byte) (*coin.Transaction, error) {
 	if err := validateSendAmounts(toAddrs); err != nil {
 		return nil, err
 	}
 
 	// Get unspent outputs of those addresses
-	unspents, err := c.GetUnspentOutputs(inAddrs)
+	outputs, err := c.OutputsForAddresses(inAddrs)
 	if err != nil {
 		return nil, err
 	}
 
-	inUxs, err := unspents.Outputs.SpendableOutputs().ToUxArray()
+	inUxs, err := outputs.SpendableOutputs().ToUxArray()
 	if err != nil {
 		return nil, err
 	}
 
-	txn, err := createRawTx(unspents.Outputs, wlt, chgAddr, toAddrs, password)
+	txn, err := createRawTx(outputs, wlt, chgAddr, toAddrs, password)
 	if err != nil {
 		return nil, err
 	}
@@ -422,82 +531,25 @@ func CreateRawTx(c *webrpc.Client, wlt *wallet.Wallet, inAddrs []string, chgAddr
 		}
 	}
 
-	// TODO -- remove me -- reimplementation of visor.VerifySingleTxnSoftConstraints minus
-	// the parts that require block head data, which is not available from the RPC API (see below)
-	if err := verifyTransactionConstraints(txn, inUxsFiltered, visor.DefaultMaxBlockSize); err != nil {
+	head, err := outputs.Head.ToCoinBlockHeader()
+	if err != nil {
 		return nil, err
 	}
 
-	// TODO -- verify against soft and hard constraints
-	// Need to get the head block to do verification.
-	// The head block is not exposed over the JSON RPC, which webrpc.Client uses.
-	// Need to remove the JSON RPC API and have the client make requests to the HTTP API.
-	// Once the HTTP API is used,
-	// Need to request /blockchain/metadata to get the head block time
-	// This could lead to race conditions; /blockchain/metadata should return the full head, or have an API endpoint
-	// just for the head, and/or include the head block in the get_outputs response
-	// The head block is used for calculating inUxs's coin hours.
-	// if err := visor.VerifySingleTxnSoftConstraints(txn, inUxs, visor.DefaultMaxBlockSize); err != nil {
-	//     return nil, err
-	// }
-	// if err := visor.VerifySingleTxnHardConstraints(txn, head, inUxs); err != nil {
-	// 	return nil, err
-	// }
+	if err := visor.VerifySingleTxnSoftConstraints(*txn, head.Time, inUxsFiltered, params.UserVerifyTxn); err != nil {
+		return nil, err
+	}
+	if err := visor.VerifySingleTxnHardConstraints(*txn, head, inUxsFiltered); err != nil {
+		return nil, err
+	}
+	if err := visor.VerifySingleTxnUserConstraints(*txn); err != nil {
+		return nil, err
+	}
 
 	return txn, nil
 }
 
-// TODO -- remove me -- reimplementation of visor.VerifySingleTxnSoftConstraints and HardConstraints
-// minus the parts that require block head data, which is not available from the RPC API (see below)
-func verifyTransactionConstraints(txn *coin.Transaction, uxIn coin.UxArray, maxSize int) error { // nolint: unparam
-	// SOFT constraints:
-
-	if txn.Size() > maxSize {
-		return errors.New("Transaction size bigger than max block size")
-	}
-
-	if visor.TransactionIsLocked(uxIn) {
-		return errors.New("Transaction has locked address inputs")
-	}
-
-	// Ignore transactions that do not conform to decimal restrictions
-	for _, o := range txn.Out {
-		if err := visor.DropletPrecisionCheck(o.Coins); err != nil {
-			return err
-		}
-	}
-
-	// HARD constraints:
-
-	if err := txn.Verify(); err != nil {
-		return err
-	}
-
-	// Checks whether ux inputs exist,
-	// Check that signatures are allowed to spend inputs
-	if err := txn.VerifyInput(uxIn); err != nil {
-		return err
-	}
-
-	// Verify CoinHours do not overflow
-	if _, err := txn.OutputHours(); err != nil {
-		return err
-	}
-
-	// Check that no coins are created or destroyed
-	// TODO -- use the correct block head, once we have it from the API
-	// For now it doesn't matter, the block head is used to calculate the uxOut hours,
-	// but we're not validating the hours
-	uxOut := coin.CreateUnspents(coin.BlockHeader{
-		BkSeq: 1,
-	}, *txn)
-	return coin.VerifyTransactionCoinsSpending(uxIn, uxOut)
-
-	// TODO -- use coin.VerifyTransactionHoursSpending, once we have the head block
-	// return coin.VerifyTransactionHoursSpending(head.Time(), uxIn, uxOut)
-}
-
-func createRawTx(uxouts visor.ReadableOutputSet, wlt *wallet.Wallet, chgAddr string, toAddrs []SendAmount, password []byte) (*coin.Transaction, error) {
+func createRawTx(uxouts *readable.UnspentOutputsSummary, wlt *wallet.Wallet, chgAddr string, toAddrs []SendAmount, password []byte) (*coin.Transaction, error) {
 	// Calculate total required coins
 	var totalCoins uint64
 	for _, arg := range toAddrs {
@@ -524,7 +576,7 @@ func createRawTx(uxouts visor.ReadableOutputSet, wlt *wallet.Wallet, chgAddr str
 			return nil, err
 		}
 
-		return NewTransaction(spendOutputs, keys, txOuts), nil
+		return NewTransaction(spendOutputs, keys, txOuts)
 	}
 
 	makeTx := func() (*coin.Transaction, error) {
@@ -549,9 +601,9 @@ func createRawTx(uxouts visor.ReadableOutputSet, wlt *wallet.Wallet, chgAddr str
 	return makeTx()
 }
 
-func chooseSpends(uxouts visor.ReadableOutputSet, coins uint64) ([]wallet.UxBalance, error) {
+func chooseSpends(uxouts *readable.UnspentOutputsSummary, coins uint64) ([]wallet.UxBalance, error) {
 	// Convert spendable unspent outputs to []wallet.UxBalance
-	spendableOutputs, err := visor.ReadableOutputsToUxBalances(uxouts.SpendableOutputs())
+	spendableOutputs, err := readable.OutputsToUxBalances(uxouts.SpendableOutputs())
 	if err != nil {
 		return nil, err
 	}
@@ -566,7 +618,7 @@ func chooseSpends(uxouts visor.ReadableOutputSet, coins uint64) ([]wallet.UxBala
 		// If there is not enough balance in the spendable outputs,
 		// see if there is enough balance when including incoming outputs
 		if err == wallet.ErrInsufficientBalance {
-			expectedOutputs, otherErr := visor.ReadableOutputsToUxBalances(uxouts.ExpectedOutputs())
+			expectedOutputs, otherErr := readable.OutputsToUxBalances(uxouts.ExpectedOutputs())
 			if otherErr != nil {
 				return nil, otherErr
 			}
@@ -611,7 +663,7 @@ func makeChangeOut(outs []wallet.UxBalance, chgAddr string, toAddrs []SendAmount
 	nAddrs := uint64(len(toAddrs))
 	changeHours, addrHours, totalOutHours := wallet.DistributeSpendHours(totalInHours, nAddrs, haveChange)
 
-	if err := fee.VerifyTransactionFeeForHours(totalOutHours, totalInHours-totalOutHours); err != nil {
+	if err := fee.VerifyTransactionFeeForHours(totalOutHours, totalInHours-totalOutHours, params.UserVerifyTxn.BurnFactor); err != nil {
 		return nil, err
 	}
 
@@ -669,18 +721,22 @@ func getKeys(wlt *wallet.Wallet, outs []wallet.UxBalance) ([]cipher.SecKey, erro
 }
 
 // NewTransaction creates a transaction. The transaction should be validated against hard and soft constraints before transmission.
-func NewTransaction(utxos []wallet.UxBalance, keys []cipher.SecKey, outs []coin.TransactionOutput) *coin.Transaction {
-	tx := coin.Transaction{}
+func NewTransaction(utxos []wallet.UxBalance, keys []cipher.SecKey, outs []coin.TransactionOutput) (*coin.Transaction, error) {
+	txn := coin.Transaction{}
 	for _, u := range utxos {
-		tx.PushInput(u.Hash)
+		txn.PushInput(u.Hash)
 	}
 
 	for _, o := range outs {
-		tx.PushOutput(o.Address, o.Coins, o.Hours)
+		txn.PushOutput(o.Address, o.Coins, o.Hours)
 	}
 
-	tx.SignInputs(keys)
+	txn.SignInputs(keys)
 
-	tx.UpdateHeader()
-	return &tx
+	err := txn.UpdateHeader()
+	if err != nil {
+		return nil, err
+	}
+
+	return &txn, nil
 }

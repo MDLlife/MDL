@@ -19,8 +19,10 @@ IP_ADDR="127.0.0.1"
 
 RPC_ADDR="$IP_ADDR:$RPC_PORT"
 
-DATA_DIR=$(mktemp -d -t mdl-data-dir.XXXXXX)
-WALLET_DIR="${DATA_DIR}/wallets"
+COIN="${COIN:-mdl}"
+
+DATA_DIR=/tmp/tmp.Ict7RGVuhX
+WALLET_DIR=$(DATA_DIR)/wallets
 
 # Electron files directory
 ELECTRON_DIR = electron
@@ -92,11 +94,12 @@ run:  ## Run the MDL node. To add arguments, do 'make ARGS="--foo" run'.
         -web-interface-port=${PORT} \
         -gui-dir="${DIR}/src/gui/static/" \
         -launch-browser=true \
-        -enable-wallet-api=true \
+        -enable-all-api-sets=true \
+        -enable-gui=true \
+        -verify-db=true \
         -rpc-interface=true \
         -log-level=debug \
         -download-peerlist=false \
-        -enable-seed-api=true \
         -disable-csrf=false \
         $@
 
@@ -107,11 +110,11 @@ test: ## Run tests for MDL
 	go test ./cmd/... -timeout=5m
 	go test ./src/api/... -timeout=5m
 	go test ./src/cipher/... -timeout=5m
+	go test ./src/cli/... -timeout=5m
 	go test ./src/coin/... -timeout=5m
 	go test ./src/consensus/... -timeout=5m
 	go test ./src/daemon/... -timeout=5m
-	go test ./src/gui/... -timeout=5m
-	go test ./src/testutil/... -timeout=5m
+	go test ./src/mdl/... -timeout=5m
 	go test ./src/util/... -timeout=5m
 	go test ./src/visor/... -timeout=5m
 	go test ./src/wallet/... -timeout=5m
@@ -175,63 +178,63 @@ lint: ## Run linters. Use make install-linters first.
 		-E unparam \
 		-E structcheck \
 		./...
-	# lib cgo can't use golint because it needs export directives in function docstrings that do not obey golint rules
-	golangci-lint run --no-config  --deadline=3m --concurrency=2 --disable-all --tests \
-		-E goimports \
-		-E varcheck \
-		-E unparam \
-		-E structcheck \
-		./lib/cgo/...
 
 check: lint test integration-test-stable integration-test-stable-disable-csrf integration-test-disable-wallet-api integration-test-disable-seed-api integration-test-enable-seed-api integration-test-disable-gui ## Run tests and linters
 
 
-integration-test-all: ## Run live integration tests
-	./ci-scripts/integration-test-all.sh
-
 integration-test-stable: ## Run stable integration tests
-	./ci-scripts/integration-test-stable.sh -c
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -c -n enable-csrf
 
 integration-test-stable-disable-csrf: ## Run stable integration tests with CSRF disabled
-	./ci-scripts/integration-test-stable.sh
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -n disable-csrf
 
 integration-test-live: ## Run live integration tests
-	./ci-scripts/integration-test-live.sh -c
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-live.sh -c
 
 integration-test-live-wallet: ## Run live integration tests with wallet
-	./ci-scripts/integration-test-live.sh -w
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-live.sh -w
 
 integration-test-live-disable-csrf: ## Run live integration tests against a node with CSRF disabled
-	./ci-scripts/integration-test-live.sh
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-live.sh
+
+integration-test-live-disable-networking: ## Run live integration tests against a node with networking disabled (requires wallet)
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-live.sh -c -k
 
 integration-test-disable-wallet-api: ## Run disable wallet api integration tests
-	./ci-scripts/integration-test-disable-wallet-api.sh
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-disable-wallet-api.sh
 
 integration-test-enable-seed-api: ## Run enable seed api integration test
-	./ci-scripts/integration-test-enable-seed-api.sh
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-enable-seed-api.sh
 
-integration-test-disable-gui:
-	./ci-scripts/integration-test-disable-gui.sh
+integration-test-disable-gui: ## Run tests with the GUI disabled
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-disable-gui.sh
+
+integration-test-db-no-unconfirmed: ## Run stable tests against the stable database that has no unconfirmed transactions
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -d -n no-unconfirmed
+
+integration-test-auth: ## Run stable tests with HTTP Basic auth enabled
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-auth.sh
 
 integration-test-server:
+	rm -rf $(DATA_DIR);
 	go build -o /opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
 	/opt/gocode/src/github.com/MDLlife/MDL/cmd/mdl/mdl.go;
 	/opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
 	-disable-networking=true \
 	-genesis-signature eb10468d10054d15f2b6f8946cd46797779aa20a7617ceb4be884189f219bc9a164e56a5b9f7bec392a804ff3740210348d73db77a37adb542a8e08d429ac92700 \
 	-genesis-address 2jBbGxZRGoQG1mqhPBnXnLTxK6oxsTf8os6 \
-	-master-public-key 0328c576d3f420e7682058a981173a4b374c7cc5ff55bf394d3cf57059bbe6456a \
-	-db-path=./src/api/integration/testdata/blockchain-180.db \
+	-blockchain-public-key 0328c576d3f420e7682058a981173a4b374c7cc5ff55bf394d3cf57059bbe6456a \
 	-peerlist-url https://downloads.mdl.net/blockchain/peers.txt \
 	-web-interface-addr=$(IP_ADDR) \
 	-web-interface-port=$(PORT) \
 	-download-peerlist=false \
-	-db-path=./src/api/integration/testdata/blockchain-180.db \
+	-db-path=$(PWD)/src/api/integration/testdata/blockchain-180.db \
 	-db-read-only=true \
 	-rpc-interface=true \
+	-enable-all-api-sets=true \
 	-launch-browser=false \
-	-data-dir="$DATA_DIR" \
-	-wallet-dir="$WALLET_DIR" \
+	-data-dir=$(DATA_DIR) \
+	-wallet-dir=$(WALLET_DIR) \
 	-disable-csrf;
 
 cover: ## Runs tests on ./src/ with HTML code coverage
@@ -253,9 +256,9 @@ install-deps-libc: configure-build ## Install locally dependencies for testing l
 	cp -R $(BUILD_DIR)/usr/tmp/Criterion/include/* $(BUILD_DIR)/usr/include/
 
 format:  # Formats the code. Must have goimports installed (use make install-linters).
-	goimports -w -local github.com/mdllife/mdl ./cmd
-	goimports -w -local github.com/mdllife/mdl ./src
-	goimports -w -local github.com/mdllife/mdl ./lib
+	$(foreach pkg,$(PACKAGES),\
+		goimports -w -local github.com/MDLlife/MDL $(pkg);\
+		)
 
 install-deps-ui:  ## Install the UI dependencies
 	cd $(GUI_STATIC_DIR) && npm install

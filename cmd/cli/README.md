@@ -2,42 +2,48 @@
 
 MDL command line interface
 
-The CLI command APIs can be used directly from a Go application, see [Skycoin CLI Godoc](https://godoc.org/github.com/MDLLife/mdl/src/api/cli).
+The CLI command APIs can be used directly from a Go application, see [MDL CLI Godoc](https://godoc.org/github.com/MDLlife/MDL/src/cli).
 
 <!-- MarkdownTOC autolink="true" bracket="round" levels="1,2,3" -->
 
 - [Install](#install)
-    - [Enable command autocomplete](#enable-command-autocomplete)
+	- [Enable command autocomplete](#enable-command-autocomplete)
 - [Environment Setting](#environment-setting)
-    - [RPC_ADDR](#rpc_addr)
-    - [WALLET_DIR](#wallet_dir)
-    - [WALLET_NAME](#wallet_name)
-    - [USE_CSRF](#use_csrf)
+	- [RPC_ADDR](#rpc_addr)
+	- [RPC_USER](#rpc_user)
+	- [RPC_PASS](#rpc_pass)
+	- [WALLET_DIR](#wallet_dir)
+	- [WALLET_NAME](#wallet_name)
 - [Usage](#usage)
-    - [Add Private Key](#add-private-key)
-    - [Check address balance](#check-address-balance)
-    - [Generate new addresses](#generate-new-addresses)
-    - [Check address outputs](#check-address-outputs)
-    - [Check block data](#check-block-data)
-    - [Check database integrity](#check-database-integrity)
-    - [Create a raw transaction](#create-a-raw-transaction)
-    - [Decode a raw transaction](#decode-a-raw-transaction)
-    - [Broadcast a raw transaction](#broadcast-a-raw-transaction)
-    - [Generate a wallet](#generate-a-wallet)
-    - [Generate addresses for a wallet](#generate-addresses-for-a-wallet)
-    - [Last blocks](#last-blocks)
-    - [List wallet addresses](#list-wallet-addresses)
-    - [List wallets](#list-wallets)
-    - [Send](#send)
-    - [Show Config](#show-config)
-    - [Status](#status)
-    - [Get transaction](#get-transaction)
-    - [Verify address](#verify-address)
-    - [Check wallet balance](#check-wallet-balance)
-    - [See wallet directory](#see-wallet-directory)
-    - [List wallet transaction history](#list-wallet-transaction-history)
-    - [List wallet outputs](#list-wallet-outputs)
-    - [CLI version](#cli-version)
+	- [Add Private Key](#add-private-key)
+	- [Check address balance](#check-address-balance)
+	- [Generate new addresses](#generate-new-addresses)
+	- [Generate distribution addresses for a new fiber coin](#generate-distribution-addresses-for-a-new-fiber-coin)
+	- [Check address outputs](#check-address-outputs)
+	- [Check block data](#check-block-data)
+	- [Check database integrity](#check-database-integrity)
+	- [Create a raw transaction](#create-a-raw-transaction)
+	- [Decode a raw transaction](#decode-a-raw-transaction)
+	- [Broadcast a raw transaction](#broadcast-a-raw-transaction)
+	- [Create a wallet](#create-a-wallet)
+	- [Add addresses to a wallet](#add-addresses-to-a-wallet)
+	- [Encrypt Wallet](#encrypt-wallet)
+	- [Decrypt Wallet](#decrypt-wallet)
+	- [Last blocks](#last-blocks)
+	- [List wallet addresses](#list-wallet-addresses)
+	- [List wallets](#list-wallets)
+    - [Rich list](#rich-list)
+	- [Send](#send)
+	- [Show Config](#show-config)
+	- [Status](#status)
+	- [Get transaction](#get-transaction)
+    - [Get address transactions](#get-address-transactions)
+	- [Verify address](#verify-address)
+	- [Check wallet balance](#check-wallet-balance)
+	- [See wallet directory](#see-wallet-directory)
+	- [List wallet transaction history](#list-wallet-transaction-history)
+	- [List wallet outputs](#list-wallet-outputs)
+	- [CLI version](#cli-version)
 - [Note](#note)
 
 <!-- /MarkdownTOC -->
@@ -46,7 +52,7 @@ The CLI command APIs can be used directly from a Go application, see [Skycoin CL
 ## Install
 
 ```bash
-$ cd $GOPATH/src/github.com/mdllife/mdl/cmd/cli
+$ cd $GOPATH/src/github.com/MDLlife/MDL/cmd/cli
 $ ./install.sh
 ```
 
@@ -55,7 +61,7 @@ $ ./install.sh
 If you are in `bash`, run the following command:
 
 ```bash
-$ PROG=mdl-cli source $GOPATH/src/github.com/mdllife/mdl/cmd/cli/autocomplete/bash_autocomplete
+$ PROG=mdl-cli source $GOPATH/src/github.com/MDLlife/MDL/cmd/cli/autocomplete/bash_autocomplete
 ```
 
 If you are in `zsh`, please replace the `bash_autocomplete` with `zsh_autocomplete` in the previous command.
@@ -69,19 +75,35 @@ The CLI uses environment variable to manage the configurations.
 
 ### RPC_ADDR
 
-CLI will connect to skycoin node rpc address:`127.0.0.1:6430` by default,
-you can change the address by setting the `RPC_ADDR` env variable
+CLI will connect to mdl node RPC address `http://127.0.0.1:6420` by default.
+You can change the address by setting the `RPC_ADDR` environment variable
 with the following command:
 
 ```bash
-$ export RPC_ADDR=127.0.0.1:6430
+$ export RPC_ADDR=http://127.0.0.1:6420
 ```
 
 Note: `RPC_ADDR` must be in `scheme://host` format.
 
+### RPC_USER
+
+A username for authenticating requests to the mdl node.
+
+```bash
+$ export RPC_USER=...
+```
+
+### RPC_PASS
+
+A password for authenticating requests to the mdl node.
+
+```bash
+$ export RPC_PASS=...
+```
+
 ### WALLET_DIR
 
-The default CLI wallet dir is located in `$HOME/.skycoin/wallets/`, change it by setting the
+The default CLI wallet dir is located in `$HOME/.mdl/wallets/`, change it by setting the
 `WALLET_DIR` environment variable.
 
 ```bash
@@ -90,93 +112,92 @@ $ export WALLET_DIR=$HOME/YOUR_WALLET_DIR
 
 ### WALLET_NAME
 
-The default CLI wallet file name is `skycoin_cli.wlt`, change it by setting the `WALLET_NAME` env.
+The default CLI wallet file name is `mdl_cli.wlt`, change it by setting the `WALLET_NAME` env.
 The wallet file name must have `.wlt` extension.
 
 ```bash
 $ export WALLET_NAME=YOUR_WALLET_NAME
 ```
 
-### USE_CSRF
-
-If the remote node to communicate with is not run with `-csrf-disabled`, set this variable.
-CSRF is enabled by default on nodes.
-
-```bash
-$ export USE_CSRF=1
-```
-
 ## Usage
 
-After the installation, you can run `skycoin-cli` to see the usage:
+After the installation, you can run `mdl-cli` to see the usage:
 
 ```
-$ skycoin-cli
-
-NAME:
-   skycoin-cli - the skycoin command line interface
+$ mdl-cli
 
 USAGE:
-   skycoin-cli [global options] command [command options] [arguments...]
+  mdl-cli [command] [flags] [arguments...]
 
-VERSION:
-   0.24.1
+DESCRIPTION:
+    The mdl command line interface
 
 COMMANDS:
-     addPrivateKey         Add a private key to specific wallet
-     addressBalance        Check the balance of specific addresses
-     addressGen            Generate skycoin or bitcoin addresses
-     addressOutputs        Display outputs of specific addresses
-     blocks                Lists the content of a single block or a range of blocks
-     broadcastTransaction  Broadcast a raw transaction to the network
-     checkdb               Verify the database
-     createRawTransaction  Create a raw transaction to be broadcast to the network later
-     decodeRawTransaction  Decode raw transaction
-     generateAddresses     Generate additional addresses for a wallet
-     generateWallet        Generate a new wallet
-     lastBlocks            Displays the content of the most recently N generated blocks
-     listAddresses         Lists all addresses in a given wallet
-     listWallets           Lists all wallets stored in the wallet directory
-     send                  Send skycoin from a wallet or an address to a recipient address
-     showConfig            show cli configuration
-     status                Check the status of current skycoin node
-     transaction           Show detail info of specific transaction
-     verifyAddress         Verify a skycoin address
-     version
-     walletBalance         Check the balance of a wallet
-     walletDir             Displays wallet folder address
-     walletHistory         Display the transaction history of specific wallet. Requires skycoin node rpc.
-     walletOutputs         Display outputs of specific wallet
-     help, h               Shows a list of commands or help for one command
+  addPrivateKey        Add a private key to specific wallet
+  addressBalance       Check the balance of specific addresses
+  addressGen           Generate mdl or bitcoin addresses
+  addressOutputs       Display outputs of specific addresses
+  addressTransactions  Show detail for transaction associated with one or more specified addresses
+  blocks               Lists the content of a single block or a range of blocks
+  broadcastTransaction Broadcast a raw transaction to the network
+  checkdb              Verify the database
+  createRawTransaction Create a raw transaction to be broadcast to the network later
+  decodeRawTransaction Decode raw transaction
+  decryptWallet        Decrypt wallet
+  encryptWallet        Encrypt wallet
+  fiberAddressGen      Generate addresses and seeds for a new fiber coin
+  help                 Help about any command
+  lastBlocks           Displays the content of the most recently N generated blocks
+  listAddresses        Lists all addresses in a given wallet
+  listWallets          Lists all wallets stored in the wallet directory
+  richlist             Get mdl richlist
+  send                 Send mdl from a wallet or an address to a recipient address
+  showConfig           Show cli configuration
+  showSeed             Show wallet seed
+  status               Check the status of current mdl node
+  transaction          Show detail info of specific transaction
+  verifyAddress        Verify a mdl address
+  version              List the current version of MDL components
+  walletAddAddresses   Generate additional addresses for a wallet
+  walletBalance        Check the balance of a wallet
+  walletCreate         Generate a new wallet
+  walletDir            Displays wallet folder address
+  walletHistory        Display the transaction history of specific wallet. Requires mdl node rpc.
+  walletOutputs        Display outputs of specific wallet
 
-GLOBAL OPTIONS:
-   --help, -h     show help
-   --version, -v  print the version
+FLAGS:
+  -h, --help      help for mdl-cli
+      --version   version for mdl-cli
+
+Use "mdl-cli [command] --help" for more information about a command.
+
 ENVIRONMENT VARIABLES:
-    RPC_ADDR: Address of RPC node. Default "127.0.0.1:6430"
-    COIN: Name of the coin. Default "skycoin"
-    USE_CSRF: Set to 1 or true if the remote node has CSRF enabled. Default false (unset)
-    WALLET_DIR: Directory where wallets are stored. This value is overriden by any subcommand flag specifying a wallet filename, if that filename includes a path. Default "$HOME/.$COIN/wallets"
-    WALLET_NAME: Name of wallet file (without path). This value is overriden by any subcommand flag specifying a wallet filename. Default "$COIN_cli.wlt"
+    RPC_ADDR: Address of RPC node. Must be in scheme://host format. Default "http://127.0.0.1:6420"
+    RPC_USER: Username for RPC API, if enabled in the RPC.
+    RPC_PASS: Password for RPC API, if enabled in the RPC.
+    COIN: Name of the coin. Default "mdl"
+    WALLET_DIR: Directory where wallets are stored. This value is overridden by any subcommand flag specifying a wallet filename, if that filename includes a path. Default "$DATA_DIR/wallets"
+    WALLET_NAME: Name of wallet file (without path). This value is overridden by any subcommand flag specifying a wallet filename. Default "$COIN_cli.wlt"
+    DATA_DIR: Directory where everything is stored. Default "$HOME/.$COIN/"
 ```
 
 ### Add Private Key
-Add a private key to a skycoin wallet.
+Add a private key to a mdl wallet.
 
 ```bash
-$ skycoin-cli addPrivateKey [command options] [private key]
+$ mdl-cli addPrivateKey [flags] [private key]
 ```
 
 ```
-OPTIONS:
-    -f value [wallet file or path] private key will be added to this wallet
-    if not specified then default wallet ($HOME/.skycoin/wallets//wallets/skycoin_cli.wlt)
-    will be used
+FLAGS:
+  -h, --help                 help for addPrivateKey
+  -p, --password string      Wallet password
+  -f, --wallet-file string   wallet file or path. If no path is specified your default wallet path will be used.
 ```
 
 #### Example
 ```bash
-$ skycoin-cli addPrivateKey -f $WALLET_PATH $PRIVATE_KEY
+$ mdl-cli addPrivateKey -f $WALLET_PATH $PRIVATE_KEY
 ```
 
 ```
@@ -187,12 +208,12 @@ $ success
 Check balance of specific addresses, join multiple addresses with space.
 
 ```bash
-$ skycoin-cli addressBalance [addresses]
+$ mdl-cli addressBalance [addresses]
 ```
 
 #### Example
 ```bash
-$ skycoin-cli addressBalance 2iVtHS5ye99Km5PonsB42No3pQRGEURmxyc 2GgFvqoyk9RjwVzj8tqfcXVXB4orBwoc9qv
+$ mdl-cli addressBalance 2iVtHS5ye99Km5PonsB42No3pQRGEURmxyc 2GgFvqoyk9RjwVzj8tqfcXVXB4orBwoc9qv
 ```
 <details>
  <summary>View Output</summary>
@@ -248,26 +269,30 @@ $ skycoin-cli addressBalance 2iVtHS5ye99Km5PonsB42No3pQRGEURmxyc 2GgFvqoyk9RjwVz
 </details>
 
 ### Generate new addresses
-Generate new skycoin or bitcoin addresses.
+Generate new mdl or bitcoin addresses.
 
 ```bash
-$ skycoin-cli addressGen [command options] [arguments...]
+$ mdl-cli addressGen [flags]
 ```
 
 ```
-OPTIONS:
-        --count value, -c value  Number of addresses to generate (default: 1)
-        --hide-secret, -s        Hide the secret key from the output
-        --bitcoin, -b            Output the addresses as bitcoin addresses instead of skycoin addresses
-        --hex, -x                Use hex(sha256sum(rand(1024))) (CSPRNG-generated) as the seed if no seed is not provided
-        --only-addr, --oa        Only show generated address list, hide seed, secret key and public key
-        --seed value             Seed for deterministic key generation. If `--hex` is not defined will use bip39 to generate a seed if not provided.
+FLAGS:
+  -c, --coin string    Coin type. Must be mdl or bitcoin. If bitcoin, secret keys are in Wallet Import Format instead of hex. (default "mdl")
+  -x, --encrypt        Encrypt the wallet when printing a JSON wallet
+  -e, --entropy int    Entropy of the autogenerated bip39 seed, when the seed is not provided. Can be 128 or 256 (default 128)
+      --hex            Use hex(sha256sum(rand(1024))) (CSPRNG-generated) as the seed if not seed is not provided
+  -i, --hide-secrets   Hide the secret key and seed from the output when printing a JSON wallet file
+  -l, --label string   Wallet label to use when printing or writing a wallet file
+  -m, --mode string    Output mode. Options are wallet (prints a full JSON wallet), addresses (prints addresses in plain text), secrets (prints secret keys in plain text) (default "wallet")
+  -n, --num int        Number of addresses to generate (default 1)
+  -s, --seed string    Seed for deterministic key generation. Will use bip39 as the seed if not provided.
+  -t, --strict-seed    Seed should be a valid bip39 mnemonic seed.
 ```
 
 #### Examples
-##### Generate `n` number of skycoin addresses
+##### Generate `n` number of mdl addresses
 ```bash
-$ skycoin-cli addressGen --count 2
+$ mdl-cli addressGen --num 2
 ```
 
 <details>
@@ -276,7 +301,7 @@ $ skycoin-cli addressGen --count 2
 ```json
 {
  "meta": {
-     "coin": "skycoin",
+     "coin": "mdl",
      "seed": "genius canyon asset swallow picture torch awkward radar nest bunker walnut garage"
  },
  "entries": [
@@ -298,7 +323,7 @@ $ skycoin-cli addressGen --count 2
 
 ##### Generate `n` number of bitcoin addresses
 ```bash
-$ skycoin-cli addressGen --count 2 --bitcoin
+$ mdl-cli addressGen --num 2 --coin bitcoin
 ```
 
 <details>
@@ -328,7 +353,7 @@ $ skycoin-cli addressGen --count 2 --bitcoin
 
 ##### Hide secret in output
 ```bash
-$ skycoin-cli addressGen --count 2 --hide-secret
+$ mdl-cli addressGen --num 2 --hide-secrets
 ```
 
 <details>
@@ -337,7 +362,7 @@ $ skycoin-cli addressGen --count 2 --hide-secret
 ```json
 {
  "meta": {
-     "coin": "skycoin",
+     "coin": "mdl",
      "seed": "walnut wise pluck sniff weird enable document special soul era mercy you"
  },
  "entries": [
@@ -358,7 +383,7 @@ $ skycoin-cli addressGen --count 2 --hide-secret
 
 ##### Output only an address list
 ```bash
-$ skycoin-cli addressGen --count 2 --only-addr
+$ mdl-cli addressGen --num 2 --mode addresses
 ```
 
 ```
@@ -370,7 +395,7 @@ $ skycoin-cli addressGen --count 2 --only-addr
 
 ##### Use a predefined seed value
 ```bash
-$ skycoin-cli addressGen --count 2 --seed "my super secret seed"
+$ mdl-cli addressGen --num 2 --seed "my super secret seed"
 ```
 
 <details>
@@ -379,7 +404,7 @@ $ skycoin-cli addressGen --count 2 --seed "my super secret seed"
 ```json
 {
  "meta": {
-     "coin": "skycoin",
+     "coin": "mdl",
      "seed": "my super secret seed"
  },
  "entries": [
@@ -400,7 +425,7 @@ $ skycoin-cli addressGen --count 2 --seed "my super secret seed"
 
 ##### Generate addresses with a hex (CSPRNG-generated) seed
 ```bash
-skycoin-cli addressGen --count 2 --hex
+mdl-cli addressGen --num 2 --hex
 ```
 
 <details>
@@ -409,7 +434,7 @@ skycoin-cli addressGen --count 2 --hex
 ```json
 {
  "meta": {
-     "coin": "skycoin",
+     "coin": "mdl",
      "seed": "d5fa95cc3bd265c9ef99e7c2b300f0ede75375fbb76b2329bd5877631c315068"
  },
  "entries": [
@@ -428,17 +453,41 @@ skycoin-cli addressGen --count 2 --hex
 ```
 </details>
 
+### Generate distribution addresses for a new fiber coin
+```bash
+mdl-cli fiberAddressGen [flags]
+```
+
+```
+DESCRIPTION:
+    Addresses are written in a format that can be copied into fiber.toml
+    for configuring distribution addresses. Addresses along with their seeds are written to a csv file,
+    these seeds can be imported into the wallet to access distribution coins.
+
+FLAGS:
+  -a, --addres-file string   Output file for the generated addresses in fiber.toml format (default "addresses.txt")
+  -e, --entropy int          Entropy of the autogenerated bip39 seeds. Can be 128 or 256 (default 128)
+  -n, --num int              Number of addresses to generate (default 100)
+  -o, --overwrite            Allow overwriting any existing addrs-file or seeds-file
+  -s, --seeds-file string    Output file for the generated addresses and seeds in a csv (default "seeds.csv")
+```
+
+
+#### Examples
+```bash
+mdl-cli fiberAddressGen
+```
 
 ### Check address outputs
 Display outputs of specific addresses, join multiple addresses with space.
 
 ```bash
-$ skycoin-cli addressOutputs [address list]
+$ mdl-cli addressOutputs [address list]
 ```
 
 #### Example
 ```bash
-skycoin-cli addressOutputs tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V 29fDBQuJs2MDLymJsjyWH6rDjsyv995SrGU
+mdl-cli addressOutputs tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V 29fDBQuJs2MDLymJsjyWH6rDjsyv995SrGU
 ```
 
 <details>
@@ -487,15 +536,15 @@ skycoin-cli addressOutputs tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V 29fDBQuJs2MDLymJsj
 </details>
 
 ### Check block data
-Get block data of a range of blocks.
+Lists the content of a single block or a range of blocks
 
 ```bash
-$ skycoin-cli blocks [starting block or single block seq] [ending block seq]
+$ mdl-cli blocks [starting block or single block seq] [ending block seq]
 ```
 
 #### Example
 ```bash
-$ skycoin-cli blocks 41 42
+$ mdl-cli blocks 41 42
 ```
 
 <details>
@@ -503,107 +552,111 @@ $ skycoin-cli blocks 41 42
 
 ```json
 {
- "blocks": [
-     {
-         "header": {
-             "seq": 41,
-             "block_hash": "08f89cfe92be09e9848ba4d77c300908761354933f80401c107644feab1f4c9e",
-             "previous_block_hash": "fad5aca57144cbc86ad916492e814ec84c825d9870a86beac81980de30b0ae60",
-             "timestamp": 1429058524,
-             "fee": 4561,
-             "version": 0,
-             "tx_body_hash": "cf4fe76a08e3296b6f6abdb949604409be66574f211d9d14fde39103c4cfe1d6"
-         },
-         "body": {
-             "txns": [
-                 {
-                     "length": 220,
-                     "type": 0,
-                     "txid": "cf4fe76a08e3296b6f6abdb949604409be66574f211d9d14fde39103c4cfe1d6",
-                     "inner_hash": "2f5942207104d52dbd6191684b2a97392e616b7fa51dde314dbddd58d34b8027",
-                     "sigs": [
-                         "b2b8c8ec1e1dfdeac4690e88d4ef9fcc4b52fcb771153f391cbcb58d651505a94c6263b6dc15a948c0396c0d8be20d9e0d1993b494bd9189c778d3673363bfc401"
-                     ],
-                     "inputs": [
-                         "c65a9e6aa33244958e9595e9eceed678f9f17761753bf77000c5474f7696da53"
-                     ],
-                     "outputs": [
-                         {
-                             "uxid": "195f5e50b4eed1ec7ff968feca90356285437adc8ccfcf6623b55a4eebf7bbb5",
-                             "dst": "R6aHqKWSQfvpdo2fGSrq4F1RYXkBWR9HHJ",
-                             "coins": "969790.000000",
-                             "hours": 760
-                         },
-                         {
-                             "uxid": "6bbf13da052e1baade111ae8bb85548732532c8f5286eba8345d436d315d1c93",
-                             "dst": "qxmeHkwgAMfwXyaQrwv9jq3qt228xMuoT5",
-                             "coins": "9000.000000",
-                             "hours": 760
-                         }
-                     ]
-                 }
-             ]
-         }
-     },
-     {
-         "header": {
-             "seq": 42,
-             "block_hash": "60a17e0cf411e5db7150272e597d343beaa5fbce5d61f6f647a14288262593b1",
-             "previous_block_hash": "08f89cfe92be09e9848ba4d77c300908761354933f80401c107644feab1f4c9e",
-             "timestamp": 1429058594,
-             "fee": 292512,
-             "version": 0,
-             "tx_body_hash": "0e91a08561e85a36ddf44e77b9228f7d561c18c0b46d19083d4af511085b697e"
-         },
-         "body": {
-             "txns": [
-                 {
-                     "length": 317,
-                     "type": 0,
-                     "txid": "0e91a08561e85a36ddf44e77b9228f7d561c18c0b46d19083d4af511085b697e",
-                     "inner_hash": "d78230e22b358d7cc8d491adb3c0ec1e77a5170602a4ec92d700c4b4bb101f98",
-                     "sigs": [
-                         "17ba9c495e4d396a37eaf062e1806a13b3bdc91a83151c2455cf948a7e6d91882dc02ec6443970517f0f7daf59ce9b89658a17f5d51c0cbc18056811d0f3006501",
-                         "e4e8f28801fe461cc8097b29cfe1307739bdfbdd6b20c31e04eef89aede641a6407fa0c41b0ad5ef167e3255e1916c0bbd358ffd70f34dc7944ffe67514bc5f501"
-                     ],
-                     "inputs": [
-                         "f48432d381a10abecbd1357d81705ea922246e92170fe405d1a4a35c5ceef6a4",
-                         "6bbf13da052e1baade111ae8bb85548732532c8f5286eba8345d436d315d1c93"
-                     ],
-                     "outputs": [
-                         {
-                             "uxid": "19efa2bd8c59623a092612c511fb66333e2049a57d546269c19255852056fead",
-                             "dst": "qxmeHkwgAMfwXyaQrwv9jq3qt228xMuoT5",
-                             "coins": "9000.000000",
-                             "hours": 48752
-                         },
-                         {
-                             "uxid": "9953e00abe05db134510693a44b8928ca9b29d0009b38d9c4f8dcdedee7edc35",
-                             "dst": "4EHiTjCsxQmt4wRy5yJxBMcxsM5yGqtuqu",
-                             "coins": "1000.000000",
-                             "hours": 48752
-                         }
-                     ]
-                 }
-             ]
-         }
-     }
- ]
+    "blocks": [
+        {
+            "header": {
+                "seq": 41,
+                "block_hash": "08f89cfe92be09e9848ba4d77c300908761354933f80401c107644feab1f4c9e",
+                "previous_block_hash": "fad5aca57144cbc86ad916492e814ec84c825d9870a86beac81980de30b0ae60",
+                "timestamp": 1429058524,
+                "fee": 4561,
+                "version": 0,
+                "tx_body_hash": "cf4fe76a08e3296b6f6abdb949604409be66574f211d9d14fde39103c4cfe1d6",
+                "ux_hash": "d3f60f0d20aeac951aacab8d849696cac54c7057da741cfd90b63018100818d0"
+            },
+            "body": {
+                "txns": [
+                    {
+                        "length": 220,
+                        "type": 0,
+                        "txid": "cf4fe76a08e3296b6f6abdb949604409be66574f211d9d14fde39103c4cfe1d6",
+                        "inner_hash": "2f5942207104d52dbd6191684b2a97392e616b7fa51dde314dbddd58d34b8027",
+                        "sigs": [
+                            "b2b8c8ec1e1dfdeac4690e88d4ef9fcc4b52fcb771153f391cbcb58d651505a94c6263b6dc15a948c0396c0d8be20d9e0d1993b494bd9189c778d3673363bfc401"
+                        ],
+                        "inputs": [
+                            "c65a9e6aa33244958e9595e9eceed678f9f17761753bf77000c5474f7696da53"
+                        ],
+                        "outputs": [
+                            {
+                                "uxid": "195f5e50b4eed1ec7ff968feca90356285437adc8ccfcf6623b55a4eebf7bbb5",
+                                "dst": "R6aHqKWSQfvpdo2fGSrq4F1RYXkBWR9HHJ",
+                                "coins": "969790.000000",
+                                "hours": 760
+                            },
+                            {
+                                "uxid": "6bbf13da052e1baade111ae8bb85548732532c8f5286eba8345d436d315d1c93",
+                                "dst": "qxmeHkwgAMfwXyaQrwv9jq3qt228xMuoT5",
+                                "coins": "9000.000000",
+                                "hours": 760
+                            }
+                        ]
+                    }
+                ]
+            },
+            "size": 220
+        },
+        {
+            "header": {
+                "seq": 42,
+                "block_hash": "60a17e0cf411e5db7150272e597d343beaa5fbce5d61f6f647a14288262593b1",
+                "previous_block_hash": "08f89cfe92be09e9848ba4d77c300908761354933f80401c107644feab1f4c9e",
+                "timestamp": 1429058594,
+                "fee": 292512,
+                "version": 0,
+                "tx_body_hash": "0e91a08561e85a36ddf44e77b9228f7d561c18c0b46d19083d4af511085b697e",
+                "ux_hash": "9173768496bc49e2a34d5a7ea65d05ad6507dfdb489836e861b3c03d35efeb7a"
+            },
+            "body": {
+                "txns": [
+                    {
+                        "length": 317,
+                        "type": 0,
+                        "txid": "0e91a08561e85a36ddf44e77b9228f7d561c18c0b46d19083d4af511085b697e",
+                        "inner_hash": "d78230e22b358d7cc8d491adb3c0ec1e77a5170602a4ec92d700c4b4bb101f98",
+                        "sigs": [
+                            "17ba9c495e4d396a37eaf062e1806a13b3bdc91a83151c2455cf948a7e6d91882dc02ec6443970517f0f7daf59ce9b89658a17f5d51c0cbc18056811d0f3006501",
+                            "e4e8f28801fe461cc8097b29cfe1307739bdfbdd6b20c31e04eef89aede641a6407fa0c41b0ad5ef167e3255e1916c0bbd358ffd70f34dc7944ffe67514bc5f501"
+                        ],
+                        "inputs": [
+                            "f48432d381a10abecbd1357d81705ea922246e92170fe405d1a4a35c5ceef6a4",
+                            "6bbf13da052e1baade111ae8bb85548732532c8f5286eba8345d436d315d1c93"
+                        ],
+                        "outputs": [
+                            {
+                                "uxid": "19efa2bd8c59623a092612c511fb66333e2049a57d546269c19255852056fead",
+                                "dst": "qxmeHkwgAMfwXyaQrwv9jq3qt228xMuoT5",
+                                "coins": "9000.000000",
+                                "hours": 48752
+                            },
+                            {
+                                "uxid": "9953e00abe05db134510693a44b8928ca9b29d0009b38d9c4f8dcdedee7edc35",
+                                "dst": "4EHiTjCsxQmt4wRy5yJxBMcxsM5yGqtuqu",
+                                "coins": "1000.000000",
+                                "hours": 48752
+                            }
+                        ]
+                    }
+                ]
+            },
+            "size": 317
+        }
+    ]
 }
 ```
 </details>
 
 ### Check database integrity
-Checks if the given database file contains valid skycoin blockchain data
+Checks if the given database file contains valid mdl blockchain data
 If no argument is given, the default `data.db` in `$HOME/.$COIN/` will be checked.
 
 ```bash
-$ skycoin-cli checkdb [db path]
+$ mdl-cli checkdb [db path]
 ```
 
 #### Example
 ```bash
-$ skycoin-cli checkdb $DB_PATH
+$ mdl-cli checkdb $DB_PATH
 ```
 
 <details>
@@ -619,30 +672,32 @@ Create a raw transaction that can be broadcasted later.
 A raw transaction is a binary encoded hex string.
 
 ```bash
-$ skycoin-cli createRawTransaction [command options] [to address] [amount]
+$ mdl-cli createRawTransaction [flags] [to address] [amount]
 ```
 
 ```
-OPTIONS:
-        -f value    [wallet file or path], From wallet
-        -a value    [address] From address
-        -c value    [changeAddress] Specify different change address.
-                          By default the from address or a wallets coinbase address will be used.
-        -m value    [send to many] use JSON string to set multiple receive addresses and coins,
-                          example: -m '[{"addr":"$addr1", "coins": "10.2"}, {"addr":"$addr2", "coins": "20"}]'
-        --json, -j  Returns the results in JSON format.
+FLAGS:
+  -a, --address string          From address
+  -c, --change-address string   Specify different change address.
+                                By default the from address or a wallets coinbase address will be used.
+      --csv  string         CSV file containing addresses and amounts to send
+  -j, --json                    Returns the results in JSON format.
+  -m, --many string             use JSON string to set multiple receive addresses and coins,
+                                example: -m '[{"addr":"$addr1", "coins": "10.2"}, {"addr":"$addr2", "coins": "20"}]'
+  -p, --password string         Wallet password
+  -f, --wallet-file string      wallet file or path. If no path is specified your default wallet path will be used.
 ```
 
 #### Examples
 ##### Sending to a single address from a specified wallet
 ```bash
-$ skycoin-cli createRawTransaction -f $WALLET_PATH -a $FROM_ADDRESS $RECIPIENT_ADDRESS $AMOUNT
+$ mdl-cli createRawTransaction -f $WALLET_PATH -a $FROM_ADDRESS $RECIPIENT_ADDRESS $AMOUNT
 ```
 
 ##### Sending to a specific change address
 
 ```bash
-$ skycoin-cli createRawTransaction -f $WALLET_PATH -a $FROM_ADDRESS -c $CHANGE_ADDRESS $RECIPIENT_ADDRESS $AMOUNT
+$ mdl-cli createRawTransaction -f $WALLET_PATH -a $FROM_ADDRESS -c $CHANGE_ADDRESS $RECIPIENT_ADDRESS $AMOUNT
 ```
 
 <details>
@@ -655,7 +710,17 @@ dc00000000c7425e5a49fce496d78ea9b04fc47e4126b91f675b00c16b3a7515c1555c2520010000
 
 ##### Sending to multiple addresses
 ```bash
-$ skycoin-cli createRawTransaction -f $WALLET_PATH -a $FROM_ADDRESS -m '[{"addr":"$ADDR1", "coins": "$AMT1"}, {"addr":"$ADDR2", "coins": "$AMT2"}]'
+$ mdl-cli createRawTransaction -f $WALLET_PATH -a $FROM_ADDRESS -m '[{"addr":"$ADDR1", "coins": "$AMT1"}, {"addr":"$ADDR2", "coins": "$AMT2"}]'
+```
+
+##### Sending to addresses in a CSV file
+```bash
+$ cat <<EOF > $CSV_FILE
+2Niqzo12tZ9ioZq5vwPHMVR4g7UVpp9TCmP,123.1
+2UDzBKnxZf4d9pdrBJAqbtoeH641RFLYKxd,456.045
+yExu4fryscnahAEMKa7XV4Wc1mY188KvGw,0.3
+EOF
+$ mdl-cli createRawTransaction -f $WALLET_PATH -a $FROM_ADDRESS -csv $CSV_FILE
 ```
 
 <details>
@@ -666,13 +731,13 @@ $ skycoin-cli createRawTransaction -f $WALLET_PATH -a $FROM_ADDRESS -m '[{"addr"
 ```
 </details>
 
-> NOTE: When sending to multiple addresses all the receiving addresses need to be different
+> NOTE: When sending to multiple addresses each combination of address and coins need to be unique
         Otherwise you get, `ERROR: Duplicate output in transaction`
 
 
 ##### Generate a JSON output
 ```bash
-$ skycoin-cli createRawTransaction -f $WALLET_PATH -a $FROM_ADDRESS --json $RECIPIENT_ADDRESS $AMOUNT
+$ mdl-cli createRawTransaction -f $WALLET_PATH -a $FROM_ADDRESS --json $RECIPIENT_ADDRESS $AMOUNT
 ```
 
 <details>
@@ -687,15 +752,15 @@ $ skycoin-cli createRawTransaction -f $WALLET_PATH -a $FROM_ADDRESS --json $RECI
 
 ### Decode a raw transaction
 ```bash
-$ skycoin-cli decodeRawTransaction [raw transaction]
+$ mdl-cli decodeRawTransaction [raw transaction]
 ```
 
-Decode a raw skycoin transaction.
+Decode a raw mdl transaction.
 
 #### Example
 
 ```bash
-skycoin-cli decodeRawTransaction dc00000000247bd0f0a1cf39fa51ea3eca044e4d9cbb28fff5376e90e2eb008c9fe0af384301000000cf5869cb1b21da4da98bdb5dca57b1fd5a6fcbefd37d4f1eb332b21233f92cd62e00d8e2f1c8545142eaeed8fada1158dd0e552d3be55f18dd60d7e85407ef4f000100000005e524872c838de517592c9a495d758b8ab2ec32d3e4d3fb131023a424386634020000000007445b5d6fbbb1a7d70bef941fb5da234a10fcae40420f00000000000100000000000000008001532c3a705e7e62bb0bb80630ecc21a87ec090024f400000000009805000000000000
+mdl-cli decodeRawTransaction dc00000000247bd0f0a1cf39fa51ea3eca044e4d9cbb28fff5376e90e2eb008c9fe0af384301000000cf5869cb1b21da4da98bdb5dca57b1fd5a6fcbefd37d4f1eb332b21233f92cd62e00d8e2f1c8545142eaeed8fada1158dd0e552d3be55f18dd60d7e85407ef4f000100000005e524872c838de517592c9a495d758b8ab2ec32d3e4d3fb131023a424386634020000000007445b5d6fbbb1a7d70bef941fb5da234a10fcae40420f00000000000100000000000000008001532c3a705e7e62bb0bb80630ecc21a87ec090024f400000000009805000000000000
 ```
 
 <details>
@@ -703,45 +768,45 @@ skycoin-cli decodeRawTransaction dc00000000247bd0f0a1cf39fa51ea3eca044e4d9cbb28f
 
 ```json
 {
-  "hash": "ee700309aba9b8b552f1c932a667c3701eff98e71c0e5b0e807485cea28170e5",
-  "inner_hash": "247bd0f0a1cf39fa51ea3eca044e4d9cbb28fff5376e90e2eb008c9fe0af3843",
-  "sigs": [
-    "cf5869cb1b21da4da98bdb5dca57b1fd5a6fcbefd37d4f1eb332b21233f92cd62e00d8e2f1c8545142eaeed8fada1158dd0e552d3be55f18dd60d7e85407ef4f00"
-  ],
-  "in": [
-    "05e524872c838de517592c9a495d758b8ab2ec32d3e4d3fb131023a424386634"
-  ],
-  "out": [
-    {
-      "hash": "2cb770d7c045954e9195b312e5409d0070c15361da7148879fb8658b766fae90",
-      "src_tx": "247bd0f0a1cf39fa51ea3eca044e4d9cbb28fff5376e90e2eb008c9fe0af3843",
-      "address": "3vbfHxPzMuyFJvgHdAoqmFnyg6k8HiLyxd",
-      "coins": "1.000000",
-      "hours": 1
-    },
-    {
-      "hash": "0de690eeec960274539c2ad35b57d7c0492a268a5f17ab54e5e24f3d6e14bc72",
-      "src_tx": "247bd0f0a1cf39fa51ea3eca044e4d9cbb28fff5376e90e2eb008c9fe0af3843",
-      "address": "tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V",
-      "coins": "16.000000",
-      "hours": 1432
-    }
-  ]
+    "length": 220,
+    "type": 0,
+    "txid": "ee700309aba9b8b552f1c932a667c3701eff98e71c0e5b0e807485cea28170e5",
+    "inner_hash": "247bd0f0a1cf39fa51ea3eca044e4d9cbb28fff5376e90e2eb008c9fe0af3843",
+    "sigs": [
+        "cf5869cb1b21da4da98bdb5dca57b1fd5a6fcbefd37d4f1eb332b21233f92cd62e00d8e2f1c8545142eaeed8fada1158dd0e552d3be55f18dd60d7e85407ef4f00"
+    ],
+    "inputs": [
+        "05e524872c838de517592c9a495d758b8ab2ec32d3e4d3fb131023a424386634"
+    ],
+    "outputs": [
+        {
+            "uxid": "2f146924431e8c9b84a53d4d823acefb92515a264956d873ac86066c608af418",
+            "dst": "3vbfHxPzMuyFJvgHdAoqmFnyg6k8HiLyxd",
+            "coins": "1.000000",
+            "hours": 1
+        },
+        {
+            "uxid": "5d69d22aff5957a18194c443557d97ec18707e4db8ee7e9a4bb8a7eef642fdff",
+            "dst": "tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V",
+            "coins": "16.000000",
+            "hours": 1432
+        }
+    ]
 }
 ```
 </details>
 
 
 ### Broadcast a raw transaction
-Broadcast a raw skycoin transaction.
+Broadcast a raw mdl transaction.
 Output is the transaction id.
 
 ```bash
-$ skycoin-cli broadcastTransaction [raw transaction]
+$ mdl-cli broadcastTransaction [raw transaction]
 ```
 
 ```bash
-$ skycoin-cli broadcastTransaction dc00000000247bd0f0a1cf39fa51ea3eca044e4d9cbb28fff5376e90e2eb008c9fe0af384301000000cf5869cb1b21da4da98bdb5dca57b1fd5a6fcbefd37d4f1eb332b21233f92cd62e00d8e2f1c8545142eaeed8fada1158dd0e552d3be55f18dd60d7e85407ef4f000100000005e524872c838de517592c9a495d758b8ab2ec32d3e4d3fb131023a424386634020000000007445b5d6fbbb1a7d70bef941fb5da234a10fcae40420f00000000000100000000000000008001532c3a705e7e62bb0bb80630ecc21a87ec090024f400000000009805000000000000
+$ mdl-cli broadcastTransaction dc00000000247bd0f0a1cf39fa51ea3eca044e4d9cbb28fff5376e90e2eb008c9fe0af384301000000cf5869cb1b21da4da98bdb5dca57b1fd5a6fcbefd37d4f1eb332b21233f92cd62e00d8e2f1c8545142eaeed8fada1158dd0e552d3be55f18dd60d7e85407ef4f000100000005e524872c838de517592c9a495d758b8ab2ec32d3e4d3fb131023a424386634020000000007445b5d6fbbb1a7d70bef941fb5da234a10fcae40420f00000000000100000000000000008001532c3a705e7e62bb0bb80630ecc21a87ec090024f400000000009805000000000000
 ```
 <details>
  <summary>View Output</summary>
@@ -751,29 +816,32 @@ ee700309aba9b8b552f1c932a667c3701eff98e71c0e5b0e807485cea28170e5
 ```
 </details>
 
-### Generate a wallet
-Generate a new skycoin wallet.
+### Create a wallet
+Create a new mdl wallet.
 
 ```bash
-$ skycoin-cli generateWallet [command options]
+$ mdl-cli walletCreate [flags]
 ```
 
 ```
-OPTIONS:
-        -r        A random alpha numeric seed will be generated for you
-        --rd      A random seed consisting of 12 dictionary words will be generated for you (default)
-        -s value  Your seed
-        -n value  [numberOfAddresses] Number of addresses to generate
-                            By default 1 address is generated. (default: 1)
-        -f value  [walletName] Name of wallet. The final format will be "yourName.wlt".
-                             If no wallet name is specified a generic name will be selected. (default: "skycoin_cli.wlt")
-        -l value  [label] Label used to idetify your wallet.
+FLAGS:
+  -x, --crypto-type string   The crypto type for wallet encryption, can be scrypt-chacha20poly1305 or sha256-xor (default "scrypt-chacha20poly1305")
+  -e, --encrypt              Create encrypted wallet.
+  -l, --label string         Label used to idetify your wallet.
+  -m, --mnemonic             A mnemonic seed consisting of 12 dictionary words will be generated
+  -n, --num uint             [numberOfAddresses] Number of addresses to generate
+                                 By default 1 address is generated. (default 1)
+  -p, --password string      Wallet password
+  -r, --random               A random alpha numeric seed will be generated
+  -s, --seed string          Your seed
+  -f, --wallet-file string   Name of wallet. The final format will be "yourName.wlt".
+                                 If no wallet name is specified a generic name will be selected. (default "mdl_cli.wlt")
 ```
 
 #### Examples
-##### Generate the default wallet
+##### Create the default wallet
 ```bash
-$ skycoin-cli generateWallet
+$ mdl-cli walletCreate
 ```
 
 <details>
@@ -782,10 +850,10 @@ $ skycoin-cli generateWallet
 ```json
 {
  "meta": {
-     "coin": "skycoin",
+     "coin": "mdl",
      "cryptoType": "",
      "encrypted": "false",
-     "filename": "skycoin_cli.wlt",
+     "filename": "mdl_cli.wlt",
      "label": "",
      "lastSeed": "781576ec74bfa2cc9eb06f8613b96db9be21438b9cd6b6ded09df3bc5b9da279",
      "secrets": "",
@@ -807,9 +875,9 @@ $ skycoin-cli generateWallet
 
 > NOTE: If a wallet with the same name already exists then the cli exits with an error.
 
-##### Generate a wallet with a random alpha numeric seed
+##### Create a wallet with a random alpha numeric seed
 ```bash
-$ skycoin-cli generateWallet -r
+$ mdl-cli walletCreate -r
 ```
 
 <details>
@@ -818,10 +886,10 @@ $ skycoin-cli generateWallet -r
 ```json
 {
  "meta": {
-     "coin": "skycoin",
+     "coin": "mdl",
      "cryptoType": "",
      "encrypted": "false",
-     "filename": "skycoin_cli.wlt",
+     "filename": "mdl_cli.wlt",
      "label": "",
      "lastSeed": "fdaf0729903fbd5962301f16531a1da102bf0875b4a636cb43ce24b967b932ac",
      "secrets": "",
@@ -841,9 +909,9 @@ $ skycoin-cli generateWallet -r
 ```
 </details>
 
-##### Generate a wallet with a 12 word mnemomic seed
+##### Create a wallet with a 12 word mnemomic seed
 ```bash
-$ skycoin-cli generateWallet -rd
+$ mdl-cli walletCreate -rm
 ```
 
 <details>
@@ -852,10 +920,10 @@ $ skycoin-cli generateWallet -rd
 ```json
 {
  "meta": {
-     "coin": "skycoin",
+     "coin": "mdl",
      "cryptoType": "",
      "encrypted": "false",
-     "filename": "skycoin_cli.wlt",
+     "filename": "mdl_cli.wlt",
      "label": "",
      "lastSeed": "f219c2e902940f27ea735d866a495372debcbd01da287a2ec1226d0eb43b9890",
      "secrets": "",
@@ -875,9 +943,9 @@ $ skycoin-cli generateWallet -rd
 ```
 </details>
 
-##### Generate a wallet with a specified seed
+##### Create a wallet with a specified seed
 ```bash
-$ skycoin-cli generateWallet -s "this is the super secret seed everyone needs but does not have"
+$ mdl-cli walletCreate -s "this is the super secret seed everyone needs but does not have"
 ```
 
 <details>
@@ -886,10 +954,10 @@ $ skycoin-cli generateWallet -s "this is the super secret seed everyone needs bu
 ```json
 {
  "meta": {
-     "coin": "skycoin",
+     "coin": "mdl",
      "cryptoType": "",
      "encrypted": "false",
-     "filename": "skycoin_cli.wlt",
+     "filename": "mdl_cli.wlt",
      "label": "",
      "lastSeed": "c34a83b473ea4d2f9dc394d0b9c1c0d4578012252b842ef1bfce9950cfe50b06",
      "secrets": "",
@@ -910,9 +978,9 @@ $ skycoin-cli generateWallet -s "this is the super secret seed everyone needs bu
 </details>
 
 
-##### Generate more than 1 default address
+##### Create more than 1 default address
 ```bash
-$ skycoin-cli generateWallet -n 2
+$ mdl-cli walletCreate -n 2
 ```
 
 <details>
@@ -921,10 +989,10 @@ $ skycoin-cli generateWallet -n 2
 ```json
 {
  "meta": {
-     "coin": "skycoin",
+     "coin": "mdl",
      "cryptoType": "",
      "encrypted": "false",
-     "filename": "skycoin_cli.wlt",
+     "filename": "mdl_cli.wlt",
      "label": "",
      "lastSeed": "861a8989e6c85fb69cf5968586fe9d5a1e26936ab122c5d542bf78fb35e0d247",
      "secrets": "",
@@ -949,9 +1017,9 @@ $ skycoin-cli generateWallet -n 2
 ```
 </details>
 
-##### Generate wallet with a custom wallet name
+##### Create a wallet with a custom wallet name
 ```bash
-$ skycoin-cli generateWallet -f "secret_wallet.wlt"
+$ mdl-cli walletCreate -f "secret_wallet.wlt"
 ```
 
 <details>
@@ -960,7 +1028,7 @@ $ skycoin-cli generateWallet -f "secret_wallet.wlt"
 ```json
 {
  "meta": {
-     "coin": "skycoin",
+     "coin": "mdl",
      "cryptoType": "",
      "encrypted": "false",
      "filename": "secret_wallet.wlt",
@@ -985,10 +1053,10 @@ $ skycoin-cli generateWallet -f "secret_wallet.wlt"
 
 > NOTE: The wallet name needs to end with `.wlt` and it should not be a path.
 
-##### Generate wallet with a custom wallet label
+##### Create a wallet with a custom wallet label
 By default the wallet label is an empty field
 ```bash
-$ skycoin-cli generateWallet -l "cli wallet"
+$ mdl-cli walletCreate -l "cli wallet"
 ```
 
 <details>
@@ -997,10 +1065,10 @@ $ skycoin-cli generateWallet -l "cli wallet"
 ```json
 {
  "meta": {
-     "coin": "skycoin",
+     "coin": "mdl",
      "cryptoType": "",
      "encrypted": "false",
-     "filename": "skycoin_cli.wlt",
+     "filename": "mdl_cli.wlt",
      "label": "cli wallet",
      "lastSeed": "b3b3c13419a8343f8845a8de30543fa33680e25251a3a1bda3e49346f1d640f9",
      "secrets": "",
@@ -1020,23 +1088,24 @@ $ skycoin-cli generateWallet -l "cli wallet"
 ```
 </details>
 
-### Generate addresses for a wallet
-Generate new addresses for a skycoin wallet.
+### Add addresses to a wallet
+Add new addresses to a mdl wallet.
 
 ```bash
-$ skycoin-cli generateAddresses [command options]
+$ mdl-cli walletAddAddresses [flags]
 ```
 
 ```
-OPTIONS:
-        -n value    [numberOfAddresses]  Number of addresses to generate (default: 1)
-        -f value    [wallet file or path] Generate addresses in the wallet (default: $HOME/.skycoin/wallets//wallets/skycoin_cli.wlt)
-        --json, -j  Returns the results in JSON format
+FLAGS:
+  -j, --json                 Returns the results in JSON format
+  -n, --num uint             Number of addresses to generate (default 1)
+  -p, --password string      wallet password
+  -f, --wallet-file string   Generate addresses in the wallet (default "$HOME/.mdl/wallets/mdl_cli.wlt")
 ```
 
-##### Generate an address for the default wallet
+##### Add an address to the default wallet
 ```bash
-$ skycoin-cli generateAddresses
+$ mdl-cli walletAddAddresses
 ```
 
 <details>
@@ -1047,9 +1116,9 @@ $ skycoin-cli generateAddresses
 ```
 </details>
 
-##### Generate an address for a specific wallet
+##### Add an address to a specific wallet
 ```bash
-$ skycoin-cli generateAddresses $WALLET_PATH
+$ mdl-cli walletAddAddresses $WALLET_PATH
 ```
 
 <details>
@@ -1060,9 +1129,9 @@ $ skycoin-cli generateAddresses $WALLET_PATH
 ```
 </details>
 
-##### Generate `n` addresses
+##### Add `n` addresses
 ```bash
-$ skycoin-cli generateAddresses -n 2
+$ mdl-cli walletAddAddresses -n 2
 ```
 
 <details>
@@ -1073,9 +1142,9 @@ $ skycoin-cli generateAddresses -n 2
 ```
 </details>
 
-##### Generate a JSON output
+##### Add an address to a wallet with JSON output
 ```bash
-$ skycoin-cli generateAddresses --json
+$ mdl-cli walletAddAddresses --json
 ```
 
 <details>
@@ -1090,18 +1159,151 @@ $ skycoin-cli generateAddresses --json
 ```
 </details>
 
+### Encrypt Wallet
+Encrypt a wallet seed
+
+```bash
+$ mdl-cli encryptWallet [flags]
+```
+
+```
+FLAGS:
+  -x, --crypto-type string   The crypto type for wallet encryption, can be scrypt-chacha20poly1305 or sha256-xor
+  -h, --help                 help for encryptWallet
+  -p, --password string      wallet password
+```
+
+### Examples
+#### Encrypt wallet
+```bash
+$ mdl-cli encryptWallet -p test
+```
+
+<details>
+ <summary>View Output</summary>
+
+ ```json
+ {
+     "meta": {
+         "coin": "mdl",
+         "cryptoType": "scrypt-chacha20poly1305",
+         "encrypted": "true",
+         "filename": "mdl_cli.wlt",
+         "label": "",
+         "lastSeed": "",
+         "secrets": "dgB7Im4iOjEwNDg1NzYsInIiOjgsInAiOjEsImtleUxlbiI6MzIsInNhbHQiOiJRNVRSVHh0VFpieERpUWt0dnkzc01SYTl6U0t2aFJqVlpUUHQzeldSVGs4PSIsIm5vbmNlIjoiSUt5VG8zdWdGdFY3MWYxTiJ9LB7Cu3bvZFzsmKqToPi3bjARIRfmhL8HBUdnwLzS5Rxu4uw1tIlDDmEKUpgDWV3RvB+xDz3sHchQr5BpK72LDOwbZ6BubMHovTqC4+lx9hKc2qnDGwsymxLQJHQrQ23DkHMioSUVYNZv1/DwzJ2qI0WIOTkb+L34e9f60YV+2zF7v+C/nTS8AjMwjGYldKinPEjyDXkpxB2d4Sd3EnfUm8u76TvTKxqZpZ/tr+in/OfRsJsN7dC7rMFRZukoCJYNnWv/wgPn/NMu4DIxqF+WUQhCsCgqk6oMderdK/E/xtLJmKnbHRLH4PO/Dh4ypLXg2EzW+JBN6RpzVEXxYdvVCqmKfs7d+hnHWDmDtCLGqYyPsUa+d4PPhylruNE=",
+         "seed": "",
+         "tm": "1540305209",
+         "type": "deterministic",
+         "version": "0.2"
+     },
+     "entries": [
+         {
+             "address": "2gvvvS5jziMDQTUPB98LFipCTDjm1H723k2",
+             "public_key": "032fe2ceacabc1a6acad8c93bd3493a3570fb76a9f8dc625dd200d13f96abed3e0",
+             "secret_key": ""
+         }
+     ]
+ }
+ ```
+</details>
+
+
+#### Encrypt wallet with different crypto type
+```bash
+$ mdl-cli encryptWallet -x sha256-xor -p test
+```
+
+<details>
+ <summary>View Output</summary>
+
+ ```json
+ {
+     "meta": {
+         "coin": "mdl",
+         "cryptoType": "sha256-xor",
+         "encrypted": "true",
+         "filename": "mdl_cli.wlt",
+         "label": "",
+         "lastSeed": "",
+         "secrets": "mJ4g+/NgncOVp7gKIZqVPysmrRYKjprSuMvvpq3HLt7ajjMOheEdyU0PGtueDQADIhhTFZlQh/eaaYXF3fecS7OrGa79F+2lRRdD7Tva/MueiL9TL0ng12x0I7dXkUVsXLTl3MJK27JwS9hKedcVvnmFysJA6W3lX2aE7Qn+v6cyMbfgR8r89OHGaUZ9SPZn2HKOhhIcXt66Q/t0kVWU0XEH+G
+ xUyX23ksN3scQoAshVidLAgXwpkgExEl+qjCpDNQga3MncZV+WuQxpIKodJ3l5TKoJAA0/Taz9O9Se0tIoiK2ls2m6JUayev3Id0+hkmNNSUKQ53Ni3xwjNzZXoPQAemMWpkdUSv8qNuhh7C/4gBBrZROM6ZyxmsdlWgcG0Yfrh8o505D0i4mtubkdZSGi8Djm9j1mpWTZi3VuUjtGvBAmH3Qzdma+nvORZj11QuEuCcO+
+ 8jmQB9bVxcTL9u4Nan2+cYijVNul93m7xWik/mSB7uIFVIJAm4kSMiJm",
+         "seed": "",
+         "tm": "1540305209",
+         "type": "deterministic",
+         "version": "0.2"
+     },
+     "entries": [
+         {
+             "address": "2gvvvS5jziMDQTUPB98LFipCTDjm1H723k2",
+             "public_key": "032fe2ceacabc1a6acad8c93bd3493a3570fb76a9f8dc625dd200d13f96abed3e0",
+             "secret_key": ""
+         }
+     ]
+ }
+ ```
+</details>
+
+### Decrypt Wallet
+Decrypt a wallet seed
+
+```bash
+$ mdl-cli decryptWallet [flags]
+```
+
+```
+FLAGS:
+  -h, --help              help for decryptWallet
+  -p, --password string   wallet password
+```
+
+### Example
+```bash
+$ mdl-cli decryptWallet -p test
+```
+
+<details>
+ <summary>View Output</summary>
+
+ ```json
+ {
+     "meta": {
+         "coin": "mdl",
+         "cryptoType": "",
+         "encrypted": "false",
+         "filename": "mdl_cli.wlt",
+         "label": "",
+         "lastSeed": "522dba68fe58c179f3467f9e799c02b25552143b250626cc03281faa28c262c0",
+         "secrets": "",
+         "seed": "select salute trip target blur short link suspect river ready senior bleak",
+         "tm": "1540305209",
+         "type": "deterministic",
+         "version": "0.2"
+     },
+     "entries": [
+         {
+             "address": "2gvvvS5jziMDQTUPB98LFipCTDjm1H723k2",
+             "public_key": "032fe2ceacabc1a6acad8c93bd3493a3570fb76a9f8dc625dd200d13f96abed3e0",
+             "secret_key": "080bfb86463da87e06f816c4326a11b84806c9744235bb7ce7bc8d63acb4f6c2"
+         }
+     ]
+ }
+ ```
+</details>
+
 ### Last blocks
-Show the last `n` skycoin blocks.
+Show the last `n` mdl blocks.
 By default the last block is shown.
 
 ```bash
-$  skycoin-cli lastBlocks [numberOfBlocks]
+$  mdl-cli lastBlocks [numberOfBlocks]
 ```
 
 #### Examples
 ##### Get the last block
 ```bash
-$ skycoin-cli lastBlocks
+$ mdl-cli lastBlocks
 ```
 
 <details>
@@ -1109,56 +1311,64 @@ $ skycoin-cli lastBlocks
 
 ```json
 {
- "blocks": [
-     {
-         "header": {
-             "seq": 21202,
-             "block_hash": "07140b536a5d0c3fcecec6cd61d2d4628a6fe6d7f7933223365269ea78d47c06",
-             "previous_block_hash": "baf74fae7ba8e304236e84e4cbc24b810a3827512bfdb82f892ffcb8682f9d16",
-             "timestamp": 1523179526,
-             "fee": 38,
-             "version": 0,
-             "tx_body_hash": "31b4f132374b4eb6c31c1c2f51a07a336a5d290b859d4c32a4982f325f124023"
-         },
-         "body": {
-             "txns": [
-                 {
-                     "length": 220,
-                     "type": 0,
-                     "txid": "31b4f132374b4eb6c31c1c2f51a07a336a5d290b859d4c32a4982f325f124023",
-                     "inner_hash": "78b51146a1822c777f5de05fd9c78bb457bcbaeec13d9c927f548cc4019a467c",
-                     "sigs": [
-                         "22e13afd39ac22ed452b716c721c82374b4d6d69fe2db8a70ea74f9fa37487761039365a5de0bf741e7c4da171b2164ddf8bd4326b9845784719645fa16a8ec401"
-                     ],
-                     "inputs": [
-                         "1714a29f821bc955857132a495e64c458794564108245bb605d2eb418edb8b54"
-                     ],
-                     "outputs": [
-                         {
-                             "uxid": "8d2fe35c36f69866ea91ff468464ddb6e0bee7fd145df7319fe192245c0dd646",
-                             "dst": "2GgFvqoyk9RjwVzj8tqfcXVXB4orBwoc9qv",
-                             "coins": "6458.000000",
-                             "hours": 19
-                         },
-                         {
-                             "uxid": "4d0a689781cd6aaf61d33f8f0bf87f16210c3e5b45f83a789f454530c2d64b21",
-                             "dst": "i66Gax2z4cMiTYGHjRjmKpooWS2Rhnmoeu",
-                             "coins": "1.000000",
-                             "hours": 19
-                         }
-                     ]
-                 }
-             ]
-         }
-     }
- ]
+    "blocks": [
+        {
+            "header": {
+                "seq": 58894,
+                "block_hash": "3961bea8c4ab45d658ae42effd4caf36b81709dc52a5708fdd4c8eb1b199a1f6",
+                "previous_block_hash": "8eca94e7597b87c8587286b66a6b409f6b4bf288a381a56d7fde3594e319c38a",
+                "timestamp": 1537581604,
+                "fee": 485194,
+                "version": 0,
+                "tx_body_hash": "c03c0dd28841d5aa87ce4e692ec8adde923799146ec5504e17ac0c95036362dd",
+                "ux_hash": "f7d30ecb49f132283862ad58f691e8747894c9fc241cb3a864fc15bd3e2c83d3"
+            },
+            "body": {
+                "txns": [
+                    {
+                        "length": 257,
+                        "type": 0,
+                        "txid": "c03c0dd28841d5aa87ce4e692ec8adde923799146ec5504e17ac0c95036362dd",
+                        "inner_hash": "f7dbd09f7e9f65d87003984640f1977fb9eec95b07ef6275a1ec6261065e68d7",
+                        "sigs": [
+                            "af5329e77213f34446a0ff41d249fd25bc1dae913390871df359b9bd587c95a10b625a74a3477a05cc7537cb532253b12c03349ead5be066b8e0009e79462b9501"
+                        ],
+                        "inputs": [
+                            "fb8db3f78928aee3f5cbda8db7fc290df9e64414e8107872a1c5cf83e08e4df7"
+                        ],
+                        "outputs": [
+                            {
+                                "uxid": "235811602fc96cf8b5b031edb88ee1606830aa641c06e0986681552d8728ec07",
+                                "dst": "2Huip6Eizrq1uWYqfQEh4ymibLysJmXnWXS",
+                                "coins": "0.500000",
+                                "hours": 1
+                            },
+                            {
+                                "uxid": "873da4edc01c0b5184e1f26c4c3471dd407d08e9ab36b018ab93874e7392320b",
+                                "dst": "2XBMMDMqTTYmqs2rfjEwYDz8ABd38y9B8r7",
+                                "coins": "0.500000",
+                                "hours": 1
+                            },
+                            {
+                                "uxid": "42a6f0127f61e1d7bca8e9680027eddcecad772250c5634a03e56a8b1cf5a816",
+                                "dst": "uvcDrKc8rHTjxLrU4mPN56Hyh2tR6RvCvw",
+                                "coins": "25.913000",
+                                "hours": 485192
+                            }
+                        ]
+                    }
+                ]
+            },
+            "size": 257
+        }
+    ]
 }
 ```
 </details>
 
 ##### Get the last `n` blocks
 ```bash
-$ skycoin-cli lastBlocks 3
+$ mdl-cli lastBlocks 3
 ```
 
 <details>
@@ -1166,152 +1376,182 @@ $ skycoin-cli lastBlocks 3
 
 ```json
 {
- "blocks": [
-     {
-         "header": {
-             "seq": 21202,
-             "block_hash": "07140b536a5d0c3fcecec6cd61d2d4628a6fe6d7f7933223365269ea78d47c06",
-             "previous_block_hash": "baf74fae7ba8e304236e84e4cbc24b810a3827512bfdb82f892ffcb8682f9d16",
-             "timestamp": 1523179526,
-             "fee": 38,
-             "version": 0,
-             "tx_body_hash": "31b4f132374b4eb6c31c1c2f51a07a336a5d290b859d4c32a4982f325f124023"
-         },
-         "body": {
-             "txns": [
-                 {
-                     "length": 220,
-                     "type": 0,
-                     "txid": "31b4f132374b4eb6c31c1c2f51a07a336a5d290b859d4c32a4982f325f124023",
-                     "inner_hash": "78b51146a1822c777f5de05fd9c78bb457bcbaeec13d9c927f548cc4019a467c",
-                     "sigs": [
-                         "22e13afd39ac22ed452b716c721c82374b4d6d69fe2db8a70ea74f9fa37487761039365a5de0bf741e7c4da171b2164ddf8bd4326b9845784719645fa16a8ec401"
-                     ],
-                     "inputs": [
-                         "1714a29f821bc955857132a495e64c458794564108245bb605d2eb418edb8b54"
-                     ],
-                     "outputs": [
-                         {
-                             "uxid": "8d2fe35c36f69866ea91ff468464ddb6e0bee7fd145df7319fe192245c0dd646",
-                             "dst": "2GgFvqoyk9RjwVzj8tqfcXVXB4orBwoc9qv",
-                             "coins": "6458.000000",
-                             "hours": 19
-                         },
-                         {
-                             "uxid": "4d0a689781cd6aaf61d33f8f0bf87f16210c3e5b45f83a789f454530c2d64b21",
-                             "dst": "i66Gax2z4cMiTYGHjRjmKpooWS2Rhnmoeu",
-                             "coins": "1.000000",
-                             "hours": 19
-                         }
-                     ]
-                 }
-             ]
-         }
-     },
-     {
-         "header": {
-             "seq": 21203,
-             "block_hash": "5b1f652bd5639e7cd2f9e5af4c1f86685b3f8104bb2039e2d6e56ec90003b086",
-             "previous_block_hash": "07140b536a5d0c3fcecec6cd61d2d4628a6fe6d7f7933223365269ea78d47c06",
-             "timestamp": 1523179676,
-             "fee": 10,
-             "version": 0,
-             "tx_body_hash": "3c2881347dcd6eb767f447720fc337dc75c8698ff1d25e6ebc490befdb4123fa"
-         },
-         "body": {
-             "txns": [
-                 {
-                     "length": 220,
-                     "type": 0,
-                     "txid": "3c2881347dcd6eb767f447720fc337dc75c8698ff1d25e6ebc490befdb4123fa",
-                     "inner_hash": "ec69bb1f2c2f1acffb95a7623a8f85b0797c48fec251b64622f52b0cb71f1e9f",
-                     "sigs": [
-                         "9287f01192d7b8afe9cd7b15c2859bb13032b96b24d791eacadd612c14a0d30e7f1a503bcb01eb5f4d2ccd2400c320a82fd2825a410309f00c41086debf639d701"
-                     ],
-                     "inputs": [
-                         "8d2fe35c36f69866ea91ff468464ddb6e0bee7fd145df7319fe192245c0dd646"
-                     ],
-                     "outputs": [
-                         {
-                             "uxid": "814922f2428e6a5c8acdd364785309cc9a446a10d80901baf0600c5de3b30171",
-                             "dst": "2GgFvqoyk9RjwVzj8tqfcXVXB4orBwoc9qv",
-                             "coins": "6457.000000",
-                             "hours": 5
-                         },
-                         {
-                             "uxid": "70b6b19d632e26b2a2ccae4dce6fc4093c5e02cfde03da6f893e8db14c7afa44",
-                             "dst": "i66Gax2z4cMiTYGHjRjmKpooWS2Rhnmoeu",
-                             "coins": "1.000000",
-                             "hours": 4
-                         }
-                     ]
-                 }
-             ]
-         }
-     },
-     {
-         "header": {
-             "seq": 21204,
-             "block_hash": "bb3dd979527f6133e8a5b9bb9792d2fa964daf6158834a02034719f0e943d049",
-             "previous_block_hash": "5b1f652bd5639e7cd2f9e5af4c1f86685b3f8104bb2039e2d6e56ec90003b086",
-             "timestamp": 1523179736,
-             "fee": 3,
-             "version": 0,
-             "tx_body_hash": "49f0f5813ecfee45556f769c1971cf8b4300ec4ce9f05deedb57b8048e2bd0f9"
-         },
-         "body": {
-             "txns": [
-                 {
-                     "length": 220,
-                     "type": 0,
-                     "txid": "49f0f5813ecfee45556f769c1971cf8b4300ec4ce9f05deedb57b8048e2bd0f9",
-                     "inner_hash": "11a949890d63993b98a92418ba2682795ebad30583e4c16a108939a6945a76a9",
-                     "sigs": [
-                         "9d23748dac110ab464d9cbc2de472fdf00da804a8da440d592667f11fdf7f4937620ddcc265f75751ca2566d3a39df0b04f7ab638ecff5f32f5d2699e627820700"
-                     ],
-                     "inputs": [
-                         "814922f2428e6a5c8acdd364785309cc9a446a10d80901baf0600c5de3b30171"
-                     ],
-                     "outputs": [
-                         {
-                             "uxid": "3ebedfac8cef4d3fc27c48060277a8b4880c047ed77a72ffdab40fdb274c5a93",
-                             "dst": "2GgFvqoyk9RjwVzj8tqfcXVXB4orBwoc9qv",
-                             "coins": "6456.000000",
-                             "hours": 1
-                         },
-                         {
-                             "uxid": "78500a48b430d6c6e6b744bdb193df7a4f90c60ec0bf6a7bebf6b6e34f49e6f2",
-                             "dst": "2ESrbYizrvrZNK5zFoHsj69a7fTVXxTTpMi",
-                             "coins": "1.000000",
-                             "hours": 1
-                         }
-                     ]
-                 }
-             ]
-         }
-     }
- ]
+    "blocks": [
+        {
+            "header": {
+                "seq": 58892,
+                "block_hash": "1f042ed976c0cb150ea6b71c9608d65b519e4bc1c507eba9f1146e443a856c2d",
+                "previous_block_hash": "d9ca9442febd8788de0a3093158943beca228017bf8c9c9b8529a382fad8d991",
+                "timestamp": 1537580914,
+                "fee": 94694,
+                "version": 0,
+                "tx_body_hash": "9895f8af790e33a618004dc61f48ecc16bd642751a3fff6b05cecb8815c80942",
+                "ux_hash": "bb188dcaaf28613d49b926636675dacf67a739a4e316253b1207ad674709252b"
+            },
+            "body": {
+                "txns": [
+                    {
+                        "length": 1190,
+                        "type": 0,
+                        "txid": "9895f8af790e33a618004dc61f48ecc16bd642751a3fff6b05cecb8815c80942",
+                        "inner_hash": "8bff0b7572bb49ccde4b2b313e921e5cf302a11fd9f786a2ef97a7c0ddfee261",
+                        "sigs": [
+                            "f843861b301eb025e58bacfb934d615f263419704b0a59f2645845344f2702fa1a7a967651f01933af4d56752c656a7e759e942b9278e228362f2ef273d4ff5200",
+                            "06f15e2522e7413f25dedb5aee67ae880bd98bb7df11a1a92241d88db9bb976d2c707e77a4a3ddfd8d123ad04701fe2538ea2d0f78cfbcdc44e70fd2320a72b500",
+                            "dc32fe308274f9aaa21e09046384a83b4b2c6bf800c6b9ff492af8bd3f5cd7717b245c9d460c242139034c73cd15aca9f288cb69e8ae4c33df2a807ff3b373aa00",
+                            "18d83a122f0ca3629f0c82e21ea3d6fbdfd1ea07ba062ffb6647b7e2c3aa9a1d7c112dc5543435ddd0bccd163f839d9802eb344f6203372deea7402d8476679501",
+                            "26a8723c1ac22dca2b61d807ca2279e341a9f5a371c4d14333f49e52b90ec87f08ab7930e5804367c1dffb01b197d976619ab26f0c8afe8837c41b0df809a23301",
+                            "fe190749475cd66afcdd295b22b007c63726db0fd834acef4ecde9c41ae7d15d54c2c180c8aba5c894d3843405f6243b7ff964f974f607b38298c195d7b523c401",
+                            "d58e8283a28faed377161605e252cd929959e40fd8b996f928049f2b446bc920468d1086a2bc34a8fcaedefdc471427266cc67b9770d9b0482f5f4f22729a79a00",
+                            "2be852a5b589ce49f9d3678fa44a758c2e4d7372620a8241d71c41451c5244387ac337bbee5010b98fc8c38fc44619ed8a7beb2af06385a11ecb53eb0112a8a700",
+                            "b6376cc54078f775da6438960e828c799c780349c8590508b4500f0e6dd9ecbc760992599d698209b078220d8aaa9db9f80091290a18cd0753efd1805515d06600",
+                            "958e17753d4cedc3203b95a39d585314ac10efc00332befa81c8049b4178222d2514ba1d68385b2518d976835dee48f2bb540db0d0e728acbf59d8562cbb7baa00",
+                            "d921e2aa2b1b6778a84efdc7f1d016c7aad66dfc13c0be4fee6a5f303a2c3cf465fa0d549ca5fc57d3a26832bffcaec842837905a78e8ca3fa553522d931571d01"
+                        ],
+                        "inputs": [
+                            "c551da99c0b74b64511aaaf99536cb6d263958064890ef6c27be36e8f5a14fb8",
+                            "64875d950120b16d0f0f84c708e3e48b26fb9c32f36c0fba71764dfc53e7ae05",
+                            "ba50cb14fc26bcf658ace9a3b5d6e0d257fa022e80613902c693ab57a1c0924a",
+                            "b388fdb6dc7c91cab7e72a4786967e18834350c1ccd149790a0a2270bdf91bf9",
+                            "94f87596cb7471e2b96b7e1ddd8194d44ca4858d97ed29f83e926bcdf36601c1",
+                            "dd2a4d942ba1ad4dc55f46adc31e3f62e7326b9a0d511f1faf83911af77018f1",
+                            "35b82981a9648ba871c2c08604cb95f130baafa26761139c7134f5b9e4575b9d",
+                            "aa0f74c067347b0178c6963d8409c6bdf7a39051641f9ba1a5d5c37d88dce7f0",
+                            "5a34d07536c2964338aa89f19ab7ff857056f6ffd16e936ae13229077387afb5",
+                            "dc93bb4a131cea3d3f2b523408f077779384c816a4516dfbe0817845938a26ef",
+                            "53f92392b71ce79ead8452e5c31c8a404acf9770a71d4dc234f2fe54a8671495"
+                        ],
+                        "outputs": [
+                            {
+                                "uxid": "061a639996b85d2c0f19cf929a83c5abe2667a411de31fbdbd16c1da6c8e4880",
+                                "dst": "2gXHek83jtEdDndgrKkEwgwZZDsHXKfNaD",
+                                "coins": "87.990000",
+                                "hours": 1
+                            },
+                            {
+                                "uxid": "f210a8ed58c92094832ccb4d5a4ae7271df1df0d7176b18d5c7b149ed36a7d80",
+                                "dst": "27ckSMTwxMxHanUM1VmF8BV9JuWdQd4Gd9S",
+                                "coins": "0.010000",
+                                "hours": 94693
+                            }
+                        ]
+                    }
+                ]
+            },
+            "size": 1190
+        },
+        {
+            "header": {
+                "seq": 58893,
+                "block_hash": "8eca94e7597b87c8587286b66a6b409f6b4bf288a381a56d7fde3594e319c38a",
+                "previous_block_hash": "1f042ed976c0cb150ea6b71c9608d65b519e4bc1c507eba9f1146e443a856c2d",
+                "timestamp": 1537581594,
+                "fee": 970389,
+                "version": 0,
+                "tx_body_hash": "1bea5cf1279693a0da24828c37b267c702007842b16ca5557ae497574d15aab7",
+                "ux_hash": "bf35652af199779bc40cbeb339e8a782ff70673b07779e5c5621d37dfe13b42b"
+            },
+            "body": {
+                "txns": [
+                    {
+                        "length": 377,
+                        "type": 0,
+                        "txid": "1bea5cf1279693a0da24828c37b267c702007842b16ca5557ae497574d15aab7",
+                        "inner_hash": "a25232405bcef0c007bb2d7d3520f2a389e17e11125c252ab6c00168ec52c08d",
+                        "sigs": [
+                            "2ff7390c3b66c6b0fbb2b4c59c8e218291d4cbb82a836bb577c7264677f4a8320f6f3ad72d804e3014728baa214c223ecced8725b64be96fe3b51332ad1eda4201",
+                            "9e7c715f897b3c987c00ee8c6b14e4b90bb3e4e11d003b481f82042b1795b3c75eaa3d563cd0358cdabdab77cfdbead7323323cf73e781f9c1a8cf6d9b4f8ac100",
+                            "5c9748314f2fe0cd442df5ebb8f211087111d22e9463355bf9eee583d44df1bd36addb510eb470cb5dafba0732615f8533072f80ae05fc728c91ce373ada1e7b00"
+                        ],
+                        "inputs": [
+                            "5f634c825b2a53103758024b3cb8578b17d56d422539e23c26b91ea397161703",
+                            "16ac52084ffdac2e9169b9e057d44630dec23d18cfb90b9437d28220a3dc585d",
+                            "8d3263890d32382e182b86f8772c7685a8f253ed475c05f7d530e9296f692bc9"
+                        ],
+                        "outputs": [
+                            {
+                                "uxid": "fb8db3f78928aee3f5cbda8db7fc290df9e64414e8107872a1c5cf83e08e4df7",
+                                "dst": "uvcDrKc8rHTjxLrU4mPN56Hyh2tR6RvCvw",
+                                "coins": "26.913000",
+                                "hours": 970388
+                            }
+                        ]
+                    }
+                ]
+            },
+            "size": 377
+        },
+        {
+            "header": {
+                "seq": 58894,
+                "block_hash": "3961bea8c4ab45d658ae42effd4caf36b81709dc52a5708fdd4c8eb1b199a1f6",
+                "previous_block_hash": "8eca94e7597b87c8587286b66a6b409f6b4bf288a381a56d7fde3594e319c38a",
+                "timestamp": 1537581604,
+                "fee": 485194,
+                "version": 0,
+                "tx_body_hash": "c03c0dd28841d5aa87ce4e692ec8adde923799146ec5504e17ac0c95036362dd",
+                "ux_hash": "f7d30ecb49f132283862ad58f691e8747894c9fc241cb3a864fc15bd3e2c83d3"
+            },
+            "body": {
+                "txns": [
+                    {
+                        "length": 257,
+                        "type": 0,
+                        "txid": "c03c0dd28841d5aa87ce4e692ec8adde923799146ec5504e17ac0c95036362dd",
+                        "inner_hash": "f7dbd09f7e9f65d87003984640f1977fb9eec95b07ef6275a1ec6261065e68d7",
+                        "sigs": [
+                            "af5329e77213f34446a0ff41d249fd25bc1dae913390871df359b9bd587c95a10b625a74a3477a05cc7537cb532253b12c03349ead5be066b8e0009e79462b9501"
+                        ],
+                        "inputs": [
+                            "fb8db3f78928aee3f5cbda8db7fc290df9e64414e8107872a1c5cf83e08e4df7"
+                        ],
+                        "outputs": [
+                            {
+                                "uxid": "235811602fc96cf8b5b031edb88ee1606830aa641c06e0986681552d8728ec07",
+                                "dst": "2Huip6Eizrq1uWYqfQEh4ymibLysJmXnWXS",
+                                "coins": "0.500000",
+                                "hours": 1
+                            },
+                            {
+                                "uxid": "873da4edc01c0b5184e1f26c4c3471dd407d08e9ab36b018ab93874e7392320b",
+                                "dst": "2XBMMDMqTTYmqs2rfjEwYDz8ABd38y9B8r7",
+                                "coins": "0.500000",
+                                "hours": 1
+                            },
+                            {
+                                "uxid": "42a6f0127f61e1d7bca8e9680027eddcecad772250c5634a03e56a8b1cf5a816",
+                                "dst": "uvcDrKc8rHTjxLrU4mPN56Hyh2tR6RvCvw",
+                                "coins": "25.913000",
+                                "hours": 485192
+                            }
+                        ]
+                    }
+                ]
+            },
+            "size": 257
+        }
+    ]
 }
 ```
 </details>
 
 
 ### List wallet addresses
-List addresses in a skycoin wallet.
+List addresses in a mdl wallet.
 
 ```bash
-$ skycoin-cli listAddresses [walletName]
+$ mdl-cli listAddresses [walletName]
 ```
 
-If no `walletName` is given then default wallet ($HOME/.skycoin/wallets/skycoin_cli.wlt) is used.
+If no `walletName` is given then default wallet ($HOME/.mdl/wallets/mdl_cli.wlt) is used.
 
-> NOTE: The wallet name `skycoin_cli.wlt` or full path `$HOME/.skycoin/wallets/skycoin_cli.wlt` can be used.
+> NOTE: The wallet name `mdl_cli.wlt` or full path `$HOME/.mdl/wallets/mdl_cli.wlt` can be used.
         When only the wallet name is given then the default wallet dir, $HOME/.$COIN/wallets is used.
 
 #### Examples
 ##### List addresses of default wallet
 ```bash
-$ skycoin-cli listAddresses
+$ mdl-cli listAddresses
 ```
 
 <details>
@@ -1333,7 +1573,7 @@ $ skycoin-cli listAddresses
 
 ##### List addresses of a specific wallet
 ```bash
-$ skycoin-cli listAddresses $WALLET_NAME or $WALLET_PATH
+$ mdl-cli listAddresses $WALLET_NAME or $WALLET_PATH
 ```
 
 <details>
@@ -1351,15 +1591,15 @@ $ skycoin-cli listAddresses $WALLET_NAME or $WALLET_PATH
 </details>
 
 ### List wallets
-List wallets in the skycoin wallet directory.
+List wallets in the mdl wallet directory.
 
 ```bash
-$ skycoin-cli listWallets
+$ mdl-cli listWallets
 ```
 
 #### Example
 ```bash
-$ skycoin-cli listWallets
+$ mdl-cli listWallets
 ```
 
 <details>
@@ -1389,7 +1629,7 @@ $ skycoin-cli listWallets
          "address_num": 1
      },
      {
-         "name": "skycoin_cli.wlt",
+         "name": "mdl_cli.wlt",
          "label": "cli wallet",
          "address_num": 6
      }
@@ -1398,51 +1638,110 @@ $ skycoin-cli listWallets
 ```
 </details>
 
-### Send
-Make a skycoin transaction.
+### Rich list
+Returns the top N address (default 20) balances (based on unspent outputs). Optionally include distribution addresses (exluded by default).
 
 ```bash
-$ skycoin-cli send [command options] [to address] [amount]
+$ mdl-cli richlist [top N addresses] [include distribution addresses]
+```
+
+#### Example
+```bash
+$ mdl-cli richlist 5 false
+```
+
+<details>
+ <summary>View Output</summary>
+
+```json
+{
+    "richlist": [
+        {
+            "address": "2iNNt6fm9LszSWe51693BeyNUKX34pPaLx8",
+            "coins": "1072264.838000",
+            "locked": false
+        },
+        {
+            "address": "2fGi2jhvp6ppHg3DecguZgzqvpJj2Gd4KHW",
+            "coins": "500000.000000",
+            "locked": false
+        },
+        {
+            "address": "2jNwfvZNUoRLiFzJtmnevSF6TKPfSehvrc1",
+            "coins": "252297.068000",
+            "locked": false
+        },
+        {
+            "address": "2GgFvqoyk9RjwVzj8tqfcXVXB4orBwoc9qv",
+            "coins": "236884.364000",
+            "locked": false
+        },
+        {
+            "address": "2fR8BkeTRQC4R3ATNnujHsQQXcaB6m4Aqwo",
+            "coins": "173571.990000",
+            "locked": false
+        }
+    ]
+}
+```
+</details>
+
+### Send
+Make a mdl transaction.
+
+```bash
+$ mdl-cli send [flags] [to address] [amount]
 ```
 
 ```
-OPTIONS:
-        -f value    [wallet file or path] From wallet. If no path is specified your default wallet
-                    (`$HOME/.skycoin/wallets/skycoin_cli.wlt`) path will be used.
-        -a value    [address] From address
-        -c value    [changeAddress] Specify change address, by default the from address or
-                          the wallet's coinbase address will be used
-        -m value    [send to many] use JSON string to set multiple recive addresses and coins,
-                          example: -m '[{"addr":"$addr1", "coins": "10.2"}, {"addr":"$addr2", "coins": "20"}]'
-        --json, -j  Returns the results in JSON format.
+FLAGS:
+  -a, --address string          From address
+  -c, --change-address string   Specify different change address.
+                                By default the from address or a wallets coinbase address will be used.
+      --csv  string         CSV file containing addresses and amounts to send
+  -j, --json                    Returns the results in JSON format.
+  -m, --many string             use JSON string to set multiple receive addresses and coins,
+                                example: -m '[{"addr":"$addr1", "coins": "10.2"}, {"addr":"$addr2", "coins": "20"}]'
+  -p, --password string         Wallet password
+  -f, --wallet-file string      wallet file or path. If no path is specified your default wallet path will be used.
 ```
 
 #### Examples
 ##### Sending from the default wallet
 ```bash
-$ skycoin-cli send $RECIPIENT_ADDRESS $AMOUNT
+$ mdl-cli send $RECIPIENT_ADDRESS $AMOUNT
 ```
 
 ##### Sending from a specific wallet
 ```bash
-$ skycoin-cli send -f $WALLET_PATH $RECIPIENT_ADDRESS $AMOUNT
+$ mdl-cli send -f $WALLET_PATH $RECIPIENT_ADDRESS $AMOUNT
 ```
 
 ##### Sending from a specific address in a wallet
 ```bash
-$ skycoin-cli send -f $WALLET_PATH -a $FROM_ADDRRESS $RECIPIENT_ADDRESS $AMOUNT
+$ mdl-cli send -f $WALLET_PATH -a $FROM_ADDRRESS $RECIPIENT_ADDRESS $AMOUNT
 ```
 
 > NOTE: If $WALLET_PATH is not specified above then the default wallet is used.
 
 ##### Sending change to a specific change address
 ```bash
-$ skycoin-cli send -f $WALLET_PATH -a $FROM_ADDRESS -c $CHANGE_ADDRESS $RECIPIENT_ADDRESS $AMOUNT
+$ mdl-cli send -f $WALLET_PATH -a $FROM_ADDRESS -c $CHANGE_ADDRESS $RECIPIENT_ADDRESS $AMOUNT
 ```
 
 ##### Sending to multiple addresses
 ```bash
-$ skycoin-cli send -f $WALLET_PATH -a $FROM_ADDRESS -m '[{"addr":"$ADDR1", "coins": "$AMT1"}, {"addr":"$ADDR2", "coins": "$AMT2"}]'
+$ mdl-cli send -f $WALLET_PATH -a $FROM_ADDRESS -m '[{"addr":"$ADDR1", "coins": "$AMT1"}, {"addr":"$ADDR2", "coins": "$AMT2"}]'
+```
+
+##### Sending to addresses in a CSV file
+```bash
+$ cat <<EOF > $CSV_FILE
+2Niqzo12tZ9ioZq5vwPHMVR4g7UVpp9TCmP,123.1
+2UDzBKnxZf4d9pdrBJAqbtoeH641RFLYKxd,456.045
+yExu4fryscnahAEMKa7XV4Wc1mY188KvGw,0.3
+EOF
+$ mdl-cli send -f $WALLET_PATH -a $FROM_ADDRESS -csv $CSV_FILE
 ```
 
 <details>
@@ -1453,9 +1752,12 @@ txid:$TRANSACTION_ID
 ```
 </details>
 
+> NOTE: When sending to multiple addresses each combination of address and coins need to be unique
+        Otherwise you get, `ERROR: Duplicate output in transaction`
+
 ##### Generate a JSON output
 ```bash
-$ skycoin-cli send -f $WALLET_PATH -a $FROM_ADDRESS --json $RECIPIENT_ADDRESS $AMOUNT
+$ mdl-cli send -f $WALLET_PATH -a $FROM_ADDRESS --json $RECIPIENT_ADDRESS $AMOUNT
 ```
 
 <details>
@@ -1468,12 +1770,39 @@ $ skycoin-cli send -f $WALLET_PATH -a $FROM_ADDRESS --json $RECIPIENT_ADDRESS $A
 ```
 </details>
 
+### Show Seed
+Show seed of a specified wallet.
+The default wallet `($HOME/wallets/mdl_cli.wlt)` will be used if no wallet was specified.
+The wallet file is configured through `WALLET_NAME` env var.
+
+
+```bash
+$ mdl-cli showSeed [flags]
+```
+
+```
+FLAGS:
+  -j, --json                 Returns the results in JSON format.
+  -p, --password string      Wallet password
+```
+
+#### Example
+```bash
+$ mdl-cli showSeed
+```
+<details>
+ <summary>View Output</summary>
+ ```
+ eternal turtle seek nominee narrow much melody kite worth giggle shrimp horse
+ ```
+</details>
+
 ### Show Config
 Show the CLI tool's local configuration.
 
 #### Example
 ```bash
-$ skycoin-cli showConfig
+$ mdl-cli showConfig
 ```
 
 <details>
@@ -1481,19 +1810,19 @@ $ skycoin-cli showConfig
 
 ```json
 {
-    "wallet_directory": "/home/user/.skycoin/wallets",
-    "wallet_name": "skycoin_cli.wlt",
-    "data_directory": "/home/user/.skycoin",
-    "coin": "skycoin",
-    "rpc_address": "http://127.0.0.1:6420",
-    "use_csrf": false
+    "wallet_directory": "/home/user/.mdl/wallets",
+    "wallet_name": "mdl_cli.wlt",
+    "data_directory": "/home/user/.mdl",
+    "coin": "mdl",
+    "rpc_address": "http://127.0.0.1:6420"
 }
 ```
+</details>
 
 ### Status
 #### Example
 ```bash
-$ skycoin-cli status
+$ mdl-cli status
 ```
 
 <details>
@@ -1501,11 +1830,53 @@ $ skycoin-cli status
 
 ```json
 {
- "running": true,
- "num_of_blocks": 21210,
- "hash_of_last_block": "d5797705bfc0ac7956f3eeaa083aec4e89a6b27ada7499c5a53dad2fda84c5f9",
- "time_since_last_block": "18446744073709551591s",
- "webrpc_address": "127.0.0.1:6430"
+    "status": {
+        "blockchain": {
+            "head": {
+                "seq": 58894,
+                "block_hash": "3961bea8c4ab45d658ae42effd4caf36b81709dc52a5708fdd4c8eb1b199a1f6",
+                "previous_block_hash": "8eca94e7597b87c8587286b66a6b409f6b4bf288a381a56d7fde3594e319c38a",
+                "timestamp": 1537581604,
+                "fee": 485194,
+                "version": 0,
+                "tx_body_hash": "c03c0dd28841d5aa87ce4e692ec8adde923799146ec5504e17ac0c95036362dd",
+                "ux_hash": "f7d30ecb49f132283862ad58f691e8747894c9fc241cb3a864fc15bd3e2c83d3"
+            },
+            "unspents": 38171,
+            "unconfirmed": 1,
+            "time_since_last_block": "7m44s"
+        },
+        "version": {
+            "version": "0.25.0",
+            "commit": "620405485d3276c16c0379bc3b88b588e34c45e1",
+            "branch": "develop"
+        },
+	    "coin": "mdl",
+	    "user_agent": "mdl:0.25.0",
+        "open_connections": 8,
+        "outgoing_connections": 5,
+        "incoming_connections": 3,
+        "uptime": "4h1m23.697072461s",
+        "csrf_enabled": true,
+        "csp_enabled": true,
+        "wallet_api_enabled": true,
+        "gui_enabled": true,
+        "unversioned_api_enabled": false,
+        "json_rpc_enabled": false,
+        "user_verify_transaction": {
+            "burn_factor": 2,
+            "max_transaction_size": 32768,
+            "max_decimals": 3
+        },
+        "unconfirmed_verify_transaction": {
+            "burn_factor": 2,
+            "max_transaction_size": 32768,
+            "max_decimals": 3
+        }
+    },
+    "cli_config": {
+        "webrpc_address": "http://127.0.0.1:6420"
+    }
 }
 ```
 </details>
@@ -1514,12 +1885,12 @@ $ skycoin-cli status
 Get transaction data from a `txid`.
 
 ```bash
-$ skycoin-cli transaction [transaction id]
+$ mdl-cli transaction [transaction id]
 ```
 
 #### Example
 ```bash
-$ skycoin-cli transaction 824d421a25f81aa7565d042a54b3e1e8fdc58bed4eefe8f8a90748da6d77d135
+$ mdl-cli transaction 824d421a25f81aa7565d042a54b3e1e8fdc58bed4eefe8f8a90748da6d77d135
 ```
 
 <details>
@@ -1532,8 +1903,7 @@ $ skycoin-cli transaction 824d421a25f81aa7565d042a54b3e1e8fdc58bed4eefe8f8a90748
          "confirmed": true,
          "unconfirmed": false,
          "height": 1,
-         "block_seq": 864,
-         "unknown": false
+         "block_seq": 864
      },
      "txn": {
          "length": 220,
@@ -1567,18 +1937,411 @@ $ skycoin-cli transaction 824d421a25f81aa7565d042a54b3e1e8fdc58bed4eefe8f8a90748
 ```
 </details>
 
-### Verify address
-Verify whether a given address is a valid skycoin addres or not.
+### Get address transactions
+Get transaction for one or more addresses - including listing of both inputs and outputs.
 
 ```bash
-$  skycoin-cli verifyAddress [skycoin address]
+$ mdl-cli addressTransactions [addr1 addr2 addr3]
+```
+
+#### Example
+#### Single Address
+```bash
+$ mdl-cli addressTransactions 21YPgFwkLxQ1e9JTCZ43G7JUyCaGRGqAsda
+```
+
+<details>
+ <summary>View Output</summary>
+
+```json
+[
+    {
+        "status": {
+            "confirmed": true,
+            "unconfirmed": false,
+            "height": 66119,
+            "block_seq": 21213
+        },
+        "time": 1523180676,
+        "txn": {
+            "timestamp": 1523180676,
+            "length": 220,
+            "type": 0,
+            "txid": "8cdf82ec42e8316007ed99c0b1de1d0dfd9221c757f41fdec0b36009df74085f",
+            "inner_hash": "c543f08bfe7b99a19f7bc4068a02e437ed4a043130e976551188c4d38b89ce8d",
+            "fee": 726,
+            "sigs": [
+                "f1021744902892eb47c60f7240ce6964de3c7bf77777ce267b58df8879e208e57bd044d15a36d78bebab2897c2c61ecbbceb348cfc45152efb105960799364c401"
+            ],
+            "inputs": [
+                {
+                    "uxid": "5d69d22aff5957a18194c443557d97ec18707e4db8ee7e9a4bb8a7eef642fdff",
+                    "owner": "tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V",
+                    "coins": "16.000000",
+                    "hours": 1432,
+                    "calculated_hours": 1452
+                }
+            ],
+            "outputs": [
+                {
+                    "uxid": "0020ae8da2bcc7657f3b234cbb59e0fd2486c53d7ef3f05cda6ff613587c8441",
+                    "dst": "3vbfHxPzMuyFJvgHdAoqmFnyg6k8HiLyxd",
+                    "coins": "1.000000",
+                    "hours": 1
+                },
+                {
+                    "uxid": "9d79ad07a90fee10b59bea1bd6f566f0b69f6bf9a9e735c1bec4b0e5eb4b33cb",
+                    "dst": "21YPgFwkLxQ1e9JTCZ43G7JUyCaGRGqAsda",
+                    "coins": "15.000000",
+                    "hours": 725
+                }
+            ]
+        }
+    },
+    {
+        "status": {
+            "confirmed": true,
+            "unconfirmed": false,
+            "height": 66111,
+            "block_seq": 21221
+        },
+        "time": 1523184376,
+        "txn": {
+            "timestamp": 1523184376,
+            "length": 183,
+            "type": 0,
+            "txid": "f3c5cfd462d95e724b7d35b1688c53f25a5f358f2eb9a6f87b63cdf31deb2bf8",
+            "inner_hash": "8269589c228be4bc33d75f6ee5b334856e8680b7d6ec275f897406c01da8340b",
+            "fee": 370,
+            "sigs": [
+                "33879494d644df45b5c6c7111c0e453cd42f6fe718614a9411d9fbabd57ab24749813cdf47424dcac5ed097a0de0ac7b557154d2ec93f81b12b1dfdee5138df701"
+            ],
+            "inputs": [
+                {
+                    "uxid": "9d79ad07a90fee10b59bea1bd6f566f0b69f6bf9a9e735c1bec4b0e5eb4b33cb",
+                    "owner": "21YPgFwkLxQ1e9JTCZ43G7JUyCaGRGqAsda",
+                    "coins": "15.000000",
+                    "hours": 725,
+                    "calculated_hours": 739
+                }
+            ],
+            "outputs": [
+                {
+                    "uxid": "c51b2692aa9f296a3cd2f37b14f39c496c82f5c5ae01c54701ea60b7353f27e2",
+                    "dst": "tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V",
+                    "coins": "15.000000",
+                    "hours": 369
+                }
+            ]
+        }
+    }
+]
+```
+</details>
+
+#### Multiple Address
+```bash
+$ mdl-cli addressTransactions 21YPgFwkLxQ1e9JTCZ43G7JUyCaGRGqAsda 3vbfHxPzMuyFJvgHdAoqmFnyg6k8HiLyxd
+```
+
+<details>
+ <summary>View Output</summary>
+
+```json
+[
+    {
+        "status": {
+            "confirmed": true,
+            "unconfirmed": false,
+            "height": 66143,
+            "block_seq": 21189
+        },
+        "time": 1523176026,
+        "txn": {
+            "timestamp": 1523176026,
+            "length": 220,
+            "type": 0,
+            "txid": "ee700309aba9b8b552f1c932a667c3701eff98e71c0e5b0e807485cea28170e5",
+            "inner_hash": "247bd0f0a1cf39fa51ea3eca044e4d9cbb28fff5376e90e2eb008c9fe0af3843",
+            "fee": 1442,
+            "sigs": [
+                "cf5869cb1b21da4da98bdb5dca57b1fd5a6fcbefd37d4f1eb332b21233f92cd62e00d8e2f1c8545142eaeed8fada1158dd0e552d3be55f18dd60d7e85407ef4f00"
+            ],
+            "inputs": [
+                {
+                    "uxid": "05e524872c838de517592c9a495d758b8ab2ec32d3e4d3fb131023a424386634",
+                    "owner": "tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V",
+                    "coins": "17.000000",
+                    "hours": 139,
+                    "calculated_hours": 2875
+                }
+            ],
+            "outputs": [
+                {
+                    "uxid": "2f146924431e8c9b84a53d4d823acefb92515a264956d873ac86066c608af418",
+                    "dst": "3vbfHxPzMuyFJvgHdAoqmFnyg6k8HiLyxd",
+                    "coins": "1.000000",
+                    "hours": 1
+                },
+                {
+                    "uxid": "5d69d22aff5957a18194c443557d97ec18707e4db8ee7e9a4bb8a7eef642fdff",
+                    "dst": "tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V",
+                    "coins": "16.000000",
+                    "hours": 1432
+                }
+            ]
+        }
+    },
+    {
+        "status": {
+            "confirmed": true,
+            "unconfirmed": false,
+            "height": 66142,
+            "block_seq": 21190
+        },
+        "time": 1523176126,
+        "txn": {
+            "timestamp": 1523176126,
+            "length": 183,
+            "type": 0,
+            "txid": "8c137774a2485beeaa3f8e861097ba6dffb144fb2c2f2c357c9261a324b02013",
+            "inner_hash": "92da4c2d6e93a6f0a62899225a9195b95eb274f8e926b0a2ce5d259f84015014",
+            "fee": 1,
+            "sigs": [
+                "84f9c7b5d1f88245b53d50e4e8d4fd8719089768940a4ff9d8c3d88b15c300e57f91fa07a0789bbfac8e7c77aebda83d39c6b77aa80cd70a613bf175c316b6cc00"
+            ],
+            "inputs": [
+                {
+                    "uxid": "2f146924431e8c9b84a53d4d823acefb92515a264956d873ac86066c608af418",
+                    "owner": "3vbfHxPzMuyFJvgHdAoqmFnyg6k8HiLyxd",
+                    "coins": "1.000000",
+                    "hours": 1,
+                    "calculated_hours": 1
+                }
+            ],
+            "outputs": [
+                {
+                    "uxid": "5250017c47070e011cc71c44472d5ab8e957c25c9c57fc7885e0a4301c7c014c",
+                    "dst": "tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V",
+                    "coins": "1.000000",
+                    "hours": 0
+                }
+            ]
+        }
+    },
+    {
+        "status": {
+            "confirmed": true,
+            "unconfirmed": false,
+            "height": 66119,
+            "block_seq": 21213
+        },
+        "time": 1523180676,
+        "txn": {
+            "timestamp": 1523180676,
+            "length": 220,
+            "type": 0,
+            "txid": "8cdf82ec42e8316007ed99c0b1de1d0dfd9221c757f41fdec0b36009df74085f",
+            "inner_hash": "c543f08bfe7b99a19f7bc4068a02e437ed4a043130e976551188c4d38b89ce8d",
+            "fee": 726,
+            "sigs": [
+                "f1021744902892eb47c60f7240ce6964de3c7bf77777ce267b58df8879e208e57bd044d15a36d78bebab2897c2c61ecbbceb348cfc45152efb105960799364c401"
+            ],
+            "inputs": [
+                {
+                    "uxid": "5d69d22aff5957a18194c443557d97ec18707e4db8ee7e9a4bb8a7eef642fdff",
+                    "owner": "tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V",
+                    "coins": "16.000000",
+                    "hours": 1432,
+                    "calculated_hours": 1452
+                }
+            ],
+            "outputs": [
+                {
+                    "uxid": "0020ae8da2bcc7657f3b234cbb59e0fd2486c53d7ef3f05cda6ff613587c8441",
+                    "dst": "3vbfHxPzMuyFJvgHdAoqmFnyg6k8HiLyxd",
+                    "coins": "1.000000",
+                    "hours": 1
+                },
+                {
+                    "uxid": "9d79ad07a90fee10b59bea1bd6f566f0b69f6bf9a9e735c1bec4b0e5eb4b33cb",
+                    "dst": "21YPgFwkLxQ1e9JTCZ43G7JUyCaGRGqAsda",
+                    "coins": "15.000000",
+                    "hours": 725
+                }
+            ]
+        }
+    },
+    {
+        "status": {
+            "confirmed": true,
+            "unconfirmed": false,
+            "height": 66118,
+            "block_seq": 21214
+        },
+        "time": 1523180976,
+        "txn": {
+            "timestamp": 1523180976,
+            "length": 220,
+            "type": 0,
+            "txid": "be67302e8f6f579423ba38be29de0de19815ec3c91352c6540e5f75439eb9f22",
+            "inner_hash": "ef091437da13980547e33aa8647cdd1462384ec73cd57caf289e5410e3a96cf0",
+            "fee": 2243,
+            "sigs": [
+                "d8636af89bf7f7c6aeaf32a994f8efc6e62bc25bd4e2d7b0a4deeb1e0e2888c234895f978e051985964f8b522e7d68794b90d6404809464d6c86af7153d5896e01"
+            ],
+            "inputs": [
+                {
+                    "uxid": "c981f19ff129c5746940cbf4e57383bcdf524a02055219c629e5fc4ff74067ab",
+                    "owner": "tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V",
+                    "coins": "3.000000",
+                    "hours": 111,
+                    "calculated_hours": 4486
+                }
+            ],
+            "outputs": [
+                {
+                    "uxid": "ba74051563bbe6aac1836780770a66bf782a4b3a90c5ea341b43cb85a7f9d51b",
+                    "dst": "3vbfHxPzMuyFJvgHdAoqmFnyg6k8HiLyxd",
+                    "coins": "1.000000",
+                    "hours": 1
+                },
+                {
+                    "uxid": "80ad81c7de66f2839b24896340890c77a79b8409abdf8e9956f5e3b65baa545b",
+                    "dst": "tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V",
+                    "coins": "2.000000",
+                    "hours": 2242
+                }
+            ]
+        }
+    },
+    {
+        "status": {
+            "confirmed": true,
+            "unconfirmed": false,
+            "height": 66117,
+            "block_seq": 21215
+        },
+        "time": 1523181146,
+        "txn": {
+            "timestamp": 1523181146,
+            "length": 183,
+            "type": 0,
+            "txid": "5b6318a95f32487a6340f35a03cd46cba8c87d261e80ad3106a0e67d4cd4601b",
+            "inner_hash": "33144c33224f1a59f75fba415a67834260e7253958d7130a0e9c0fe342ff608e",
+            "fee": 1,
+            "sigs": [
+                "231ac8febcb4b34f6742e2c6b20690c09acffea135707fb5b6679b9cf943b9b529a06cb161e3b51d0c37e5126ce9dbf59e87eaeac511ae06d2beca5d2300611500"
+            ],
+            "inputs": [
+                {
+                    "uxid": "0020ae8da2bcc7657f3b234cbb59e0fd2486c53d7ef3f05cda6ff613587c8441",
+                    "owner": "3vbfHxPzMuyFJvgHdAoqmFnyg6k8HiLyxd",
+                    "coins": "1.000000",
+                    "hours": 1,
+                    "calculated_hours": 1
+                }
+            ],
+            "outputs": [
+                {
+                    "uxid": "2a5d9458199c977779347d160f7db4978059c70217c44f8fc34716be43b7c6f1",
+                    "dst": "tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V",
+                    "coins": "1.000000",
+                    "hours": 0
+                }
+            ]
+        }
+    },
+    {
+        "status": {
+            "confirmed": true,
+            "unconfirmed": false,
+            "height": 66112,
+            "block_seq": 21220
+        },
+        "time": 1523184176,
+        "txn": {
+            "timestamp": 1523184176,
+            "length": 183,
+            "type": 0,
+            "txid": "4acd61d7aa7dfe20795e517d7560643d049036af9451bcbd762793bcb6a4a6de",
+            "inner_hash": "c01a389f1018cf41d4ef36d550162999d82211f24f3d8b2cbf40a88edfaf690b",
+            "fee": 1,
+            "sigs": [
+                "8ce6eff33887a8c2e31b669138163e2bcc2161782754d79c3a4c6839b4cf1fbc5a7d5e0576060d0378fbd9ee5c0f4863f949c77e7f724a4d66d75b2aed9123ae00"
+            ],
+            "inputs": [
+                {
+                    "uxid": "ba74051563bbe6aac1836780770a66bf782a4b3a90c5ea341b43cb85a7f9d51b",
+                    "owner": "3vbfHxPzMuyFJvgHdAoqmFnyg6k8HiLyxd",
+                    "coins": "1.000000",
+                    "hours": 1,
+                    "calculated_hours": 1
+                }
+            ],
+            "outputs": [
+                {
+                    "uxid": "a0777af14223bbbd5aeb8bf3cfd6ba94c776c6eec731310caaaaee49b9feb9a5",
+                    "dst": "tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V",
+                    "coins": "1.000000",
+                    "hours": 0
+                }
+            ]
+        }
+    },
+    {
+        "status": {
+            "confirmed": true,
+            "unconfirmed": false,
+            "height": 66111,
+            "block_seq": 21221
+        },
+        "time": 1523184376,
+        "txn": {
+            "timestamp": 1523184376,
+            "length": 183,
+            "type": 0,
+            "txid": "f3c5cfd462d95e724b7d35b1688c53f25a5f358f2eb9a6f87b63cdf31deb2bf8",
+            "inner_hash": "8269589c228be4bc33d75f6ee5b334856e8680b7d6ec275f897406c01da8340b",
+            "fee": 370,
+            "sigs": [
+                "33879494d644df45b5c6c7111c0e453cd42f6fe718614a9411d9fbabd57ab24749813cdf47424dcac5ed097a0de0ac7b557154d2ec93f81b12b1dfdee5138df701"
+            ],
+            "inputs": [
+                {
+                    "uxid": "9d79ad07a90fee10b59bea1bd6f566f0b69f6bf9a9e735c1bec4b0e5eb4b33cb",
+                    "owner": "21YPgFwkLxQ1e9JTCZ43G7JUyCaGRGqAsda",
+                    "coins": "15.000000",
+                    "hours": 725,
+                    "calculated_hours": 739
+                }
+            ],
+            "outputs": [
+                {
+                    "uxid": "c51b2692aa9f296a3cd2f37b14f39c496c82f5c5ae01c54701ea60b7353f27e2",
+                    "dst": "tWPDM36ex9zLjJw1aPMfYTVPbYgkL2Xp9V",
+                    "coins": "15.000000",
+                    "hours": 369
+                }
+            ]
+        }
+    }
+]
+```
+</details>
+
+### Verify address
+Verify whether a given address is a valid mdl addres or not.
+
+```bash
+$  mdl-cli verifyAddress [mdl address]
 ```
 
 #### Example
 ##### Valid addresss
 
 ```bash
-$ skycoin-cli verifyAddress 21YPgFwkLxQ1e9JTCZ43G7JUyCaGRGqAsda
+$ mdl-cli verifyAddress 21YPgFwkLxQ1e9JTCZ43G7JUyCaGRGqAsda
 ```
 
 ```
@@ -1588,7 +2351,7 @@ No Output
 ##### Invalid Address
 ###### Invalid checksum
 ```bash
-$ skycoin-cli verifyAddress 21YPgFwkLxQ1e9JTCZ43G7JUyCaGRGqAsdx
+$ mdl-cli verifyAddress 21YPgFwkLxQ1e9JTCZ43G7JUyCaGRGqAsdx
 ```
 
 <details>
@@ -1601,7 +2364,7 @@ Invalid checksum
 
 ###### Invalid address length
 ```bash
-$ skycoin-cli verifyAddress 21YPg
+$ mdl-cli verifyAddress 21YPg
 ```
 
 <details>
@@ -1614,19 +2377,19 @@ Invalid address length
 
 
 ### Check wallet balance
-Check the wallet a skycoin wallet.
+Check the wallet a mdl wallet.
 
 ```bash
-$ skycoin-cli walletBalance [wallet]
+$ mdl-cli walletBalance [wallet]
 ```
 
 > NOTE: Both the full wallet path or only the wallet name can be used.
-        If no wallet is specified then the default wallet: `$HOME/.$COIN/wallets/skycoin_cli.wlt` is used.
+        If no wallet is specified then the default wallet: `$HOME/.$COIN/wallets/mdl_cli.wlt` is used.
 
 #### Example
 ##### Balance of default wallet
 ```bash
-$ skycoin-cli walletBalance
+$ mdl-cli walletBalance
 ```
 
 <details>
@@ -1684,12 +2447,12 @@ $ skycoin-cli walletBalance
 
 ##### Balance of a specific wallet
 ```bash
-$ skycoin-cli walletBalance 2018_04_01_198c.wlt
+$ mdl-cli walletBalance 2018_04_01_198c.wlt
 ```
 *OR*
 
 ```bash
-$ skycoin-cli walletBalance ~/.skycoin/wallets/2018_04_01_198c.wlt
+$ mdl-cli walletBalance ~/.mdl/wallets/2018_04_01_198c.wlt
 ```
 
 <details>
@@ -1746,10 +2509,10 @@ $ skycoin-cli walletBalance ~/.skycoin/wallets/2018_04_01_198c.wlt
 </details>
 
 ### See wallet directory
-Get the current skycoin wallet directory.
+Get the current mdl wallet directory.
 
 ```bash
-$ skycoin-cli walletDir [command options]
+$ mdl-cli walletDir [flags]
 ```
 
 ```
@@ -1760,7 +2523,7 @@ OPTIONS:
 #### Examples
 ##### Text output
 ```bash
-$ skycoin-cli walletDir
+$ mdl-cli walletDir
 ```
 <details>
  <summary>View Output</summary>
@@ -1772,7 +2535,7 @@ $WALLET_DIR
 
 ##### JSON output
 ```bash
-$ skycoin-cli walletDir --json
+$ mdl-cli walletDir --json
 ```
 
 <details>
@@ -1789,27 +2552,27 @@ $ skycoin-cli walletDir --json
 Show all previous transactions made by the addresses in a wallet.
 
 ```bash
-$ skycoin-cli walletHistory [command options]
+$ mdl-cli walletHistory [flags]
 ```
 
 ```
-OPTIONS:
-        -f value  [wallet file or path] From wallet. If no path is specified your default wallet path will be used.
+FLAGS:
+        -f value  wallet file or path. If no path is specified your default wallet path will be used.
 ```
 
 #### Examples
 ##### Default wallet
 ```bash
-$ skycoin-cli walletHistory
+$ mdl-cli walletHistory
 ```
 
 ##### Specific wallet
 ```bash
-$ skycoin-cli walletHistory -f $WALLET_NAME
+$ mdl-cli walletHistory -f $WALLET_NAME
 ```
 *OR*
 ```bash
-$ skycoin-cli walletHistory -f $WALLET_PATH
+$ mdl-cli walletHistory -f $WALLET_PATH
 ```
 
 <details>
@@ -1839,22 +2602,22 @@ $ skycoin-cli walletHistory -f $WALLET_PATH
 List unspent outputs of all addresses in a wallet.
 
 ```bash
-$ skycoin-cli walletOutputs [wallet file]
+$ mdl-cli walletOutputs [wallet file]
 ```
 
 #### Examples
 ##### Default wallet
 ```bash
-$ skycoin-cli walletOutputs
+$ mdl-cli walletOutputs
 ```
 
 ##### Specific wallet
 ```bash
-$ skycoin-cli walletHistory $WALLET_NAME
+$ mdl-cli walletHistory $WALLET_NAME
 ```
 *OR*
 ```bash
-$ skycoin-cli walletHistory $WALLET_PATH
+$ mdl-cli walletHistory $WALLET_PATH
 ```
 
 <details>
@@ -1892,29 +2655,93 @@ $ skycoin-cli walletHistory $WALLET_PATH
 ```
 </details>
 
-### CLI version
-Get version of current skycoin cli.
+### Richlist
+Returns top N address (default 20) balances (based on unspent outputs). Optionally include distribution addresses (exluded by default).
 
 ```bash
-$ skycoin-cli version [command options]
+$ mdl-cli richlist [top N addresses (20 default)] [include distribution addresses (false default)]
 ```
 
 ```
-OPTIONS:
-        --json, -j  Returns the results in JSON format
+FLAGS:
+  -h, --help   help for richlist
+```
+
+#### Example
+##### Without distribution addresses
+```bash
+$ mdl-cli richlist 2
+```
+<details>
+ <summary>View Output</summary>
+
+```json
+{
+    "richlist": [
+        {
+            "address": "zVzkqNj3Ueuzo54sbACcYBqqGBPCGAac5W",
+            "coins": "2922927.299000",
+            "locked": false
+        },
+        {
+            "address": "2iNNt6fm9LszSWe51693BeyNUKX34pPaLx8",
+            "coins": "675256.308000",
+            "locked": false
+        }
+    ]
+}
+```
+</details>
+
+##### Including distribution addresses
+```bash
+$ mdl-cli richlist 2 true
+```
+
+<details>
+ <summary>View Output</summary>
+
+```json
+{
+    "richlist": [
+        {
+            "address": "zVzkqNj3Ueuzo54sbACcYBqqGBPCGAac5W",
+            "coins": "2922927.299000",
+            "locked": false
+        },
+        {
+            "address": "ejJjiCwp86ykmFr5iTJ8LxQXJ2wJPTYmkm",
+            "coins": "1000000.010000",
+            "locked": true
+        }
+    ]
+}
+```
+</details>
+
+### CLI version
+Get version of current mdl cli.
+
+```bash
+$ mdl-cli version [flags]
+```
+
+```
+FLAGS:
+  -j, --json   Returns the results in JSON format
 ```
 
 #### Examples
 ##### Text output
 ```bash
-$ skycoin-cli version
+$ mdl-cli version
 ```
 
 <details>
  <summary>View Output</summary>
 
 ```
-skycoin:0.23.0
+mdl:0.23.0
 cli:0.23.0
 rpc:0.23.0
 wallet:0.23.0
@@ -1923,7 +2750,7 @@ wallet:0.23.0
 
 ##### JSON output
 ```bash
-$ skycoin-cli version --json
+$ mdl-cli version --json
 ```
 
 <details>
@@ -1931,10 +2758,10 @@ $ skycoin-cli version --json
 
 ```json
 {
- "skycoin": "0.23.0",
- "cli": "0.23.0",
- "rpc": "0.23.0",
- "wallet": "0.23.0"
+    "mdl": "0.23.0",
+    "cli": "0.23.0",
+    "rpc": "0.23.0",
+    "wallet": "0.23.0"
 }
 ```
 </details>
@@ -1948,7 +2775,7 @@ If we want to specify a `change address` in `send` command, we can use `-c` opti
 the command in the following way:
 
 ```bash
-$ skycoin-cli send $RECIPIENT_ADDRESS $AMOUNT -c $CHANGE_ADDRESS
+$ mdl-cli send $RECIPIENT_ADDRESS $AMOUNT -c $CHANGE_ADDRESS
 ```
 
 The change coins won't go to the address as you wish, it will go to the
@@ -1958,5 +2785,5 @@ coinbase address.
 The right script should look like this:
 
 ```bash
-$ skycoin-cli send -c $CHANGE_ADDRESS $RECIPIENT_ADDRESS $AMOUNT
+$ mdl-cli send -c $CHANGE_ADDRESS $RECIPIENT_ADDRESS $AMOUNT
 ```

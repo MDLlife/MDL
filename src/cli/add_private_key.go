@@ -1,57 +1,53 @@
 package cli
 
 import (
-	"errors"
 	"fmt"
 	"path/filepath"
 
-	gcli "github.com/urfave/cli"
+	"github.com/spf13/cobra"
 
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/wallet"
 )
 
-func addPrivateKeyCmd(cfg Config) gcli.Command {
-	name := "addPrivateKey"
-	return gcli.Command{
-		Name:      name,
-		Usage:     "Add a private key to specific wallet",
-		ArgsUsage: "[private key]",
-		Description: fmt.Sprintf(`Add a private key to specific wallet, the default
-		wallet (%s) will be
-		used if the wallet file or path is not specified
+func addPrivateKeyCmd() *cobra.Command {
+	addPrivateKeyCmd := &cobra.Command{
+		Short: "Add a private key to specific wallet",
+		Use:   "addPrivateKey [flags] [private key]",
+		Long: fmt.Sprintf(`Add a private key to specific wallet, the default
+    wallet (%s) will be
+    used if the wallet file or path is not specified
 
-		Use caution when using the "-p" command. If you have command
-		history enabled your wallet encryption password can be recovered from the
-		history log. If you do not include the "-p" option you will be prompted to
-		enter your password after you enter your command.`, cfg.FullWalletPath()),
-		Flags: []gcli.Flag{
-			gcli.StringFlag{
-				Name:  "f",
-				Usage: "[wallet file or path] private key will be added to this wallet",
-			},
-			gcli.StringFlag{
-				Name:  "p",
-				Usage: "[password] wallet password",
-			},
-		},
-		OnUsageError: onCommandUsageError(name),
-		Action: func(c *gcli.Context) error {
-			cfg := ConfigFromContext(c)
-
+    Use caution when using the "-p" command. If you have command
+    history enabled your wallet encryption password can be recovered from the
+    history log. If you do not include the "-p" option you will be prompted to
+    enter your password after you enter your command.`, cliConfig.FullWalletPath()),
+		SilenceUsage:          true,
+		Args:                  cobra.MinimumNArgs(1),
+		DisableFlagsInUseLine: true,
+		RunE: func(c *cobra.Command, args []string) error {
 			// get private key
-			skStr := c.Args().First()
+			skStr := args[0]
 			if skStr == "" {
-				gcli.ShowSubcommandHelp(c)
-				return nil
+				return c.Help()
 			}
+
 			// get wallet file path
-			w, err := resolveWalletPath(cfg, c.String("f"))
+			walletFile, err := c.Flags().GetString("wallet-file")
 			if err != nil {
 				return err
 			}
 
-			pr := NewPasswordReader([]byte(c.String("p")))
+			w, err := resolveWalletPath(cliConfig, walletFile)
+			if err != nil {
+				return err
+			}
+
+			password, err := c.Flags().GetString("password")
+			if err != nil {
+				return err
+			}
+			pr := NewPasswordReader([]byte(password))
 
 			err = AddPrivateKeyToFile(w, skStr, pr)
 
@@ -60,15 +56,18 @@ func addPrivateKeyCmd(cfg Config) gcli.Command {
 				fmt.Println("success")
 				return nil
 			case WalletLoadError:
-				errorWithHelp(c, err)
-				return nil
-			case WalletSaveError:
-				return errors.New("save wallet failed")
+				printHelp(c)
+				return err
 			default:
 				return err
 			}
 		},
 	}
+
+	addPrivateKeyCmd.Flags().StringP("wallet-file", "f", "", "wallet file or path. If no path is specified your default wallet path will be used.")
+	addPrivateKeyCmd.Flags().StringP("password", "p", "", "Wallet password")
+
+	return addPrivateKeyCmd
 }
 
 // AddPrivateKey adds a private key to a *wallet.Wallet. Caller should save the wallet afterwards
@@ -78,7 +77,11 @@ func AddPrivateKey(wlt *wallet.Wallet, key string) error {
 		return fmt.Errorf("invalid private key: %s, must be a hex string of length 64", key)
 	}
 
-	pk := cipher.PubKeyFromSecKey(sk)
+	pk, err := cipher.PubKeyFromSecKey(sk)
+	if err != nil {
+		return err
+	}
+
 	addr := cipher.AddressFromPubKey(pk)
 
 	entry := wallet.Entry{

@@ -3,90 +3,87 @@ package cli
 import (
 	"fmt"
 
-	gcli "github.com/urfave/cli"
+	gcli "github.com/spf13/cobra"
 
 	"github.com/MDLlife/MDL/src/api/webrpc"
 	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/readable"
 	"github.com/MDLlife/MDL/src/wallet"
 )
 
-func walletOutputsCmd(cfg Config) gcli.Command {
-	name := "walletOutputs"
-	return gcli.Command{
-		Name:      name,
-		Usage:     "Display outputs of specific wallet",
-		ArgsUsage: "[wallet file]",
-		Description: fmt.Sprintf(`Display outputs of specific wallet, the default
-		wallet (%s) will be
-		used if no wallet was specified, use ENV 'WALLET_NAME'
-		to update default wallet file name, and 'WALLET_DIR' to update
-		the default wallet directory`, cfg.FullWalletPath()),
-		OnUsageError: onCommandUsageError(name),
-		Action:       getWalletOutputsCmd,
+func walletOutputsCmd() *gcli.Command {
+	return &gcli.Command{
+		Short: "Display outputs of specific wallet",
+		Use:   "walletOutputs [wallet file]",
+		Long: fmt.Sprintf(`Display outputs of specific wallet, the default wallet (%s) will be
+    used if no wallet was specified, use ENV 'WALLET_NAME'
+    to update default wallet file name, and 'WALLET_DIR' to update
+    the default wallet directory`, cliConfig.FullWalletPath()),
+		DisableFlagsInUseLine: true,
+		SilenceUsage:          true,
+		RunE:                  getWalletOutputsCmd,
 	}
 }
 
-func addressOutputsCmd() gcli.Command {
-	name := "addressOutputs"
-	return gcli.Command{
-		Name:      name,
-		Usage:     "Display outputs of specific addresses",
-		ArgsUsage: "[address list]",
-		Description: `Display outputs of specific addresses, join multiple addresses with space,
-        example: addressOutputs $addr1 $addr2 $addr3`,
-		OnUsageError: onCommandUsageError(name),
-		Action:       getAddressOutputsCmd,
+func addressOutputsCmd() *gcli.Command {
+	return &gcli.Command{
+		Short: "Display outputs of specific addresses",
+		Use:   "addressOutputs [address list]",
+		Long: `Display outputs of specific addresses, join multiple addresses with space,
+    example: addressOutputs $addr1 $addr2 $addr3`,
+		Args:                  gcli.MinimumNArgs(1),
+		DisableFlagsInUseLine: true,
+		SilenceUsage:          true,
+		RunE:                  getAddressOutputsCmd,
 	}
-
 }
 
-func getWalletOutputsCmd(c *gcli.Context) error {
-	cfg := ConfigFromContext(c)
-	rpcClient := RPCClientFromContext(c)
-
-	w := ""
-	if c.NArg() > 0 {
-		w = c.Args().First()
+func getWalletOutputsCmd(c *gcli.Command, args []string) error {
+	var wltPath string
+	if len(args) == 1 {
+		wltPath = args[0]
 	}
-
 	var err error
-	w, err = resolveWalletPath(cfg, w)
+	w, err := resolveWalletPath(cliConfig, wltPath)
 	if err != nil {
 		return err
 	}
 
-	outputs, err := GetWalletOutputsFromFile(rpcClient, w)
+	outputs, err := GetWalletOutputsFromFile(apiClient, w)
 	if err != nil {
 		return err
 	}
 
-	return printJSON(outputs)
+	return printJSON(webrpc.OutputsResult{
+		Outputs: *outputs,
+	})
 }
 
-func getAddressOutputsCmd(c *gcli.Context) error {
-	rpcClient := RPCClientFromContext(c)
+func getAddressOutputsCmd(c *gcli.Command, args []string) error {
+	addrs := make([]string, len(args))
 
-	addrs := make([]string, c.NArg())
 	var err error
-	for i := 0; i < c.NArg(); i++ {
-		addrs[i] = c.Args().Get(i)
+	for i := 0; i < len(args); i++ {
+		addrs[i] = args[i]
 		if _, err = cipher.DecodeBase58Address(addrs[i]); err != nil {
 			return fmt.Errorf("invalid address: %v, err: %v", addrs[i], err)
 		}
 	}
 
-	outputs, err := rpcClient.GetUnspentOutputs(addrs)
+	outputs, err := apiClient.OutputsForAddresses(addrs)
 	if err != nil {
 		return err
 	}
 
-	return printJSON(outputs)
+	return printJSON(webrpc.OutputsResult{
+		Outputs: *outputs,
+	})
 }
 
 // PUBLIC
 
 // GetWalletOutputsFromFile returns unspent outputs associated with all addresses in a wallet file
-func GetWalletOutputsFromFile(c *webrpc.Client, walletFile string) (*webrpc.OutputsResult, error) {
+func GetWalletOutputsFromFile(c GetOutputser, walletFile string) (*readable.UnspentOutputsSummary, error) {
 	wlt, err := wallet.Load(walletFile)
 	if err != nil {
 		return nil, err
@@ -96,12 +93,12 @@ func GetWalletOutputsFromFile(c *webrpc.Client, walletFile string) (*webrpc.Outp
 }
 
 // GetWalletOutputs returns unspent outputs associated with all addresses in a wallet.Wallet
-func GetWalletOutputs(c *webrpc.Client, wlt *wallet.Wallet) (*webrpc.OutputsResult, error) {
+func GetWalletOutputs(c GetOutputser, wlt *wallet.Wallet) (*readable.UnspentOutputsSummary, error) {
 	cipherAddrs := wlt.GetAddresses()
 	addrs := make([]string, len(cipherAddrs))
 	for i := range cipherAddrs {
 		addrs[i] = cipherAddrs[i].String()
 	}
 
-	return c.GetUnspentOutputs(addrs)
+	return c.OutputsForAddresses(addrs)
 }

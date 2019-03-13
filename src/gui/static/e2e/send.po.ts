@@ -61,7 +61,7 @@ export class SendPage {
   }
 
   private getCoinsFromOptionString(option: string) {
-    const value = option.slice(option.indexOf('-') + 1, option.indexOf(' SKY'));
+    const value = option.slice(option.indexOf('-') + 1, option.indexOf(' MDL'));
 
     return parseFloat(value);
   }

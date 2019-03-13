@@ -2,13 +2,15 @@
 
 ## Simple Tags
 
--	[`latest` (*docker/images/skycoindev-cli/Dockerfile*)](https://github.com/skycoin/skycoin/tree/develop/docker/images/skycoindev-cli/Dockerfile)
+-	[`latest` (*docker/images/dev-cli/Dockerfile*)](https://github.com/MDLlife/MDL/tree/develop/docker/images/dev-cli/Dockerfile)
 
-# Skycoin development image
+# MDL development image
 
-This image has the necessary tools to build, test, edit, lint and version the Skycoin
+This image has the necessary tools to build, test, edit, lint and version the MDL
 source code.  It comes with the Vim editor installed, along with some plugins
 to ease go development and version control with git.
+
+_Plase note that there is also a sister image with ["docker in docker"](https://github.com/MDLlife/MDL/tree/develop/docker/images/dev-docker/) feature on it._
 
 # How to use this image
 
@@ -17,12 +19,12 @@ to ease go development and version control with git.
 ```sh
 $ mkdir src
 $ docker run --rm \
-    -v src:/go/src skycoin/skycoindev-cli \
-    go get github.com/skycoin/skycoin
+    -v src:/go/src MDLlife/MDLdev-cli \
+    go get github.com/MDLlife/MDL
 $ sudo chown -R `whoami` src
 ```
 
-This downloads the skycoin source to src/skycoin/skycoin and changes the owner
+This downloads the mdl source to src/MDLlife/MDL and changes the owner
 to your user. This is necessary, because all processes inside the container run
 as root and the files created by it are therefore owned by root.
 
@@ -39,23 +41,23 @@ in a container and deleted when finished.
 
 ```sh
 $ docker run --rm \
-    -v src:/go/src skycoin/skycoindev-cli \
-    sh -c "cd skycoin; make test"
+    -v src:/go/src MDLlife/MDLdev-cli \
+    sh -c "cd mdl; make test"
 ```
 
 ### Running lint
 
 ```sh
 $ docker run --rm \
-    -v src:/go/src skycoin/skycoindev-cli \
-    sh -c "cd skycoin; make lint"
+    -v src:/go/src MDLlife/MDLdev-cli \
+    sh -c "cd mdl; make lint"
 ```
 
 ### Editing code
 
 ```sh
 $ docker run --rm \
-    -v src:/go/src skycoin/skycoindev-cli \
+    -v src:/go/src MDLlife/MDLdev-cli \
     vim
 ```
 
@@ -71,4 +73,11 @@ $ docker run --rm \
 
 - Ale
 - tig-explorer
+
+## Automated builds
+
+Docker Cloud is configured to build images from `develop` branch on every push.
+The same process is triggered for all feature branches matching the pattern
+`/^([^_]+)_t([0-9]+)_.*docker.*/`. The tag generated for those images will be of the form
+`feature-{\1}-{\2}`.
 

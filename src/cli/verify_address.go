@@ -1,21 +1,20 @@
 package cli
 
 import (
-	gcli "github.com/urfave/cli"
+	"github.com/spf13/cobra"
 
 	"github.com/MDLlife/MDL/src/cipher"
 )
 
-func verifyAddressCmd() gcli.Command {
-	name := "verifyAddress"
-	return gcli.Command{
-		Name:         name,
-		Usage:        "Verify a MDL address",
-		ArgsUsage:    "[mdl address]",
-		OnUsageError: onCommandUsageError(name),
-		Action: func(c *gcli.Context) error {
-			mdlAddr := c.Args().First()
-			_, err := cipher.DecodeBase58Address(mdlAddr)
+func verifyAddressCmd() *cobra.Command {
+	return &cobra.Command{
+		Short:                 "Verify a mdl address",
+		Use:                   "verifyAddress [mdl address]",
+		Args:                  cobra.ExactArgs(1),
+		DisableFlagsInUseLine: true,
+		SilenceUsage:          true,
+		RunE: func(c *cobra.Command, args []string) error {
+			_, err := cipher.DecodeBase58Address(args[0])
 			return err
 		},
 	}

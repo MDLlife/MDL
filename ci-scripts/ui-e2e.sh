@@ -21,7 +21,7 @@ GOLDFLAGS="-X main.Commit=${COMMIT} -X main.Branch=${BRANCH}"
 
 set -euxo pipefail
 
-DATA_DIR=$(mktemp -d -t skycoin-data-dir.XXXXXX)
+DATA_DIR=$(mktemp -d -t mdl-data-dir.XXXXXX)
 WALLET_DIR="${DATA_DIR}/wallets"
 
 if [[ ! "$DATA_DIR" ]]; then
@@ -34,7 +34,7 @@ mkdir "$WALLET_DIR"
 cat >"${WALLET_DIR}/test_wallet.wlt" <<EOL
 {
     "meta": {
-        "coin": "skycoin",
+        "coin": "mdl",
         "cryptoType": "scrypt-chacha20poly1305",
         "encrypted": "true",
         "filename": "test_wallet.wlt",
@@ -57,26 +57,31 @@ cat >"${WALLET_DIR}/test_wallet.wlt" <<EOL
 EOL
 
 # Compile the mdl node
-# We can't use "go run" because this creates two processes which doesn't allow us to kill it at the end
+# We can't use "go run" because that creates two processes which doesn't allow us to kill it at the end
 echo "compiling mdl"
-go build -o "$BINARY" -ldflags "${GOLDFLAGS}" cmd/skycoin/skycoin.go
+go build -o "$BINARY" -ldflags "${GOLDFLAGS}" cmd/mdl/mdl.go
 
 # Run mdl node with pinned blockchain database
 echo "starting mdl node in background with http listener on $HOST"
 
-./skycoin-integration -disable-networking=true \
+./mdl-integration -disable-networking=true \
+                      -genesis-signature eb10468d10054d15f2b6f8946cd46797779aa20a7617ceb4be884189f219bc9a164e56a5b9f7bec392a804ff3740210348d73db77a37adb542a8e08d429ac92700 \
+                      -genesis-address 2jBbGxZRGoQG1mqhPBnXnLTxK6oxsTf8os6 \
+                      -blockchain-public-key 0328c576d3f420e7682058a981173a4b374c7cc5ff55bf394d3cf57059bbe6456a \
+                      -db-path=./src/api/integration/testdata/blockchain-180.db \
                       -web-interface-port=$PORT \
                       -download-peerlist=false \
                       -db-path=./src/api/integration/testdata/blockchain-180.db \
                       -db-read-only=true \
                       -launch-browser=false \
                       -data-dir="$DATA_DIR" \
-                      -enable-wallet-api=true \
+                      -enable-all-api-sets=true \
+                      -enable-api-sets=INSECURE_WALLET_SEED \
                       -wallet-dir="$WALLET_DIR" \
-                      -enable-seed-api=true &
-SKYCOIN_PID=$!
+                      &
+MDL_PID=$!
 
-echo "mdl node pid=$SKYCOIN_PID"
+echo "mdl node pid=$MDL_PID"
 
 echo "sleeping for startup"
 sleep 3
@@ -109,8 +114,8 @@ RESULT=$?
 echo "shutting down mdl node"
 
 # Shutdown mdl node
-kill -s SIGINT $SKYCOIN_PID
-wait $SKYCOIN_PID
+kill -s SIGINT $MDL_PID
+wait $MDL_PID
 
 rm "$BINARY"
 rm "$E2E_PROXY_CONFIG"

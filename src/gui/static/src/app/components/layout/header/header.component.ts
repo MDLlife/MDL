@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { PriceService } from '../../../services/price.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription, ISubscription } from 'rxjs/Subscription';
 import { WalletService } from '../../../services/wallet.service';
 import { BlockchainService } from '../../../services/blockchain.service';
 import { Observable } from 'rxjs/Observable';
@@ -11,6 +11,7 @@ import 'rxjs/add/operator/skip';
 import 'rxjs/add/operator/take';
 import { shouldUpgradeVersion } from '../../../utils/semver';
 import { TranslateService } from '@ngx-translate/core';
+import { BigNumber } from 'bignumber.js';
 
 @Component({
   selector: 'app-header',
@@ -30,20 +31,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
   updateAvailable: boolean;
   hasPendingTxs: boolean;
   price: number;
+  synchronized = true;
 
   private subscription: Subscription;
+  private synchronizedSubscription: ISubscription;
   private fetchVersionError: string;
 
   get loading() {
-    return !this.current || !this.highest || this.current !== this.highest;
+    return !this.current || !this.highest || this.current !== this.highest || !this.coins || this.coins === 'NaN' || !this.hours || this.hours === 'NaN';
   }
 
   get coins() {
-    return this.addresses.map(addr => addr.coins >= 0 ? addr.coins : 0).reduce((a, b) => a + b, 0);
+    let coins = new BigNumber('0');
+    this.addresses.map(addr => coins = coins.plus(addr.coins));
+
+    return coins.decimalPlaces(6).toString();
   }
 
   get hours() {
-    return this.addresses.map(addr => addr.hours >= 0 ? addr.hours : 0).reduce((a, b) => a + b, 0);
+    let hours = new BigNumber('0');
+    this.addresses.map(addr => hours = hours.plus(addr.hours));
+
+    return hours.decimalPlaces(0).toString();
   }
 
   constructor(
@@ -68,6 +77,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.highest = response.highest;
         this.current = response.current;
         this.percentage = this.current && this.highest ? (this.current / this.highest) : 0;
+
+        // Adding the code here prevents the warning from flashing if the wallet is synchronized. Also, adding the
+        // subscription to this.subscription causes problems.
+        if (!this.synchronizedSubscription) {
+          this.synchronizedSubscription = this.blockchainService.synchronized.subscribe(value => this.synchronized = value);
+        }
       });
 
     this.setVersion();
@@ -91,6 +106,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    if (this.synchronizedSubscription) {
+      this.synchronizedSubscription.unsubscribe();
+    }
   }
 
   setVersion() {
@@ -105,7 +123,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private retrieveReleaseVersion() {
-    this.http.get('https://api.github.com/repos/mdllife/mdl/tags')
+    this.http.get('https://api.github.com/repos/MDLlife/MDL/tags')
       .map((res: any) => res.json())
       .catch((error: any) => Observable.throw(error || this.fetchVersionError))
       .subscribe(response =>  {

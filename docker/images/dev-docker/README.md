@@ -2,11 +2,11 @@
 
 ## Simple Tags
 
--	[`dind` (*docker/images/devdocker/Dockerfile*)](https://github.com/skycoin/skycoin/tree/develop/docker/images/devdocker/Dockerfile)
+-	[`dind` (*docker/images/dev-docker/Dockerfile*)](https://github.com/MDLlife/MDL/tree/develop/docker/images/dev-docker/Dockerfile)
 
-# Skycoin development image including [docker in docker](https://hub.docker.com/_/docker/)
+# MDL development image including [docker in docker](https://hub.docker.com/_/docker/)
 
-This image has the necessary tools to build, test, edit, lint and version the Skycoin
+This image has the necessary tools to build, test, edit, lint and version the MDL
 source code.  It comes with the Vim editor installed, along with some plugins
 to ease go development and version control with git, besides it comes with docker installed.
 
@@ -17,12 +17,12 @@ to ease go development and version control with git, besides it comes with docke
 ```sh
 $ mkdir src
 $ docker run --privileged --rm \
-    -v src:/go/src skycoin/skycoindev-cli:dind \
-    go get github.com/skycoin/skycoin
+    -v src:/go/src MDLlife/MDLdev-cli:dind \
+    go get github.com/MDLlife/MDL
 $ sudo chown -R `whoami` src
 ```
 
-This downloads the skycoin source to src/skycoin/skycoin and changes the owner
+This downloads the mdl source to src/MDLlife/MDL and changes the owner
 to your user. This is necessary, because all processes inside the container run
 as root and the files created by it are therefore owned by root.
 
@@ -39,23 +39,23 @@ in a container and deleted when finished.
 
 ```sh
 $ docker run --rm \
-    -v src:/go/src skycoin/skycoindev-cli:dind \
-    sh -c "cd skycoin; make test"
+    -v src:/go/src MDLlife/MDLdev-cli:dind \
+    sh -c "cd mdl; make test"
 ```
 
 ### Running lint
 
 ```sh
 $ docker run --rm \
-    -v src:/go/src skycoin/skycoindev-cli:dind \
-    sh -c "cd skycoin; make lint"
+    -v src:/go/src MDLlife/MDLdev-cli:dind \
+    sh -c "cd mdl; make lint"
 ```
 
 ### Editing code
 
 ```sh
 $ docker run --rm \
-    -v src:/go/src skycoin/skycoindev-cli:dind \
+    -v src:/go/src MDLlife/MDLdev-cli:dind \
     vim
 ```
 
@@ -64,7 +64,7 @@ $ docker run --rm \
 ### Start a daemon instance
 
 ```sh
-$ docker run --privileged --name some-name -d skycoin/skycoindev-cli:dind
+$ docker run --privileged --name some-name -d MDLlife/MDLdev-cli:dind
 ```
 
 ### Where to store data
@@ -78,7 +78,7 @@ The downside is that you need to make sure that the directory exists, and that e
 
 ```sh
 $ docker run --privileged --name some-name -v /my/own/var-lib-docker:/var/lib/docker \ 
--d skycoin/skycoindev-cli:dind
+-d MDLlife/MDLdev-cli:dind
 ```
 
 

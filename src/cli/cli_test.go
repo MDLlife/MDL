@@ -20,13 +20,13 @@ func Example() {
 		os.Exit(1)
 	}
 
-	app, err := NewApp(cfg)
+	cli, err := NewCLI(cfg)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	if err := app.Run(os.Args); err != nil {
+	if err := cli.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
@@ -111,43 +111,6 @@ func TestLoadConfig(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, cfg.DataDir, val)
 		require.Equal(t, cfg.WalletDir, valWallet)
-	})
-
-	t.Run("don't set USE_CSRF", func(t *testing.T) {
-		os.Unsetenv("USE_CSRF")
-
-		c, err := LoadConfig()
-		require.NoError(t, err)
-		require.False(t, c.UseCSRF)
-	})
-
-	t.Run("set USE_CSRF false", func(t *testing.T) {
-		val := "0"
-		os.Setenv("USE_CSRF", val)
-		defer os.Unsetenv("USE_CSRF")
-
-		c, err := LoadConfig()
-		require.NoError(t, err)
-		require.False(t, c.UseCSRF)
-	})
-
-	t.Run("set USE_CSRF true", func(t *testing.T) {
-		val := "1"
-		os.Setenv("USE_CSRF", val)
-		defer os.Unsetenv("USE_CSRF")
-
-		c, err := LoadConfig()
-		require.NoError(t, err)
-		require.True(t, c.UseCSRF)
-	})
-
-	t.Run("set USE_CSRF invalid", func(t *testing.T) {
-		val := "not_boolean"
-		os.Setenv("USE_CSRF", val)
-		defer os.Unsetenv("USE_CSRF")
-
-		_, err := LoadConfig()
-		testutil.RequireError(t, err, "Invalid USE_CSRF value, must be interpretable as a boolean e.g. 0, 1, true, false")
 	})
 }
 

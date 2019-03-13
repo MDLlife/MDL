@@ -1,12 +1,15 @@
-# skycoin build
-# reference https://github.com/skycoin/skycoin
+# mdl build
+# reference https://github.com/MDLlife/MDL
 ARG IMAGE_FROM=busybox
-FROM golang:1.10.1-stretch AS build
+FROM golang:1.11-stretch AS build
 ARG ARCH=amd64
 ARG GOARM
 ARG MDL_VERSION
+ARG SCOMMIT
+ARG SBRANCH
+ARG STAG
 
-COPY . $GOPATH/src/github.com/mdllife/mdl
+COPY . $GOPATH/src/github.com/MDLlife/MDL
 
 # This code checks if MDL_VERSION is set and checkouts to that version if
 # so. The git stash line prevents the build to fail if there are any uncommited
@@ -14,40 +17,66 @@ COPY . $GOPATH/src/github.com/mdllife/mdl
 RUN sh -c \
     'if test ${MDL_VERSION};then \
         echo "Revision is set to: "${MDL_VERSION}; \
-        cd $GOPATH/src/github.com/mdllife/mdl; \
+        cd $GOPATH/src/github.com/MDLlife/MDL; \
         git stash; \
         git checkout ${MDL_VERSION}; \
      fi'
 
-RUN cd $GOPATH/src/github.com/mdllife/mdl && \
-  CGO_ENABLED=0 GOOS=linux go install -a -installsuffix cgo ./...
+ENV GOARCH="$ARCH" \
+    GOARM="$GOARM" \
+    CGO_ENABLED="0" \
+    GOOS="linux" \
+    GOLDFLAGS="-X main.Commit=${SCOMMIT} -X main.Branch=${SBRANCH}"
 
-# mdllife image
-FROM alpine:3.7
+RUN cd $GOPATH/src/github.com/MDLlife/MDL && \
+    echo "Building with GOLDFLAGS=$GOLDFLAGS GOARCH=$GOARCH GOARM=$GOARM CGO_ENABLED=$CGO_ENABLED GOOS=$GOOS " && \
+    go install -ldflags "${GOLDFLAGS}" ./cmd/... && \
+    sh -c "if test -d $GOPATH/bin/linux_arm ; then mv $GOPATH/bin/linux_arm/* $GOPATH/bin/; fi; \
+           if test -d $GOPATH/bin/linux_arm64 ; then mv $GOPATH/bin/linux_arm64/* $GOPATH/bin/; fi"
 
-ENV COIN="mdl" \
-    RPC_ADDR="0.0.0.0:8330" \
+RUN apt-get update && \
+    apt-get install -y ca-certificates
+
+
+RUN /bin/bash -c 'mkdir -p /tmp/files/{usr/bin,/usr/local/mdl/src/gui/static,/usr/local/bin/,/etc/ssl}'
+RUN cp -r /go/bin/* /tmp/files/usr/bin/
+RUN cp -r  /go/src/github.com/MDLlife/MDL/src/gui/static /tmp/files/usr/local/mdl/src/gui/static
+RUN cp -r  /etc/ssl/certs /tmp/files/etc/ssl/certs
+COPY docker_launcher.sh /tmp/files/usr/local/bin/docker_launcher.sh
+
+# mdl image
+FROM $IMAGE_FROM
+ARG BDATE
+ARG SCOMMIT
+ARG SBRANCH
+ARG STAG
+
+# Image labels
+LABEL "org.label-schema.name"="MDL" \
+      "org.label-schema.description"="MDL core docker image" \
+      "org.label-schema.vcs-url"="https://github.com/MDLlife/MDL/tree/develop/docker/images/mainnet" \
+      "org.label-schema.vendor"="MDL project" \
+      "org.label-schema.url"="mdl.net" \
+      "org.label-schema.schema-version"="1.0" \
+      "org.label-schema.build-date"=$BDATE \
+      "org.label-schema.vcs-ref"=$SCOMMIT \
+      "org.label-schema.version"=$STAG \
+      "org.label-schema.usage"="https://github.com/MDLlife/MDL/blob/"$SCOMMIT"/docker/images/mainnet/README.md" \
+      "org.label-schema.docker.cmd"="docker volume create mdl-data; docker volume create mdl-wallet; docker run -d -v mdl-data:/data/.mdl -v mdl-wallet:/wallet -p 6000:6000 -p 6420:6420 --name mdl-node-stable MDLlife/MDL"
+
+ENV COIN="mdl"
+ENV RPC_ADDR="http://0.0.0.0:8330" \
     DATA_DIR="/data/.$COIN" \
     WALLET_DIR="/wallet" \
-    USE_CSRF="1" \
     WALLET_NAME="$COIN_cli.wlt"
 
 # copy all the binaries
-COPY --from=build /go/bin/* /usr/bin/
-
-# copy assets
-COPY --from=build /go/src/github.com/mdllife/mdl/src/gui/static /usr/local/mdl/src/gui/static
-
-# copy launcher
-COPY docker_launcher.sh /usr/local/bin/docker_launcher.sh
-
-#Copy certificates
-COPY --from=build /etc/ssl/certs /etc/ssl/certs
+COPY --from=build /tmp/files /
 
 # volumes
 VOLUME $WALLET_DIR
 VOLUME $DATA_DIR
 
-EXPOSE 6000 8320 8330
+EXPOSE 6000 8320
 
-ENTRYPOINT ["docker_launcher.sh", "--web-interface-addr=0.0.0.0", "--rpc-interface-addr=0.0.0.0", "--gui-dir=/usr/local/mdl/src/gui/static"]
+ENTRYPOINT ["docker_launcher.sh", "--web-interface-addr=0.0.0.0", "--gui-dir=/usr/local/mdl/src/gui/static"]
