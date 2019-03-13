@@ -242,7 +242,7 @@ func checkGoldenFileObjectChanges(t *testing.T, goldenFile string, td TestData) 
 }
 
 func mode(t *testing.T) string {
-	mode := os.Getenv("MDL_INTEGRATION_TEST_MODE")
+	mode := os.Getenv("SKYCOIN_INTEGRATION_TEST_MODE")
 	switch mode {
 	case "":
 		mode = testModeStable
@@ -254,7 +254,7 @@ func mode(t *testing.T) string {
 }
 
 func enabled() bool {
-	return os.Getenv("MDL_INTEGRATION_TESTS") == "1"
+	return os.Getenv("SKYCOIN_INTEGRATION_TESTS") == "1"
 }
 
 func doStable(t *testing.T) bool {
