@@ -1,6 +1,6 @@
 [![mdl logo](https://avatars3.githubusercontent.com/u/32588034?s=400&u=66bd3c250fc20d6a6044f50a911aba46683e0e20&v=4)](https://mdl.life)
 
-# MDL Talent Hub Native Token / TH / Token Hour / Talent Hour Wallet
+# MDL Talent Hub Token / TH / Token Hour / Talent Hour Wallet
 
 [![Build Status](https://travis-ci.org/MDLlife/MDL.svg)](https://travis-ci.org/MDLlife/MDL)
 [![GoDoc](https://godoc.org/github.com/MDLlife/MDL?status.svg)](https://godoc.org/github.com/MDLlife/MDL)
