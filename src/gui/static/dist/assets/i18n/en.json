@@ -2,6 +2,7 @@
   "common": {
     "coin-id": "MDL",
     "coin-hours": "Token Hours",
+    "usd": "USD",
     "loading": "Loading...",
     "new": "New",
     "load": "Load"
@@ -66,18 +67,18 @@
   },
 
   "buy": {
-    "deposit-address": "Choose an address to generate a BTC deposit link for:",
+    "deposit-address": "Choose an address to generate a Selected Coin deposit link for:",
     "select-address": "Select address",
     "generate": "Generate",
     "deposit-location": "Deposit Location",
-    "deposit-location-desc": "Choose a wallet where you'd like us to deposit your MDL after we receive your Bitcoin.",
+    "deposit-location-desc": "Choose a wallet where you'd like us to deposit your MDL after we receive your Selected Coin.",
     "make-choice": "Make a choice",
-    "wallets-desc": "Each time a new wallet and address are selected, a new BTC address is generated. A single MDL address can have up to 5 BTC addresses assigned to it.",
-    "send": "Send Bitcoin",
-    "send-desc": "Send Bitcoin to the address below. Once received, we will deposit the MDL to a new address in the wallet selected above at the current rate of {{ rate }} MDL/BTC.",
+    "wallets-desc": "Each time a new wallet and address are selected, a new Selected Coin address is generated. A single MDL address can have up to 5 Selected Coin addresses assigned to it.",
+    "send": "Send Selected Coin",
+    "send-desc": "Send Selected Coin to the address below. Once received, we will deposit the MDL to a new address in the wallet selected above at the current rate of {{ rate }} MDL/Selected Coin.",
     "fraction-warning": "Only send multiple of the MDL/BTC rate! MDL is sent in whole number; fractional MDL is not sent!",
     "receive": "Receive MDL",
-    "receive-desc": "After receiving your Bitcoin, we'll send you your MDL. It may take anywhere between 20 minutes and an hour to receive your MDL.",
+    "receive-desc": "After receiving your Selected Coin, we'll send you your MDL. It may take anywhere between 20 minutes and an hour to receive your MDL.",
     "status-button": "Status:",
     "check-status-button": "Check Status",
     "new-order-button": "New Order"
@@ -300,7 +301,7 @@
   "teller": {
     "done": "Completed",
     "waiting-confirm": "Waiting for confirmation",
-    "waiting-deposit": "Waiting for Bitcoin deposit",
+    "waiting-deposit": "Waiting for deposit",
     "waiting-send": "Waiting to send MDL",
     "unknown": "Unknown"
   },

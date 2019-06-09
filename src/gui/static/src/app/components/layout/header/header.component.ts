@@ -36,6 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription;
   private synchronizedSubscription: ISubscription;
+  private fetchVersionError: string;
   // This should be deleted. View the comment in the constructor.
   // private fetchVersionError: string;
 
@@ -139,7 +140,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.releaseVersion = response.find(element => element['name'].indexOf('rc') === -1)['name'].substr(1);
         this.updateAvailable = shouldUpgradeVersion(this.version, this.releaseVersion);
       });
-    */
     this.updateAvailable = false;
   }
 }

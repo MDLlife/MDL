@@ -21,10 +21,6 @@ export class BlockchainService {
     return this.progressSubject.asObservable();
   }
 
-  get synchronized() {
-    return this.synchronizedSubject.asObservable();
-  }
-
   get currentMaxDecimals(): number {
     return this.maxDecimals;
   }
