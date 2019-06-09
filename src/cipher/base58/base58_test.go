@@ -1,5 +1,5 @@
 /*
-Package base58 implements base58 encoding, used for MDL and Bitcoin addresses
+Package base58 implements base58 encoding, used for Skycoin and Bitcoin addresses
 */
 package base58
 

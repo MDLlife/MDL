@@ -1,6 +1,5 @@
 /*
-Package cli implements the CLI cmd's methods.
-
+Package cli implements an interface for creating a CLI application.
 Includes methods for manipulating wallets files and interacting with the
 REST API to query a mdl node's status.
 */
@@ -9,7 +8,10 @@ package cli
 import (
 	"encoding/json"
 	"errors"
+	"flag"
 	"fmt"
+	"github.com/spf13/cobra"
+	"github.com/spf13/pflag"
 	"net/url"
 	"path/filepath"
 	"strings"
@@ -17,7 +19,6 @@ import (
 
 	"os"
 
-	"github.com/spf13/cobra"
 	"golang.org/x/crypto/ssh/terminal"
 
 	"github.com/MDLlife/MDL/src/api"
@@ -26,7 +27,7 @@ import (
 
 var (
 	// Version is the CLI Version
-	Version = "0.25.1"
+	Version = "0.26.0"
 )
 
 const (
@@ -227,9 +228,10 @@ func NewCLI(cfg Config) (*cobra.Command, error) {
 		addressOutputsCmd(),
 		blocksCmd(),
 		broadcastTxCmd(),
-		checkdbCmd(),
-		createRawTxCmd(),
-		decodeRawTxCmd(),
+		checkDBCmd(),
+		checkDBEncodingCmd(),
+		createRawTxnCmd(),
+		decodeRawTxnCmd(),
 		decryptWalletCmd(),
 		encryptWalletCmd(),
 		lastBlocksCmd(),
@@ -240,6 +242,7 @@ func NewCLI(cfg Config) (*cobra.Command, error) {
 		showSeedCmd(),
 		statusCmd(),
 		transactionCmd(),
+		verifyTransactionCmd(),
 		verifyAddressCmd(),
 		versionCmd(),
 		walletCreateCmd(),
@@ -250,6 +253,8 @@ func NewCLI(cfg Config) (*cobra.Command, error) {
 		walletOutputsCmd(),
 		richlistCmd(),
 		addressTransactionsCmd(),
+		pendingTransactionsCmd(),
+		addresscountCmd(),
 	}
 
 	skyCLI.Version = Version
@@ -258,6 +263,7 @@ func NewCLI(cfg Config) (*cobra.Command, error) {
 
 	skyCLI.SetHelpTemplate(helpTemplate)
 	skyCLI.SetUsageTemplate(helpTemplate)
+	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 
 	return skyCLI, nil
 }

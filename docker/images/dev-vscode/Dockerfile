@@ -97,7 +97,7 @@ USER root
 # Copy start.sh script to use it as our Docker ENTRYPOINT
 COPY ./start.sh /usr/local/bin/start.sh
 # backwards compat
-RUN ln -s usr/local/bin/start.sh / 
+RUN ln -s usr/local/bin/start.sh /
 
 WORKDIR $GOPATH/src/github.com/mdl/
 

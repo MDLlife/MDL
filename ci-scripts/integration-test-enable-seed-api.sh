@@ -11,7 +11,7 @@ while $(lsof -Pi :$PORT -sTCP:LISTEN -t >/dev/null) ; do
     PORT=$((PORT+1))
 done
 
-COIN=${COIN:-mdl}
+COIN=${COIN:-skycoin}
 RPC_PORT="$PORT"
 HOST="http://127.0.0.1:$PORT"
 RPC_ADDR="http://127.0.0.1:$RPC_PORT"
@@ -50,6 +50,10 @@ set -euxo pipefail
 
 CMDPKG=$(go list ./cmd/${COIN})
 COVERPKG=$(dirname $(dirname ${CMDPKG}))
+
+echo "checking if integration tests compile"
+go test ./src/api/integration/...
+go test ./src/cli/integration/...
 
 DATA_DIR=$(mktemp -d -t ${COIN}-data-dir.XXXXXX)
 WALLET_DIR="${DATA_DIR}/wallets"

@@ -26,6 +26,7 @@ RUN_TESTS=""
 TEST_LIVE_WALLET=""
 FAILFAST=""
 USE_CSRF=""
+HEADER_CHECK="1"
 DISABLE_NETWORKING=""
 
 usage () {
@@ -38,6 +39,7 @@ usage () {
   echo "-w <boolean> -- Run wallet tests"
   echo "-f <boolean> -- Run test with -failfast flag"
   echo "-c <boolean> -- Pass this argument if the node has CSRF enabled"
+  echo "-x <boolean> -- Pass this argument if the node has header check disabled"
   echo "-k <boolean> -- Run the tests that require networking disabled (live node must be run with -disable-networking)"
   exit 1
 }
@@ -54,6 +56,7 @@ case $args in
     w ) TEST_LIVE_WALLET="--test-live-wallet";;
     f ) FAILFAST="-failfast";;
     c ) USE_CSRF="1";;
+    x ) HEADER_CHECK="";;
 	k ) DISABLE_NETWORKING="true"
   esac
 done
@@ -70,6 +73,10 @@ if [ ! $? -eq 0 ]; then
     echo "$COIN node is not running on $HOST"
     exit 1
 fi
+
+echo "checking if integration tests compile"
+go test ./src/api/integration/...
+go test ./src/cli/integration/...
 
 if [[ -z $TEST || $TEST = "api" ]]; then
 

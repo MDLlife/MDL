@@ -1,6 +1,6 @@
 // Package useragent implements methods for managing MDL user agents.
 //
-// A mdl user agent has the following format:
+// A MDL user agent has the following format:
 //
 //   `$NAME:$VERSION[$GIT_HASH]($REMARK)`
 //

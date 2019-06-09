@@ -15,7 +15,7 @@ LABEL "org.label-schema.name"="mdldev-cli:dind" \
       "org.label-schema.version"="1.0.0-rc.1" \
       "org.label-schema.usage"="https://github.com/MDLlife/MDL/blob/"$SCOMMIT"/docker/images/dev-docker/README.md" \
       "org.label-schema.docker.cmd"="mkdir src; docker run --privileged --rm -v src:/go/src MDLlife/MDLdev-cli:dind go get github.com/MDLlife/MDL; sudo chown -R `whoami` src"
-      
+
 # Install docker
 
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
@@ -60,7 +60,7 @@ ENV DIND_COMMIT 3b5fac462d21ca164b3778647420016315289034
 
 RUN set -ex; \
 	wget -O /usr/local/bin/dind "https://raw.githubusercontent.com/docker/docker/${DIND_COMMIT}/hack/dind"; \
-	chmod +x /usr/local/bin/dind; 
+	chmod +x /usr/local/bin/dind;
 
 COPY dockerd-entrypoint.sh /usr/local/bin/
 

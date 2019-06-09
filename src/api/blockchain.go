@@ -13,7 +13,7 @@ import (
 	"github.com/MDLlife/MDL/src/coin"
 	"github.com/MDLlife/MDL/src/readable"
 	wh "github.com/MDLlife/MDL/src/util/http"
-	"github.com/MDLlife/MDL/src/visor" //http,json helpers
+	"github.com/MDLlife/MDL/src/visor"
 )
 
 // blockchainMetadataHandler returns the blockchain metadata
@@ -56,12 +56,14 @@ func blockchainProgressHandler(gateway Gatewayer) http.HandlerFunc {
 			return
 		}
 
-		progress, err := gateway.GetBlockchainProgress()
+		headSeq, _, err := gateway.HeadBkSeq()
 		if err != nil {
-			err = fmt.Errorf("gateway.GetBlockchainProgress failed: %v", err)
+			err = fmt.Errorf("gateway.HeadBkSeq failed: %v", err)
 			wh.Error500(w, err.Error())
 			return
 		}
+
+		progress := gateway.GetBlockchainProgress(headSeq)
 
 		// This can happen if the node is shut down at the right moment, guard against a panic
 		if progress == nil {

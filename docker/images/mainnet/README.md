@@ -122,7 +122,7 @@ $ docker volume create mdl-block-publisher-wallet
 $ docker run -d -v mdl-block-publisher-data:/data/.mdl \
   -v mdl-block-publisher-wallet:/wallet \
   -p 6001:6000 -p 6421:6420 \
-  --name mdl-block-publisher-stable MDLlife/MDL -block-publisher
+  --name mdl-block-publisher-stable mdl/mdl -block-publisher
 ```
 
 Notice that the host's port must be changed since collisions of two services listening at the same port are not allowed by the low-level operating system socket libraries.

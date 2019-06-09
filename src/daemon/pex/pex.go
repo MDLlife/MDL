@@ -52,7 +52,7 @@ var (
 	// ErrNotExternalIP is returned if an IP address is not a global unicast address
 	ErrNotExternalIP = errors.New("IP is not a valid external IP")
 	// ErrPortTooLow is returned if a port is less than 1024
-	ErrPortTooLow = errors.New("Port must be 7800|8330|8320")
+	ErrPortTooLow = errors.New("Port must be >= 1024")
 	// ErrBlacklistedAddress returned when attempting to add a blacklisted peer
 	ErrBlacklistedAddress = errors.New("Blacklisted address")
 
@@ -90,11 +90,6 @@ func validateAddress(ipPort string, allowLocalhost bool) (string, error) {
 	}
 
 	if port < 1024 {
-		return "", ErrPortTooLow
-	}
-
-	// TODO refactor and merge with v26 permanent solution when ready
-	if port != 7800 && port != 8330 && port != 8320 {
 		return "", ErrPortTooLow
 	}
 
@@ -274,8 +269,8 @@ func New(cfg Config) (*Pex, error) {
 		return nil, err
 	}
 
-	// Download peers from remote peers list
-	if pex.Config.DownloadPeerList {
+	// Download peers from remote peers list if networking is enabled
+	if pex.Config.DownloadPeerList && !pex.Config.NetworkDisabled {
 		go func() {
 			if err := pex.downloadPeers(); err != nil {
 				logger.WithError(err).Error("Failed to download peers list")

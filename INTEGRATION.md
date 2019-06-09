@@ -1,13 +1,11 @@
 # MDL Exchange Integration
 
-A MDL node offers multiple interfaces:
+A MDL node offers a REST API on port 6420 (when running from source; if you are using the releases downloaded from the website, the port is randomized)
 
 * REST API on port 6420 (when running from source; if you are using the releases downloaded from the website, the port is randomized)
 * JSON-RPC 2.0 API accessible on `/api/v1/webrpc` endpoint **[deprecated]**
 
-A CLI tool is provided in `cmd/cli/cli.go`. This tool communicates over the JSON-RPC 2.0 API. In the future it will communicate over the REST API.
-
-*Note*: Do not interface with the JSON-RPC 2.0 API directly, it is deprecated and will be removed in a future version.
+A CLI tool is provided in `cmd/cli/cli.go`. This tool communicates over the REST API.
 
 The API interfaces do not support authentication or encryption so they should only be used over localhost.
 
@@ -65,9 +63,37 @@ and to use the CLI tool for wallet operations (seed and address generation, tran
 		- [Using the CLI](#using-the-cli-4)
 		- [Using the REST API](#using-the-rest-api-4)
 		- [Using mdl as a library in a Go application](#using-mdl-as-a-library-in-a-go-application-4)
+	- [Scanning deposits](#scanning-deposits)
+		- [Using the CLI](#using-the-cli)
+		- [Using the REST API](#using-the-rest-api)
+		- [Using mdl as a library in a Go application](#using-mdl-as-a-library-in-a-go-application)
+	- [Sending coins](#sending-coins)
+		- [General principles](#general-principles)
+		- [Using the CLI](#using-the-cli-1)
+		- [Using the REST API](#using-the-rest-api-1)
+		- [Using mdl as a library in a Go application](#using-mdl-as-a-library-in-a-go-application-1)
+		- [Coinhours](#coinhours)
+			- [REST API](#rest-api)
+			- [CLI](#cli)
+	- [Verifying addresses](#verifying-addresses)
+		- [Using the CLI](#using-the-cli-2)
+		- [Using the REST API](#using-the-rest-api-2)
+		- [Using mdl as a library in a Go application](#using-mdl-as-a-library-in-a-go-application-2)
+		- [Using mdl as a library in other applications](#using-mdl-as-a-library-in-other-applications)
+	- [Checking MDL node connections](#checking-mdl-node-connections)
+		- [Using the CLI](#using-the-cli-3)
+		- [Using the REST API](#using-the-rest-api-3)
+		- [Using mdl as a library in a Go application](#using-mdl-as-a-library-in-a-go-application-3)
+	- [Checking MDL node status](#checking-mdl-node-status)
+		- [Using the CLI](#using-the-cli-4)
+		- [Using the REST API](#using-the-rest-api-4)
+		- [Using mdl as a library in a Go application](#using-mdl-as-a-library-in-a-go-application-4)
 
 <!-- /MarkdownTOC -->
 
+## Running the mdl node
+
+For integrations, the mdl node should be run from source with `./run-daemon.sh`. This requires go1.10+ to be installed.
 ## Running the mdl node
 
 For integrations, the mdl node should be run from source with `./run-daemon.sh`. This requires go1.10+ to be installed.

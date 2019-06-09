@@ -20,7 +20,7 @@ import (
 
 var (
 	// Version of the node. Can be set by -ldflags
-	Version = "0.25.1"
+	Version = "0.26.0"
 	// Commit ID. Can be set by -ldflags
 	Commit = ""
 	// Branch name. Can be set by -ldflags
@@ -72,13 +72,6 @@ var (
 		Port:                           7800,
 		WebInterfacePort:               8320,
 		DataDirectory:                  "$HOME/.mdl",
-		UnconfirmedBurnFactor:          2,
-		UnconfirmedMaxTransactionSize:  32768,
-		UnconfirmedMaxDropletPrecision: 3,
-		CreateBlockBurnFactor:          2,
-		CreateBlockMaxTransactionSize:  32768,
-		CreateBlockMaxDropletPrecision: 3,
-		MaxBlockSize:                   32768,
 	})
 
 	parseFlags = true

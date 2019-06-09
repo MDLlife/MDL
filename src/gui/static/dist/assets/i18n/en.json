@@ -11,6 +11,7 @@
     "error": "Error",
     "fetch-version": "Unable to fetch latest release version from Github",
     "incorrect-password": "Incorrect password",
+    "error-decrypting": "Error decrypting the wallet",
     "api-disabled": "API disabled",
     "no-wallet": "Wallet does not exist",
     "no-outputs": "No unspent outputs",
@@ -18,6 +19,7 @@
   },
 
   "title": {
+    "language": "Select Language",
     "wallets": "Wallets",
     "send": "Send",
     "history": "History",
@@ -31,7 +33,10 @@
     "explorer": "MDL Explorer",
     "seed": "Wallet Seed",
     "qrcode": "QR Code",
-    "reset": "Reset Password"
+    "reset": "Reset Password",
+    "exchange": "Exchange",
+    "select-address": "Select Address",
+    "order-history": "Order history"
   },
 
   "header": {
@@ -61,31 +66,25 @@
   },
 
   "buy": {
-    "deposit-address": "Choose an address to generate a Selected Coin deposit link for:",
+    "deposit-address": "Choose an address to generate a BTC deposit link for:",
     "select-address": "Select address",
     "generate": "Generate",
     "deposit-location": "Deposit Location",
-    "deposit-location-desc": "Choose a wallet where you'd like us to deposit your MDL after we receive your Selected Coin.",
+    "deposit-location-desc": "Choose a wallet where you'd like us to deposit your MDL after we receive your Bitcoin.",
     "make-choice": "Make a choice",
-    "wallets-desc": "Each time a new wallet and address are selected, a new Selected Coin address is generated. A single MDL address can have up to 5 Selected Coin addresses assigned to it.",
-    "send": "Send Selected Coin",
-    "send-desc": "Send Selected Coin to the address below. Once received, we will deposit the MDL to a new address in the wallet selected above at the current rate of {{ rate }} MDL/Selected Coin.",
-    "fraction-warning": "",
+    "wallets-desc": "Each time a new wallet and address are selected, a new BTC address is generated. A single MDL address can have up to 5 BTC addresses assigned to it.",
+    "send": "Send Bitcoin",
+    "send-desc": "Send Bitcoin to the address below. Once received, we will deposit the MDL to a new address in the wallet selected above at the current rate of {{ rate }} MDL/BTC.",
+    "fraction-warning": "Only send multiple of the MDL/BTC rate! MDL is sent in whole number; fractional MDL is not sent!",
     "receive": "Receive MDL",
-    "receive-desc": "After receiving your Selected Coin, we'll send you your MDL. Depending on the blockchain and its status, it may take anywhere between 20 minutes or a few hours to receive your MDL. MDL and all fiber coins are showing great performance, check it out.",
+    "receive-desc": "After receiving your Bitcoin, we'll send you your MDL. It may take anywhere between 20 minutes and an hour to receive your MDL.",
     "status-button": "Status:",
     "check-status-button": "Check Status",
-    "new-order-button": "New Order",
-    "refresh": "Refresh",
-    "available-now": "Available Now:",
-    "choose-preference": "Choose your preferred payment method. Please be aware that some methods can temporarily be disabled.",
-    "choose": "Please choose your favourite crypto ;)",
-    "send-coin":"Send",
-    "send-coin-text-1": "to the address below. After enough confirmations on the blockchain, you will receive MDL tokens to the wallet selected above at the current rate of"
+    "new-order-button": "New Order"
   },
 
   "wizard": {
-    "wallet-desc": "If you don't have an MDL wallet, use the generated seed to create a new one. If you already have a wallet, toggle over to \"Load Wallet\" and enter your seed.",
+    "wallet-desc": "If you don't have a MDL wallet, use the generated seed to create a new one. If you already have a wallet, toggle over to \"Load Wallet\" and enter your seed.",
     "encrypt-desc": "Increase security of your wallet by encrypting it. By entering a password below, your wallet will be encrypted. Only those with the password will be able access the wallet and remove funds.",
     "hardware-wallet-link": "Using a hardware wallet?",
     "finish-button": "Finish",
@@ -119,6 +118,7 @@
     "delete-confirmation": "WARNING: The wallet \"{{ name }}\" will be removed from the list. To add it again, you will have to reconnect the device and open the hardware wallet options (by pressing the \"Hardware Wallet\" button below the wallets list). Do you want to continue?",
     "delete-confirmation-check": "Yeah, I want to delete the wallet.",
     "max-hardware-wallets-error": "You have already reached the max number of addresses that can be added to the hardware wallet.",
+    "add-many-confirmation": "WARNING: If you add too many addresses without using the previous ones or if you use the last ones and not the first ones, some addresses may not be recovered automatically if you try to restore the wallet using the seed (you will have to add them manually). Do you want to continue?",
 
     "new": {
       "create-title": "Create Wallet",
@@ -157,10 +157,12 @@
     },
 
     "address": {
+      "show": "Press to show",
       "copy": "Copy",
       "copy-address": "Copy address",
       "copied": "Copied!",
-      "outputs": "Unspent Outputs",
+      "confirm": "Confirm address",
+      "outputs": "Unspent outputs",
       "history": "History"
     }
   },
@@ -173,7 +175,16 @@
     "notes-label": "Notes",
     "wallet-label": "Wallet",
     "addresses-label": "Addresses",
-    "addresses-help": "Wallet addresses to send from",
+    "invalid-amount": "Please enter a valid amount",
+    "addresses-help": "Limit the addresses from where the coins and hours could be sent",
+    "all-addresses": "All the addresses of the selected wallet",
+    "outputs-label": "Unspent outputs",
+    "outputs-help": "Limit the unspent outputs from where the coins and hours could be sent. Only the outputs from the selected addresses are shown",
+    "all-outputs": "All the outputs of the selected addresses",
+    "available-msg-part1": "With your current selection you can send up to",
+    "available-msg-part2": "and",
+    "available-msg-part3": "(at least",
+    "available-msg-part4": "must be used for the transaction fee).",
     "change-address-label": "Custom change address",
     "change-address-select": "Select",
     "change-address-help": "Address to receive change. If it's not provided, it will be chosen automatically. Click on the \"Select\" link to choose an address from one of your wallets",
@@ -211,6 +222,7 @@
     "hours": "Hours",
     "id": "Tx ID",
     "show-more": "Show more",
+    "hours-moved": "moved",
     "hours-sent": "sent",
     "hours-received": "received",
     "hours-burned": "burned",
@@ -270,6 +282,8 @@
 
   "history": {
     "tx-detail": "Transaction Detail",
+    "moving": "Internally moving",
+    "moved": "Internally moved",
     "sending": "Sending",
     "sent": "Sent",
     "received": "Received",
@@ -286,7 +300,7 @@
   "teller": {
     "done": "Completed",
     "waiting-confirm": "Waiting for confirmation",
-    "waiting-deposit": "Waiting for deposit",
+    "waiting-deposit": "Waiting for Bitcoin deposit",
     "waiting-send": "Waiting to send MDL",
     "unknown": "Unknown"
   },
@@ -324,6 +338,10 @@
       "completed": "Operation completed successfully.",
       "refused": "The operation failed or was canceled."
     },
+    "errors": {
+      "too-many-inputs": "The transaction has too many inputs and can not be processed. Please contact technical support.",
+      "too-many-outputs": "The transaction has too many outputs and can not be processed. Please contact technical support."
+    },
     "security-warning" : {
       "title": "Security warning",
       "text": "The last time this hardware wallet was connected, one or more security warnings were found. We recommend you to open the hardware wallet options (by pressing the \"Hardware Wallet\" button below the wallets list) while the device is connected and solve the security problems before continuing.",
@@ -346,17 +364,23 @@
       "restore-backup": "Restore backup",
       "create-backup": "Create a backup",
       "wipe": "Wipe the device",
+      "confirm-seed": "Confirm seed",
       "create-pin": "Create PIN code",
       "change-pin": "Change PIN code",
       "forgotten-pin1": "If you can not access the wallet because you have forgotten the PIN, you can wipe the hardware wallet and then restore it with the seed by clicking",
       "forgotten-pin2": "here."
     },
     "generate-seed" : {
+      "text": "Before proceeding, you can select the number of words you want the seed to have. The seed is a list of words that can be used to recover access to the coins in case of problems. Both values are safe, so if you do not have a special reason for selecting one or the other, you can leave the default value.",
       "configuring": "Configuring..."
     },
     "restore-seed" : {
+      "text": "Before proceeding, please select the number of words that the seed you want to recover has.",
+      "check-text": "You can use this option to enter a seed and check if it is equal to the one in the hardware wallet. Before start, select the number of words the seed you want to check has.",
+      "warning" : "WARNING: to avoid potential problems, use only seeds created with a hardware wallet from the same brand/model.",
       "error-wrong-word": "Error: The retyped word does not match the one requested by the hardware wallet.",
-      "error-invalid-seed": "Error: The seed is not valid. Please be sure to enter the correct words in the correct order."
+      "error-invalid-seed": "Error: The seed is not valid. Please be sure to enter the correct words in the correct order.",
+      "error-wrong-seed": "Error: The seed is valid but does not match the one in the device."
     },
     "added" : {
       "title": "New Hardware Wallet",
@@ -390,7 +414,7 @@
       "title-change-new": "Enter the new PIN",
       "title-change-confirm": "Confirm the new PIN",
       "instructions": "The PIN layout is displayed on the hardware wallet screen.",
-      "instructions-tx": "Enter the PIN to confirm and sign the transaction ({{ current }} of {{ total }} required signatures).",
+      "instructions-tx": "Enter the PIN to confirm and sign the transaction.",
       "instructions-change": "Please enter a hard-to-guess PIN of between 4 and 8 numbers.",
       "help": "Need help?"
     },
@@ -399,6 +423,83 @@
       "part1": "When it is necessary to enter the PIN to continue, the hardware wallet screen will display a matrix of 9 boxes with numbers in random order (the order changes each time) and you will be asked to enter the PIN in the software wallet using a matrix of 9 buttons that simply show the symbol #.",
       "part2": "To enter the PIN, look at the position of the PIN numbers in numbers matrix on the screen of the hardware wallet and press the corresponding buttons in the software wallet. For example, if the PIN is \"23\" and the number 2 is in the upper left, number 3 in the middle of the hardware wallet numbers matrix, press the upper left and middle button in that order in the software wallet.",
       "part3": "If you wish, you can also use the numpad on your keyboard to enter the PIN. However, as in the previous example, if the PIN is \"23\", you can not simply type \"23\" with the numpad, but you will have to press the keys that are in the position where the numbers 2 and 3 are shown on the screen of the hardware wallet."
+    },
+    "create-tx" : {
+      "title": "Create transaction"
+    },
+    "confirm-address" : {
+      "title": "Confirm address",
+      "instructions": "Please confirm on the hardware wallet if the address is:",
+      "short-confirmation": "Address confirmed.",
+      "confirmation": "Address confirmed. For security, you can re-show the address in the hardware wallet using the \"Confirm address\" option, in the menu that you can display by pressing the button at the right of the address balance."
+    }
+  },
+
+  "time-from-now": {
+    "few-seconds": "a few seconds ago",
+    "minute": "one minute ago",
+    "minutes": "{{time}} minutes ago",
+    "hour": "one hour ago",
+    "hours": "{{time}} hours ago",
+    "day": "one day ago",
+    "days": "{{time}} days ago"
+  },
+
+  "exchange": {
+    "you-send": "You send",
+    "you-get": "You get (approx.)",
+    "to-address": "To {{coin}} address",
+    "price": "Exchange rate",
+    "time-15": "Exchange time",
+    "exchange-button": "Exchange",
+    "min-amount": "Minimum amount:",
+    "max-amount": "Maximum amount:",
+    "agree-1": "I agree with",
+    "agree-2": "Terms of Use",
+    "agree-3": "and",
+    "agree-4": "Privacy Policy",
+    "powered-by": "Powered by",
+    "need-help": "Need help?",
+    "support-portal": "Support portal",
+    "history": "Order history",
+    "order-not-found": "Order not found",
+    "status": "Status",
+    "exchanging": "Exchanging {{from}} for {{to}}",
+    "select": "Select",
+    "offline": "Exchange is temporarily offline",
+    "problem-connecting": "Unable to connect with the service. Please check your Internet connection and try again later.",
+    "invalid-address": "Invalid address.",
+    "statuses": {
+      "user-waiting": "Waiting for deposit. Please send {{amount}} {{from}} to the exchange address shown below",
+      "user-waiting-info": "The system is waiting for you to make the deposit into the exchange address. The exchange process will start after the deposit is detected and confirmed in the blockchain. If you have already made the deposit, it should be detected shortly.",
+      "market-waiting-confirmations": "Waiting for transaction confirmations",
+      "market-waiting-confirmations-info": "The deposit has already been detected and the system is waiting for it to be confirmed in the blockchain.",
+      "market-confirmed": "Transaction accepted",
+      "market-confirmed-info": "The transaction has already been confirmed in the blockchain. Preparing to make the exchange soon.",
+      "market-exchanged": "Traded {{from}} for {{to}}",
+      "market-exchanged-info": "The exchange has been made. The funds will be transferred to your address in a moment.",
+      "market-withdraw-waiting": "Sending {{to}} to your address",
+      "market-withdraw-waiting-info": "The process for sending the coins to your address has been initiated.",
+      "complete": "Exchange completed!",
+      "complete-info": "The funds have been successfully sent to your address.",
+      "error": "Error occurred",
+      "error-info": "There was an error in the operation, you can find more information below. If you need help, please save all the operation data shown below and contact technical support using the link in the lower right part of this page."
+    },
+    "history-window": {
+      "address": "Address",
+      "date": "Date"
+    },
+    "details": {
+      "exchange-addr": "Exchange address",
+      "exchange-addr-tag": "Payment ID or Destination Tag which must be used for the transaction",
+      "tx-id": "Transaction ID",
+      "order-id": "Order ID",
+      "initial-price": "Initial exchange rate",
+      "error-msg": "Error message",
+      "details": "Details",
+      "start-date": "Start date",
+      "back": "Back",
+      "back-alert": "The operation is still in progress. Do you really want to return to the form? You can see the progress of this operation again by pressing the \"Order history\" button"
     }
   }
 }
