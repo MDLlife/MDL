@@ -113,8 +113,8 @@ test-386: ## Run tests for Skycoin with GOARCH=386
 	GOARCH=386 COIN=$(COIN) go test ./src/... -timeout=5m
 
 test-amd64: ## Run tests for MDL with GOARCH=amd64
-	GOARCH=amd64 go test ./cmd/... -timeout=5m
-	GOARCH=amd64 go test ./src/... -timeout=5m
+	GOARCH=amd64 COIN=$(COIN) go test ./cmd/... -timeout=5m
+	GOARCH=amd64 COIN=$(COIN) go test ./src/... -timeout=5m
 
 configure-build:
 	mkdir -p $(BUILD_DIR)/usr/tmp $(BUILD_DIR)/usr/lib $(BUILD_DIR)/usr/include
@@ -174,11 +174,11 @@ check: lint clean-coverage test test-386 \
 	integration-test-stable integration-test-stable-disable-csrf \
 	integration-test-disable-wallet-api integration-test-disable-seed-api \
 	integration-test-enable-seed-api integration-test-disable-gui \
-	integration-test-auth integration-test-db-no-unconfirmed check-newcoin ## Run tests and linters
+	integration-test-auth integration-test-db-no-unconfirmed ## Run tests and linters
 
 
 integration-test-stable: ## Run stable integration tests
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -c -x -n enable-csrf-header-check
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -c -x -n enable-csrf-header-check -uintegration-test-stable
 
 integration-test-stable-disable-header-check: ## Run stable integration tests with header check disabled
 	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -n disable-header-check

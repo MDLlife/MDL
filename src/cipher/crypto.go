@@ -25,7 +25,7 @@ import (
 	"time"
 
 	"github.com/MDLlife/MDL/src/cipher/ripemd160"
-	"github.com/MDLlife/MDL/src/cipher/secp256k1-go"
+	secp256k1 "github.com/MDLlife/MDL/src/cipher/secp256k1-go"
 )
 
 var (
