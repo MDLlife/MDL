@@ -10,9 +10,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/MDLlife/encodertest"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/MDLlife/encodertest"
+
 	"github.com/MDLlife/MDL/src/cipher/encoder"
 )
 

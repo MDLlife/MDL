@@ -108,9 +108,6 @@ test: ## Run tests for MDL
 	COIN=$(COIN) go test -coverpkg="github.com/MDLLife/MDL/..." -coverprofile=coverage/go-test-src.coverage.out -timeout=5m ./src/...
 
 
-test-386: ## Run tests for MDL with GOARCH=386
-	GOARCH=386 go test ./cmd/... -timeout=5m
-	GOARCH=386 go test ./src/... -timeout=5m
 test-386: ## Run tests for Skycoin with GOARCH=386
 	GOARCH=386 COIN=$(COIN) go test ./cmd/... -timeout=5m
 	GOARCH=386 COIN=$(COIN) go test ./src/... -timeout=5m
@@ -159,9 +156,6 @@ docs-libc:
 	moxygen -o $(LIBDOC_DIR)/API.md $(LIBDOC_DIR)/xml/
 
 docs: docs-libc
-test-amd64: ## Run tests for Skycoin with GOARCH=amd64
-	GOARCH=amd64 COIN=$(COIN) go test ./cmd/... -timeout=5m
-	GOARCH=amd64 COIN=$(COIN) go test ./src/... -timeout=5m
 
 
 lint: ## Run linters. Use make install-linters first.
@@ -256,10 +250,9 @@ install-linters: ## Install linters
 	# However, they suggest `curl ... | bash` which we should not do
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 
-format:  # Formats the code. Must have goimports installed (use make install-linters).
-	$(foreach pkg,$(PACKAGES),\
-		goimports -w -local github.com/MDLlife/MDL $(pkg);\
-		)
+format: ## Formats the code. Must have goimports installed (use make install-linters).
+	goimports -w -local github.com/MDLlife/mdl ./cmd
+	goimports -w -local github.com/MDLlife/mdl ./src
 
 install-deps-ui:  ## Install the UI dependencies
 	cd $(GUI_STATIC_DIR) && npm install

@@ -3,9 +3,10 @@ package visor
 import (
 	"errors"
 	"fmt"
-	"github.com/MDLlife/MDL/src/util/mathutil"
 	"math"
 	"testing"
+
+	"github.com/MDLlife/MDL/src/util/mathutil"
 
 	"github.com/stretchr/testify/require"
 

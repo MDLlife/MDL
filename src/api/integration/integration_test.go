@@ -125,16 +125,16 @@ func useCSRF(t *testing.T) bool {
 	return useCSRF
 }
 
-func doHeaderCheck(t *testing.T) bool {
-	x := os.Getenv("HEADER_CHECK")
-	if x == "" {
-		return false
-	}
-
-	doHeaderCheck, err := strconv.ParseBool(x)
-	require.NoError(t, err)
-	return doHeaderCheck
-}
+//func doHeaderCheck(t *testing.T) bool {
+//	x := os.Getenv("HEADER_CHECK")
+//	if x == "" {
+//		return false
+//	}
+//
+//	doHeaderCheck, err := strconv.ParseBool(x)
+//	require.NoError(t, err)
+//	return doHeaderCheck
+//}
 
 func doStable(t *testing.T) bool {
 	if enabled() && mode(t) == testModeStable {
@@ -231,7 +231,7 @@ func loadGoldenFile(t *testing.T, filename string, testData TestData) {
 	}
 
 	f, err := os.Open(goldenFile)
-	require.NoError(t, err,  "loadGoldenFile failed", goldenFile)
+	require.NoError(t, err, "loadGoldenFile failed", goldenFile)
 	defer f.Close()
 
 	d := json.NewDecoder(f)

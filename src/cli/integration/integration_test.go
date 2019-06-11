@@ -2136,7 +2136,7 @@ func TestLiveSend(t *testing.T) {
 				return []string{"send", "-a", w.Entries[2].Address.String(),
 					w.Entries[1].Address.String(), "1"}
 			},
-			errMsg:  []byte("See 'mdl-cli send --help'\nError: Transaction has zero coinhour fee"),
+			errMsg:   []byte("See 'mdl-cli send --help'\nError: Transaction has zero coinhour fee"),
 			checkTxn: func(t *testing.T, txid string) {},
 		},
 	}

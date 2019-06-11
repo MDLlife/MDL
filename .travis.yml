@@ -60,7 +60,7 @@ services:
   - xvfb
 
 script:
-  - make check-newcoin
+#  - make check-newcoin
   - make lint
   - make test-386
   - make test-amd64

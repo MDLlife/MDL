@@ -153,9 +153,9 @@ linters:
     - unused
     - ineffassign
     - typecheck
-    - gosec
+#    - gosec
     - megacheck
-    - misspell
+#    - misspell
     - nakedret
     - depguard
   enable-all: false
