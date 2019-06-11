@@ -65,6 +65,10 @@ STDC_FLAG = $(python -c "if tuple(map(int, '$(CC_VERSION)'.split('.'))) < (6,): 
 LIBC_LIBS = -lcriterion
 LIBC_FLAGS = -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BUILDLIB_DIR) -L$(BUILD_DIR)/usr/lib
 
+COMMIT=$(shell git rev-parse HEAD)
+BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
+GOLDFLAGS="-X main.Commit=${COMMIT} -X main.Branch=${BRANCH}"
+
 # Platform specific checks
 OSNAME = $(TRAVIS_OS_NAME)
 
@@ -180,7 +184,7 @@ check: lint clean-coverage test test-386 \
 
 
 integration-test-stable: ## Run stable integration tests
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -c -n enable-csrf
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -c -x -n enable-csrf-header-check
 
 integration-test-stable-disable-header-check: ## Run stable integration tests with header check disabled
 	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -n disable-header-check
@@ -220,7 +224,7 @@ integration-test-auth: ## Run stable tests with HTTP Basic auth enabled
 
 integration-test-server:
 	rm -rf $(DATA_DIR);
-	go build -o /opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
+	go build -ldflags ${GOLDFLAGS} -o /opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
 	/opt/gocode/src/github.com/MDLlife/MDL/cmd/mdl/mdl.go;
 	/opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
 	-disable-networking=true \
@@ -233,7 +237,6 @@ integration-test-server:
 	-download-peerlist=false \
 	-db-path=$(PWD)/src/api/integration/testdata/blockchain-180.db \
 	-db-read-only=true \
-	-rpc-interface=true \
 	-enable-all-api-sets=true \
 	-launch-browser=false \
 	-data-dir=$(DATA_DIR) \

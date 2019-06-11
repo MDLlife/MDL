@@ -25,7 +25,7 @@ import (
 	"time"
 
 	"github.com/MDLlife/MDL/src/cipher/ripemd160"
-	secp256k1 "github.com/MDLlife/MDL/src/cipher/secp256k1-go"
+	"github.com/MDLlife/MDL/src/cipher/secp256k1-go"
 )
 
 var (
@@ -434,6 +434,7 @@ func VerifyPubKeySignedHash(pubkey PubKey, sig Sig, hash SHA256) error {
 		return ErrInvalidSigPubKeyRecovery
 	}
 	if pubkeyRec != pubkey {
+		//fmt.Println("pubkeyRec=", pubkeyRec.Hex(), " pubkey=", pubkey.Hex())
 		return ErrPubKeyRecoverMismatch
 	}
 	if secp256k1.VerifyPubkey(pubkey[:]) != 1 {

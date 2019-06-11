@@ -35,7 +35,7 @@ const (
 	defaultCoin       = "mdl"
 	defaultWalletName = "$COIN_cli" + walletExt
 	defaultWalletDir  = "$DATA_DIR/wallets"
-	defaultRPCAddress = "http://127.0.0.1:6420"
+	defaultRPCAddress = "http://127.0.0.1:8330"
 	defaultDataDir    = "$HOME/.$COIN/"
 )
 

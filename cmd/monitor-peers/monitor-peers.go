@@ -100,7 +100,7 @@ func (r Report) Append(addr string, state PeerState, introduction *daemon.Introd
 }
 
 const (
-	blockchainPubKey                 = "0328c576d3f420e7682058a981173a4b374c7cc5ff55bf394d3cf57059bbe6456a"
+	blockchainPubKey                 = "025d096499390a1924969f0991b1e0fd5f37c9ec54f7830f10fa8d911a51bb1e4b"
 	defaultConnectTimeout            = "1s"
 	defaultReadTimeout               = "1s"
 	defaultPeersFile                 = "peers.txt"

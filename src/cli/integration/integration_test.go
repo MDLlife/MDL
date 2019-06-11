@@ -441,7 +441,7 @@ func doLiveOrStable(t *testing.T) bool {
 func rpcAddress() string {
 	rpcAddr := os.Getenv("RPC_ADDR")
 	if rpcAddr == "" {
-		rpcAddr = "http://127.0.0.1:6420"
+		rpcAddr = "http://127.0.0.1:8330"
 	}
 
 	return rpcAddr
@@ -2206,7 +2206,7 @@ func TestLiveSendNotEnoughDecimals(t *testing.T) {
 		require.NoError(t, err)
 		name := fmt.Sprintf("send %v", v)
 		t.Run(name, func(t *testing.T) {
-			output, err := exec.Command(binaryPath, "send", w.Entries[0].Address.String(), v).CombinedOutput()
+			output, err := execCommandCombinedOutput("send", w.Entries[0].Address.String(), v)
 			require.Error(t, err)
 			require.Equal(t, err.Error(), "exit status 1")
 			output = bytes.TrimRight(output, "\n")

@@ -80,12 +80,13 @@ echo "starting $COIN node in background with http listener on $HOST"
             -db-path=./src/api/integration/testdata/blockchain-180.db \
             -web-interface-port=$PORT \
             -download-peerlist=false \
+            -db-path=./src/api/integration/testdata/blockchain-180.db \
             -db-read-only=true \
             -launch-browser=false \
             -data-dir="$DATA_DIR" \
             -wallet-dir="$WALLET_DIR" \
             -enable-all-api-sets=true \
-            -enable-api-sets=DEPRECATED_WALLET_SPEND,INSECURE_WALLET_SEED \
+            -enable-api-sets=INSECURE_WALLET_SEED \
             -enable-gui=false \
             -test.run "^TestRunMain$" \
             -test.coverprofile="${COVERAGEFILE}" \

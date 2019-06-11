@@ -103,6 +103,7 @@ echo "starting $COIN node in background with http listener on $HOST"
             -db-path=./src/api/integration/testdata/$DB_FILE \
             -web-interface-port=$PORT \
             -download-peerlist=false \
+            -db-path=./src/api/integration/testdata/$DB_FILE \
             -db-read-only=true \
             -launch-browser=false \
             -data-dir="$DATA_DIR" \
