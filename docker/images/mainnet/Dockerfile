@@ -62,7 +62,7 @@ LABEL "org.label-schema.name"="MDL" \
       "org.label-schema.vcs-ref"=$SCOMMIT \
       "org.label-schema.version"=$STAG \
       "org.label-schema.usage"="https://github.com/MDLlife/MDL/blob/"$SCOMMIT"/docker/images/mainnet/README.md" \
-      "org.label-schema.docker.cmd"="docker volume create mdl-data; docker volume create mdl-wallet; docker run -d -v mdl-data:/data/.mdl -v mdl-wallet:/wallet -p 6000:6000 -p 6420:6420 --name mdl-node-stable MDLlife/MDL"
+      "org.label-schema.docker.cmd"="docker volume create mdl-data; docker volume create mdl-wallet; docker run -d -v mdl-data:/data/.mdl -v mdl-wallet:/wallet -p 6000:6000 -p 8320:8320 --name mdl-node-stable MDLlife/MDL"
 
 ENV COIN="mdl"
 ENV RPC_ADDR="http://0.0.0.0:8330" \

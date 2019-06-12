@@ -8,4 +8,9 @@ export const environment = {
   production: false,
   tellerUrl: 'https://ito.mdl.wtf/api/',
 //  tellerUrl: 'http://127.0.0.1:7071/api/',
+  swaplab: {
+    apiKey: '', // if set to null, integration will be disabled
+    activateTestMode: true,
+    endStatusInError: false,
+  },
 };

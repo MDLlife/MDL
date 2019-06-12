@@ -1,43 +1,43 @@
 {
 	"richlist": [
 		{
-			"address": "3iFGBKapAWWzbiGFSr5ScbhrEPm6Esyvia",
-			"coins": "1000000.000000",
+			"address": "2kvLEyXwAYvHfJuFCkjnYNRTUfHPyWgVwKt",
+			"coins": "63083.000000",
 			"locked": false
 		},
 		{
-			"address": "4CW2CPJEzxhn2PS4JoSLoWGL5QQ7dL2eji",
-			"coins": "1000000.000000",
+			"address": "LzniV6G4nVVvRBNo7NcCUvAz1Tzo5MajqZ",
+			"coins": "38105.000000",
 			"locked": false
 		},
 		{
-			"address": "4Ebf4PkG9QEnQTm4MVvaZvJV6Y9av3jhgb",
-			"coins": "1000000.000000",
+			"address": "2fGC7kwAM9yZyEF1QqBqp8uo9RUsF6ENGJF",
+			"coins": "27045.000000",
 			"locked": false
 		},
 		{
-			"address": "5B98bU1nsedGJBdRD5wLtq7Z8t8ZXio8u5",
-			"coins": "1000000.000000",
+			"address": "bNQHMc2nM8x2fssmyUp6QWY1ow6LzB7kZz",
+			"coins": "27000.000000",
 			"locked": false
 		},
 		{
-			"address": "6NSJKsPxmqipGAfFFhUKbkopjrvEESTX3j",
-			"coins": "1000000.000000",
+			"address": "2JJ8pgq8EDAnrzf9xxBJapE2qkYLefW4uF8",
+			"coins": "26400.000000",
 			"locked": false
 		},
 		{
-			"address": "7Uf5xJ3GkiEKaLxC2WmJ1t6SeekJeBdJfu",
-			"coins": "1000000.000000",
+			"address": "qxmeHkwgAMfwXyaQrwv9jq3qt228xMuoT5",
+			"coins": "22100.000000",
 			"locked": false
 		},
 		{
-			"address": "8yf8PAQqU2cDj8Yzgz3LgBEyDqjvCh2xR7",
-			"coins": "1000000.000000",
+			"address": "wLhHnBXzdhzFcuWRmfLCG5DTnPVEtHdhzB",
+			"coins": "22000.000000",
 			"locked": false
 		},
 		{
-			"address": "9TC4RGs6AtFUsbcVWnSoCdoCpSfM66ALAc",
-			"coins": "1000000.000000",
+			"address": "G5XZCdcjcnKqPkeLjZShMz112avsgSo8EW",
+			"coins": "21500.000000",
 			"locked": false
 		}
 	]

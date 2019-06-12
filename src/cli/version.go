@@ -13,7 +13,7 @@ func versionCmd() *cobra.Command {
 		Short:        "List the current version of MDL components",
 		Args:         cobra.NoArgs,
 		SilenceUsage: true,
-		RunE: func(c *cobra.Command, args []string) error {
+		RunE: func(c *cobra.Command, _ []string) error {
 			var ver = struct {
 				MDL    string `json:"mdl"`
 				Cli    string `json:"cli"`

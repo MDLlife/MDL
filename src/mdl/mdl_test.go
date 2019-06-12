@@ -95,7 +95,6 @@ func buildBinary(t *testing.T, version string) (string, func()) {
 		fmt.Sprintf("-coverpkg=%s/...", coverpkgName),
 		fmt.Sprintf("../../cmd/%s/", coin),
 	}
-	fmt.Println(args)
 	cmd := exec.Command("go", args...)
 
 	stdout, err := cmd.StdoutPipe()
@@ -139,27 +138,27 @@ func TestDBVerifyLogic(t *testing.T) {
 			appVersion:   "0.25.0",
 			shouldVerify: true,
 		},
-		//{
-		//	name:         "db version 0.24.1, app version 0.24.1",
-		//	dbFile:       "version-0.24.1.db",
-		//	dbVersion:    "0.24.1",
-		//	appVersion:   "0.24.1",
-		//	shouldVerify: false,
-		//},
-		//{
-		//	name:         "db version 0.25.0, app version 0.25.0",
-		//	dbFile:       "version-0.25.0.db",
-		//	dbVersion:    "0.25.0",
-		//	appVersion:   "0.25.0",
-		//	shouldVerify: false,
-		//},
-		//{
-		//	name:         "db version 0.25.0, app version 0.26.0",
-		//	dbFile:       "version-0.25.0.db",
-		//	dbVersion:    "0.25.0",
-		//	appVersion:   "0.26.0",
-		//	shouldVerify: false,
-		//},
+		{
+			name:         "db version 0.24.1, app version 0.24.1",
+			dbFile:       "version-0.24.1.db",
+			dbVersion:    "0.24.1",
+			appVersion:   "0.24.1",
+			shouldVerify: false,
+		},
+		{
+			name:         "db version 0.25.0, app version 0.25.0",
+			dbFile:       "version-0.25.0.db",
+			dbVersion:    "0.25.0",
+			appVersion:   "0.25.0",
+			shouldVerify: false,
+		},
+		{
+			name:         "db version 0.25.0, app version 0.26.0",
+			dbFile:       "version-0.25.0.db",
+			dbVersion:    "0.25.0",
+			appVersion:   "0.26.0",
+			shouldVerify: false,
+		},
 		{
 			name:         "db version 0.25.0, app version 0.26.0, force verify",
 			dbFile:       "version-0.25.0.db",
@@ -243,7 +242,6 @@ func TestDBVerifyLogic(t *testing.T) {
 				fmt.Sprintf("-test.coverprofile=%s", coverageFile),
 			}, tc.args...)
 
-			fmt.Println(args)
 			cmd := exec.Command(binaryPath, args...)
 
 			stdout, err := cmd.StdoutPipe()
@@ -269,7 +267,6 @@ func TestDBVerifyLogic(t *testing.T) {
 			foundErrMsg := false
 			for scanner.Scan() {
 				x := scanner.Bytes()
-				fmt.Println(string(x))
 
 				if tc.err != "" && bytes.Contains(x, []byte(tc.err)) {
 					foundErrMsg = true

@@ -9,10 +9,10 @@ import (
 func TestDistributionAddressArrays(t *testing.T) {
 	require.Len(t, GetDistributionAddresses(), 100)
 
-	// At the time of this writing, there should be 56 addresses in the
-	// unlocked pool and 44 in the locked pool.
-	require.Len(t, GetUnlockedDistributionAddresses(), 56)
-	require.Len(t, GetLockedDistributionAddresses(), 44)
+	// At the time of this writing, there should be 25 addresses in the
+	// unlocked pool and 75 in the locked pool.
+	require.Len(t, GetUnlockedDistributionAddresses(), 25)
+	require.Len(t, GetLockedDistributionAddresses(), 75)
 
 	all := GetDistributionAddresses()
 	allMap := make(map[string]struct{})

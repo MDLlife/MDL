@@ -41,14 +41,14 @@ func TestGetBlockchainMetadata(t *testing.T) {
 			err:    "405 Method Not Allowed",
 		},
 		{
-			name:                     "500 error",
+			name:                     "500 - GetBlockchainMetadata error",
 			method:                   http.MethodGet,
 			status:                   http.StatusInternalServerError,
 			err:                      "500 Internal Server Error - gateway.GetBlockchainMetadata failed: GetBlockchainMetadata error",
 			getBlockchainMetadataErr: errors.New("GetBlockchainMetadata error"),
 		},
 		{
-			name:   "500 nil visor.BlockchainMetadata",
+			name:   "500 - nil visor.BlockchainMetadata",
 			method: http.MethodGet,
 			status: http.StatusInternalServerError,
 			err:    "500 Internal Server Error - gateway.GetBlockchainMetadata metadata is nil",
@@ -91,7 +91,7 @@ func TestGetBlockchainMetadata(t *testing.T) {
 			cfg := defaultMuxConfig()
 			cfg.disableCSRF = false
 
-			handler := newServerMux(cfg, gateway, nil)
+			handler := newServerMux(cfg, gateway)
 			handler.ServeHTTP(rr, req)
 
 			status := rr.Code
@@ -119,8 +119,9 @@ func TestGetBlockchainProgress(t *testing.T) {
 		method                      string
 		status                      int
 		err                         string
+		headBkSeq                   uint64
+		headBkSeqErr                error
 		getBlockchainProgressResult *daemon.BlockchainProgress
-		getBlockchainProgressErr    error
 		result                      readable.BlockchainProgress
 	}{
 		{
@@ -129,23 +130,27 @@ func TestGetBlockchainProgress(t *testing.T) {
 			status: http.StatusMethodNotAllowed,
 			err:    "405 Method Not Allowed",
 		},
+
 		{
-			name:                     "500 - GetBlockchainProgress error",
-			method:                   http.MethodGet,
-			status:                   http.StatusInternalServerError,
-			err:                      "500 Internal Server Error - gateway.GetBlockchainProgress failed: GetBlockchainProgress error",
-			getBlockchainProgressErr: errors.New("GetBlockchainProgress error"),
+			name:         "500 - HeadBkSeq error",
+			method:       http.MethodGet,
+			status:       http.StatusInternalServerError,
+			err:          "500 Internal Server Error - gateway.HeadBkSeq failed: HeadBkSeq error",
+			headBkSeqErr: errors.New("HeadBkSeq error"),
 		},
+
 		{
 			name:   "500 - nil daemon.BlockchainProgress",
 			method: http.MethodGet,
 			status: http.StatusInternalServerError,
 			err:    "500 Internal Server Error - gateway.GetBlockchainProgress progress is nil",
 		},
+
 		{
-			name:   "200",
-			method: http.MethodGet,
-			status: http.StatusOK,
+			name:      "200",
+			method:    http.MethodGet,
+			status:    http.StatusOK,
+			headBkSeq: 99,
 			getBlockchainProgressResult: &daemon.BlockchainProgress{
 				Peers: []daemon.PeerBlockchainHeight{
 					{
@@ -180,7 +185,8 @@ func TestGetBlockchainProgress(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			gateway := &MockGatewayer{}
-			gateway.On("GetBlockchainProgress").Return(tc.getBlockchainProgressResult, tc.getBlockchainProgressErr)
+			gateway.On("HeadBkSeq").Return(tc.headBkSeq, true, tc.headBkSeqErr)
+			gateway.On("GetBlockchainProgress", tc.headBkSeq).Return(tc.getBlockchainProgressResult)
 
 			endpoint := "/api/v1/blockchain/progress"
 			req, err := http.NewRequest(tc.method, endpoint, nil)
@@ -193,7 +199,7 @@ func TestGetBlockchainProgress(t *testing.T) {
 			cfg := defaultMuxConfig()
 			cfg.disableCSRF = false
 
-			handler := newServerMux(cfg, gateway, nil)
+			handler := newServerMux(cfg, gateway)
 			handler.ServeHTTP(rr, req)
 
 			status := rr.Code
@@ -226,7 +232,8 @@ func makeBadBlock(t *testing.T) *coin.Block {
 			testutil.RandSHA256(t),
 		},
 	}
-	txn.PushOutput(genAddress, math.MaxInt64+1, 255)
+	err = txn.PushOutput(genAddress, math.MaxInt64+1, 255)
+	require.NoError(t, err)
 	b, err := coin.NewBlock(*preBlock, now, uxHash, coin.Transactions{txn}, func(t *coin.Transaction) (uint64, error) {
 		return 0, nil
 	})
@@ -565,7 +572,7 @@ func TestGetBlock(t *testing.T) {
 			cfg := defaultMuxConfig()
 			cfg.disableCSRF = false
 
-			handler := newServerMux(cfg, gateway, nil)
+			handler := newServerMux(cfg, gateway)
 			handler.ServeHTTP(rr, req)
 
 			status := rr.Code
@@ -816,7 +823,7 @@ func TestGetBlocks(t *testing.T) {
 			gatewayGetBlocksInRangeResult: []coin.SignedBlock{{}},
 			response: &readable.Blocks{
 				Blocks: []readable.Block{
-					{
+					readable.Block{
 						Head: readable.BlockHeader{
 							Hash:         "7b8ec8dd836b564f0c85ad088fc744de820345204e154bc1503e04e9d6fdd9f1",
 							PreviousHash: "0000000000000000000000000000000000000000000000000000000000000000",
@@ -848,7 +855,7 @@ func TestGetBlocks(t *testing.T) {
 			},
 			response: &readable.BlocksVerbose{
 				Blocks: []readable.BlockVerbose{
-					{
+					readable.BlockVerbose{
 						Head: readable.BlockHeader{
 							Hash:         "7b8ec8dd836b564f0c85ad088fc744de820345204e154bc1503e04e9d6fdd9f1",
 							PreviousHash: "0000000000000000000000000000000000000000000000000000000000000000",
@@ -874,7 +881,7 @@ func TestGetBlocks(t *testing.T) {
 			gatewayGetBlocksResult: []coin.SignedBlock{{}},
 			response: &readable.Blocks{
 				Blocks: []readable.Block{
-					{
+					readable.Block{
 						Head: readable.BlockHeader{
 							Hash:         "7b8ec8dd836b564f0c85ad088fc744de820345204e154bc1503e04e9d6fdd9f1",
 							PreviousHash: "0000000000000000000000000000000000000000000000000000000000000000",
@@ -904,7 +911,7 @@ func TestGetBlocks(t *testing.T) {
 			},
 			response: &readable.BlocksVerbose{
 				Blocks: []readable.BlockVerbose{
-					{
+					readable.BlockVerbose{
 						Head: readable.BlockHeader{
 							Hash:         "7b8ec8dd836b564f0c85ad088fc744de820345204e154bc1503e04e9d6fdd9f1",
 							PreviousHash: "0000000000000000000000000000000000000000000000000000000000000000",
@@ -930,7 +937,7 @@ func TestGetBlocks(t *testing.T) {
 			gatewayGetBlocksResult: []coin.SignedBlock{{}},
 			response: &readable.Blocks{
 				Blocks: []readable.Block{
-					{
+					readable.Block{
 						Head: readable.BlockHeader{
 							Hash:         "7b8ec8dd836b564f0c85ad088fc744de820345204e154bc1503e04e9d6fdd9f1",
 							PreviousHash: "0000000000000000000000000000000000000000000000000000000000000000",
@@ -993,7 +1000,7 @@ func TestGetBlocks(t *testing.T) {
 			setCSRFParameters(t, tokenValid, req)
 
 			rr := httptest.NewRecorder()
-			handler := newServerMux(defaultMuxConfig(), gateway, nil)
+			handler := newServerMux(defaultMuxConfig(), gateway)
 
 			handler.ServeHTTP(rr, req)
 
@@ -1114,7 +1121,7 @@ func TestGetLastBlocks(t *testing.T) {
 			gatewayGetLastBlocksResult: []coin.SignedBlock{{}},
 			response: &readable.Blocks{
 				Blocks: []readable.Block{
-					{
+					readable.Block{
 						Head: readable.BlockHeader{
 							Hash:         "7b8ec8dd836b564f0c85ad088fc744de820345204e154bc1503e04e9d6fdd9f1",
 							PreviousHash: "0000000000000000000000000000000000000000000000000000000000000000",
@@ -1144,7 +1151,7 @@ func TestGetLastBlocks(t *testing.T) {
 			},
 			response: &readable.BlocksVerbose{
 				Blocks: []readable.BlockVerbose{
-					{
+					readable.BlockVerbose{
 						Head: readable.BlockHeader{
 							Hash:         "7b8ec8dd836b564f0c85ad088fc744de820345204e154bc1503e04e9d6fdd9f1",
 							PreviousHash: "0000000000000000000000000000000000000000000000000000000000000000",
@@ -1187,7 +1194,7 @@ func TestGetLastBlocks(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 
-			handler := newServerMux(defaultMuxConfig(), gateway, nil)
+			handler := newServerMux(defaultMuxConfig(), gateway)
 
 			handler.ServeHTTP(rr, req)
 

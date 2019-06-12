@@ -1,6 +1,6 @@
 {
     "meta": {
-        "coin": "skycoin",
+        "coin": "mdl",
         "cryptoType": "scrypt-chacha20poly1305",
         "encrypted": "true",
         "filename": "integration-test-encrypted.wlt",

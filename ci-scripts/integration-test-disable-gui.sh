@@ -51,6 +51,10 @@ set -euxo pipefail
 CMDPKG=$(go list ./cmd/${COIN})
 COVERPKG=$(dirname $(dirname ${CMDPKG}))
 
+echo "checking if integration tests compile"
+go test ./src/api/integration/...
+go test ./src/cli/integration/...
+
 DATA_DIR=$(mktemp -d -t ${COIN}-data-dir.XXXXXX)
 WALLET_DIR="${DATA_DIR}/wallets"
 
@@ -76,12 +80,13 @@ echo "starting $COIN node in background with http listener on $HOST"
             -db-path=./src/api/integration/testdata/blockchain-180.db \
             -web-interface-port=$PORT \
             -download-peerlist=false \
+            -db-path=./src/api/integration/testdata/blockchain-180.db \
             -db-read-only=true \
             -launch-browser=false \
             -data-dir="$DATA_DIR" \
             -wallet-dir="$WALLET_DIR" \
             -enable-all-api-sets=true \
-            -enable-api-sets=DEPRECATED_WALLET_SPEND,INSECURE_WALLET_SEED \
+            -enable-api-sets=INSECURE_WALLET_SEED \
             -enable-gui=false \
             -test.run "^TestRunMain$" \
             -test.coverprofile="${COVERAGEFILE}" \

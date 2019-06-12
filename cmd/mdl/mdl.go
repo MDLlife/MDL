@@ -20,7 +20,7 @@ import (
 
 var (
 	// Version of the node. Can be set by -ldflags
-	Version = "0.25.1"
+	Version = "0.26.0"
 	// Commit ID. Can be set by -ldflags
 	Commit = ""
 	// Branch name. Can be set by -ldflags
@@ -51,34 +51,24 @@ var (
 
 	// DefaultConnections the default trust node addresses
 	DefaultConnections = []string{
-		//"208.110.84.122:7800",
-		//"69.90.132.231:7800",
-		//"64.34.218.31:7800",
 		"76.74.178.136:7800",
 		"68.183.177.154:7800",
 		"128.199.148.6:7800",
 	}
 
 	nodeConfig = mdl.NewNodeConfig(ConfigMode, mdl.NodeParameters{
-		CoinName:                       CoinName,
-		GenesisSignatureStr:            GenesisSignatureStr,
-		GenesisAddressStr:              GenesisAddressStr,
-		GenesisCoinVolume:              GenesisCoinVolume,
-		GenesisTimestamp:               GenesisTimestamp,
-		BlockchainPubkeyStr:            BlockchainPubkeyStr,
-		BlockchainSeckeyStr:            BlockchainSeckeyStr,
-		DefaultConnections:             DefaultConnections,
-		PeerListURL:                    "",
-		Port:                           7800,
-		WebInterfacePort:               8320,
-		DataDirectory:                  "$HOME/.mdl",
-		UnconfirmedBurnFactor:          2,
-		UnconfirmedMaxTransactionSize:  32768,
-		UnconfirmedMaxDropletPrecision: 3,
-		CreateBlockBurnFactor:          2,
-		CreateBlockMaxTransactionSize:  32768,
-		CreateBlockMaxDropletPrecision: 3,
-		MaxBlockSize:                   32768,
+		CoinName:            CoinName,
+		GenesisSignatureStr: GenesisSignatureStr,
+		GenesisAddressStr:   GenesisAddressStr,
+		GenesisCoinVolume:   GenesisCoinVolume,
+		GenesisTimestamp:    GenesisTimestamp,
+		BlockchainPubkeyStr: BlockchainPubkeyStr,
+		BlockchainSeckeyStr: BlockchainSeckeyStr,
+		DefaultConnections:  DefaultConnections,
+		PeerListURL:         "",
+		Port:                7800,
+		WebInterfacePort:    8320,
+		DataDirectory:       "$HOME/.mdl",
 	})
 
 	parseFlags = true
