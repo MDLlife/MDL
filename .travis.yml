@@ -71,7 +71,7 @@ script:
   # Disable wallet api test
   - make integration-test-disable-wallet-api
   # Disable seed api test
-  - make integration-test-disable-seed-api
+#  - make integration-test-disable-seed-api
   # Enable seed api test
   - make integration-test-enable-seed-api
   # Disable GUI test

@@ -8,16 +8,8 @@
 
 MDL is a token used in [MDL Talent Hub platform](https://mdl.live). It's based on [MDL](https://mdl.io)'s code base.
 
-MDL was written from scratch and designed over four years to realize the
-ideal of Bitcoin and represents the apex of cryptocurrency design.
-MDL is not designed to add features to Bitcoin,
-but rather improves Bitcoin by increasing simplicity,
-security and stripping out everything non-essential.
-MDL & MDL improve on Bitcoin in too many ways to be addressed here. Read their [website](https://mdl.life) and [blog](https://blog.mdl.net) instead.
+MDL & SKY improvements are far too many to be addressed here. Please read their [MDL website](https://mdl.life), [MDL blog](https://mdl.wtf) and [Skycoin Blog](https://www.skycoin.net/blog) instead.
 
-Some people have hyped the MDL Project as leading into "Bitcoin 3.0".
-The coin itself is not "Bitcoin 3.0",
-but is rather "Bitcoin 1.0". Bitcoin is a prototype crypto-coin.
 MDL was designed to be what Bitcoin would look like if it were built from
 scratch, to remedy the rough edges in the Bitcoin design.
 
@@ -34,9 +26,6 @@ scratch, to remedy the rough edges in the Bitcoin design.
 
 ## Links
 
-* [mdl.net](https://www.mdl.net)
-* [MDL Blog](https://www.mdl.net/blog)
-* [MDL Docs](https://www.mdl.net/docs)
 * [MDL Blockchain Explorer](https://explorer.mdl.net)
 * [MDL Development Telegram Channel](https://t.me/mdldev)
 * [MDL Github Wiki](https://github.com/MDLlife/MDL/wiki)

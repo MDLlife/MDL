@@ -178,7 +178,7 @@ check: lint clean-coverage test test-386 \
 
 
 integration-test-stable: ## Run stable integration tests
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -c -x -n enable-csrf-header-check -uintegration-test-stable
+	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -c -x -n enable-csrf-header-check
 
 integration-test-stable-disable-header-check: ## Run stable integration tests with header check disabled
 	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -n disable-header-check
