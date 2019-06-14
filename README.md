@@ -27,7 +27,7 @@ scratch, to remedy the rough edges in the Bitcoin design.
 ## Links
 
 * [MDL Blockchain Explorer](https://explorer.mdl.wtf)
-* [MDL Development Telegram Channel](https://t.me/MDLsupport)
+* [MDL Support Telegram Channel](https://t.me/MDLsupport)
 * [MDL Github Wiki](https://github.com/MDLlife/MDL/wiki)
 * [MDL Talent Hub](http://mdl.life)
 * [MDL Blog](https://mdl.wtf)
