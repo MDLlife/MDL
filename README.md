@@ -6,11 +6,11 @@
 [![GoDoc](https://godoc.org/github.com/MDLlife/MDL?status.svg)](https://godoc.org/github.com/MDLlife/MDL)
 [![Go Report Card](https://goreportcard.com/badge/github.com/MDLLife/MDL)](https://goreportcard.com/report/github.com/MDLLife/MDL)
 
-MDL is a token used in [MDL Talent Hub platform](https://mdl.live). It's based on [MDL](https://mdl.io)'s code base.
+MDL is a token used in [MDL Talent Hub platform](https://mdl.live). It's based on [Skycoin](https://skycoin.io)'s code base.
 
-MDL & SKY improvements are far too many to be addressed here. Please read their [MDL website](https://mdl.life), [MDL blog](https://mdl.wtf) and [Skycoin Blog](https://www.skycoin.net/blog) instead.
+MDL & SKY improvements are far too many to be addressed here. Please read [MDL website](https://mdl.life), [MDL blog](https://mdl.wtf) and [Skycoin Blog](https://www.skycoin.net/blog) instead.
 
-MDL was designed to be what Bitcoin would look like if it were built from
+MDL, following Skycoin's concepts, was designed to be what Bitcoin would look like if it were built from
 scratch, to remedy the rough edges in the Bitcoin design.
 
 - no duplicate coin-base outputs
