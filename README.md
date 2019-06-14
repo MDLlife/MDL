@@ -26,13 +26,12 @@ scratch, to remedy the rough edges in the Bitcoin design.
 
 ## Links
 
-* [MDL Blockchain Explorer](https://explorer.mdl.net)
-* [MDL Development Telegram Channel](https://t.me/mdldev)
+* [MDL Blockchain Explorer](https://explorer.mdl.wtf)
+* [MDL Development Telegram Channel](https://t.me/MDLsupport)
 * [MDL Github Wiki](https://github.com/MDLlife/MDL/wiki)
 * [MDL Talent Hub](http://mdl.life)
 * [MDL Blog](https://mdl.wtf)
 * [MDL The Platform](https://mdl.live)
-* [MDL Blockchain Explorer](https://explorer.mdl.wtf)
 * [MDL Community Telegram Channel](https://t.me/MDL_Talent_Hub)
 * [MDL Games & Tournaments Telegram Channel](https://t.me/mdlgamesandtournaments)
 
