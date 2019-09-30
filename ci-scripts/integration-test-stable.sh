@@ -130,7 +130,7 @@ if [[ -z $TEST || $TEST = "api" ]]; then
 
 MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE MDL_NODE_HOST=$HOST \
 	USE_CSRF=$USE_CSRF HEADER_CHECK=$HEADER_CHECK DB_NO_UNCONFIRMED=$DB_NO_UNCONFIRMED COIN=$COIN \
-    GOCACHE=off go test ./src/api/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
+    go test ./src/api/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
 
 API_FAIL=$?
 
@@ -140,7 +140,7 @@ if [[ -z $TEST  || $TEST = "cli" ]]; then
 
 MDL_INTEGRATION_TESTS=1 MDL_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR \
 	USE_CSRF=$USE_CSRF HEADER_CHECK=$HEADER_CHECK DB_NO_UNCONFIRMED=$DB_NO_UNCONFIRMED COIN=$COIN \
-    GOCACHE=off go test ./src/cli/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
+    go test ./src/cli/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
 
 CLI_FAIL=$?
 

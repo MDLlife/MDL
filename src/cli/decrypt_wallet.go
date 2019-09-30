@@ -5,9 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/MDLlife/MDL/src/wallet"
-)
 
-import (
 	gcli "github.com/spf13/cobra"
 )
 
