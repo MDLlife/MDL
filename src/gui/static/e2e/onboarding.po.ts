@@ -64,6 +64,10 @@ export class OnboardingCreatePage {
     const seedValidationCheckBox = element(by.css('.-check'));
     seedValidationCheckBox.click();
 
+    browser.sleep(1000);
+    const seedValidationCheckBox = element(by.css('.-check'));
+    seedValidationCheckBox.click();
+
     return btnCreate.isEnabled().then(status => {
       if (status) {
         btnCreate.click();
@@ -88,6 +92,10 @@ export class OnboardingCreatePage {
     label.sendKeys('Test wallet');
     seed.clear();
     seed.sendKeys('test test');
+    seedValidationCheckBox.click();
+
+    browser.sleep(1000);
+    const seedValidationCheckBox = element(by.css('.-check'));
     seedValidationCheckBox.click();
 
     browser.sleep(1000);
