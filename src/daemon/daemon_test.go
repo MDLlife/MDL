@@ -240,7 +240,7 @@ func TestCheckBroadcastTxnRecipients(t *testing.T) {
 		Mirror:          7777,
 		ListenPort:      9999,
 		ProtocolVersion: 2,
-		UserAgent:       useragent.MustParse("mdl:0.25.1"),
+		UserAgent:       useragent.MustParse("skycoin:0.25.1"),
 		UnconfirmedVerifyTxn: params.VerifyTxn{
 			MaxDropletPrecision: 4, // the default precision for unspecified peers is 3
 			MaxTransactionSize:  32768,

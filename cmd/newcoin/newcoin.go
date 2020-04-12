@@ -130,7 +130,7 @@ func createCoinCommand() cli.Command {
 
 			// -- parse template and create new coin.go and config blockchain.go -- //
 
-			config, err := mdl.NewParameters(configFile, configDir)
+			config, err := fiber.NewConfig(configFile, configDir)
 			if err != nil {
 				log.Errorf("failed to create new fiber coin config")
 				return err

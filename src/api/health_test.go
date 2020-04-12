@@ -72,6 +72,9 @@ func TestHealthHandler(t *testing.T) {
 			method: http.MethodGet,
 			code:   http.StatusOK,
 			cfg: muxConfig{
+				health: HealthConfig{
+					BlockPublisher: true,
+				},
 				host:        configuredHost,
 				appLoc:      ".",
 				disableCSRF: false,

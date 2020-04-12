@@ -1,5 +1,6 @@
 /*
-Package cli implements an interface for creating a CLI application.
+Package cli implements the CLI cmd's methods.
+
 Includes methods for manipulating wallets files and interacting with the
 REST API to query a mdl node's status.
 */
@@ -28,7 +29,7 @@ import (
 
 var (
 	// Version is the CLI Version
-	Version = "0.26.0"
+	Version = "0.27.0"
 )
 
 const (
@@ -46,9 +47,7 @@ var (
     RPC_USER: Username for RPC API, if enabled in the RPC.
     RPC_PASS: Password for RPC API, if enabled in the RPC.
     COIN: Name of the coin. Default "%s"
-    WALLET_DIR: Directory where wallets are stored. This value is overridden by any subcommand flag specifying a wallet filename, if that filename includes a path. Default "%s"
-    WALLET_NAME: Name of wallet file (without path). This value is overridden by any subcommand flag specifying a wallet filename. Default "%s"
-    DATA_DIR: Directory where everything is stored. Default "%s"`, defaultRPCAddress, defaultCoin, defaultWalletDir, defaultWalletName, defaultDataDir)
+    DATA_DIR: Directory where everything is stored. Default "%s"`, defaultRPCAddress, defaultCoin, defaultDataDir)
 
 	helpTemplate = fmt.Sprintf(`USAGE:{{if .Runnable}}
   {{.UseLine}}{{end}}{{if .HasAvailableSubCommands}}
@@ -93,8 +92,6 @@ var (
 
 // Config cli's configuration struct
 type Config struct {
-	WalletDir   string `json:"wallet_directory"`
-	WalletName  string `json:"wallet_name"`
 	DataDir     string `json:"data_directory"`
 	Coin        string `json:"coin"`
 	RPCAddress  string `json:"rpc_address"`
@@ -131,25 +128,14 @@ func LoadConfig() (Config, error) {
 		dataDir = filepath.Join(home, fmt.Sprintf(".%s", coin))
 	}
 
-	// get wallet dir from env
-	wltDir := os.Getenv("WALLET_DIR")
-	if wltDir == "" {
-		wltDir = filepath.Join(dataDir, "wallets")
+	if os.Getenv("WALLET_DIR") != "" {
+		return Config{}, errors.New("the envvar WALLET_DIR is no longer recognized by the CLI tool. Please review the updated CLI docs to learn how to specify the wallet file for your desired action")
 	}
-
-	// get wallet name from env
-	wltName := os.Getenv("WALLET_NAME")
-	if wltName == "" {
-		wltName = fmt.Sprintf("%s_cli%s", coin, walletExt)
-	}
-
-	if !strings.HasSuffix(wltName, walletExt) {
-		return Config{}, ErrWalletName
+	if os.Getenv("WALLET_NAME") != "" {
+		return Config{}, errors.New("the envvar WALLET_NAME is no longer recognized by the CLI tool. Please review the updated CLI docs to learn how to specify the wallet file for your desired action")
 	}
 
 	return Config{
-		WalletDir:   wltDir,
-		WalletName:  wltName,
 		DataDir:     dataDir,
 		Coin:        coin,
 		RPCAddress:  rpcAddr,
@@ -158,38 +144,9 @@ func LoadConfig() (Config, error) {
 	}, nil
 }
 
-// FullWalletPath returns the joined wallet dir and wallet name path
-func (c Config) FullWalletPath() string {
-	return filepath.Join(c.WalletDir, c.WalletName)
-}
-
 // FullDBPath returns the joined data directory and db file name path
 func (c Config) FullDBPath() string {
 	return filepath.Join(c.DataDir, "data.db")
-}
-
-// Returns a full wallet path based on cfg and optional cli arg specifying wallet file
-// FIXME: A CLI flag for the wallet filename is redundant with the envvar. Remove the flags or the envvar.
-func resolveWalletPath(cfg Config, w string) (string, error) {
-	if w == "" {
-		w = cfg.FullWalletPath()
-	}
-
-	if !strings.HasSuffix(w, walletExt) {
-		return "", ErrWalletName
-	}
-
-	// If w is only the basename, use the default wallet directory
-	if filepath.Base(w) == w {
-		w = filepath.Join(cfg.WalletDir, w)
-	}
-
-	absW, err := filepath.Abs(w)
-	if err != nil {
-		return "", fmt.Errorf("Invalid wallet path %s: %v", w, err)
-	}
-
-	return absW, nil
 }
 
 func resolveDBPath(cfg Config, db string) (string, error) {
@@ -232,7 +189,10 @@ func NewCLI(cfg Config) (*cobra.Command, error) {
 		checkDBCmd(),
 		checkDBEncodingCmd(),
 		createRawTxnCmd(),
+		createRawTxnV2Cmd(),
+		signTxnCmd(),
 		decodeRawTxnCmd(),
+		encodeJSONTxnCmd(),
 		decryptWalletCmd(),
 		encryptWalletCmd(),
 		lastBlocksCmd(),
@@ -248,14 +208,15 @@ func NewCLI(cfg Config) (*cobra.Command, error) {
 		versionCmd(),
 		walletCreateCmd(),
 		walletAddAddressesCmd(),
+		walletKeyExportCmd(),
 		walletBalanceCmd(),
-		walletDirCmd(),
 		walletHisCmd(),
 		walletOutputsCmd(),
 		richlistCmd(),
 		addressTransactionsCmd(),
 		pendingTransactionsCmd(),
 		addresscountCmd(),
+		distributeGenesisCmd(),
 	}
 
 	skyCLI.Version = Version
@@ -296,7 +257,7 @@ func printJSON(obj interface{}) error {
 func readPasswordFromTerminal() ([]byte, error) {
 	// Promotes to enter the wallet password
 	fmt.Fprint(os.Stdout, "enter password:")
-	bp, err := terminal.ReadPassword(int(syscall.Stdin)) // nolint: unconvert
+	bp, err := terminal.ReadPassword(int(syscall.Stdin)) //nolint:unconvert
 	if err != nil {
 		return nil, err
 	}

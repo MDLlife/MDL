@@ -88,8 +88,9 @@ func addressGenCmd() *cobra.Command {
 				Seed:       seed,
 				Encrypt:    encrypt,
 				Password:   password,
-				CryptoType: wallet.CryptoTypeScryptChacha20poly1305,
+				CryptoType: wallet.DefaultCryptoType,
 				GenerateN:  uint64(numAddresses),
+				Type:       wallet.WalletTypeDeterministic,
 			})
 			if err != nil {
 				return err
@@ -99,7 +100,7 @@ func addressGenCmd() *cobra.Command {
 				w.Erase()
 			}
 
-			rw := wallet.NewReadableWallet(w)
+			rw := w.ToReadable()
 
 			switch strings.ToLower(mode) {
 			case "json", "wallet":
@@ -110,14 +111,14 @@ func addressGenCmd() *cobra.Command {
 
 				fmt.Println(string(output))
 			case "addrs", "addresses":
-				for _, e := range rw.Entries {
+				for _, e := range rw.GetEntries() {
 					fmt.Println(e.Address)
 				}
 			case "secrets":
 				if hideSecrets {
 					return errors.New("secrets mode selected but hideSecrets enabled")
 				}
-				for _, e := range rw.Entries {
+				for _, e := range rw.GetEntries() {
 					fmt.Println(e.Secret)
 				}
 			default:
@@ -129,7 +130,7 @@ func addressGenCmd() *cobra.Command {
 	}
 
 	addressGenCmd.Flags().IntP("num", "n", 1, "Number of addresses to generate")
-	addressGenCmd.Flags().StringP("coin", "c", "mdl", "Coin type. Must be mdl or bitcoin. If bitcoin, secret keys are in Wallet Import Format instead of hex.")
+    addressGenCmd.Flags().StringP("coin", "c", "mdl", "Coin type. Must be mdl or bitcoin. If bitcoin, secret keys are in Wallet Import Format instead of hex.")
 	addressGenCmd.Flags().StringP("label", "l", "", "Wallet label to use when printing or writing a wallet file")
 	addressGenCmd.Flags().Bool("hex", false, "Use hex(sha256sum(rand(1024))) (CSPRNG-generated) as the seed if not seed is not provided")
 	addressGenCmd.Flags().StringP("seed", "s", "", "Seed for deterministic key generation. Will use bip39 as the seed if not provided.")

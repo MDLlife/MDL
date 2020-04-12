@@ -17,7 +17,7 @@
             <select formControlName="wallet" id="wallet" class="-wallet" required>
               <option disabled selected>{{ 'buy.make-choice' | translate }}</option>
             <option *ngFor="let wallet of wallets" [value]="wallet.filename">
-            {{ wallet.label }} - <span class="-coins">{{ wallet.coins }} MDL</span>
+            {{ wallet.label }} - <span class="-coins">{{ wallet.coins | amount }} MDL</span>
             </option>
             </select>
           </div>

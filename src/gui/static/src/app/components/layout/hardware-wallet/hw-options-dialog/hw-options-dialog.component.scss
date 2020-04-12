@@ -13,7 +13,7 @@
 
 .option-buttons-container {
   margin: 0 -10px;
-  
+
   button {
     width: 100%;
     text-align: left;
@@ -34,4 +34,8 @@
       color: $red;
     }
   }
+}
+
+.-blinking {
+  animation: alert-blinking 1s linear infinite;
 }

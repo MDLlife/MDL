@@ -4,6 +4,7 @@ Package wallet implements wallets and the wallet database service
 package wallet
 
 import (
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -13,11 +14,12 @@ import (
 	"strings"
 	"time"
 
-	"encoding/hex"
+    "github.com/sirupsen/logrus"
 
-	"github.com/MDLlife/MDL/src/cipher"
-
+    "github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/util/logging"
+    "github.com/MDLlife/MDL/src/cipher/bip44"
+    "github.com/MDLlife/MDL/src/util/file"
 )
 
 // Error wraps wallet-related errors.
@@ -36,7 +38,7 @@ func NewError(err error) error {
 
 var (
 	// Version represents the current wallet version
-	Version = "0.2"
+	Version = "0.4"
 
 	logger = logging.MustGetLogger("wallet")
 
@@ -62,20 +64,26 @@ var (
 	ErrWalletNotExist = NewError(errors.New("wallet doesn't exist"))
 	// ErrSeedUsed is returned if a wallet already exists with the same seed
 	ErrSeedUsed = NewError(errors.New("a wallet already exists with this seed"))
+	// ErrXPubKeyUsed is returned if a wallet already exists with the same xpub key
+	ErrXPubKeyUsed = NewError(errors.New("a wallet already exists with this xpub key"))
 	// ErrWalletAPIDisabled is returned when trying to do wallet actions while the EnableWalletAPI option is false
 	ErrWalletAPIDisabled = NewError(errors.New("wallet api is disabled"))
 	// ErrSeedAPIDisabled is returned when trying to get seed of wallet while the EnableWalletAPI or EnableSeedAPI is false
 	ErrSeedAPIDisabled = NewError(errors.New("wallet seed api is disabled"))
 	// ErrWalletNameConflict represents the wallet name conflict error
 	ErrWalletNameConflict = NewError(errors.New("wallet name would conflict with existing wallet, renaming"))
-	// ErrWalletRecoverSeedWrong is returned if the seed does not match the specified wallet when recovering
-	ErrWalletRecoverSeedWrong = NewError(errors.New("wallet recovery seed is wrong"))
-	// ErrNilBalanceGetter is returned if Options.ScanN > 0 but a nil BalanceGetter was provided
-	ErrNilBalanceGetter = NewError(errors.New("scan ahead requested but balance getter is nil"))
-	// ErrWalletNotDeterministic is returned if a wallet's type is not deterministic but it is necessary for the requested operation
-	ErrWalletNotDeterministic = NewError(errors.New("wallet type is not deterministic"))
+	// ErrWalletRecoverSeedWrong is returned if the seed or seed passphrase does not match the specified wallet when recovering
+	ErrWalletRecoverSeedWrong = NewError(errors.New("wallet recovery seed or seed passphrase is wrong"))
+	// ErrNilTransactionsFinder is returned if Options.ScanN > 0 but a nil TransactionsFinder was provided
+	ErrNilTransactionsFinder = NewError(errors.New("scan ahead requested but balance getter is nil"))
 	// ErrInvalidCoinType is returned for invalid coin types
 	ErrInvalidCoinType = NewError(errors.New("invalid coin type"))
+	// ErrInvalidWalletType is returned for invalid wallet types
+	ErrInvalidWalletType = NewError(errors.New("invalid wallet type"))
+	// ErrWalletTypeNotRecoverable is returned by RecoverWallet is the wallet type does not support recovery
+	ErrWalletTypeNotRecoverable = NewError(errors.New("wallet type is not recoverable"))
+	// ErrWalletPermission is returned when updating a wallet without writing permission
+	ErrWalletPermission = NewError(errors.New("saving wallet permission denied"))
 )
 
 const (
@@ -122,7 +130,7 @@ const (
 	metaSecrets    = "secrets"    // secrets which records the encrypted seeds and secrets of address entries
 )
 
-// CoinType represents the wallet coin type
+// CoinType represents the wallet coin type, which refers to the pubkey2addr method used
 type CoinType string
 
 // NewWalletFilename generates a filename from the current time and random bytes
@@ -182,6 +190,10 @@ func newWallet(wltName string, opts Options, bg BalanceGetter) (*Wallet, error) 
 	default:
 		return nil, fmt.Errorf("Invalid coin type %q", coin)
 	}
+	coin, err := ResolveCoinType(string(coin))
+	if err != nil {
+		return nil, err
+	}
 
 	w := &Wallet{
 		Meta: map[string]string{
@@ -217,9 +229,22 @@ func newWallet(wltName string, opts Options, bg BalanceGetter) (*Wallet, error) 
 		if _, err := w.ScanAddresses(opts.ScanN, bg); err != nil {
 			return nil, err
 		}
+
+	case WalletTypeCollection:
+		if opts.GenerateN != 0 || opts.ScanN != 0 {
+			return nil, NewError(fmt.Errorf("wallet scanning is not defined for %q wallets", wltType))
+		}
+
+	default:
+		logger.Panic("unhandled wltType")
 	}
 
-	// Checks if the wallet need to encrypt
+	// Validate the wallet, before encrypting
+	if err := w.Validate(); err != nil {
+		return nil, err
+	}
+
+	// Check if the wallet should be encrypted
 	if !opts.Encrypt {
 		if len(opts.Password) != 0 {
 			return nil, ErrMissingEncrypt
@@ -227,22 +252,26 @@ func newWallet(wltName string, opts Options, bg BalanceGetter) (*Wallet, error) 
 		return w, nil
 	}
 
-	// Checks if the password is provided
+	// Check if the password is provided
 	if len(opts.Password) == 0 {
 		return nil, ErrMissingPassword
 	}
 
-	// Checks crypto type
+	// Check crypto type
+	if opts.CryptoType == "" {
+		opts.CryptoType = DefaultCryptoType
+	}
+
 	if _, err := getCrypto(opts.CryptoType); err != nil {
 		return nil, err
 	}
 
 	// Encrypt the wallet
-	if err := w.Lock(opts.Password, opts.CryptoType); err != nil {
+	if err := Lock(w, opts.Password, opts.CryptoType); err != nil {
 		return nil, err
 	}
 
-	// Validate the wallet
+	// Validate the wallet again, after encrypting
 	if err := w.Validate(); err != nil {
 		return nil, err
 	}
@@ -251,17 +280,17 @@ func newWallet(wltName string, opts Options, bg BalanceGetter) (*Wallet, error) 
 }
 
 // NewWallet creates wallet without scanning addresses
-func NewWallet(wltName string, opts Options) (*Wallet, error) {
+func NewWallet(wltName string, opts Options) (Wallet, error) {
 	return newWallet(wltName, opts, nil)
 }
 
 // NewWalletScanAhead creates wallet and scan ahead N addresses
-func NewWalletScanAhead(wltName string, opts Options, bg BalanceGetter) (*Wallet, error) {
-	return newWallet(wltName, opts, bg)
+func NewWalletScanAhead(wltName string, opts Options, tf TransactionsFinder) (Wallet, error) {
+	return newWallet(wltName, opts, tf)
 }
 
 // Lock encrypts the wallet with the given password and specific crypto type
-func (w *Wallet) Lock(password []byte, cryptoType CryptoType) error {
+func Lock(w Wallet, password []byte, cryptoType CryptoType) error {
 	if len(password) == 0 {
 		return ErrMissingPassword
 	}
@@ -270,23 +299,17 @@ func (w *Wallet) Lock(password []byte, cryptoType CryptoType) error {
 		return ErrWalletEncrypted
 	}
 
-	wlt := w.clone()
+	wlt := w.Clone()
 
 	// Records seeds in secrets
-	ss := make(secrets)
+	ss := make(Secrets)
 	defer func() {
 		// Wipes all unencrypted sensitive data
 		ss.erase()
 		wlt.Erase()
 	}()
 
-	ss.set(secretSeed, wlt.seed())
-	ss.set(secretLastSeed, wlt.lastSeed())
-
-	// Saves address's secret keys in secrets
-	for _, e := range wlt.Entries {
-		ss.set(e.Address.String(), e.Secret.Hex())
-	}
+	wlt.PackSecrets(ss)
 
 	sb, err := ss.serialize()
 	if err != nil {
@@ -304,17 +327,11 @@ func (w *Wallet) Lock(password []byte, cryptoType CryptoType) error {
 		return err
 	}
 
-	// Sets the crypto type
-	wlt.setCryptoType(cryptoType)
-
-	// Updates the secrets data in wallet
-	wlt.setSecrets(string(encSecret))
-
 	// Sets wallet as encrypted
-	wlt.setEncrypted(true)
+	wlt.SetEncrypted(cryptoType, string(encSecret))
 
-	// Sets the wallet version
-	wlt.setVersion(Version)
+	// Update the wallet to the latest version, which indicates encryption support
+	wlt.SetVersion(Version)
 
 	// Wipes unencrypted sensitive data
 	wlt.Erase()
@@ -323,14 +340,14 @@ func (w *Wallet) Lock(password []byte, cryptoType CryptoType) error {
 	w.Erase()
 
 	// Replace the original wallet with new encrypted wallet
-	w.copyFrom(wlt)
+	w.CopyFrom(wlt)
 	return nil
 }
 
 // Unlock decrypts the wallet into a temporary decrypted copy of the wallet
 // Returns error if the decryption fails
 // The temporary decrypted wallet should be erased from memory when done.
-func (w *Wallet) Unlock(password []byte) (*Wallet, error) {
+func Unlock(w Wallet, password []byte) (Wallet, error) {
 	if !w.IsEncrypted() {
 		return nil, ErrWalletNotEncrypted
 	}
@@ -339,20 +356,20 @@ func (w *Wallet) Unlock(password []byte) (*Wallet, error) {
 		return nil, ErrMissingPassword
 	}
 
-	wlt := w.clone()
+	wlt := w.Clone()
 
 	// Gets the secrets string
-	sstr := wlt.secrets()
+	sstr := w.Secrets()
 	if sstr == "" {
-		return nil, errors.New("secrets doesn't exsit")
+		return nil, errors.New("secrets missing from wallet")
 	}
 
-	ct := w.cryptoType()
+	ct := w.CryptoType()
 	if ct == "" {
 		return nil, errors.New("missing crypto type")
 	}
 
-	// Gets the crypto
+	// Gets the crypto module
 	crypto, err := getCrypto(ct)
 	if err != nil {
 		return nil, err
@@ -364,79 +381,82 @@ func (w *Wallet) Unlock(password []byte) (*Wallet, error) {
 		return nil, ErrInvalidPassword
 	}
 
+	defer func() {
+		// Wipe the data from the secrets bytes buffer
+		for i := range sb {
+			sb[i] = 0
+		}
+	}()
+
 	// Deserialize into secrets
-	ss := make(secrets)
+	ss := make(Secrets)
 	defer ss.erase()
 	if err := ss.deserialize(sb); err != nil {
 		return nil, err
 	}
 
-	seed, ok := ss.get(secretSeed)
-	if !ok {
-		return nil, errors.New("seed doesn't exist in secrets")
-	}
-	wlt.setSeed(seed)
-
-	lastSeed, ok := ss.get(secretLastSeed)
-	if !ok {
-		return nil, errors.New("lastSeed doesn't exist in secrets")
-	}
-	wlt.setLastSeed(lastSeed)
-
-	// Gets addresses related secrets
-	for i, e := range wlt.Entries {
-		sstr, ok := ss.get(e.Address.String())
-		if !ok {
-			return nil, fmt.Errorf("secret of address %s doesn't exist in secrets", e.Address)
-		}
-		s, err := hex.DecodeString(sstr)
-		if err != nil {
-			return nil, fmt.Errorf("decode secret hex string failed: %v", err)
-		}
-
-		copy(wlt.Entries[i].Secret[:], s[:])
+	if err := wlt.UnpackSecrets(ss); err != nil {
+		return nil, err
 	}
 
-	wlt.setEncrypted(false)
-	wlt.setSecrets("")
-	wlt.setCryptoType("")
+	wlt.SetDecrypted()
+
 	return wlt, nil
 }
 
-// copyFrom copies the src wallet to w
-func (w *Wallet) copyFrom(src *Wallet) {
-	// Clear the original info first
-	w.Meta = make(map[string]string)
-	w.Entries = w.Entries[:0]
+// Wallet defines the wallet API
+type Wallet interface {
+	Find(string) string
+	Seed() string
+	LastSeed() string
+	SeedPassphrase() string
+	Timestamp() int64
+	SetTimestamp(int64)
+	Coin() CoinType
+	Bip44Coin() bip44.CoinType
+	Type() string
+	Label() string
+	SetLabel(string)
+	Filename() string
+	IsEncrypted() bool
+	SetEncrypted(cryptoType CryptoType, encryptedSecrets string)
+	SetDecrypted()
+	CryptoType() CryptoType
+	Version() string
+	SetVersion(string)
+	AddressConstructor() func(cipher.PubKey) cipher.Addresser
+	Secrets() string
+	XPub() string
 
-	// Copies the meta
-	for k, v := range src.Meta {
-		w.Meta[k] = v
-	}
+	UnpackSecrets(ss Secrets) error
+	PackSecrets(ss Secrets)
 
-	// Copies the address entries
-	w.Entries = append(w.Entries, src.Entries...)
-}
+	Erase()
+	Clone() Wallet
+	CopyFrom(src Wallet)
+	CopyFromRef(src Wallet)
 
-// Erase wipes secret fields in wallet
-func (w *Wallet) Erase() {
-	// Wipes the seed and last seed
-	w.setSeed("")
-	w.setLastSeed("")
+	ToReadable() Readable
 
-	// Wipes private keys in entries
-	for i := range w.Entries {
-		for j := range w.Entries[i].Secret {
-			w.Entries[i].Secret[j] = 0
-		}
+	Validate() error
 
-		w.Entries[i].Secret = cipher.SecKey{}
-	}
+	Fingerprint() string
+	GetAddresses() []cipher.Addresser
+	GetSkycoinAddresses() ([]cipher.Address, error)
+	GetEntryAt(i int) Entry
+	GetEntry(cipher.Address) (Entry, bool)
+	HasEntry(cipher.Address) bool
+	EntriesLen() int
+	GetEntries() Entries
+
+	GenerateAddresses(num uint64) ([]cipher.Addresser, error)
+	GenerateSkycoinAddresses(num uint64) ([]cipher.Address, error)
+	ScanAddresses(scanN uint64, tf TransactionsFinder) error
 }
 
 // GuardUpdate executes a function within the context of a read-write managed decrypted wallet.
 // Returns ErrWalletNotEncrypted if wallet is not encrypted.
-func (w *Wallet) GuardUpdate(password []byte, fn func(w *Wallet) error) error {
+func GuardUpdate(w Wallet, password []byte, fn func(w Wallet) error) error {
 	if !w.IsEncrypted() {
 		return ErrWalletNotEncrypted
 	}
@@ -445,8 +465,8 @@ func (w *Wallet) GuardUpdate(password []byte, fn func(w *Wallet) error) error {
 		return ErrMissingPassword
 	}
 
-	cryptoType := w.cryptoType()
-	wlt, err := w.Unlock(password)
+	cryptoType := w.CryptoType()
+	wlt, err := Unlock(w, password)
 	if err != nil {
 		return err
 	}
@@ -457,11 +477,12 @@ func (w *Wallet) GuardUpdate(password []byte, fn func(w *Wallet) error) error {
 		return err
 	}
 
-	if err := wlt.Lock(password, cryptoType); err != nil {
+	if err := Lock(wlt, password, cryptoType); err != nil {
 		return err
 	}
 
-	*w = *wlt
+	w.CopyFromRef(wlt)
+
 	// Wipes all sensitive data
 	w.Erase()
 	return nil
@@ -469,7 +490,7 @@ func (w *Wallet) GuardUpdate(password []byte, fn func(w *Wallet) error) error {
 
 // GuardView executes a function within the context of a read-only managed decrypted wallet.
 // Returns ErrWalletNotEncrypted if wallet is not encrypted.
-func (w *Wallet) GuardView(password []byte, f func(w *Wallet) error) error {
+func GuardView(w Wallet, password []byte, f func(w Wallet) error) error {
 	if !w.IsEncrypted() {
 		return ErrWalletNotEncrypted
 	}
@@ -478,7 +499,7 @@ func (w *Wallet) GuardView(password []byte, f func(w *Wallet) error) error {
 		return ErrMissingPassword
 	}
 
-	wlt, err := w.Unlock(password)
+	wlt, err := Unlock(w, password)
 	if err != nil {
 		return err
 	}
@@ -488,26 +509,87 @@ func (w *Wallet) GuardView(password []byte, f func(w *Wallet) error) error {
 	return f(wlt)
 }
 
+type walletLoadMeta struct {
+	Meta struct {
+		Type string `json:"type"`
+	} `json:"meta"`
+}
+
+type walletLoader interface {
+	SetFilename(string)
+	SetCoin(CoinType)
+	Coin() CoinType
+	ToWallet() (Wallet, error)
+}
+
 // Load loads wallet from a given file
-func Load(wltFile string) (*Wallet, error) {
-	if _, err := os.Stat(wltFile); os.IsNotExist(err) {
-		return nil, fmt.Errorf("wallet %s doesn't exist", wltFile)
+func Load(filename string) (Wallet, error) {
+	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		return nil, fmt.Errorf("wallet %q doesn't exist", filename)
 	}
 
-	r := &ReadableWallet{}
-	if err := r.Load(wltFile); err != nil {
+	// Load the wallet meta type field from JSON
+	var m walletLoadMeta
+	if err := file.LoadJSON(filename, &m); err != nil {
+		logger.WithError(err).WithField("filename", filename).Error("Load: file.LoadJSON failed")
 		return nil, err
 	}
 
-	// update filename meta info with the real filename
-	r.Meta["filename"] = filepath.Base(wltFile)
-	return r.ToWallet()
+	if !IsValidWalletType(m.Meta.Type) {
+		logger.WithError(ErrInvalidWalletType).WithFields(logrus.Fields{
+			"filename":   filename,
+			"walletType": m.Meta.Type,
+		}).Error("wallet meta loaded from disk has invalid wallet type")
+		return nil, fmt.Errorf("invalid wallet %q: %v", filename, ErrInvalidWalletType)
+	}
+
+	// Depending on the wallet type in the wallet metadata header, load the full wallet data
+	var rw walletLoader
+	var err error
+	switch m.Meta.Type {
+	case WalletTypeDeterministic:
+		logger.WithField("filename", filename).Info("LoadReadableDeterministicWallet")
+		rw, err = LoadReadableDeterministicWallet(filename)
+	case WalletTypeCollection:
+		logger.WithField("filename", filename).Info("LoadReadableCollectionWallet")
+		rw, err = LoadReadableCollectionWallet(filename)
+	case WalletTypeBip44:
+		logger.WithField("filename", filename).Info("LoadReadableBip44Wallet")
+		rw, err = LoadReadableBip44Wallet(filename)
+	case WalletTypeXPub:
+		logger.WithField("filename", filename).Info("LoadReadableXPubWallet")
+		rw, err = LoadReadableXPubWallet(filename)
+	default:
+		err := errors.New("unhandled wallet type")
+		logger.WithField("walletType", m.Meta.Type).WithError(err).Error("Load failed")
+		return nil, err
+	}
+
+	if err != nil {
+		logger.WithError(err).WithFields(logrus.Fields{
+			"filename":   filename,
+			"walletType": m.Meta.Type,
+		}).Error("Load readable wallet failed")
+		return nil, err
+	}
+
+	// Make sure "sky", "btc" normalize to "skycoin", "bitcoin"
+	ct, err := ResolveCoinType(string(rw.Coin()))
+	if err != nil {
+		logger.WithError(err).WithField("coinType", rw.Coin()).Error("Load: invalid coin type")
+		return nil, fmt.Errorf("invalid wallet %q: %v", filename, err)
+	}
+	rw.SetCoin(ct)
+
+	rw.SetFilename(filepath.Base(filename))
+
+	return rw.ToWallet()
 }
 
-// Save saves the wallet to given dir
-func (w *Wallet) Save(dir string) error {
-	r := NewReadableWallet(w)
-	return r.Save(filepath.Join(dir, w.Filename()))
+// Save saves the wallet to a directory. The wallet's filename is read from its metadata.
+func Save(w Wallet, dir string) error {
+	rw := w.ToReadable()
+	return file.SaveJSON(filepath.Join(dir, rw.Filename()), rw, 0600)
 }
 
 // removeBackupFiles removes any *.wlt.bak files whom have version 0.1 and *.wlt matched in the given directory

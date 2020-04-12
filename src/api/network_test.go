@@ -191,7 +191,7 @@ func TestConnections(t *testing.T) {
 		Mirror:        9876,
 		ListenPort:    9877,
 		Height:        1234,
-		UserAgent:     useragent.MustParse("mdl:0.25.1(foo)"),
+		UserAgent:     useragent.MustParse("skycoin:0.25.1(foo)"),
 		IsTrustedPeer: true,
 	}
 

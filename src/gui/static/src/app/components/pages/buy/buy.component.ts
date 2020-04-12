@@ -3,9 +3,9 @@ import { PurchaseService } from '../../../services/purchase.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { WalletService } from '../../../services/wallet.service';
 import { Address, PurchaseOrder, Wallet } from '../../../app.datatypes';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ButtonComponent } from '../../layout/button/button.component';
-import { Subscription } from 'rxjs/Subscription';
+import { ISubscription } from 'rxjs/Subscription';
+import { MsgBarService } from '../../../services/msg-bar.service';
 
 @Component({
   selector: 'app-buy',
@@ -25,12 +25,12 @@ export class BuyComponent implements OnInit, OnDestroy {
   order: PurchaseOrder;
   wallets: Wallet[];
 
-  private subscription: Subscription;
+  private subscriptionsGroup: ISubscription[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
     private purchaseService: PurchaseService,
-    private snackBar: MatSnackBar,
+    private msgBarService: MsgBarService,
     private walletService: WalletService,
   ) {}
 
@@ -40,7 +40,7 @@ export class BuyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscriptionsGroup.forEach(sub => sub.unsubscribe());
   }
 
   checkStatus() {
@@ -69,13 +69,12 @@ export class BuyComponent implements OnInit, OnDestroy {
       coin_type: ['', Validators.required],
     });
 
-    this.subscription = this.form.get('wallet').valueChanges.subscribe(filename => {
-      if (this.form.value.coin_type === '') return;
+    this.subscriptionsGroup.push(this.form.get('wallet').valueChanges.subscribe(filename => {
       const wallet = this.wallets.find(wlt => wlt.filename === filename);
       console.log('changing wallet value', filename);
       this.purchaseService.generate(wallet, this.form.value.coin_type).subscribe(
         order => this.saveData(order),
-        error => this.snackBar.open(error.toString()),
+        error => this.msgBarService.showError(error.toString()),
       );
     });
 
@@ -128,7 +127,7 @@ export class BuyComponent implements OnInit, OnDestroy {
     this.loadConfig();
     this.loadOrder();
 
-    this.subscription.add(this.walletService.all().subscribe(wallets => {
+    this.subscriptionsGroup.add(this.walletService.all().subscribe(wallets => {
       this.wallets = wallets;
 
       if (this.order) {

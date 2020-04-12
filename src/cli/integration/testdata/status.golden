@@ -41,7 +41,18 @@
 			"max_transaction_size": 32768,
 			"max_decimals": 3
 		},
-		"started_at": 0
+		"started_at": 0,
+				"fiber": {
+        			"name": "mdl",
+        			"display_name": "MDL",
+        			"ticker": "MDL",
+        			"coin_hours_display_name": "Coin Hours",
+        			"coin_hours_display_name_singular": "Coin Hour",
+        			"coin_hours_ticker": "SCH",
+        			"explorer_url": "https://explorer.skycoin.com",
+        			"version_url": "https://version.skycoin.com/skycoin/version.txt",
+        			"bip44_coin": 8000
+        		}
 	},
 	"cli_config": {
 		"webrpc_address": "http://127.0.0.1:1024"

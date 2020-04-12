@@ -18,7 +18,7 @@ func encodeSizeAnnounceTxnsMessage(obj *AnnounceTxnsMessage) uint64 {
 	{
 		i1 := uint64(0)
 
-		// x
+		// x1
 		i1 += 32
 
 		i0 += uint64(len(obj.Transactions)) * i1
