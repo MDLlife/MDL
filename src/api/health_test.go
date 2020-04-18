@@ -128,7 +128,7 @@ func TestHealthHandler(t *testing.T) {
 			}
 			tc.cfg.health.BuildInfo = buildInfo
 
-			tc.cfg.health.CoinName = "mdl"
+			tc.cfg.health.Fiber.Name = "mdl"
 			tc.cfg.health.DaemonUserAgent = useragent.Data{
 				Coin:    "mdl",
 				Version: "0.25.0",
@@ -227,6 +227,7 @@ func TestHealthHandler(t *testing.T) {
 			require.Equal(t, len(conns), r.OpenConnections)
 			require.Equal(t, "mdl", r.CoinName)
 			require.Equal(t, "mdl:0.25.0(test)", r.DaemonUserAgent)
+            require.Equal(t, tc.cfg.health.BlockPublisher, r.BlockPublisher)
 
 			require.Equal(t, unconfirmed, r.BlockchainMetadata.Unconfirmed)
 			require.Equal(t, unspents, r.BlockchainMetadata.Unspents)

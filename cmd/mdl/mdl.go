@@ -10,7 +10,8 @@ AVOID EDITING THIS MANUALLY
 
 import (
 	"flag"
-	_ "net/http/pprof"
+    "github.com/MDLlife/MDL/src/fiber"
+    _ "net/http/pprof"
 	"os"
 
 	"github.com/MDLlife/MDL/src/mdl"
@@ -56,7 +57,7 @@ var (
 		"128.199.148.6:7800",
 	}
 
-	nodeConfig = mdl.NewNodeConfig(ConfigMode, mdl.NodeParameters{
+	nodeConfig = mdl.NewNodeConfig(ConfigMode, fiber.NodeConfig{
 		CoinName:            CoinName,
 		GenesisSignatureStr: GenesisSignatureStr,
 		GenesisAddressStr:   GenesisAddressStr,
@@ -69,6 +70,23 @@ var (
 		Port:                7800,
 		WebInterfacePort:    8320,
 		DataDirectory:       "$HOME/.mdl",
+
+        UnconfirmedBurnFactor:          10,
+        UnconfirmedMaxTransactionSize:  32768,
+        UnconfirmedMaxDropletPrecision: 3,
+        CreateBlockBurnFactor:          10,
+        CreateBlockMaxTransactionSize:  32768,
+        CreateBlockMaxDropletPrecision: 3,
+        MaxBlockTransactionsSize:       32768,
+
+        DisplayName:           "Skycoin",
+        Ticker:                "SKY",
+        CoinHoursName:         "Coin Hours",
+        CoinHoursNameSingular: "Coin Hour",
+        CoinHoursTicker:       "SCH",
+        ExplorerURL:           "https://explorer.skycoin.com",
+        VersionURL:            "https://version.skycoin.com/skycoin/version.txt",
+        Bip44Coin:             8000,
 	})
 
 	parseFlags = true

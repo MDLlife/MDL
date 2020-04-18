@@ -14,18 +14,18 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/SkycoinProject/skycoin/src/api"
-	"github.com/SkycoinProject/skycoin/src/cipher"
-	"github.com/SkycoinProject/skycoin/src/cipher/bip44"
-	"github.com/SkycoinProject/skycoin/src/coin"
-	"github.com/SkycoinProject/skycoin/src/params"
-	"github.com/SkycoinProject/skycoin/src/readable"
-	"github.com/SkycoinProject/skycoin/src/testutil"
-	"github.com/SkycoinProject/skycoin/src/transaction"
-	"github.com/SkycoinProject/skycoin/src/util/droplet"
-	"github.com/SkycoinProject/skycoin/src/util/fee"
-	"github.com/SkycoinProject/skycoin/src/util/mathutil"
-	"github.com/SkycoinProject/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/api"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher/bip44"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/params"
+	"github.com/MDLlife/MDL/src/readable"
+	"github.com/MDLlife/MDL/src/testutil"
+	"github.com/MDLlife/MDL/src/transaction"
+	"github.com/MDLlife/MDL/src/util/droplet"
+	"github.com/MDLlife/MDL/src/util/fee"
+	"github.com/MDLlife/MDL/src/util/mathutil"
+	"github.com/MDLlife/MDL/src/wallet"
 )
 
 func TestStableInjectTransaction(t *testing.T) {

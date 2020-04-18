@@ -19,6 +19,14 @@ import (
     "github.com/MDLlife/MDL/src/wallet"
 )
 
+func skipWalletIfLive(t *testing.T) bool {
+	skip := enabled() && mode(t) == testModeLive && !doLiveWallet(t)
+	if skip {
+		t.Skip("live wallet tests disabled")
+	}
+	return skip
+}
+
 func TestWalletNewSeed(t *testing.T) {
 	if !doLiveOrStable(t) {
 		return

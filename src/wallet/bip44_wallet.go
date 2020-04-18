@@ -8,12 +8,12 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/SkycoinProject/skycoin/src/cipher"
-	"github.com/SkycoinProject/skycoin/src/cipher/bip32"
-	"github.com/SkycoinProject/skycoin/src/cipher/bip39"
-	"github.com/SkycoinProject/skycoin/src/cipher/bip44"
-	"github.com/SkycoinProject/skycoin/src/util/file"
-	"github.com/SkycoinProject/skycoin/src/util/mathutil"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher/bip32"
+	"github.com/MDLlife/MDL/src/cipher/bip39"
+	"github.com/MDLlife/MDL/src/cipher/bip44"
+	"github.com/MDLlife/MDL/src/util/file"
+	"github.com/MDLlife/MDL/src/util/mathutil"
 )
 
 // Bip44Wallet manages keys using the original Skycoin deterministic
@@ -109,7 +109,7 @@ func (w *Bip44Wallet) GetAddresses() []cipher.Addresser {
 
 // GetSkycoinAddresses returns all Skycoin addresses in wallet. The wallet's coin type must be Skycoin.
 func (w *Bip44Wallet) GetSkycoinAddresses() ([]cipher.Address, error) {
-	if w.Meta.Coin() != CoinTypeSkycoin {
+	if w.Meta.Coin() != CoinTypeMDL {
 		return nil, errors.New("Bip44Wallet coin type is not skycoin")
 	}
 
@@ -327,7 +327,7 @@ func (w *Bip44Wallet) GenerateAddresses(num uint64) ([]cipher.Addresser, error) 
 // GenerateSkycoinAddresses generates Skycoin addresses for the external chain, and appends them to the wallet's entries array.
 // If the wallet's coin type is not Skycoin, returns an error
 func (w *Bip44Wallet) GenerateSkycoinAddresses(num uint64) ([]cipher.Address, error) {
-	if w.Meta.Coin() != CoinTypeSkycoin {
+	if w.Meta.Coin() != CoinTypeMDL {
 		return nil, errors.New("GenerateSkycoinAddresses called for non-skycoin wallet")
 	}
 

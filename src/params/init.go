@@ -12,7 +12,6 @@ func init() {
 	loadUserBurnFactor()
 	loadUserMaxTransactionSize()
 	loadUserMaxDecimals()
-	decodeDistributionAddresses()
 	sanityCheck()
 }
 

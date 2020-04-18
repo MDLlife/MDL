@@ -297,7 +297,7 @@ func (vs *Visor) WalletCreateTransaction(wltID string, p transaction.Params, wp 
 	return txn, inputs, nil
 }
 
-func (vs *Visor) walletCreateTransaction(methodName string, w *wallet.Wallet, p transaction.Params, wp CreateTransactionParams, signed TxnSignedFlag) (*coin.Transaction, []TransactionInput, error) {
+func (vs *Visor) walletCreateTransaction(methodName string, w wallet.Wallet, p transaction.Params, wp CreateTransactionParams, signed TxnSignedFlag) (*coin.Transaction, []TransactionInput, error) {
 	if err := p.Validate(); err != nil {
 		return nil, nil, err
 	}
@@ -306,7 +306,7 @@ func (vs *Visor) walletCreateTransaction(methodName string, w *wallet.Wallet, p 
 	}
 
 	// Get all addresses from the wallet for checking params against
-	walletAddresses, err := w.GetMDLAddresses()
+	walletAddresses, err := w.GetSkycoinAddresses()
 	if err != nil {
 		return nil, nil, err
 	}

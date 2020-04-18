@@ -3,9 +3,9 @@ package wallet
 import (
 	"errors"
 	"fmt"
+    "github.com/MDLlife/MDL/src/cipher/bip44"
 
     "github.com/MDLlife/MDL/src/cipher"
-    "github.com/MDLlife/MDL/src/util/file"
 )
 
 var (

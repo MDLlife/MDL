@@ -157,23 +157,23 @@ SymlinkTo: ../../symlinktargets/xyz
 # ttar - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Path: fixtures/26232/limits
 Lines: 17
-Limit                     Soft Limit           Hard Limit           Units
-Max cpu time              unlimited            unlimited            seconds
-Max file size             unlimited            unlimited            bytes
-Max data size             unlimited            unlimited            bytes
-Max stack size            8388608              unlimited            bytes
-Max core file size        0                    unlimited            bytes
-Max resident set          unlimited            unlimited            bytes
-Max processes             29436                29436                processes
-Max open files            1024                 4096                 files
-Max locked memory         65536                65536                bytes
-Max address space         unlimited            unlimited            bytes
-Max file locks            unlimited            unlimited            locks
-Max pending signals       29436                29436                signals
-Max msgqueue size         819200               819200               bytes
-Max nice priority         0                    0
-Max realtime priority     0                    0
-Max realtime timeout      unlimited            unlimited            us
+Limit                     Soft Limit           Hard Limit           Units     
+Max cpu time              unlimited            unlimited            seconds   
+Max file size             unlimited            unlimited            bytes     
+Max data size             unlimited            unlimited            bytes     
+Max stack size            8388608              unlimited            bytes     
+Max core file size        0                    unlimited            bytes     
+Max resident set          unlimited            unlimited            bytes     
+Max processes             29436                29436                processes 
+Max open files            1024                 4096                 files     
+Max locked memory         65536                65536                bytes     
+Max address space         unlimited            unlimited            bytes     
+Max file locks            unlimited            unlimited            locks     
+Max pending signals       29436                29436                signals   
+Max msgqueue size         819200               819200               bytes     
+Max nice priority         0                    0                    
+Max realtime priority     0                    0                    
+Max realtime timeout      unlimited            unlimited            us        
 Mode: 644
 # ttar - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Path: fixtures/26232/root
@@ -219,7 +219,7 @@ Mode: 755
 # ttar - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Path: fixtures/buddyinfo/sizemismatch/buddyinfo
 Lines: 3
-Node 0, zone      DMA      1      0      1      0      2      1      1      0      1      1      3
+Node 0, zone      DMA      1      0      1      0      2      1      1      0      1      1      3 
 Node 0, zone    DMA32    759    572    791    475    194     45     12      0      0      0      0      0
 Node 0, zone   Normal   4381   1093    185   1530    567    102      4      0      0      0
 Mode: 644
@@ -229,9 +229,9 @@ Mode: 755
 # ttar - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Path: fixtures/buddyinfo/valid/buddyinfo
 Lines: 3
-Node 0, zone      DMA      1      0      1      0      2      1      1      0      1      1      3
-Node 0, zone    DMA32    759    572    791    475    194     45     12      0      0      0      0
-Node 0, zone   Normal   4381   1093    185   1530    567    102      4      0      0      0      0
+Node 0, zone      DMA      1      0      1      0      2      1      1      0      1      1      3 
+Node 0, zone    DMA32    759    572    791    475    194     45     12      0      0      0      0 
+Node 0, zone   Normal   4381   1093    185   1530    567    102      4      0      0      0      0 
 Mode: 644
 # ttar - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Directory: fixtures/fs
@@ -272,13 +272,13 @@ Lines: 26
 Personalities : [linear] [multipath] [raid0] [raid1] [raid6] [raid5] [raid4] [raid10]
 md3 : active raid6 sda1[8] sdh1[7] sdg1[6] sdf1[5] sde1[11] sdd1[3] sdc1[10] sdb1[9]
       5853468288 blocks super 1.2 level 6, 64k chunk, algorithm 2 [8/8] [UUUUUUUU]
-
+      
 md127 : active raid1 sdi2[0] sdj2[1]
       312319552 blocks [2/2] [UU]
-
+      
 md0 : active raid1 sdk[2](S) sdi1[0] sdj1[1]
       248896 blocks [2/2] [UU]
-
+      
 md4 : inactive raid1 sda3[0] sdb3[1]
       4883648 blocks [2/2] [UU]
 

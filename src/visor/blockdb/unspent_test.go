@@ -14,11 +14,11 @@ import (
 	"github.com/boltdb/bolt"
 	"github.com/stretchr/testify/require"
 
-	"github.com/SkycoinProject/skycoin/src/cipher"
-	"github.com/SkycoinProject/skycoin/src/cipher/encoder"
-	"github.com/SkycoinProject/skycoin/src/coin"
-	"github.com/SkycoinProject/skycoin/src/testutil"
-	"github.com/SkycoinProject/skycoin/src/visor/dbutil"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher/encoder"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/testutil"
+	"github.com/MDLlife/MDL/src/visor/dbutil"
 )
 
 func makeUxBody(t *testing.T) coin.UxBody {

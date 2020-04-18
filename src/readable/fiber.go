@@ -1,6 +1,6 @@
 package readable
 
-import "github.com/SkycoinProject/skycoin/src/cipher/bip44"
+import "github.com/MDLlife/MDL/src/cipher/bip44"
 
 // FiberConfig is fiber configuration parameters
 type FiberConfig struct {

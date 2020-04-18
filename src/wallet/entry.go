@@ -22,11 +22,6 @@ func (we Entry) SkycoinAddress() cipher.Address {
 	return we.Address.(cipher.Address)
 }
 
-// BitcoinAddress returns the Skycoin address of an entry. Panics if Address is not a Bitcoin address
-func (we Entry) BitcoinAddress() cipher.BitcoinAddress {
-	return we.Address.(cipher.BitcoinAddress)
-}
-
 // MDLAddress returns the MDL address of an entry. Panics if Address is not a MDL address
 func (we *Entry) MDLAddress() cipher.Address {
 	return we.Address.(cipher.Address)

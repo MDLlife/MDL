@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/SkycoinProject/skycoin/src/cipher"
-	"github.com/SkycoinProject/skycoin/src/util/file"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/util/file"
 )
 
 // CollectionWallet manages keys as an arbitrary collection.
@@ -123,7 +123,7 @@ func (w *CollectionWallet) GetAddresses() []cipher.Addresser {
 
 // GetSkycoinAddresses returns all Skycoin addresses in wallet. The wallet's coin type must be Skycoin.
 func (w *CollectionWallet) GetSkycoinAddresses() ([]cipher.Address, error) {
-	if w.Meta.Coin() != CoinTypeSkycoin {
+	if w.Meta.Coin() != CoinTypeMDL {
 		return nil, errors.New("CollectionWallet coin type is not skycoin")
 	}
 

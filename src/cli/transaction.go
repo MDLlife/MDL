@@ -7,8 +7,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/SkycoinProject/skycoin/src/util/droplet"
-	"github.com/SkycoinProject/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/util/droplet"
+	"github.com/MDLlife/MDL/src/wallet"
 
 	"github.com/MDLlife/MDL/src/api"
 	"github.com/MDLlife/MDL/src/cipher"

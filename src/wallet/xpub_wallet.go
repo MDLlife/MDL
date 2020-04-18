@@ -8,10 +8,10 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/SkycoinProject/skycoin/src/cipher"
-	"github.com/SkycoinProject/skycoin/src/cipher/bip32"
-	"github.com/SkycoinProject/skycoin/src/util/file"
-	"github.com/SkycoinProject/skycoin/src/util/mathutil"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher/bip32"
+	"github.com/MDLlife/MDL/src/util/file"
+	"github.com/MDLlife/MDL/src/util/mathutil"
 )
 
 // XPubWallet holds a single xpub (extended public key) and derives child public keys from it.
@@ -115,7 +115,7 @@ func (w *XPubWallet) GetAddresses() []cipher.Addresser {
 
 // GetSkycoinAddresses returns all Skycoin addresses in wallet. The wallet's coin type must be Skycoin.
 func (w *XPubWallet) GetSkycoinAddresses() ([]cipher.Address, error) {
-	if w.Meta.Coin() != CoinTypeSkycoin {
+	if w.Meta.Coin() != CoinTypeMDL {
 		return nil, errors.New("XPubWallet coin type is not skycoin")
 	}
 
@@ -229,7 +229,7 @@ func (w *XPubWallet) GenerateAddresses(num uint64) ([]cipher.Addresser, error) {
 // GenerateSkycoinAddresses generates Skycoin addresses for the external chain, and appends them to the wallet's entries array.
 // If the wallet's coin type is not Skycoin, returns an error
 func (w *XPubWallet) GenerateSkycoinAddresses(num uint64) ([]cipher.Address, error) {
-	if w.Meta.Coin() != CoinTypeSkycoin {
+	if w.Meta.Coin() != CoinTypeMDL {
 		return nil, errors.New("GenerateSkycoinAddresses called for non-skycoin wallet")
 	}
 

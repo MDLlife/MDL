@@ -92,17 +92,6 @@ func init() {
 	}
 }
 
-type mockBalanceGetter map[cipher.Address]BalancePair
-
-func (mb mockBalanceGetter) GetBalanceOfAddrs(addrs []cipher.Address) ([]BalancePair, error) {
-	var bals []BalancePair
-	for _, addr := range addrs {
-		bal := mb[addr]
-		bals = append(bals, bal)
-	}
-	return bals, nil
-}
-
 func TestNewWallet(t *testing.T) {
 	type expect struct {
 		meta map[string]string

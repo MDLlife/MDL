@@ -9,8 +9,8 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/SkycoinProject/skycoin/src/cli"
-	"github.com/SkycoinProject/skycoin/src/util/logging"
+	"github.com/MDLlife/MDL/src/cli"
+	"github.com/MDLlife/MDL/src/util/logging"
 )
 
 func main() {

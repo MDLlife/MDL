@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/MDLlife/MDL/src/cipher"
-	"github.com/MDLlife/MDL/src/params"
 	"github.com/MDLlife/MDL/src/readable"
 	"github.com/MDLlife/MDL/src/util/droplet"
 	wh "github.com/MDLlife/MDL/src/util/http"

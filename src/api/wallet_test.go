@@ -685,7 +685,6 @@ func TestWalletTransactionsHandler(t *testing.T) {
 		{
 			name:   "500 - gateway.GetWalletUnconfirmedTransactions error",
 			method: http.MethodGet,
-			status: http.StatusBadRequest,
 			body: &httpBody{
 				walletID: "foo",
 			},

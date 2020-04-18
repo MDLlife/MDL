@@ -884,19 +884,19 @@ func TestServiceGetAddress(t *testing.T) {
 					dirIsEmpty(t, dir)
 
 					require.Empty(t, s.wallets)
-					addrs, err := s.GetMDLAddresses("")
+					addrs, err := s.GetSkycoinAddresses("")
 					require.Equal(t, ErrWalletAPIDisabled, err)
 					require.Equal(t, 0, len(addrs))
 					return
 				}
 
-				addrs, err := s.GetMDLAddresses("test1.wlt")
+				addrs, err := s.GetSkycoinAddresses("test1.wlt")
 				require.NoError(t, err)
 				require.Equal(t, 1, len(addrs))
 
 				// test none exist wallet
 				notExistID := "not_exist_id.wlt"
-				_, err = s.GetMDLAddresses(notExistID)
+				_, err = s.GetSkycoinAddresses(notExistID)
 				require.Equal(t, ErrWalletNotExist, err)
 			})
 		}
@@ -1832,7 +1832,6 @@ func TestServiceCreateWalletWithScan(t *testing.T) {
 				addrs:    addrs,
 			},
 		},
-
 		{
 			name: "scan 5 get 5, encrypted",
 			opts: Options{

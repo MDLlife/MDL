@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/SkycoinProject/skycoin/src/cipher"
-	"github.com/SkycoinProject/skycoin/src/cipher/bip39"
-	"github.com/SkycoinProject/skycoin/src/cipher/bip44"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher/bip39"
+	"github.com/MDLlife/MDL/src/cipher/bip44"
 )
 
 // wallet meta fields
@@ -333,7 +333,7 @@ func (m Meta) SetTimestamp(t int64) {
 // AddressConstructor returns a function to create a cipher.Addresser from a cipher.PubKey
 func (m Meta) AddressConstructor() func(cipher.PubKey) cipher.Addresser {
 	switch m.Coin() {
-	case CoinTypeSkycoin:
+	case CoinTypeMDL:
 		return func(pk cipher.PubKey) cipher.Addresser {
 			return cipher.AddressFromPubKey(pk)
 		}

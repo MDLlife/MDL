@@ -1445,23 +1445,6 @@ func TestVerifyTransaction(t *testing.T) {
 	unsignedTxnBodyUnsignedJSON, err := json.Marshal(unsignedTxnBodyUnsigned)
 	require.NoError(t, err)
 
-	unsignedTxnAndInputs := prepareTxnAndInputs(t)
-	unsignedTxnAndInputs.txn.Sigs = make([]cipher.Sig, len(unsignedTxnAndInputs.txn.Sigs))
-	err = unsignedTxnAndInputs.txn.UpdateHeader()
-	require.NoError(t, err)
-	unsignedTxnBody := &httpBody{
-		EncodedTransaction: unsignedTxnAndInputs.txn.MustSerializeHex(),
-	}
-	unsignedTxnBodyJSON, err := json.Marshal(unsignedTxnBody)
-	require.NoError(t, err)
-
-	unsignedTxnBodyUnsigned := &httpBody{
-		Unsigned:           true,
-		EncodedTransaction: unsignedTxnAndInputs.txn.MustSerializeHex(),
-	}
-	unsignedTxnBodyUnsignedJSON, err := json.Marshal(unsignedTxnBodyUnsigned)
-	require.NoError(t, err)
-
 	type verifyTxnVerboseResult struct {
 		Uxouts         []visor.TransactionInput
 		IsTxnConfirmed bool

@@ -6,10 +6,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/SkycoinProject/skycoin/src/cipher"
-	"github.com/SkycoinProject/skycoin/src/coin"
-	"github.com/SkycoinProject/skycoin/src/params"
-	"github.com/SkycoinProject/skycoin/src/util/droplet"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/coin"
+	"github.com/MDLlife/MDL/src/params"
+	"github.com/MDLlife/MDL/src/util/droplet"
 )
 
 func distributeGenesisCmd() *cobra.Command {

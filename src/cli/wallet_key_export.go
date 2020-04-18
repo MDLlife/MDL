@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/SkycoinProject/skycoin/src/cipher"
-	"github.com/SkycoinProject/skycoin/src/cipher/bip32"
-	"github.com/SkycoinProject/skycoin/src/wallet"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher/bip32"
+	"github.com/MDLlife/MDL/src/wallet"
 )
 
 func walletKeyExportCmd() *cobra.Command {
