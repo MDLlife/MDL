@@ -16,7 +16,7 @@
       <div class="-body">
         <div class="-row" *ngFor="let peer of peers">
           <div class="-direction">
-            <img src="/assets/img/send-blue.png" [ngClass]="{ '-incoming': !peer.outgoing }"
+            <img src="/assets/img/send-black.png" [ngClass]="{ '-incoming': !peer.outgoing }"
                  [matTooltip]="(peer.outgoing ? 'network.out' : 'network.in') | translate">
           </div>
           <div class="-width-200 -pl-0">
