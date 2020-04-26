@@ -74,21 +74,3 @@ export function getHardwareWalletErrorMsg(translateService: TranslateService, er
     return response;
   }
 }
-
-export function getHardwareWalletErrorMsg(hwWalletService: HwWalletService, translateService: TranslateService, error: any): string {
-  if (!hwWalletService.getDeviceConnectedSync()) {
-    return translateService.instant('hardware-wallet.general.error-disconnected');
-  } else {
-    if (error.result) {
-      if (error.result === OperationResults.FailedOrRefused) {
-        return translateService.instant('hardware-wallet.general.refused');
-      } else if (error.result === OperationResults.WrongPin) {
-        return translateService.instant('hardware-wallet.general.error-incorrect-pin');
-      } else if (error.result === OperationResults.IncorrectHardwareWallet) {
-        return translateService.instant('hardware-wallet.general.error-incorrect-wallet');
-      }
-    }
-
-    return translateService.instant('hardware-wallet.general.generic-error');
-  }
-}

@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { WalletService } from '../../../../services/wallet.service';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatSnackBar, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { PasswordDialogComponent } from '../../../layout/password-dialog/password-dialog.component';
 import { ButtonComponent } from '../../../layout/button/button.component';
-import { showSnackbarError, getHardwareWalletErrorMsg } from '../../../../utils/errors';
+import { getHardwareWalletErrorMsg } from '../../../../utils/errors';
 import { Subscription, ISubscription } from 'rxjs/Subscription';
 import { NavBarService } from '../../../../services/nav-bar.service';
 import { SelectAddressComponent } from './select-address/select-address';
@@ -20,6 +20,7 @@ import { HwWalletService } from '../../../../services/hw-wallet.service';
 import { TranslateService } from '@ngx-translate/core';
 import { DoubleButtonActive } from '../../../layout/double-button/double-button.component';
 import { PriceService } from '../../../../services/price.service';
+import { MsgBarService } from '../../../../services/msg-bar.service';
 import { SendFormComponent } from '../send-form/send-form.component';
 
 @Component({
@@ -64,7 +65,7 @@ export class SendFormAdvancedComponent implements OnInit, OnDestroy {
     private appService: AppService,
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
-    private snackbar: MatSnackBar,
+    private msgBarService: MsgBarService,
     private navbarService: NavBarService,
     private hwWalletService: HwWalletService,
     private translate: TranslateService,
@@ -143,7 +144,7 @@ export class SendFormAdvancedComponent implements OnInit, OnDestroy {
     this.closeSyncCheckSubscription();
     this.subscriptions.unsubscribe();
     this.navbarService.hideSwitch();
-    this.snackbar.dismiss();
+    this.msgBarService.hide();
     this.destinationSubscriptions.forEach(s => s.unsubscribe());
   }
 
@@ -235,7 +236,7 @@ export class SendFormAdvancedComponent implements OnInit, OnDestroy {
   }
 
   private prepareTransaction() {
-    this.snackbar.dismiss();
+    this.msgBarService.hide();
     this.previewButton.resetState();
     this.sendButton.resetState();
 
@@ -256,7 +257,7 @@ export class SendFormAdvancedComponent implements OnInit, OnDestroy {
         this.showBusy();
         this.processingSubscription = this.hwWalletService.checkIfCorrectHwConnected((this.form.value.wallet as Wallet).addresses[0].address).subscribe(
           () => this.createTransaction(),
-          err => this.showError(getHardwareWalletErrorMsg(this.hwWalletService, this.translate, err)),
+          err => this.showError(getHardwareWalletErrorMsg(this.translate, err)),
         );
       }
     }
@@ -479,8 +480,9 @@ export class SendFormAdvancedComponent implements OnInit, OnDestroy {
         passwordDialog.close();
       }
 
+      const note = this.form.value.note.trim();
       if (!this.previewTx) {
-        this.processingSubscription = this.walletService.injectTransaction(transaction.encoded)
+        this.processingSubscription = this.walletService.injectTransaction(transaction.encoded, note)
           .subscribe(() => this.showSuccess(), error => this.showError(error));
       } else {
         let amount = new BigNumber('0');
@@ -510,7 +512,7 @@ export class SendFormAdvancedComponent implements OnInit, OnDestroy {
       }
 
       if (error && error.result) {
-        this.showError(getHardwareWalletErrorMsg(this.hwWalletService, this.translate, error));
+        this.showError(getHardwareWalletErrorMsg(this.translate, error));
       } else {
         this.showError(error);
       }
@@ -640,7 +642,8 @@ export class SendFormAdvancedComponent implements OnInit, OnDestroy {
 
   private showError(error) {
     this.busy = false;
-    showSnackbarError(this.snackbar, error);
+    this.msgBarService.showError(error);
+    this.navbarService.enableSwitch();
     this.previewButton.resetState().setEnabled();
     this.sendButton.resetState().setEnabled();
   }

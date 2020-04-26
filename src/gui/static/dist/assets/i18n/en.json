@@ -144,10 +144,6 @@
       "encrypt-warning": "We suggest that you encrypt each one of your wallets with a password. If you forget your password, you can reset it with your seed. Make sure you have your seed saved somewhere safe before encrypting your wallet.",
       "unconventional-seed-title": "Possible error",
       "unconventional-seed-text": "You introduced an unconventional seed. If you did it for any special reason, you can continue (only recommended for advanced users). However, if your intention is to use a normal system seed, you must delete all the additional text and special characters.",
-      "unconventional-seed-check": "Continue with the unconventional seed."
-      "encrypt-warning": "We suggest that you encrypt each one of your wallets with a password. If you forget your password, you can reset it with your seed. Make sure you have your seed saved somewhere safe before encrypting your wallet.",
-      "unconventional-seed-title": "Possible error",
-      "unconventional-seed-text": "You introduced an unconventional seed. If you did it for any special reason, you can continue (only recommended for advanced users). However, if your intention is to use a normal system seed, you must delete all the additional text and special characters.",
       "unconventional-seed-check": "Continue with the unconventional seed.",
       "synchronizing-warning-title": "Warning",
       "synchronizing-warning-text": "The wallet is still synchronizing and some addresses may not be restored. If some addresses are not restored, please wait for the wallet to be fully synchronized and add them again manually.",
@@ -181,13 +177,6 @@
       "name-label": "Name",
       "cancel-button": "Cancel",
       "rename-button": "Rename"
-    },
-
-    "add-addresses": {
-      "title": "Select quantity",
-      "name-quantity": "How many addresses to create",
-      "cancel-button": "Cancel",
-      "create-button": "Create"
     },
 
     "add-addresses": {
@@ -259,8 +248,8 @@
     "destinations-help2": "Destination addresses, their coins and coin hours",
     "hours-allocation-label": "Automatic coin hours allocation",
     "options-label": "Options",
-    "value-label": "Coin hours share factor",
-    "value-help": "The higher the value, the more coin hours will be sent to the recipients and less will be retained",
+    "value-label": "Token hours share factor",
+    "value-help": "The higher the value, the more token hours will be sent to the recipients and less will be retained",
     "preview-button": "Preview",
     "send-button": "Send",
     "back-button": "Back",
@@ -286,7 +275,8 @@
     "seed-label": "Wallet seed",
     "password-label": "New password (leave empty if you want the wallet not to be encrypted)",
     "confirm-label": "Confirm new password",
-    "reset-button": "Reset"
+    "reset-button": "Reset",
+    "done": "Password successfully changed."
   },
 
   "tx": {

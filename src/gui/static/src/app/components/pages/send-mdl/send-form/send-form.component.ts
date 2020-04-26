@@ -5,8 +5,8 @@ import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/filter';
 import { ButtonComponent } from '../../../layout/button/button.component';
 import { PasswordDialogComponent } from '../../../layout/password-dialog/password-dialog.component';
-import { MatDialog, MatSnackBar, MatDialogConfig } from '@angular/material';
-import { showSnackbarError, getHardwareWalletErrorMsg } from '../../../../utils/errors';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { getHardwareWalletErrorMsg } from '../../../../utils/errors';
 import { ISubscription, Subscription } from 'rxjs/Subscription';
 import { NavBarService } from '../../../../services/nav-bar.service';
 import { BigNumber } from 'bignumber.js';
@@ -17,6 +17,7 @@ import { BlockchainService } from '../../../../services/blockchain.service';
 import { showConfirmationModal } from '../../../../utils';
 import { DoubleButtonActive } from '../../../layout/double-button/double-button.component';
 import { PriceService } from '../../../../services/price.service';
+import { MsgBarService } from '../../../../services/msg-bar.service';
 
 @Component({
   selector: 'app-send-form',
@@ -51,7 +52,7 @@ export class SendFormComponent implements OnInit, OnDestroy {
     public blockchainService: BlockchainService,
     public walletService: WalletService,
     private dialog: MatDialog,
-    private snackbar: MatSnackBar,
+    private msgBarService: MsgBarService,
     private navbarService: NavBarService,
     private hwWalletService: HwWalletService,
     private translate: TranslateService,
@@ -75,7 +76,7 @@ export class SendFormComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
     this.closeSyncCheckSubscription();
     this.navbarService.hideSwitch();
-    this.snackbar.dismiss();
+    this.msgBarService.hide();
   }
 
   preview() {
@@ -153,7 +154,7 @@ export class SendFormComponent implements OnInit, OnDestroy {
   }
 
   private prepareTransaction() {
-    this.snackbar.dismiss();
+    this.msgBarService.hide();
     this.previewButton.resetState();
     this.sendButton.resetState();
 
@@ -174,7 +175,7 @@ export class SendFormComponent implements OnInit, OnDestroy {
         this.showBusy();
         this.processingSubscription = this.hwWalletService.checkIfCorrectHwConnected((this.form.value.wallet as Wallet).addresses[0].address).subscribe(
           () => this.createTransaction(),
-          err => this.showError(getHardwareWalletErrorMsg(this.hwWalletService, this.translate, err)),
+          err => this.showError(getHardwareWalletErrorMsg(this.translate, err)),
         );
       }
     }
@@ -215,8 +216,9 @@ export class SendFormComponent implements OnInit, OnDestroy {
           passwordDialog.close();
         }
 
+        const note = this.form.value.note.trim();
         if (!this.previewTx) {
-          this.processingSubscription = this.walletService.injectTransaction(transaction.encoded)
+          this.processingSubscription = this.walletService.injectTransaction(transaction.encoded, note)
             .subscribe(() => this.showSuccess(), error => this.showError(error));
         } else {
           this.onFormSubmitted.emit({
@@ -239,7 +241,7 @@ export class SendFormComponent implements OnInit, OnDestroy {
         }
 
         if (error && error.result) {
-          this.showError(getHardwareWalletErrorMsg(this.hwWalletService, this.translate, error));
+          this.showError(getHardwareWalletErrorMsg(this.translate, error));
         } else {
           this.showError(error);
         }
@@ -259,7 +261,8 @@ export class SendFormComponent implements OnInit, OnDestroy {
 
   private showError(error) {
     this.busy = false;
-    showSnackbarError(this.snackbar, error);
+    this.msgBarService.showError(error);
+    this.navbarService.enableSwitch();
     this.previewButton.resetState().setEnabled();
     this.sendButton.resetState().setEnabled();
   }
@@ -269,7 +272,12 @@ export class SendFormComponent implements OnInit, OnDestroy {
       wallet: ['', Validators.required],
       address: ['', Validators.required],
       amount: ['', Validators.required],
+      note: [''],
     });
+
+    this.form.get('address').setValidators([
+      this.validateAddress.bind(this),
+    ]);
 
     this.subscriptions.add(this.form.get('wallet').valueChanges.subscribe(value => {
       this.form.get('amount').setValidators([
@@ -295,6 +303,12 @@ export class SendFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  private validateAddress(addressControl: FormControl) {
+    if (!addressControl.value || (addressControl.value as string).trim().length === 0) {
+      return { Required: true };
+    }
+  }
+  
   private validateAmount(amountControl: FormControl) {
     if (isNaN(amountControl.value.replace(' ', '='))) {
       return { Invalid: true };

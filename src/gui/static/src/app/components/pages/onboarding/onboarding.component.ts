@@ -41,15 +41,6 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  ngOnInit() {
-    this.subscription = this.languageService.currentLanguage
-      .subscribe(lang => this.language = lang);
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
   onLabelAndSeedCreated(data: WalletFormData) {
     this.formData = data,
     this.step = 2;

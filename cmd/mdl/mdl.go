@@ -79,12 +79,12 @@ var (
         CreateBlockMaxDropletPrecision: 3,
         MaxBlockTransactionsSize:       32768,
 
-        DisplayName:           "Skycoin",
-        Ticker:                "SKY",
-        CoinHoursName:         "Coin Hours",
-        CoinHoursNameSingular: "Coin Hour",
-        CoinHoursTicker:       "SCH",
-        ExplorerURL:           "https://explorer.skycoin.com",
+        DisplayName:           "MDL Talent Hub",
+        Ticker:                "MDL",
+        CoinHoursName:         "Talent Hours",
+        CoinHoursNameSingular: "Talent Hour",
+        CoinHoursTicker:       "MTH",
+        ExplorerURL:           "https://explorer.mdl.wtf",
         VersionURL:            "https://version.skycoin.com/skycoin/version.txt",
         Bip44Coin:             8000,
 	})

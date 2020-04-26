@@ -31,12 +31,6 @@ export class AppService {
   }
   private lastestVersionInternal = '';
 
-  get burnRate() {
-    return this.burnRateInternal;
-  }
-
-  private burnRateInternal = new BigNumber(0.5);
-
   constructor(
     private apiService: ApiService,
     private http: Http,

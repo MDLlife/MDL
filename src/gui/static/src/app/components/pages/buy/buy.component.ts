@@ -76,7 +76,7 @@ export class BuyComponent implements OnInit, OnDestroy {
         order => this.saveData(order),
         error => this.msgBarService.showError(error.toString()),
       );
-    });
+    }));
 
     this.form.controls.coin_type.valueChanges.subscribe(type => {
 
@@ -89,9 +89,9 @@ export class BuyComponent implements OnInit, OnDestroy {
           this.saveData(order);
         },
         err => {
-          this.snackBar.open(err._body);
+          this.msgBarService.showError(err._body);
           setTimeout(() => {
-            this.snackBar.dismiss();
+            this.msgBarService.hide();
           }, 5000)
         }
       );
@@ -127,7 +127,7 @@ export class BuyComponent implements OnInit, OnDestroy {
     this.loadConfig();
     this.loadOrder();
 
-    this.subscriptionsGroup.add(this.walletService.all().subscribe(wallets => {
+    this.subscriptionsGroup.push(this.walletService.all().subscribe(wallets => {
       this.wallets = wallets;
 
       if (this.order) {

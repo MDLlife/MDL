@@ -3,6 +3,7 @@ import 'rxjs/add/operator/takeWhile';
 import { MatDialog } from '@angular/material';
 
 
+import { AppService } from './services/app.service';
 import { WalletService } from './services/wallet.service';
 import { HwWalletService } from './services/hw-wallet.service';
 import { HwPinDialogComponent } from './components/layout/hardware-wallet/hw-pin-dialog/hw-pin-dialog.component';
@@ -27,17 +28,12 @@ export class AppComponent implements OnInit {
   constructor(
     private appService: AppService,
     private languageService: LanguageService,
-    walletService: WalletService,
-    hwWalletService: HwWalletService,
     private bip38WordList: Bip39WordListService,
     private dialog: MatDialog,
-    private languageService: LanguageService,
     walletService: WalletService,
     hwWalletService: HwWalletService,
     hwWalletPinService: HwWalletPinService,
     hwWalletSeedWordService: HwWalletSeedWordService,
-    private bip38WordList: Bip39WordListService,
-    private dialog: MatDialog,
     private msgBarService: MsgBarService,
   ) {
     hwWalletPinService.requestPinComponent = HwPinDialogComponent;
