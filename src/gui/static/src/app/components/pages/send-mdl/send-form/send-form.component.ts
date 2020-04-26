@@ -54,7 +54,7 @@ export class SendFormComponent implements OnInit, OnDestroy {
   constructor(
     public formBuilder: FormBuilder,
     public blockchainService: BlockchainService,
-    private walletService: WalletService,
+    public walletService: WalletService,
     private dialog: MatDialog,
     private msgBarService: MsgBarService,
     private navbarService: NavBarService,
