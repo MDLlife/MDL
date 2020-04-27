@@ -6,14 +6,16 @@
         <p *ngIf="highest && loading" class="coins"><span>{{ percentage | percent:'1.2-2' }}</span></p>
         <p *ngIf="!loading" class="coins"><span>{{ coins | amount:true:'first' }}</span> {{ coins | amount:true:'last' }}</p>
         <p *ngIf="!highest && loading" class="coins"><span>&nbsp;</span></p>
-        <p class="dollars">
-          <span *ngIf="price">
-            <span *ngIf="!loading">{{ (coins * price) | currency:'USD':'symbol':'1.2-2' }}</span>
-            <span *ngIf="loading">-</span>
-            ({{ price | currency:'USD':'symbol':'1.2-2' }})
-          </span>
-          <span *ngIf="!price">{{ 'common.loading' | translate }}</span>
-        </p>
+        <a href="https://coinpaprika.com/coin/mdl-mdl" target="_blank" style="text-decoration: none; color: #fff;">
+          <p class="dollars">
+            <span *ngIf="price">
+              <span *ngIf="!loading">{{ (coins * price) | currency:'USD':'symbol':'1.2-2' }}</span>
+              <span *ngIf="loading">-</span>
+              ({{ price | currency:'USD':'symbol':'1.2-2' }})
+            </span>
+            <span *ngIf="!price">{{ 'common.loading' | translate }}</span>
+          </p>
+        </a>
       </div>
     </div>
     <div class="hour-balance">
