@@ -22,11 +22,11 @@ func walletDirCmd() *cobra.Command {
 				return printJSON(struct {
 					WltDir string `json:"walletDir"`
 				}{
-					WltDir: cliConfig.WalletDir,
+					WltDir: cliConfig.DataDir,
 				})
 			}
 
-			fmt.Println(cliConfig.WalletDir)
+			fmt.Println(cliConfig.DataDir)
 			return nil
 		},
 	}

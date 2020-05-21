@@ -7,6 +7,7 @@ import (
 	"strings"
 
     "github.com/MDLlife/MDL/src/params"
+    "github.com/MDLlife/MDL/src/api"
 	"github.com/MDLlife/MDL/src/readable"
 	"github.com/MDLlife/MDL/src/transaction"
 	"github.com/MDLlife/MDL/src/util/droplet"

@@ -2,10 +2,13 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PurchaseService } from '../../../services/purchase.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { WalletService } from '../../../services/wallet.service';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Address, PurchaseOrder, Wallet } from '../../../app.datatypes';
 import { ButtonComponent } from '../../layout/button/button.component';
 import { ISubscription } from 'rxjs/Subscription';
 import { MsgBarService } from '../../../services/msg-bar.service';
+import { QrCodeComponent, QrDialogConfig } from '../../layout/qr-code/qr-code.component';
+import {copyTextToClipboard} from "../../../utils";
 
 @Component({
   selector: 'app-buy',
@@ -28,6 +31,7 @@ export class BuyComponent implements OnInit, OnDestroy {
   private subscriptionsGroup: ISubscription[] = [];
 
   constructor(
+    private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private purchaseService: PurchaseService,
     private msgBarService: MsgBarService,
@@ -70,6 +74,7 @@ export class BuyComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptionsGroup.push(this.form.get('wallet').valueChanges.subscribe(filename => {
+      if ( this.form.value.coin_type === '' ) return;
       const wallet = this.wallets.find(wlt => wlt.filename === filename);
       console.log('changing wallet value', filename);
       this.purchaseService.generate(wallet, this.form.value.coin_type).subscribe(
@@ -167,5 +172,20 @@ export class BuyComponent implements OnInit, OnDestroy {
       case "WAVES": return this.config.supported[3].exchange_rate;
     }
     return "1"
+  }
+
+  showQrCode(event, address: string) {
+    event.stopPropagation();
+
+
+    const config: QrDialogConfig = { address, hideCoinRequestForm : true, ignoreCoinPrefix : true};
+    QrCodeComponent.openDialog(this.dialog, config);
+  }
+
+  copyAddress(event, address) {
+    event.stopPropagation();
+
+    copyTextToClipboard(address);
+    this.msgBarService.showDone('qr.copied', 4000);
   }
 }

@@ -26,6 +26,7 @@ import (
 	"github.com/MDLlife/MDL/src/daemon"
 	"github.com/MDLlife/MDL/src/daemon/pex"
 	"github.com/MDLlife/MDL/src/util/logging"
+    "encoding/json"
 )
 
 // PeerState is a current state of the peer
@@ -189,31 +190,40 @@ func main() {
 // If the line fails to parse, an error is returned
 // Localhost addresses are allowed if allowLocalhost is true
 func getPeersListFromFile(filePath string) ([]string, error) {
-	body, err := ioutil.ReadFile(filePath)
+    file, err := os.Open(filePath)
+    if err != nil {
+        return nil, err
+    }
+	body, err := ioutil.ReadAll(file)
 	if err != nil {
 		return nil, err
 	}
 
+	var peersJson map[string]interface{}
 	var peers []string
-	for _, addr := range strings.Split(string(body), "\n") {
-		addr = whitespaceFilter.ReplaceAllString(addr, "")
-		if addr == "" {
-			continue
-		}
-
-		if strings.HasPrefix(addr, "#") {
-			continue
-		}
-
-		a, err := validateAddress(addr, true)
-		if err != nil {
-			err = fmt.Errorf("peers list has invalid address %s: %v", addr, err)
-			logger.WithError(err).Error()
-			return nil, err
-		}
-
-		peers = append(peers, a)
-	}
+	json.Unmarshal(body, &peersJson)
+	for peer, _:= range peersJson {
+	    peers = append(peers, peer)
+    }
+	//for _, addr := range strings.Split(string(body), "\n") {
+	//	addr = whitespaceFilter.ReplaceAllString(addr, "")
+	//	if addr == "" {
+	//		continue
+	//	}
+	//
+	//	if strings.HasPrefix(addr, "#") {
+	//		continue
+	//	}
+	//
+	//	a, err := validateAddress(addr, true)
+	//	if err != nil {
+	//		err = fmt.Errorf("peers list has invalid address %s: %v", addr, err)
+	//		logger.WithError(err).Error()
+	//		return nil, err
+	//	}
+	//
+	//	peers = append(peers, a)
+	//}
 
 	return peers, nil
 }

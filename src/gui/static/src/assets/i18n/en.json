@@ -70,21 +70,27 @@
   },
 
   "buy": {
-    "deposit-address": "Choose an address to generate a Selected Coin deposit link for:",
+    "deposit-address": "Choose an address to generate a deposit link for:",
     "select-address": "Select address",
     "generate": "Generate",
     "deposit-location": "Deposit Location",
-    "deposit-location-desc": "Choose a wallet where you'd like us to deposit your MDL after we receive your Selected Coin.",
+    "deposit-location-desc": "Choose a wallet where you'd like to receive your MDL after we receive your deposit.",
     "make-choice": "Make a choice",
-    "wallets-desc": "Each time a new wallet and address are selected, a new Selected Coin address is generated. A single MDL address can have up to 5 Selected Coin addresses assigned to it.",
-    "send": "Send Selected Coin",
-    "send-desc": "Send Selected Coin to the address below. Once received, we will deposit the MDL to a new address in the wallet selected above at the current rate of {{ rate }} MDL/Selected Coin.",
-    "fraction-warning": "Only send multiple of the MDL/BTC rate! MDL is sent in whole number; fractional MDL is not sent!",
+    "wallets-desc": "Each time a new wallet and address are selected, a new deposit address is generated. A single MDL address can have up to 5 addresses assigned to it.",
+    "send": "Send Your Deposit",
+    "send-desc": "Send deposit to the address below. Once received, we will deposit MDL tokens to a new address in the wallet selected above at the current rate of {{ rate }} MDL/Selected Coin.",
+    "note": "You can send to this address multiple times. We recommend sending a small transaction first, to test.",
     "receive": "Receive MDL",
     "receive-desc": "After receiving your Selected Coin, we'll send you your MDL. It may take anywhere between 20 minutes and an hour to receive your MDL.",
     "status-button": "Status:",
     "check-status-button": "Check Status",
-    "new-order-button": "New Order"
+    "new-order-button": "New Order",
+    "refresh": "Refresh",
+    "available-now": "Available Now:",
+    "choose-preference": "Choose your preferred payment method. Please be aware that some methods can temporarily be disabled.",
+    "choose": "Please choose your favourite crypto ;)",
+    "send-coin":"Send",
+    "send-coin-text-1": "to the address below. After enough confirmations on the blockchain, you will receive MDL tokens to the wallet selected above at the current rate of"
   },
 
   "wizard": {

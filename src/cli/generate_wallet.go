@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	gcli "github.com/spf13/cobra"
+	"github.com/spf13/cobra"
 
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/cipher/bip39"
@@ -44,7 +44,7 @@ func walletCreateCmd() *cobra.Command {
 	walletCreateCmd.Flags().StringP("seed", "s", "", "Your seed")
 	walletCreateCmd.Flags().StringP("seed-passphrase", "", "", "Seed passphrase (bip44 wallets only)")
 	walletCreateCmd.Flags().Uint32P("bip44-coin", "", uint32(bip44.CoinTypeSkycoin), "BIP44 coin type")
-	walletCreateCmd.Flags().StringP("coin", "c", string(wallet.CoinTypeSkycoin), "Wallet address coin type (options: skycoin, bitcoin)")
+	walletCreateCmd.Flags().StringP("coin", "c", string(wallet.CoinTypeMDL), "Wallet address coin type (options: skycoin, bitcoin)")
 	walletCreateCmd.Flags().Uint64P("num", "n", 1, `Number of addresses to generate.`)
 	walletCreateCmd.Flags().StringP("label", "l", "", "Label used to identify your wallet.")
 	walletCreateCmd.Flags().StringP("type", "t", wallet.WalletTypeDeterministic, "Wallet type. Types are \"collection\", \"deterministic\", \"bip44\" or \"xpub\"")

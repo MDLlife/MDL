@@ -15,7 +15,7 @@ export class Address {
 export class PurchaseOrder {
   coin_type: string;
   filename: string;
-  deposit_address: string;
+  address: string;
   recipient_address: string;
   status?: string;
 }
