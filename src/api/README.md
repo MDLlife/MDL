@@ -1,6 +1,6 @@
 # REST API Documentation
 
-API default service port is `6420`. However, if running the desktop or standalone releases from the website, the port is randomized by default.
+API default service port is `8320`. However, if running the desktop or standalone releases from the website, the port is randomized by default.
 
 A REST API implemented in Go is available,
 see [MDL REST API Client Godoc](https://godoc.org/github.com/MDLlife/MDL/src/api#Client).
@@ -173,7 +173,7 @@ Method: GET
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/csrf
+curl http://127.0.0.1:8320/api/v1/csrf
 ```
 
 Result:
@@ -198,7 +198,7 @@ Method: GET
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/health
+curl http://127.0.0.1:8320/api/v1/health
 ```
 
 Response:
@@ -261,7 +261,7 @@ Method: GET
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/version
+curl http://127.0.0.1:8320/api/v1/version
 ```
 
 Result:
@@ -286,7 +286,7 @@ Method: GET
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v2/metrics
+curl http://127.0.0.1:8320/api/v2/metrics
 ```
 
 Result:
@@ -413,7 +413,7 @@ The `POST` method can be used if many addresses need to be queried.
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/balance?addrs=7cpQ7t3PZZXvjTst8G7Uvs7XH4LeM8fBPD,nu7eSpT6hr5P21uzw7bnbxm83B6ywSjHdq,2jBbGxZRGoQG1mqhPBnXnLTxK6oxsTf8os6
+curl http://127.0.0.1:8320/api/v1/balance?addrs=7cpQ7t3PZZXvjTst8G7Uvs7XH4LeM8fBPD,nu7eSpT6hr5P21uzw7bnbxm83B6ywSjHdq,2jBbGxZRGoQG1mqhPBnXnLTxK6oxsTf8os6
 ```
 
 Result:
@@ -488,13 +488,13 @@ The `POST` method can be used if many addresses or hashes need to be queried.
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/outputs?addrs=6dkVxyKFbFKg9Vdg6HPg1UANLByYRqkrdY
+curl http://127.0.0.1:8320/api/v1/outputs?addrs=6dkVxyKFbFKg9Vdg6HPg1UANLByYRqkrdY
 ```
 
 or
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/outputs?hashes=7669ff7350d2c70a88093431a7b30d3e69dda2319dcb048aa80fa0d19e12ebe0
+curl http://127.0.0.1:8320/api/v1/outputs?hashes=7669ff7350d2c70a88093431a7b30d3e69dda2319dcb048aa80fa0d19e12ebe0
 ```
 
 Result:
@@ -549,7 +549,7 @@ Error responses:
 Example for a valid address:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v2/address/verify \
+curl -X POST http://127.0.0.1:8320/api/v2/address/verify \
  -H 'Content-Type: application/json' \
  -d '{"address":"2HTnQe3ZupkG6k8S81brNC3JycGV2Em71F2"}'
 ```
@@ -567,7 +567,7 @@ Result:
 Example for an invalid address:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v2/address/verify \
+curl -X POST http://127.0.0.1:8320/api/v2/address/verify \
  -H 'Content-Type: application/json' \
  -d '{"address":"2aTnQe3ZupkG6k8S81brNC3JycGV2Em71F2"}'
 ```
@@ -599,7 +599,7 @@ Args:
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/wallet?id=2017_11_25_e5fb.wlt
+curl http://127.0.0.1:8320/api/v1/wallet?id=2017_11_25_e5fb.wlt
 ```
 
 Result:
@@ -652,7 +652,7 @@ equal to the hours the output would have if it become confirmed immediately.
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/wallet/transactions?id=2017_11_25_e5fb.wlt
+curl http://127.0.0.1:8320/api/v1/wallet/transactions?id=2017_11_25_e5fb.wlt
 ```
 
 Result:
@@ -701,7 +701,7 @@ Result:
 Example (verbose):
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/wallet/transactions?id=2017_11_25_e5fb.wlt&verbose=1
+curl http://127.0.0.1:8320/api/v1/wallet/transactions?id=2017_11_25_e5fb.wlt&verbose=1
 ```
 
 Result:
@@ -772,7 +772,7 @@ Method: GET
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/wallets
+curl http://127.0.0.1:8320/api/v1/wallets
 ```
 
 Result:
@@ -816,7 +816,7 @@ Method: GET
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/wallets/folderName
+curl http://127.0.0.1:8320/api/v1/wallets/folderName
 ```
 
 Result:
@@ -843,7 +843,7 @@ Args:
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/wallet/newSeed
+curl http://127.0.0.1:8320/api/v1/wallet/newSeed
 ```
 
 Result:
@@ -868,7 +868,7 @@ Args:
 Example:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v2/wallet/seed/verify \
+curl -X POST http://127.0.0.1:8320/api/v2/wallet/seed/verify \
  -H 'Content-type: application/json' \
  -d '{ "seed": "nut wife logic sample addict shop before tobacco crisp bleak lawsuit affair" }'
 ```
@@ -884,7 +884,7 @@ Result:
 Example (wrong bip39 seed):
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v2/wallet/seed/verify \
+curl -X POST http://127.0.0.1:8320/api/v2/wallet/seed/verify \
  -H 'Content-type: application/json' \
  -d '{ "seed": "wrong seed" }'
 ```
@@ -918,7 +918,7 @@ Args:
 Example:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v1/wallet/create \
+curl -X POST http://127.0.0.1:8320/api/v1/wallet/create \
  -H 'Content-Type: application/x-www-form-urlencoded' \
  -d 'seed=$seed' \
  -d 'label=$label' \
@@ -965,7 +965,7 @@ Args:
 Example:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v1/wallet/newAddress \
+curl -X POST http://127.0.0.1:8320/api/v1/wallet/newAddress \
  -H 'Content-Type: x-www-form-urlencoded' \
  -d 'id=2017_05_09_d554.wlt' \
  -d 'num=2' \
@@ -997,7 +997,7 @@ Args:
 Example:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v1/wallet/update \
+curl -X POST http://127.0.0.1:8320/api/v1/wallet/update \
  -H 'Content-Type: application/x-www-form-urlencoded' \
  -d 'id=$id' \
  -d 'label=$label'
@@ -1023,7 +1023,7 @@ Args:
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/wallet/balance?id=2018_03_07_3088.wlt
+curl http://127.0.0.1:8320/api/v1/wallet/balance?id=2018_03_07_3088.wlt
 ```
 
 Result:
@@ -1294,7 +1294,7 @@ The unsigned `encoded_transaction` can be sent to `POST /api/v2/wallet/transacti
 Example:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v1/wallet/transaction -H 'content-type: application/json' -d '{
+curl -X POST http://127.0.0.1:8320/api/v1/wallet/transaction -H 'content-type: application/json' -d '{
     "hours_selection": {
         "type": "auto",
         "mode": "share",
@@ -1387,7 +1387,7 @@ The `encoded_transaction` can be provided to `POST /api/v1/injectTransaction` to
 Example:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v2/wallet/transaction/sign -H 'content-type: application/json' -d '{
+curl -X POST http://127.0.0.1:8320/api/v2/wallet/transaction/sign -H 'content-type: application/json' -d '{
     "wallet_id": "foo.wlt",
     "password": "password",
     "encoded_transaction": "010100000097dd062820314c46da0fc18c8c6c10bfab1d5da80c30adc79bbe72e90bfab11d010000006120acebfa61ba4d3970dec5665c3c952374f5d9bbf327674a0b240de62b202b319f61182e2a262b2ca5ef5a592084299504689db5448cd64c04b1f26eb01d9100010000007068bfd0f0f914ea3682d0e5cb3231b75cb9f0776bf9013d79b998d96c93ce2b0300000000ba2a4ac4a5ce4e03a82d2240ae3661419f7081b140420f0000000000ed5600000000000000ba2a4ac4a5ce4e03a82d2240ae3661419f7081b1302d8900000000006e0d0300000000000083874350e65e84aa6e06192408951d7aaac7809e10270000000000005c64030000000000"
@@ -1397,7 +1397,7 @@ curl -X POST http://127.0.0.1:6420/api/v2/wallet/transaction/sign -H 'content-ty
 Example with `sign_indexes`:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v2/wallet/transaction/sign -H 'content-type: application/json' -d '{
+curl -X POST http://127.0.0.1:8320/api/v2/wallet/transaction/sign -H 'content-type: application/json' -d '{
     "wallet_id": "foo.wlt",
     "password": "password",
     "sign_indexes": [1, 2],
@@ -1472,7 +1472,7 @@ Args:
 Example:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v1/wallet/unload \
+curl -X POST http://127.0.0.1:8320/api/v1/wallet/unload \
  -H 'Content-Type: x-www-form-urlencoded' \
  -d 'id=2017_05_09_d554.wlt'
 ```
@@ -1492,7 +1492,7 @@ Args:
 Example:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v1/wallet/encrypt \
+curl -X POST http://127.0.0.1:8320/api/v1/wallet/encrypt \
  -H 'Content-Type: application/x-www-form-urlencoded' \
  -d 'id=test.wlt' \
  -d 'password=$password'
@@ -1536,7 +1536,7 @@ Args:
 Example:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v1/wallet/decrypt \
+curl -X POST http://127.0.0.1:8320/api/v1/wallet/decrypt \
  -H 'Content-Type: application/x-www-form-urlencoded' \
  -d 'id=test.wlt' \
  -d 'password=$password'
@@ -1582,7 +1582,7 @@ This endpoint only works for encrypted wallets. If the wallet is unencrypted, th
 Example:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v1/wallet/seed \
+curl -X POST http://127.0.0.1:8320/api/v1/wallet/seed \
  -H 'Content-type: application/x-www-form-urlencoded' \
  -d 'id=test.wlt' \
  -d 'password=$password'
@@ -1678,7 +1678,7 @@ If the key does not exist, a 404 error is returned.
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v2/data?type=txid
+curl http://127.0.0.1:8320/api/v2/data?type=txid
 ```
 
 Result:
@@ -1695,7 +1695,7 @@ Result:
 Example (key):
 
 ```sh
-curl http://127.0.0.1:6420/api/v2/data?type=txid&key=key1
+curl http://127.0.0.1:8320/api/v2/data?type=txid&key=key1
 ```
 
 Result:
@@ -1731,7 +1731,7 @@ Example request body:
 Example:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v2/data -H 'Content-Type: application/json' -d '{
+curl -X POST http://127.0.0.1:8320/api/v2/data -H 'Content-Type: application/json' -d '{
     "type": "txid",
     "key": "key1",
     "val": "val1"
@@ -1761,7 +1761,7 @@ Deletes a value by key. Returns a 404 error if the key does not exist.
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v2/data?type=txid&key=key1
+curl http://127.0.0.1:8320/api/v2/data?type=txid&key=key1
 ```
 
 Result:
@@ -1791,7 +1791,7 @@ coin hour value of the output if it were to be confirmed at that instant.
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/pendingTxs
+curl http://127.0.0.1:8320/api/v1/pendingTxs
 ```
 
 Result:
@@ -1838,7 +1838,7 @@ Result:
 Example (verbose):
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/pendingTxs?verbose=1
+curl http://127.0.0.1:8320/api/v1/pendingTxs?verbose=1
 ```
 
 Result:
@@ -1964,7 +1964,7 @@ Example request body with auto hours selection type, spending specific uxouts:
 Example:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v2/transaction -H 'Content-Type: application/json' -d '{
+curl -X POST http://127.0.0.1:8320/api/v2/transaction -H 'Content-Type: application/json' -d '{
     "hours_selection": {
         "type": "auto",
         "mode": "share",
@@ -2056,7 +2056,7 @@ equal to the hours the output would have if it become confirmed immediately.
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/transaction?txid=a6446654829a4a844add9f181949d12f8291fdd2c0fcb22200361e90e814e2d3
+curl http://127.0.0.1:8320/api/v1/transaction?txid=a6446654829a4a844add9f181949d12f8291fdd2c0fcb22200361e90e814e2d3
 ```
 
 Result:
@@ -2096,7 +2096,7 @@ Result:
 Example (verbose):
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/transaction?txid=a6446654829a4a844add9f181949d12f8291fdd2c0fcb22200361e90e814e2d3&verbose=1
+curl http://127.0.0.1:8320/api/v1/transaction?txid=a6446654829a4a844add9f181949d12f8291fdd2c0fcb22200361e90e814e2d3&verbose=1
 ```
 
 Result:
@@ -2150,7 +2150,7 @@ Result:
 Example (encoded):
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/transaction?txid=a6446654829a4a844add9f181949d12f8291fdd2c0fcb22200361e90e814e2d3&encoded=1
+curl http://127.0.0.1:8320/api/v1/transaction?txid=a6446654829a4a844add9f181949d12f8291fdd2c0fcb22200361e90e814e2d3&encoded=1
 ```
 
 Result:
@@ -2180,7 +2180,7 @@ Method: GET
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/rawtx?txid=a6446654829a4a844add9f181949d12f8291fdd2c0fcb22200361e90e814e2d3
+curl http://127.0.0.1:8320/api/v1/rawtx?txid=a6446654829a4a844add9f181949d12f8291fdd2c0fcb22200361e90e814e2d3
 ```
 
 Result:
@@ -2231,7 +2231,7 @@ It is safe to retry the injection after a `503` failure.
 Example:
 
 ```sh
-curl -X POST http://127.0.0.1:6420/api/v1/injectTransaction -H 'content-type: application/json' -d '{
+curl -X POST http://127.0.0.1:8320/api/v1/injectTransaction -H 'content-type: application/json' -d '{
     "rawtx":"dc0000000008b507528697b11340f5a3fcccbff031c487bad59d26c2bdaea0cd8a0199a1720100000017f36c9d8bce784df96a2d6848f1b7a8f5c890986846b7c53489eb310090b91143c98fd233830055b5959f60030b3ca08d95f22f6b96ba8c20e548d62b342b5e0001000000ec9cf2f6052bab24ec57847c72cfb377c06958a9e04a077d07b6dd5bf23ec106020000000072116096fe2207d857d18565e848b403807cd825c044840300000000330100000000000000575e472f8c5295e8fa644e9bc5e06ec10351c65f40420f000000000066020000000000000"
 }'
 ```
@@ -2269,19 +2269,19 @@ The `POST` method can be used if many addresses need to be queried.
 To get confirmed transactions for one or more addresses:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/transactions?addrs=7cpQ7t3PZZXvjTst8G7Uvs7XH4LeM8fBPD,6dkVxyKFbFKg9Vdg6HPg1UANLByYRqkrdY&confirmed=1
+curl http://127.0.0.1:8320/api/v1/transactions?addrs=7cpQ7t3PZZXvjTst8G7Uvs7XH4LeM8fBPD,6dkVxyKFbFKg9Vdg6HPg1UANLByYRqkrdY&confirmed=1
 ```
 
 To get unconfirmed transactions for one or more addresses:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/transactions?addrs=7cpQ7t3PZZXvjTst8G7Uvs7XH4LeM8fBPD,6dkVxyKFbFKg9Vdg6HPg1UANLByYRqkrdY&confirmed=0
+curl http://127.0.0.1:8320/api/v1/transactions?addrs=7cpQ7t3PZZXvjTst8G7Uvs7XH4LeM8fBPD,6dkVxyKFbFKg9Vdg6HPg1UANLByYRqkrdY&confirmed=0
 ```
 
 To get both confirmed and unconfirmed transactions for one or more addresses:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/transactions?addrs=7cpQ7t3PZZXvjTst8G7Uvs7XH4LeM8fBPD,6dkVxyKFbFKg9Vdg6HPg1UANLByYRqkrdY
+curl http://127.0.0.1:8320/api/v1/transactions?addrs=7cpQ7t3PZZXvjTst8G7Uvs7XH4LeM8fBPD,6dkVxyKFbFKg9Vdg6HPg1UANLByYRqkrdY
 ```
 
 Result:
@@ -2398,7 +2398,7 @@ Result:
 Example (verbose):
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/transactions?addrs=7cpQ7t3PZZXvjTst8G7Uvs7XH4LeM8fBPD,2K6NuLBBapWndAssUtkxKfCtyjDQDHrEhhT&verbose=1
+curl http://127.0.0.1:8320/api/v1/transactions?addrs=7cpQ7t3PZZXvjTst8G7Uvs7XH4LeM8fBPD,2K6NuLBBapWndAssUtkxKfCtyjDQDHrEhhT&verbose=1
 ```
 
 Result:
@@ -2594,7 +2594,7 @@ Method: POST
 Example:
 
 ```sh
-curl -X POST 'http://127.0.0.1:6420/api/v1/resendUnconfirmedTxns'
+curl -X POST 'http://127.0.0.1:8320/api/v1/resendUnconfirmedTxns'
 ```
 
 Result:
@@ -2640,7 +2640,7 @@ If the transaction can not be parsed, returns `400 Bad Request` and the `"error"
 Example of valid transaction that has not been spent:
 
 ```sh
-curl -X POST -H 'Content-Type: application/json' http://127.0.0.1:6420/api/v2/transaction/verify \
+curl -X POST -H 'Content-Type: application/json' http://127.0.0.1:8320/api/v2/transaction/verify \
 -d '{"encoded_transaction": "dc000000004fd024d60939fede67065b36adcaaeaf70fc009e3a5bbb8358940ccc8bbb2074010000007635ce932158ec06d94138adc9c9b19113fa4c2279002e6b13dcd0b65e0359f247e8666aa64d7a55378b9cc9983e252f5877a7cb2671c3568ec36579f8df1581000100000019ad5059a7fffc0369fc24b31db7e92e12a4ee2c134fb00d336d7495dec7354d02000000003f0555073e17ea6e45283f0f1115b520d0698d03a086010000000000010000000000000000b90dc595d102c48d3281b47428670210415f585200f22b0000000000ff01000000000000"}'
 ```
 
@@ -2694,7 +2694,7 @@ Result:
 Example of valid transaction that *has* been spent:
 
 ```sh
-curl -X POST -H 'Content-Type: application/json' http://127.0.0.1:6420/api/v2/transaction/verify \
+curl -X POST -H 'Content-Type: application/json' http://127.0.0.1:8320/api/v2/transaction/verify \
 -d '{"encoded_transaction": "dc000000004fd024d60939fede67065b36adcaaeaf70fc009e3a5bbb8358940ccc8bbb2074010000007635ce932158ec06d94138adc9c9b19113fa4c2279002e6b13dcd0b65e0359f247e8666aa64d7a55378b9cc9983e252f5877a7cb2671c3568ec36579f8df1581000100000019ad5059a7fffc0369fc24b31db7e92e12a4ee2c134fb00d336d7495dec7354d02000000003f0555073e17ea6e45283f0f1115b520d0698d03a086010000000000010000000000000000b90dc595d102c48d3281b47428670210415f585200f22b0000000000ff01000000000000"}'
 ```
 
@@ -2752,7 +2752,7 @@ Result:
 Example of valid, unsigned transaction that has not been spent, with the unsigned parameter set to true in the request:
 
 ```sh
-curl -X POST -H 'Content-Type: application/json' http://127.0.0.1:6420/api/v2/transaction/verify \
+curl -X POST -H 'Content-Type: application/json' http://127.0.0.1:8320/api/v2/transaction/verify \
 -d '{"unsigned": true, "encoded_transaction": "dc000000004fd024d60939fede67065b36adcaaeaf70fc009e3a5bbb8358940ccc8bbb2074010000007635ce932158ec06d94138adc9c9b19113fa4c2279002e6b13dcd0b65e0359f247e8666aa64d7a55378b9cc9983e252f5877a7cb2671c3568ec36579f8df1581000100000019ad5059a7fffc0369fc24b31db7e92e12a4ee2c134fb00d336d7495dec7354d02000000003f0555073e17ea6e45283f0f1115b520d0698d03a086010000000000010000000000000000b90dc595d102c48d3281b47428670210415f585200f22b0000000000ff01000000000000"}'
 ```
 
@@ -2818,7 +2818,7 @@ Method: GET
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/blockchain/metadata
+curl http://127.0.0.1:8320/api/v1/blockchain/metadata
 ```
 
 Result:
@@ -2852,7 +2852,7 @@ Method: GET
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/blockchain/progress
+curl http://127.0.0.1:8320/api/v1/blockchain/progress
 ```
 
 Result:
@@ -2894,13 +2894,13 @@ The calculated hours are the hours the transaction had in the block in which it 
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/block?hash=6eafd13ab6823223b714246b32c984b56e0043412950faf17defdbb2cbf3fe30
+curl http://127.0.0.1:8320/api/v1/block?hash=6eafd13ab6823223b714246b32c984b56e0043412950faf17defdbb2cbf3fe30
 ```
 
 or
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/block?seq=2760
+curl http://127.0.0.1:8320/api/v1/block?seq=2760
 ```
 
 Result:
@@ -2954,13 +2954,13 @@ Result:
 Example (verbose):
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/block?hash=6eafd13ab6823223b714246b32c984b56e0043412950faf17defdbb2cbf3fe30&verbose=1
+curl http://127.0.0.1:8320/api/v1/block?hash=6eafd13ab6823223b714246b32c984b56e0043412950faf17defdbb2cbf3fe30&verbose=1
 ```
 
 or
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/block?seq=2760&verbose=1
+curl http://127.0.0.1:8320/api/v1/block?seq=2760&verbose=1
 ```
 
 Result:
@@ -3050,7 +3050,7 @@ The calculated hours are the hours the transaction had in the block in which it 
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/blocks?start=101&end=102
+curl http://127.0.0.1:8320/api/v1/blocks?start=101&end=102
 ```
 
 Result:
@@ -3139,7 +3139,7 @@ Result:
 Example (verbose):
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/blocks?start=101&end=102&verbose=1
+curl http://127.0.0.1:8320/api/v1/blocks?start=101&end=102&verbose=1
 ```
 
 Result:
@@ -3242,7 +3242,7 @@ Result:
 Example (seqs):
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/blocks?seqs=3,5,7
+curl http://127.0.0.1:8320/api/v1/blocks?seqs=3,5,7
 ```
 
 ```json
@@ -3394,7 +3394,7 @@ The calculated hours are the hours the transaction had in the block in which it 
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/last_blocks?num=2
+curl http://127.0.0.1:8320/api/v1/last_blocks?num=2
 ```
 
 Result:
@@ -3499,7 +3499,7 @@ Result:
 Example (verbose):
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/last_blocks?num=2&verbose=1
+curl http://127.0.0.1:8320/api/v1/last_blocks?num=2&verbose=1
 ```
 
 Result:
@@ -3643,7 +3643,7 @@ Args:
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/uxout?uxid=8b64d9b058e10472b9457fd2d05a1d89cbbbd78ce1d97b16587d43379271bed1
+curl http://127.0.0.1:8320/api/v1/uxout?uxid=8b64d9b058e10472b9457fd2d05a1d89cbbbd78ce1d97b16587d43379271bed1
 ```
 
 Result:
@@ -3678,7 +3678,7 @@ Returns the historical, spent outputs of a given address.
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/address_uxouts?address=6dkVxyKFbFKg9Vdg6HPg1UANLByYRqkrdY
+curl http://127.0.0.1:8320/api/v1/address_uxouts?address=6dkVxyKFbFKg9Vdg6HPg1UANLByYRqkrdY
 ```
 
 Result:
@@ -3713,7 +3713,7 @@ Method: GET
 Example:
 
 ```sh
-curl http://127.0.0.1:6420/api/v1/coinSupply
+curl http://127.0.0.1:8320/api/v1/coinSupply
 ```
 
 Result:
@@ -3845,7 +3845,7 @@ Args:
 Example:
 
 ```sh
-curl "http://127.0.0.1:6420/api/v1/richlist?n=4&include-distribution=true"
+curl "http://127.0.0.1:8320/api/v1/richlist?n=4&include-distribution=true"
 ```
 
 Result:
@@ -3889,7 +3889,7 @@ Method: GET
 Example:
 
 ```sh
-curl "http://127.0.0.1:6420/api/v1/addresscount"
+curl "http://127.0.0.1:8320/api/v1/addresscount"
 ```
 
 Result:
@@ -3922,7 +3922,7 @@ Connection `"state"` value can be `"pending"`, `"connected"` or `"introduced"`.
 Example:
 
 ```sh
-curl 'http://127.0.0.1:6420/api/v1/network/connection?addr=176.9.84.75:6000'
+curl 'http://127.0.0.1:8320/api/v1/network/connection?addr=176.9.84.75:6000'
 ```
 
 Result:
@@ -3972,7 +3972,7 @@ By default, both incoming and outgoing connections in the `"connected"` or `"int
 Example:
 
 ```sh
-curl 'http://127.0.0.1:6420/api/v1/network/connections'
+curl 'http://127.0.0.1:8320/api/v1/network/connections'
 ```
 
 Result:
@@ -4056,7 +4056,7 @@ Returns addresses in the default hardcoded list of peers.
 Example:
 
 ```sh
-curl 'http://127.0.0.1:6420/api/v1/network/defaultConnections'
+curl 'http://127.0.0.1:8320/api/v1/network/defaultConnections'
 ```
 
 Result:
@@ -4087,7 +4087,7 @@ This is typically equal to the list of addresses in the default hardcoded list o
 Example:
 
 ```sh
-curl 'http://127.0.0.1:6420/api/v1/network/connections/trust'
+curl 'http://127.0.0.1:8320/api/v1/network/connections/trust'
 ```
 
 Result:
@@ -4117,7 +4117,7 @@ Returns addresses from the peerlist that are known to have an open port.
 Example:
 
 ```sh
-curl 'http://127.0.0.1:6420/api/v1/network/connections/exchange'
+curl 'http://127.0.0.1:8320/api/v1/network/connections/exchange'
 ```
 
 Result:
@@ -4166,7 +4166,7 @@ Disconnects a peer by ID.
 Example:
 
 ```sh
-curl -X POST 'http://127.0.0.1:6420/api/v1/network/connection/disconnect?id=999'
+curl -X POST 'http://127.0.0.1:8320/api/v1/network/connection/disconnect?id=999'
 ```
 
 Result:
