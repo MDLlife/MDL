@@ -45,7 +45,7 @@ func TestNewConfig(t *testing.T) {
 			CoinHoursTicker:                "TCH",
 			ExplorerURL:                    "https://explorer.testcoin.com",
 			VersionURL:                     "https://version.testcoin.com/testcoin/version.txt",
-			Bip44Coin:                      bip44.CoinTypeSkycoin,
+			Bip44Coin:                      bip44.CoinTypeMDL,
 		},
 		Params: ParamsConfig{
 			MaxCoinSupply:           1e8,

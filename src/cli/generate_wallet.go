@@ -43,7 +43,7 @@ func walletCreateCmd() *cobra.Command {
 	walletCreateCmd.Flags().Uint64P("wordcount", "w", 12, "Number of seed words to use for mnemonic. Must be 12, 15, 18, 21 or 24")
 	walletCreateCmd.Flags().StringP("seed", "s", "", "Your seed")
 	walletCreateCmd.Flags().StringP("seed-passphrase", "", "", "Seed passphrase (bip44 wallets only)")
-	walletCreateCmd.Flags().Uint32P("bip44-coin", "", uint32(bip44.CoinTypeSkycoin), "BIP44 coin type")
+	walletCreateCmd.Flags().Uint32P("bip44-coin", "", uint32(bip44.CoinTypeMDL), "BIP44 coin type")
 	walletCreateCmd.Flags().StringP("coin", "c", string(wallet.CoinTypeMDL), "Wallet address coin type (options: skycoin, bitcoin)")
 	walletCreateCmd.Flags().Uint64P("num", "n", 1, `Number of addresses to generate.`)
 	walletCreateCmd.Flags().StringP("label", "l", "", "Label used to identify your wallet.")

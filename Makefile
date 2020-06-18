@@ -79,7 +79,7 @@ run-daemon:  ## Run mdl with server daemon configuration. To add arguments, do '
 	./run-daemon.sh ${ARGS}
 
 run:  ## Run the MDL node. To add arguments, do 'make ARGS="--foo" run'.
-	go run cmd/mdl/mdl.go \
+	go run cmd/mdl-cli/mdl.go \
 	    -web-interface=true \
         -web-interface-addr=${IP_ADDR} \
         -web-interface-port=${PORT} \
@@ -94,7 +94,7 @@ run:  ## Run the MDL node. To add arguments, do 'make ARGS="--foo" run'.
         $@
 
 run-help: ## Show MDL node help
-	@go run cmd/mdl/mdl.go --help
+	@go run cmd/mdl-cli/mdl.go --help
 
 run-integration-test-live: ## Run the mdl node configured for live integration tests
 	./ci-scripts/run-live-integration-test-node.sh
@@ -159,15 +159,15 @@ docs: docs-libc
 
 
 lint: ## Run linters. Use make install-linters first.
-	vendorcheck ./...
+	#vendorcheck ./...
 	golangci-lint run -c .golangci.yml ./...
 	@# The govet version in golangci-lint is out of date and has spurious warnings, run it separately
 	go vet -all ./...
 
 
 check-newcoin: newcoin ## Check that make newcoin succeeds and no templated files are changed.
-	@if [ "$(shell git diff ./cmd/mdl/mdl.go | wc -l | tr -d ' ')" != "0" ] ; then echo 'Changes detected after make newcoin' ; exit 2 ; fi
-	@if [ "$(shell git diff ./cmd/mdl/mdl_test.go | wc -l | tr -d ' ')" != "0" ] ; then echo 'Changes detected after make newcoin' ; exit 2 ; fi
+	@if [ "$(shell git diff ./cmd/mdl-cli/mdl.go | wc -l | tr -d ' ')" != "0" ] ; then echo 'Changes detected after make newcoin' ; exit 2 ; fi
+	@if [ "$(shell git diff ./cmd/mdl-cli/mdl_test.go | wc -l | tr -d ' ')" != "0" ] ; then echo 'Changes detected after make newcoin' ; exit 2 ; fi
 	@if [ "$(shell git diff ./src/params/params.go | wc -l | tr -d ' ')" != "0" ] ; then echo 'Changes detected after make newcoin' ; exit 2 ; fi
 
 check: lint clean-coverage test test-386 \
@@ -219,7 +219,7 @@ integration-test-auth: ## Run stable tests with HTTP Basic auth enabled
 integration-test-server:
 	rm -rf $(DATA_DIR);
 	go build -ldflags ${GOLDFLAGS} -o /opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
-	/opt/gocode/src/github.com/MDLlife/MDL/cmd/mdl/mdl.go;
+	/opt/gocode/src/github.com/MDLlife/MDL/cmd/mdl-cli/mdl.go;
 	/opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
 	-disable-networking=true \
 	-genesis-signature eb10468d10054d15f2b6f8946cd46797779aa20a7617ceb4be884189f219bc9a164e56a5b9f7bec392a804ff3740210348d73db77a37adb542a8e08d429ac92700 \

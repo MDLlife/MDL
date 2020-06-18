@@ -3,15 +3,10 @@ package wallet
 import (
 	"errors"
 	"fmt"
-    "github.com/MDLlife/MDL/src/cipher/bip44"
 
-    "github.com/MDLlife/MDL/src/cipher"
-)
+	"github.com/MDLlife/MDL/src/cipher/bip44"
 
-var (
-	emptyAddress = cipher.Address{}
-	emptyPubkey  = cipher.PubKey{}
-	emptySeckey  = cipher.SecKey{}
+	"github.com/MDLlife/MDL/src/cipher"
 )
 
 // ReadableEntry wallet entry with json tags
@@ -36,7 +31,7 @@ func NewReadableEntry(coinType CoinType, walletType string, e Entry) ReadableEnt
 
 	if !e.Secret.Null() {
 		switch coinType {
-        case CoinTypeMDL:
+		case CoinTypeMDL:
 			re.Secret = e.Secret.Hex()
 		case CoinTypeBitcoin:
 			re.Secret = cipher.BitcoinWalletImportFormatFromSeckey(e.Secret)
@@ -113,7 +108,7 @@ func newEntryFromReadable(coinType CoinType, walletType string, re *ReadableEntr
 	var err error
 
 	switch coinType {
-    case CoinTypeMDL:
+	case CoinTypeMDL:
 		a, err = cipher.DecodeBase58Address(re.Address)
 	case CoinTypeBitcoin:
 		a, err = cipher.DecodeBase58BitcoinAddress(re.Address)
@@ -134,7 +129,7 @@ func newEntryFromReadable(coinType CoinType, walletType string, re *ReadableEntr
 	var secret cipher.SecKey
 	if re.Secret != "" {
 		switch coinType {
-        case CoinTypeMDL:
+		case CoinTypeMDL:
 			secret, err = cipher.SecKeyFromHex(re.Secret)
 		case CoinTypeBitcoin:
 			secret, err = cipher.SecKeyFromBitcoinWalletImportFormat(re.Secret)

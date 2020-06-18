@@ -73,7 +73,7 @@ echo "Copying ${PKG_NAME} binaries"
 if [ ! -z "$OSX64_STL" ]; then
     OSX64="${STL_OUTPUT_DIR}/${OSX64_STL}"
     OSX64_SRC="${OSX64}/src"
-    codesign_if_exists "${OSX64_OUT}/${PKG_NAME}"
+#    codesign_if_exists "${OSX64_OUT}/${PKG_NAME}"
     copy_if_exists "${OSX64_OUT}/${PKG_NAME}" "$OSX64" "$OSX64_SRC"
 fi
 

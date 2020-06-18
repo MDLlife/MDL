@@ -12,8 +12,8 @@ import (
 	"runtime"
 	"strings"
 
-    "github.com/MDLlife/MDL/src/cipher"
-    "github.com/MDLlife/MDL/src/util/logging"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/util/logging"
 )
 
 var (

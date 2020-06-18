@@ -12,7 +12,7 @@ import (
 	"sort"
 
 	"github.com/shopspring/decimal"
-    "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/coin"

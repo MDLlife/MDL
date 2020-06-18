@@ -28,8 +28,8 @@ const (
 	CoinTypeBitcoin CoinType = 0
 	// CoinTypeBitcoinTestnet is the coin_type for Skycoin
 	CoinTypeBitcoinTestnet CoinType = 1
-	// CoinTypeSkycoin is the coin_type for Skycoin
-	CoinTypeSkycoin CoinType = 8000
+	// CoinTypeMDL is the coin_type for Skycoin
+	CoinTypeMDL CoinType = 8000
 
 	// ExternalChainIndex is the index of the external chain
 	ExternalChainIndex uint32 = 0

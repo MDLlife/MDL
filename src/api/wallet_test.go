@@ -2718,7 +2718,7 @@ func TestWalletRecover(t *testing.T) {
 
 	okWalletUnencrypted, err := wallet.NewWallet("foo", wallet.Options{
 		Type:      wallet.WalletTypeDeterministic,
-		Coin:      wallet.CoinTypeSkycoin,
+		Coin:      wallet.CoinTypeMDL,
 		Label:     "foolabel",
 		Seed:      "fooseed",
 		GenerateN: 10,
@@ -2729,7 +2729,7 @@ func TestWalletRecover(t *testing.T) {
 
 	okWalletEncrypted, err := wallet.NewWallet("foo", wallet.Options{
 		Type:       wallet.WalletTypeDeterministic,
-		Coin:       wallet.CoinTypeSkycoin,
+		Coin:       wallet.CoinTypeMDL,
 		Label:      "foolabel",
 		Seed:       "fooseed",
 		Encrypt:    true,

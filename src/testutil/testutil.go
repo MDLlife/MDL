@@ -9,6 +9,10 @@ import (
 	"os"
 	"testing"
 
+	"github.com/MDLlife/MDL/src/cipher/bip32"
+	"github.com/MDLlife/MDL/src/cipher/bip39"
+	"github.com/MDLlife/MDL/src/cipher/bip44"
+
 	"github.com/boltdb/bolt"
 	"github.com/stretchr/testify/require"
 
@@ -107,7 +111,7 @@ func RandXPub(t *testing.T) *bip32.PublicKey {
 	m := bip39.MustNewDefaultMnemonic()
 	s, err := bip39.NewSeed(m, "")
 	require.NoError(t, err)
-	c, err := bip44.NewCoin(s, bip44.CoinTypeSkycoin)
+	c, err := bip44.NewCoin(s, bip44.CoinTypeMDL)
 	require.NoError(t, err)
 	x, err := c.Account(0)
 	require.NoError(t, err)

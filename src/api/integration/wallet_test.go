@@ -402,7 +402,7 @@ func TestWalletNewAddress(t *testing.T) {
 					ss, err := bip39.NewSeed(tc.seed, tc.seedPassphrase)
 					require.NoError(t, err)
 
-					cc, err := bip44.NewCoin(ss, bip44.CoinTypeSkycoin)
+					cc, err := bip44.NewCoin(ss, bip44.CoinTypeMDL)
 					require.NoError(t, err)
 
 					acct, err := cc.Account(0)

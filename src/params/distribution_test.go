@@ -11,8 +11,8 @@ func TestDistributionAddressArrays(t *testing.T) {
 
 	// At the time of this writing, there should be 25 addresses in the
 	// unlocked pool and 75 in the locked pool.
-    require.Len(t, GetUnlockedDistributionAddresses(), 56)
-    require.Len(t, GetLockedDistributionAddresses(), 44)
+	require.Len(t, MainNetDistribution.UnlockedAddresses(), 56)
+	require.Len(t, MainNetDistribution.LockedAddresses(), 44)
 
 	addrsMap := make(map[string]struct{})
 	for _, a := range MainNetDistribution.Addresses {

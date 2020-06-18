@@ -13,8 +13,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-    "github.com/MDLlife/MDL/src/cipher"
-    "github.com/MDLlife/MDL/src/testutil"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/testutil"
 )
 
 func requireFileMode(t *testing.T, filename string, mode os.FileMode) {

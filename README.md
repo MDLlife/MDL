@@ -859,7 +859,7 @@ This mode configures itself via electron-main.js
 
 #### Standalone Desktop Client Mode
 This mode is configured by compiling with `STANDALONE_CLIENT` build tag.
-The configuration is handled in `cmd/mdl/mdl.go`
+The configuration is handled in `cmd/mdl-cli/mdl.go`
 
 ### Wallet GUI Development
 

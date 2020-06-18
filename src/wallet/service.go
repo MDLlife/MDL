@@ -38,7 +38,7 @@ type Config struct {
 
 // NewConfig creates a default Config
 func NewConfig() Config {
-    bc := bip44.CoinTypeSkycoin
+    bc := bip44.CoinTypeMDL
     return Config{
         WalletDir:       "./",
         CryptoType:      DefaultCryptoType,

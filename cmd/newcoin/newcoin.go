@@ -7,13 +7,14 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/MDLlife/MDL/src/fiber"
+
 	"os"
 	"path/filepath"
 	"text/template"
 
 	"github.com/urfave/cli"
 
-	"github.com/MDLlife/MDL/src/mdl"
 	"github.com/MDLlife/MDL/src/util/logging"
 	"github.com/MDLlife/MDL/src/util/useragent"
 )

@@ -187,9 +187,9 @@ func newWallet(wltName string, opts Options, tf TransactionsFinder) (Wallet, err
 			case CoinTypeBitcoin:
 				bip44Coin = bip44.CoinTypeBitcoin
 			case CoinTypeMDL:
-				bip44Coin = bip44.CoinTypeSkycoin
+				bip44Coin = bip44.CoinTypeMDL
 			default:
-				bip44Coin = bip44.CoinTypeSkycoin
+				bip44Coin = bip44.CoinTypeMDL
 			}
 		} else {
 			bip44Coin = *opts.Bip44Coin

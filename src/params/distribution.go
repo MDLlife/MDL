@@ -3,7 +3,7 @@ package params
 import (
 	"errors"
 
-    "github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher"
 )
 
 // Distribution parameters define the initial coin distribution and unlocking schedule

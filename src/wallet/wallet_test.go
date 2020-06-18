@@ -114,7 +114,7 @@ func TestNewWallet(t *testing.T) {
 				meta: map[string]string{
 					"label":    "",
 					"filename": "test-collection.wlt",
-					"coin":     string(CoinTypeSkycoin),
+					"coin":     string(CoinTypeMDL),
 					"type":     WalletTypeDeterministic,
 					"version":  Version,
 				},
@@ -132,7 +132,7 @@ func TestNewWallet(t *testing.T) {
 				meta: map[string]string{
 					"label":    "",
 					"filename": "test-collection.wlt",
-					"coin":     string(CoinTypeSkycoin),
+					"coin":     string(CoinTypeMDL),
 					"type":     WalletTypeDeterministic,
 					"version":  Version,
 					"xpub":     "xpub6CkxdS1d4vNqqcnf9xPgqR5e2jE2PZKmKSw93QQMjHE1hRk22nU4zns85EDRgmLWYXYtu62XexwqaET33XA28c26NbXCAUJh1xmqq6B3S2v",
@@ -151,7 +151,7 @@ func TestNewWallet(t *testing.T) {
 				meta: map[string]string{
 					"label":    "",
 					"filename": "test.wlt",
-					"coin":     string(CoinTypeSkycoin),
+					"coin":     string(CoinTypeMDL),
 					"type":     WalletTypeDeterministic,
 					"seed":     "testseed123",
 					"version":  Version,
@@ -305,7 +305,7 @@ func TestNewWallet(t *testing.T) {
 			expect: expect{
 				meta: map[string]string{
 					"label":     "bip44wallet1",
-					"coin":      string(CoinTypeSkycoin),
+					"coin":      string(CoinTypeMDL),
 					"type":      string(WalletTypeBip44),
 					"version":   Version,
 					"bip44Coin": "8000",
@@ -780,8 +780,8 @@ func TestLoadWallet(t *testing.T) {
 			filename: "./testdata/test5-bip44.wlt",
 			expect: expect{
 				meta: map[string]string{
-					"bip44Coin":      fmt.Sprint(bip44.CoinTypeSkycoin),
-					"coin":           string(CoinTypeSkycoin),
+					"bip44Coin":      fmt.Sprint(bip44.CoinTypeMDL),
+					"coin":           string(CoinTypeMDL),
 					"cryptoType":     "",
 					"encrypted":      "false",
 					"filename":       "test5-bip44.wlt",
@@ -801,8 +801,8 @@ func TestLoadWallet(t *testing.T) {
 			filename: "./testdata/test6-passphrase-bip44.wlt",
 			expect: expect{
 				meta: map[string]string{
-					"bip44Coin":      fmt.Sprint(bip44.CoinTypeSkycoin),
-					"coin":           string(CoinTypeSkycoin),
+					"bip44Coin":      fmt.Sprint(bip44.CoinTypeMDL),
+					"coin":           string(CoinTypeMDL),
 					"cryptoType":     "",
 					"encrypted":      "false",
 					"filename":       "test6-passphrase-bip44.wlt",
@@ -987,7 +987,7 @@ func generateBip44Chain(t *testing.T, seed, seedPassphrase string, change uint32
 	ss, err := bip39.NewSeed(seed, seedPassphrase)
 	require.NoError(t, err)
 
-	cc, err := bip44.NewCoin(ss, bip44.CoinTypeSkycoin)
+	cc, err := bip44.NewCoin(ss, bip44.CoinTypeMDL)
 	require.NoError(t, err)
 
 	acct, err := cc.Account(0)
