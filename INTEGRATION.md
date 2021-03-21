@@ -1,8 +1,8 @@
 # MDL Exchange Integration
 
-A MDL node offers a REST API on port 6420 (when running from source; if you are using the releases downloaded from the website, the port is randomized)
+A MDL node offers a REST API on port 8320 (when running from source; if you are using the releases downloaded from the website, the port is randomized)
 
-* REST API on port 6420 (when running from source; if you are using the releases downloaded from the website, the port is randomized)
+* REST API on port 8320 (when running from source; if you are using the releases downloaded from the website, the port is randomized)
 * JSON-RPC 2.0 API accessible on `/api/v1/webrpc` endpoint **[deprecated]**
 
 A CLI tool is provided in `cmd/cli/cli.go`. This tool communicates over the REST API.
