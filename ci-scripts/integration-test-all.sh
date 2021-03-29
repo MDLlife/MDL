@@ -49,7 +49,7 @@ fi
 # Compile the mdl node
 # We can't use "go run" because this creates two processes which doesn't allow us to kill it at the end
 echo "compiling mdl"
-go build -o "$BINARY" $PWD/cmd/mdl-cli/mdl.go
+go build -o "$BINARY" $PWD/cmd/mdl/mdl.go
 
 # Run mdl node with pinned blockchain database
 echo "starting mdl ($PWD/mdl-integration) node in background with http listener on $HOST"
