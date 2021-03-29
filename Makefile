@@ -218,9 +218,9 @@ integration-test-auth: ## Run stable tests with HTTP Basic auth enabled
 
 integration-test-server:
 	rm -rf $(DATA_DIR);
-	go build -ldflags ${GOLDFLAGS} -o /opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
-	/opt/gocode/src/github.com/MDLlife/MDL/cmd/mdl-cli/mdl.go;
-	/opt/gocode/src/github.com/MDLlife/MDL/mdl-integration \
+	go build -ldflags ${GOLDFLAGS} -o /mdl-integration \
+	/cmd/mdl-cli/mdl.go;
+	/mdl-integration \
 	-disable-networking=true \
 	-genesis-signature eb10468d10054d15f2b6f8946cd46797779aa20a7617ceb4be884189f219bc9a164e56a5b9f7bec392a804ff3740210348d73db77a37adb542a8e08d429ac92700 \
 	-genesis-address 2jBbGxZRGoQG1mqhPBnXnLTxK6oxsTf8os6 \

@@ -5,7 +5,7 @@ export const AppConfig = {
   urlForHwWalletVersionChecking: 'https://version.skycoin.com/skywallet/version.txt',
   hwWalletDownloadUrlAndPrefix: 'https://downloads.skycoin.com/skywallet/skywallet-firmware-v',
 
-  urlForVersionChecking: 'https://version.skycoin.com/skycoin/version.txt',
+  urlForVersionChecking: 'https://api.github.com/repos/MDLlife/MDL/tags',
   walletDownloadUrl: 'https://www.skycoin.com/downloads/',
 
   /**

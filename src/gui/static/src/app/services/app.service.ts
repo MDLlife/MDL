@@ -65,7 +65,7 @@ export class AppService {
       this.http.get(AppConfig.urlForVersionChecking)
         .retryWhen(errors => errors.delay(30000))
         .subscribe((response: Response) => {
-          this.lastestVersionInternal = response.text().trim();
+          this.lastestVersionInternal = response.json()[0].name.trim();
           if (this.lastestVersionInternal.startsWith('v')) {
             this.lastestVersionInternal = this.lastestVersionInternal.substr(1);
           }

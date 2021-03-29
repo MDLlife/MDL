@@ -84,7 +84,7 @@ var (
         CoinHoursNameSingular: "Talent Hour",
         CoinHoursTicker:       "MTH",
         ExplorerURL:           "https://explorer.mdl.wtf",
-        VersionURL:            "https://version.skycoin.com/skycoin/version.txt",
+        VersionURL:            "https://api.github.com/repos/MDLlife/MDL/tags",
         Bip44Coin:             8000,
 	})
 
