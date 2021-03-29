@@ -8,8 +8,6 @@ const childProcess = require('child_process');
 
 const axios = require('axios');
 
-//const hwCode = require('./hardware-wallet');
-
 // This adds refresh and devtools console keybindings
 // Page can refresh with cmd+r, ctrl+r, F5
 // Devtools can be toggled with cmd+alt+i, ctrl+shift+i, F12
@@ -30,7 +28,7 @@ let splashLoaded = false
 let dev = process.argv.find(arg => arg === 'dev') ? true : false;
 
 // Force everything localhost, in case of a leak
-app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1, EXCLUDE api.coinpaprika.com, EXCLUDE teller.mdl.cx');
+app.commandLine.appendSwitch('host-rules', 'MAP * 127.0.0.1, EXCLUDE api.coinpaprika.com, EXCLUDE teller.mdl.cx, EXCLUDE api.github.com');
 app.commandLine.appendSwitch('ssl-version-fallback-min', 'tls1.2');
 app.commandLine.appendSwitch('--no-proxy-server');
 app.setAsDefaultProtocolClient('mdl');
@@ -148,7 +146,6 @@ function startMDL() {
       .get('http://localhost:4200/api/v1/wallets/folderName')
       .then(response => {
         walletsFolder = response.data.address;
-        //hwCode.setWalletsFolderPath(walletsFolder);
       })
       .catch(() => {});
   }
@@ -176,7 +173,7 @@ function createWindow(url) {
     width: 1200,
     height: 900,
     backgroundColor: '#000000',
-    title: 'MDL Talent Hub :: MDL.life :: MDL Wallet',
+    title: 'MDL Talent Hub',
     icon: iconPath,
     nodeIntegration: false,
     webPreferences: {
@@ -189,10 +186,10 @@ function createWindow(url) {
       allowRunningInsecureContent: false,
       webSecurity: true,
       plugins: false,
+      enableRemoteModule: false,
       preload: __dirname + '/electron-api.js',
     },
   });
-  //hwCode.setWinRef(win);
 
   win.webContents.on('did-finish-load', function() {
 	if (!splashLoaded) {
@@ -205,6 +202,7 @@ function createWindow(url) {
   win.webContents.executeJavaScript('window.eval = 0;');
 
   const ses = win.webContents.session
+
   ses.clearCache(function () {
     console.log('Cleared the caching of the MDL wallet.');
   });
@@ -224,7 +222,6 @@ function createWindow(url) {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     win = null;
-    //hwCode.setWinRef(win);
   });
 
   // If in dev mode, allow to open URLs.
@@ -243,10 +240,8 @@ function createWindow(url) {
 
   // create application's main menu
   var template = [{
-    label: "MDL Talent Hub :: MDL Wallet :: MDL.life",
+    label: "MDL Talent Hub",
     submenu: [
-       { label: "About MDL", selector: "orderFrontStandardAboutPanel:" },
-      { type: "separator" },
       { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); } }
     ]
   }, {
@@ -304,22 +299,23 @@ function createWindow(url) {
     });
 }
 
-// Enforce single instance
-const alreadyRunning = app.makeSingleInstance((commandLine, workingDirectory) => {
-  // Someone tried to run a second instance, we should focus our window.
-  if (win) {
-    if (win.isMinimized()) {
-      win.restore();
-    }
-    win.focus();
-  } else {
-    createWindow(currentURL);
-  }
-});
+const singleInstanceLockObtained = app.requestSingleInstanceLock()
 
-if (alreadyRunning) {
-  app.quit();
-  return;
+if (!singleInstanceLockObtained) {
+    app.quit()
+    return;
+} else {
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+        // Someone tried to run a second instance, we should focus our window.
+        if (win) {
+            if (win.isMinimized()) {
+                win.restore();
+            }
+            win.focus();
+        } else {
+            createWindow(currentURL);
+        }
+    });
 }
 
 let walletsFolder = null;

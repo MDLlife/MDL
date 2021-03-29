@@ -6,7 +6,7 @@ export const AppConfig = {
   hwWalletDownloadUrlAndPrefix: 'https://downloads.skycoin.com/skywallet/skywallet-firmware-v',
 
   urlForVersionChecking: 'https://api.github.com/repos/MDLlife/MDL/tags',
-  walletDownloadUrl: 'https://www.skycoin.com/downloads/',
+  walletDownloadUrl: 'https://github.com/MDLlife/MDL/releases/',
 
   /**
    * This wallet uses the Skycoin URI Specification (based on BIP-21) when creating QR codes and
