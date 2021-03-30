@@ -79,12 +79,16 @@ export class BuyComponent implements OnInit, OnDestroy {
       console.log('changing wallet value', filename);
       this.purchaseService.generate(wallet, this.form.value.coin_type).subscribe(
         order => this.saveData(order),
-        error => this.msgBarService.showError(error.toString()),
-      );
+        err => {
+          this.msgBarService.showError("Please choose an unencrypted wallet. This issue will be fixed in the next version. Thank you. " + err._body);
+          setTimeout(() => {
+            this.msgBarService.hide();
+          }, 5000)
+        }
+      )
     }));
 
     this.form.controls.coin_type.valueChanges.subscribe(type => {
-
       if (this.order) this.order.coin_type = type;
       if (type === '') return;
       if (this.form.value.wallet === '') return;
@@ -94,7 +98,7 @@ export class BuyComponent implements OnInit, OnDestroy {
           this.saveData(order);
         },
         err => {
-          this.msgBarService.showError(err._body);
+          this.msgBarService.showError("Please choose an unencrypted wallet. This issue will be fixed in the next version. Thank you. " + err._body);
           setTimeout(() => {
             this.msgBarService.hide();
           }, 5000)
