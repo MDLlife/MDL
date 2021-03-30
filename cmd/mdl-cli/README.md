@@ -57,7 +57,7 @@ The CLI command APIs can be used directly from a Go application, see [Skycoin CL
 ## Install
 
 ```bash
-$ cd $GOPATH/src/github.com/SkycoinProject/skycoin/cmd/skycoin-cli
+$ cd $GOPATH/src/github.com/MDLlife/MDL/cmd/mdl-cli
 $ go install ./...
 ```
 
@@ -67,19 +67,19 @@ The CLI uses environment variable to manage the configurations.
 
 ### RPC_ADDR
 
-CLI will connect to skycoin node REST API address `http://127.0.0.1:6420` by default.
+CLI will connect to MDL node REST API address `http://127.0.0.1:8320` by default.
 You can change the address by setting the `RPC_ADDR` environment variable
 with the following command:
 
 ```bash
-$ export RPC_ADDR=http://127.0.0.1:6420
+$ export RPC_ADDR=http://127.0.0.1:8320
 ```
 
 Note: `RPC_ADDR` must be in `scheme://host` format.
 
 ### RPC_USER
 
-A username for authenticating requests to the skycoin node.
+A username for authenticating requests to the MDL node.
 
 ```bash
 $ export RPC_USER=...
@@ -87,7 +87,7 @@ $ export RPC_USER=...
 
 ### RPC_PASS
 
-A password for authenticating requests to the skycoin node.
+A password for authenticating requests to the MDL node.
 
 ```bash
 $ export RPC_PASS=...
@@ -95,21 +95,21 @@ $ export RPC_PASS=...
 
 ## Usage
 
-After the installation, you can run `skycoin-cli` to see the usage:
+After the installation, you can run `mdl-cli` to see the usage:
 
 ```
-$ skycoin-cli
+$ mdl-cli
 
 USAGE:
-  skycoin-cli [command] [flags] [arguments...]
+  mdl-cli [command] [flags] [arguments...]
 
 DESCRIPTION:
-    The skycoin command line interface
+    The mdl command line interface
 
 COMMANDS:
   addPrivateKey         Add a private key to wallet
   addressBalance        Check the balance of specific addresses
-  addressGen            Generate skycoin or bitcoin addresses
+  addressGen            Generate mdl or bitcoin addresses
   addressOutputs        Display outputs of specific addresses
   addressTransactions   Show detail for transaction associated with one or more specified addresses
   addresscount          Get the count of addresses with unspent outputs (coins)
@@ -129,19 +129,19 @@ COMMANDS:
   listAddresses         Lists all addresses in a given wallet
   listWallets           Lists all wallets stored in the wallet directory
   pendingTransactions   Get all unconfirmed transactions
-  richlist              Get skycoin richlist
-  send                  Send skycoin from a wallet or an address to a recipient address
+  richlist              Get mdl richlist
+  send                  Send mdl from a wallet or an address to a recipient address
   showConfig            Show cli configuration
   showSeed              Show wallet seed and seed passphrase
-  status                Check the status of current Skycoin node
+  status                Check the status of current MDL node
   transaction           Show detail info of specific transaction
-  verifyAddress         Verify a skycoin address
+  verifyAddress         Verify a mdl address
   verifyTransaction     Verify if the specific transaction is spendable
-  version               List the current version of Skycoin components
+  version               List the current version of MDL components
   walletAddAddresses    Generate additional addresses for a deterministic, bip44 or xpub wallet
   walletBalance         Check the balance of a wallet
   walletCreate          Create a new wallet
-  walletHistory         Display the transaction history of specific wallet. Requires skycoin node rpc.
+  walletHistory         Display the transaction history of specific wallet. Requires MDL node rpc.
   walletKeyExport       Export a specific key from an HD wallet
   walletOutputs         Display outputs of specific wallet
 
