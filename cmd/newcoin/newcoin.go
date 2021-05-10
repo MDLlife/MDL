@@ -153,6 +153,7 @@ func createCoinCommand() cli.Command {
 				log.Errorf("failed to create new coin file %s", coinFilePath)
 				return err
 			}
+			// nolint:gosec
 			defer coinFile.Close()
 
 			coinTestFilePath := fmt.Sprintf("./cmd/%[1]s/%[1]s_test.go", coinName)
@@ -161,6 +162,7 @@ func createCoinCommand() cli.Command {
 				log.Errorf("failed to create new coin test file %s", coinTestFilePath)
 				return err
 			}
+			// nolint:gosec
 			defer coinTestFile.Close()
 
 			paramsFilePath := "./src/params/params.go"
@@ -169,6 +171,7 @@ func createCoinCommand() cli.Command {
 				log.Errorf("failed to create new file %s", paramsFilePath)
 				return err
 			}
+			// nolint:gosec
 			defer paramsFile.Close()
 
 			// change dir so that text/template can parse the file

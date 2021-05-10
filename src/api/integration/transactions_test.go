@@ -1814,12 +1814,15 @@ func testLiveWalletCreateTransactionRandom(t *testing.T, unsigned bool) {
 		spendableHours := fee.RemainingHours(totalHours, params.UserVerifyTxn.BurnFactor)
 		tLog(t, "spendableHours", spendableHours)
 
+		// nolint:gosec
 		coins := rand.Intn(int(totalCoins)) + 1
 		coins -= coins % int(params.UserVerifyTxn.MaxDropletDivisor())
 		if coins == 0 {
 			coins = int(params.UserVerifyTxn.MaxDropletDivisor())
 		}
+		// nolint:gosec
 		hours := rand.Intn(int(spendableHours + 1))
+		// nolint:gosec
 		nOutputs := rand.Intn(maxOutputs) + 1
 
 		tLog(t, "sendCoins", coins)
@@ -1827,6 +1830,7 @@ func testLiveWalletCreateTransactionRandom(t *testing.T, unsigned bool) {
 
 		changeAddress := w.GetEntryAt(0).Address.String()
 
+		// nolint:gosec
 		shareFactor := strconv.FormatFloat(rand.Float64(), 'f', 8, 64)
 
 		tLog(t, "shareFactor", shareFactor)
@@ -1840,6 +1844,7 @@ func testLiveWalletCreateTransactionRandom(t *testing.T, unsigned bool) {
 			}
 
 			receiver := api.Receiver{}
+			// nolint:gosec
 			receiver.Address = destAddrs[rand.Intn(len(destAddrs))].String()
 
 			if i == nOutputs-1 {
@@ -1851,6 +1856,7 @@ func testLiveWalletCreateTransactionRandom(t *testing.T, unsigned bool) {
 				remainingCoins = 0
 				remainingHours = 0
 			} else {
+				// nolint:gosec
 				receiverCoins := rand.Intn(remainingCoins) + 1
 				receiverCoins -= receiverCoins % int(params.UserVerifyTxn.MaxDropletDivisor())
 				if receiverCoins == 0 {
@@ -1862,6 +1868,7 @@ func testLiveWalletCreateTransactionRandom(t *testing.T, unsigned bool) {
 				require.NoError(t, err)
 				remainingCoins -= receiverCoins
 
+				// nolint:gosec
 				receiverHours := rand.Intn(remainingHours + 1)
 				receiver.Hours = fmt.Sprint(receiverHours)
 				remainingHours -= receiverHours

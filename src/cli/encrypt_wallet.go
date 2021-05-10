@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-    "github.com/MDLlife/MDL/src/wallet"
+	"github.com/MDLlife/MDL/src/wallet"
 )
 
 func encryptWalletCmd() *cobra.Command {

@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-    "github.com/MDLlife/MDL/src/params"
-    "github.com/MDLlife/MDL/src/api"
+	"github.com/MDLlife/MDL/src/api"
+	"github.com/MDLlife/MDL/src/params"
 	"github.com/MDLlife/MDL/src/readable"
 	"github.com/MDLlife/MDL/src/transaction"
 	"github.com/MDLlife/MDL/src/util/droplet"
@@ -423,6 +423,7 @@ func openCSV(csvFile string) ([][]string, error) {
 	if err != nil {
 		return nil, err
 	}
+	// nolint:gosec
 	defer f.Close()
 
 	r := csv.NewReader(f)

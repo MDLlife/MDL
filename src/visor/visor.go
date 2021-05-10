@@ -782,6 +782,7 @@ func (vs *Visor) getBlocksVerbose(tx *dbutil.Tx, getBlocks func(*dbutil.Tx) ([]c
 
 	inputs := make([][][]TransactionInput, len(blocks))
 	for i, b := range blocks {
+		// nolint:gosec
 		blockInputs, err := vs.getBlockInputs(tx, &b)
 		if err != nil {
 			return nil, nil, err
@@ -1117,6 +1118,7 @@ func (vs *Visor) getTransactions(tx *dbutil.Tx, flts []TxFilter) ([]Transaction,
 
 	var retTxns []Transaction
 	for _, txn := range txns {
+		// nolint:gosec
 		if f(&txn, otherFlts) {
 			retTxns = append(retTxns, txn)
 		}
@@ -2100,6 +2102,7 @@ func (vs *Visor) VerifyTxnVerbose(txn *coin.Transaction, signed TxnSignedFlag) (
 				return fmt.Errorf("get transaction of %v from historydb failed: %v", txnHash, err)
 			}
 
+			// nolint
 			if historyTxn != nil {
 				// Transaction is confirmed
 				isTxnConfirmed = true
@@ -2108,6 +2111,7 @@ func (vs *Visor) VerifyTxnVerbose(txn *coin.Transaction, signed TxnSignedFlag) (
 			// For confirmed transactions, use the previous block time to calculate hours and fees,
 			// except for the genesis block which has no previous block and has no inputs nor fees.
 			feeCalcTime = 0
+			// nolint
 			if historyTxn.BlockSeq > 0 {
 				if isTxnConfirmed {
 					prevBlock, err := vs.blockchain.GetSignedBlockBySeq(tx, historyTxn.BlockSeq-1)

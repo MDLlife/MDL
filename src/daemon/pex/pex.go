@@ -60,6 +60,7 @@ var (
 	// instructions on how to include this log's output
 	logger = logging.MustGetLogger("pex")
 	// Default rng
+	// nolint:gosec
 	rnum = rand.New(rand.NewSource(time.Now().Unix()))
 	// For removing inadvertent whitespace from addresses
 	whitespaceFilter = regexp.MustCompile(`\s`)
@@ -396,6 +397,7 @@ func (px *Pex) loadCustom(fn string) error {
 		return err
 	}
 
+	// nolint:gosec
 	defer f.Close()
 
 	data, err := ioutil.ReadAll(f)

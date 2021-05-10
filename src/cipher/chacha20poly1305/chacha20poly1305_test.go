@@ -61,6 +61,7 @@ func TestVectors(t *testing.T) {
 		}
 
 		if len(ad) > 0 {
+			// nolint:gosec
 			alterAdIdx := mr.Intn(len(ad))
 			ad[alterAdIdx] ^= 0x80
 			if _, err := aead.Open(nil, nonce, ct, ad); err == nil {
@@ -69,6 +70,7 @@ func TestVectors(t *testing.T) {
 			ad[alterAdIdx] ^= 0x80
 		}
 
+		//nolint
 		alterNonceIdx := mr.Intn(aead.NonceSize())
 		nonce[alterNonceIdx] ^= 0x80
 		if _, err := aead.Open(nil, nonce, ct, ad); err == nil {
@@ -76,6 +78,7 @@ func TestVectors(t *testing.T) {
 		}
 		nonce[alterNonceIdx] ^= 0x80
 
+		//nolint
 		alterCtIdx := mr.Intn(len(ct))
 		ct[alterCtIdx] ^= 0x80
 		if _, err := aead.Open(nil, nonce, ct, ad); err == nil {
@@ -91,7 +94,9 @@ func TestRandom(t *testing.T) {
 		var nonce [12]byte
 		var key [32]byte
 
+		// nolint:gosec
 		al := mr.Intn(128)
+		// nolint:gosec
 		pl := mr.Intn(16384)
 		ad := make([]byte, al)
 		plaintext := make([]byte, pl)
@@ -131,6 +136,7 @@ func TestRandom(t *testing.T) {
 		}
 
 		if len(ad) > 0 {
+			// nolint:gosec
 			alterAdIdx := mr.Intn(len(ad))
 			ad[alterAdIdx] ^= 0x80
 			if _, err := aead.Open(nil, nonce[:], ct, ad); err == nil {
@@ -139,6 +145,7 @@ func TestRandom(t *testing.T) {
 			ad[alterAdIdx] ^= 0x80
 		}
 
+		// nolint:gosec
 		alterNonceIdx := mr.Intn(aead.NonceSize())
 		nonce[alterNonceIdx] ^= 0x80
 		if _, err := aead.Open(nil, nonce[:], ct, ad); err == nil {
@@ -146,6 +153,7 @@ func TestRandom(t *testing.T) {
 		}
 		nonce[alterNonceIdx] ^= 0x80
 
+		// nolint:gosec
 		alterCtIdx := mr.Intn(len(ct))
 		ct[alterCtIdx] ^= 0x80
 		if _, err := aead.Open(nil, nonce[:], ct, ad); err == nil {

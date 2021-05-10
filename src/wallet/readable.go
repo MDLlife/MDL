@@ -85,6 +85,7 @@ func (res ReadableEntries) GetEntries() ReadableEntries {
 func (res ReadableEntries) toWalletEntries(coinType CoinType, walletType string, isEncrypted bool) ([]Entry, error) {
 	entries := make([]Entry, len(res))
 	for i, re := range res {
+		// nolint:gosec
 		e, err := newEntryFromReadable(coinType, walletType, &re)
 		if err != nil {
 			return []Entry{}, err

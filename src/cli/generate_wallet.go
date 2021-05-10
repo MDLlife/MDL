@@ -11,8 +11,8 @@ import (
 
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/cipher/bip39"
-    "github.com/MDLlife/MDL/src/cipher/bip44"
-    secp256k1 "github.com/MDLlife/MDL/src/cipher/secp256k1-go"
+	"github.com/MDLlife/MDL/src/cipher/bip44"
+	secp256k1 "github.com/MDLlife/MDL/src/cipher/secp256k1-go"
 	"github.com/MDLlife/MDL/src/wallet"
 )
 

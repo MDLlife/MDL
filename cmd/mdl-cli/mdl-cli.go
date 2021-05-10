@@ -5,12 +5,12 @@ package main
 
 import (
 	"fmt"
-    "github.com/MDLlife/MDL/src/cli"
-    "github.com/MDLlife/MDL/src/util/logging"
-    "os"
+	"os"
+
+	"github.com/MDLlife/MDL/src/cli"
+	"github.com/MDLlife/MDL/src/util/logging"
 
 	"github.com/sirupsen/logrus"
-
 )
 
 func main() {

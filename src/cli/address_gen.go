@@ -130,7 +130,7 @@ func addressGenCmd() *cobra.Command {
 	}
 
 	addressGenCmd.Flags().IntP("num", "n", 1, "Number of addresses to generate")
-    addressGenCmd.Flags().StringP("coin", "c", "mdl", "Coin type. Must be mdl or bitcoin. If bitcoin, secret keys are in Wallet Import Format instead of hex.")
+	addressGenCmd.Flags().StringP("coin", "c", "mdl", "Coin type. Must be mdl or bitcoin. If bitcoin, secret keys are in Wallet Import Format instead of hex.")
 	addressGenCmd.Flags().StringP("label", "l", "", "Wallet label to use when printing or writing a wallet file")
 	addressGenCmd.Flags().Bool("hex", false, "Use hex(sha256sum(rand(1024))) (CSPRNG-generated) as the seed if not seed is not provided")
 	addressGenCmd.Flags().StringP("seed", "s", "", "Seed for deterministic key generation. Will use bip39 as the seed if not provided.")

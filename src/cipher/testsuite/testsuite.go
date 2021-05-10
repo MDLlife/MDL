@@ -186,6 +186,7 @@ func SeedTestDataFromJSON(d *SeedTestDataJSON) (*SeedTestData, error) {
 
 	keys := make([]KeysTestData, len(d.Keys))
 	for i, kj := range d.Keys {
+		// nolint:gosec
 		k, err := KeysTestDataFromJSON(&kj)
 		if err != nil {
 			return nil, err
@@ -464,6 +465,7 @@ func Bip32SeedTestDataFromJSON(d *Bip32SeedTestDataJSON) (*Bip32SeedTestData, er
 
 	keys := make([]Bip32KeysTestData, len(d.Keys))
 	for i, kj := range d.Keys {
+		// nolint:gosec
 		k, err := Bip32KeysTestDataFromJSON(&kj)
 		if err != nil {
 			return nil, err

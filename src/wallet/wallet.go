@@ -14,12 +14,12 @@ import (
 	"strings"
 	"time"
 
-    "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 
-    "github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/cipher/bip44"
+	"github.com/MDLlife/MDL/src/util/file"
 	"github.com/MDLlife/MDL/src/util/logging"
-    "github.com/MDLlife/MDL/src/cipher/bip44"
-    "github.com/MDLlife/MDL/src/util/file"
 )
 
 // Error wraps wallet-related errors.

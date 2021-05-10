@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MDLlife/encodertest"
+	    "github.com/skycoin/encodertest"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 
