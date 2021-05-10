@@ -260,12 +260,14 @@ func copyCorruptDB(dbPath string) (string, error) { //nolint:unused,megacheck
 	if err != nil {
 		return "", err
 	}
+	// nolint:gosec
 	defer in.Close()
 
 	out, err := os.Create(newDBPath)
 	if err != nil {
 		return "", err
 	}
+	// nolint:gosec
 	defer out.Close()
 	logger.Critical().Info(out.Name())
 
@@ -303,6 +305,7 @@ func shaFileID(dbPath string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	// nolint:gosec
 	defer fi.Close()
 
 	h := sha256.New()

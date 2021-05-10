@@ -504,7 +504,9 @@ func TestIntroductionMessage(t *testing.T) {
 			d.On("recordMessageEvent", tc.intro, mc).Return(tc.mockValue.recordMessageEventErr)
 			d.On("Disconnect", tc.addr, tc.mockValue.disconnectReason).Return(tc.mockValue.disconnectErr)
 			d.On("connectionIntroduced", tc.addr, tc.gnetID, mock.MatchedBy(func(m *IntroductionMessage) bool {
+				//nolint
 				t.Logf("connectionIntroduced mock.MatchedBy unconfirmedBurnFactor=%d", m.UnconfirmedVerifyTxn.BurnFactor)
+				//nolint
 				if m == nil {
 					return false
 				}
@@ -848,6 +850,7 @@ func TestMessageEncodeDecode(t *testing.T) {
 
 				f, err := os.Create(fn)
 				require.NoError(t, err)
+				// nolint:gosec
 				defer f.Close()
 
 				b := encoder.Serialize(tc.msg)
@@ -863,6 +866,7 @@ func TestMessageEncodeDecode(t *testing.T) {
 
 			f, err := os.Open(fn)
 			require.NoError(t, err)
+			// nolint:gosec
 			defer f.Close()
 
 			d, err := ioutil.ReadAll(f)

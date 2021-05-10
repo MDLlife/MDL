@@ -243,6 +243,7 @@ func TestNewPexLoadCustomPeers(t *testing.T) {
 
 	fn, err := os.Create(filepath.Join(dir, "custom-peers.txt"))
 	require.NoError(t, err)
+	// nolint:gosec
 	defer fn.Close()
 
 	_, err = fn.Write([]byte(`123.45.67.89:2020

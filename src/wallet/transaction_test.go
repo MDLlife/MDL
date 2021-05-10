@@ -768,7 +768,9 @@ func makeTransaction(t *testing.T, nInputs int) (coin.Transaction, []coin.UxOut,
 
 func makeUxOut(t *testing.T, s cipher.SecKey, coins, hours uint64) coin.UxOut { //nolint:unparam
 	body := makeUxBody(t, s, coins, hours)
+	// nolint:gosec
 	tm := rand.Int31n(1000)
+	// nolint:gosec
 	seq := rand.Int31n(100)
 	return coin.UxOut{
 		Head: coin.UxHead{

@@ -38,14 +38,14 @@ type Config struct {
 
 // NewConfig creates a default Config
 func NewConfig() Config {
-    bc := bip44.CoinTypeMDL
-    return Config{
-        WalletDir:       "./",
-        CryptoType:      DefaultCryptoType,
-        EnableWalletAPI: false,
-        EnableSeedAPI:   false,
-        Bip44Coin:       &bc,
-    }
+	bc := bip44.CoinTypeMDL
+	return Config{
+		WalletDir:       "./",
+		CryptoType:      DefaultCryptoType,
+		EnableWalletAPI: false,
+		EnableSeedAPI:   false,
+		Bip44Coin:       &bc,
+	}
 }
 
 // NewService new wallet service

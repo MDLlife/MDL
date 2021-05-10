@@ -232,6 +232,7 @@ func loadGoldenFile(t *testing.T, filename string, testData TestData) {
 
 	f, err := os.Open(goldenFile)
 	require.NoError(t, err)
+	// nolint:gosec
 	defer f.Close()
 
 	d := json.NewDecoder(f)
@@ -245,6 +246,7 @@ func updateGoldenFile(t *testing.T, filename string, content interface{}) {
 	contentJSON, err := json.MarshalIndent(content, "", "\t")
 	require.NoError(t, err)
 	contentJSON = append(contentJSON, '\n')
+	// nolint:gosec
 	err = ioutil.WriteFile(filename, contentJSON, 0644)
 	require.NoError(t, err)
 }
@@ -262,6 +264,7 @@ func checkGoldenFile(t *testing.T, goldenFile string, td TestData) {
 
 	f, err := os.Open(goldenFile)
 	require.NoError(t, err)
+	// nolint:gosec
 	defer f.Close()
 
 	c, err := ioutil.ReadAll(f)
@@ -1538,6 +1541,7 @@ func testBlocksInRangeVerbose(t *testing.T, start, end uint64) *readable.BlocksV
 
 	var prevBlock *readable.BlockVerbose
 	for idx, b := range blocks.Blocks {
+		// nolint:gosec
 		assertVerboseBlockFee(t, &b)
 
 		if prevBlock != nil {
@@ -1704,6 +1708,7 @@ func testBlocksVerbose(t *testing.T, seqs []uint64) *readable.BlocksVerbose {
 		require.True(t, ok)
 		delete(seqsMap, b.Head.BkSeq)
 
+		// nolint:gosec
 		assertVerboseBlockFee(t, &b)
 
 		bHash, err := c.BlockByHashVerbose(b.Head.Hash)
@@ -1790,6 +1795,7 @@ func TestStableLastBlocksVerbose(t *testing.T) {
 
 	var prevBlock *readable.BlockVerbose
 	for idx, b := range blocks.Blocks {
+		// nolint:gosec
 		assertVerboseBlockFee(t, &b)
 
 		if prevBlock != nil {
@@ -1817,6 +1823,7 @@ func TestLiveLastBlocksVerbose(t *testing.T) {
 
 	var prevBlock *readable.BlockVerbose
 	for idx, b := range blocks.Blocks {
+		// nolint:gosec
 		assertVerboseBlockFee(t, &b)
 
 		if prevBlock != nil {

@@ -9,8 +9,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-    "github.com/MDLlife/MDL/src/coin"
-    "io"
+	"io"
 	"io/ioutil"
 	"math/rand"
 	"os"
@@ -23,6 +22,8 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/MDLlife/MDL/src/coin"
 
 	"github.com/andreyvit/diff"
 	"github.com/stretchr/testify/require"
@@ -231,11 +232,13 @@ func createTempWallet(t *testing.T, filename string, encrypt bool) (string, func
 	f, err := os.Create(walletFile)
 	require.NoError(t, err)
 
+	//nolint:gosec
 	defer f.Close()
 
 	rf, err := os.Open(filepath.Join(testFixturesDir, wltName))
 	require.NoError(t, err)
 
+	//nolint:gosec
 	defer rf.Close()
 
 	_, err = io.Copy(f, rf)
@@ -264,6 +267,8 @@ func createTempWalletDir(t *testing.T) (string, func()) {
 func loadJSON(t *testing.T, filename string, obj interface{}) {
 	f, err := os.Open(filename)
 	require.NoError(t, err)
+
+	//nolint:gosec
 	defer f.Close()
 
 	err = json.NewDecoder(f).Decode(obj)
@@ -281,6 +286,7 @@ func loadGoldenFile(t *testing.T, filename string, testData TestData) {
 
 	f, err := os.Open(goldenFile)
 	require.NoError(t, err)
+	// nolint:gosec
 	defer f.Close()
 
 	err = json.NewDecoder(f).Decode(testData.expected)
@@ -291,7 +297,8 @@ func updateGoldenFile(t *testing.T, filename string, content interface{}) {
 	contentJSON, err := json.MarshalIndent(content, "", "\t")
 	require.NoError(t, err)
 	contentJSON = append(contentJSON, '\n')
-	err = ioutil.WriteFile(filename, contentJSON, 0644)
+	// nolint:gosec
+	err = ioutil.WriteFile(filename, contentJSON, 0600)
 	require.NoError(t, err)
 }
 
@@ -311,6 +318,7 @@ func checkGoldenFileObjectChanges(t *testing.T, goldenFile string, td TestData) 
 
 	f, err := os.Open(goldenFile)
 	require.NoError(t, err)
+	// nolint:gosec
 	defer f.Close()
 
 	c, err := ioutil.ReadAll(f)
@@ -683,6 +691,7 @@ func TestAddressGen(t *testing.T) {
 			args: []string{"addressGen", "--mode=wallet"},
 			check: func(t *testing.T, v []byte) {
 				var w wallet.ReadableDeterministicWallet
+				//nolint
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
@@ -701,6 +710,7 @@ func TestAddressGen(t *testing.T) {
 			args: []string{"addressGen", "--mode=wallet", "--num", "2"},
 			check: func(t *testing.T, v []byte) {
 				var w wallet.ReadableDeterministicWallet
+				//nolint
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
@@ -766,6 +776,7 @@ func TestAddressGen(t *testing.T) {
 			args: []string{"addressGen", "--mode=wallet", "--hide-secrets", "-n", "2"},
 			check: func(t *testing.T, v []byte) {
 				var w wallet.ReadableDeterministicWallet
+				//nolint
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
@@ -784,6 +795,7 @@ func TestAddressGen(t *testing.T) {
 			args: []string{"addressGen", "-m=wallet", "-i", "-n", "2"},
 			check: func(t *testing.T, v []byte) {
 				var w wallet.ReadableDeterministicWallet
+				//nolint
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
@@ -802,6 +814,7 @@ func TestAddressGen(t *testing.T) {
 			args: []string{"addressGen", "--mode=wallet", "--coin=bitcoin", "-n", "2"},
 			check: func(t *testing.T, v []byte) {
 				var w wallet.ReadableDeterministicWallet
+				//nolint
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
@@ -829,6 +842,7 @@ func TestAddressGen(t *testing.T) {
 			args: []string{"addressGen", "--mode=wallet", "-c=btc", "-n", "2"},
 			check: func(t *testing.T, v []byte) {
 				var w wallet.ReadableDeterministicWallet
+				// nolint
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
@@ -856,6 +870,7 @@ func TestAddressGen(t *testing.T) {
 			args: []string{"addressGen", "--mode=wallet", "--hex"},
 			check: func(t *testing.T, v []byte) {
 				var w wallet.ReadableDeterministicWallet
+				// nolint
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
@@ -897,6 +912,7 @@ func TestAddressGen(t *testing.T) {
 			args: []string{"addressGen", "--mode=wallet", "--seed", "123"},
 			check: func(t *testing.T, v []byte) {
 				var w wallet.ReadableDeterministicWallet
+				// nolint
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
@@ -914,6 +930,7 @@ func TestAddressGen(t *testing.T) {
 			args: []string{"addressGen", "--mode=wallet", "-s", "123"},
 			check: func(t *testing.T, v []byte) {
 				var w wallet.ReadableDeterministicWallet
+				// nolint
 				err := json.NewDecoder(bytes.NewReader(v)).Decode(&w)
 				require.NoError(t, err)
 
@@ -1008,6 +1025,7 @@ func TestFiberAddressGen(t *testing.T) {
 	checkSeedsFile := func(t *testing.T, fn string, entropy int, addrs []string) {
 		f, err := os.Open(fn)
 		require.NoError(t, err)
+		// nolint:gosec
 		defer f.Close()
 
 		r := csv.NewReader(f)
@@ -1057,6 +1075,7 @@ func TestFiberAddressGen(t *testing.T) {
 	touch := func(t *testing.T, fn string) {
 		f, err := os.Create(fn)
 		require.NoError(t, err)
+		// nolint:gosec
 		defer f.Close()
 		err = f.Close()
 		require.NoError(t, err)
@@ -1731,6 +1750,7 @@ func prepareCSVFile(t *testing.T, toAddrs [][]string) (csvFile string, teardown 
 
 	f, err := os.Create(csvFile)
 	require.NoError(t, err)
+	// nolint:gosec
 	defer f.Close()
 	w := csv.NewWriter(f)
 
@@ -1976,6 +1996,7 @@ func scanTransactions(t *testing.T, fullTest bool) {
 		var ids []string
 		for len(txidMap) < randomLiveTransactionNum {
 			// get random txid
+			// nolint:gosec
 			txid := txids[rand.Intn(l)]
 			if _, ok := txidMap[txid]; !ok {
 				ids = append(ids, txid)
@@ -2535,6 +2556,7 @@ func TestLiveCreateAndBroadcastRawTransaction(t *testing.T) {
 
 				f, err := ioutil.TempFile("", "createrawtxn")
 				require.NoError(t, err)
+				// nolint:gosec
 				defer f.Close()
 
 				w := csv.NewWriter(f)

@@ -5,10 +5,11 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-    "github.com/MDLlife/MDL/src/cipher/bip44"
-    "net/http"
+	"net/http"
 	"sort"
 	"strconv"
+
+	"github.com/MDLlife/MDL/src/cipher/bip44"
 
 	"github.com/MDLlife/MDL/src/cipher/bip39"
 	"github.com/MDLlife/MDL/src/readable"
@@ -445,7 +446,7 @@ func walletHandler(gateway Gatewayer) http.HandlerFunc {
 
 		wltID := r.FormValue("id")
 		if wltID == "" {
-			wh.Error400(w, fmt.Sprintf("missing wallet id"))
+			wh.Error400(w, "missing wallet id")
 			return
 		}
 
@@ -515,6 +516,7 @@ func walletTransactionsHandler(gateway Gatewayer) http.HandlerFunc {
 
 			vb := make([]readable.UnconfirmedTransactionVerbose, len(txns))
 			for i, txn := range txns {
+				// nolint:gosec
 				v, err := readable.NewUnconfirmedTransactionVerbose(&txn, inputs[i])
 				if err != nil {
 					wh.Error500(w, err.Error())

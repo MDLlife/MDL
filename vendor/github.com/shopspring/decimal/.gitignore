@@ -1,6 +1,2 @@
 .git
 *.swp
-
-# IntelliJ
-.idea/
-*.iml

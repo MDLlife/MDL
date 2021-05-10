@@ -9,21 +9,22 @@ Introduction_parameters were added in v0.25.0 so will be absent for earlier peer
 package main
 
 import (
-    "flag"
-    "fmt"
-    "io/ioutil"
-    "os"
-    "strconv"
-    "strings"
-    "time"
+	"flag"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"strconv"
+	"strings"
+	"time"
 
-    "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 
-    "encoding/json"
-    "github.com/MDLlife/MDL/cmd/monitor-peers/connection"
-    "github.com/MDLlife/MDL/src/cipher"
-    "github.com/MDLlife/MDL/src/daemon"
-    "github.com/MDLlife/MDL/src/util/logging"
+	"encoding/json"
+
+	"github.com/MDLlife/MDL/cmd/monitor-peers/connection"
+	"github.com/MDLlife/MDL/src/cipher"
+	"github.com/MDLlife/MDL/src/daemon"
+	"github.com/MDLlife/MDL/src/util/logging"
 )
 
 // PeerState is a current state of the peer
@@ -118,7 +119,7 @@ const (
 var (
 	logger = logging.MustGetLogger("main")
 	// For removing inadvertent whitespace from addresses
-	help             = fmt.Sprintf(`monitor-peers checks the status of peers.
+	help = fmt.Sprintf(`monitor-peers checks the status of peers.
 
 By default it gets peers list from %s. May be overridden with -f flag.
 
@@ -186,10 +187,10 @@ func main() {
 // If the line fails to parse, an error is returned
 // Localhost addresses are allowed if allowLocalhost is true
 func getPeersListFromFile(filePath string) ([]string, error) {
-    file, err := os.Open(filePath)
-    if err != nil {
-        return nil, err
-    }
+	file, err := os.Open(filePath)
+	if err != nil {
+		return nil, err
+	}
 	body, err := ioutil.ReadAll(file)
 	if err != nil {
 		return nil, err
@@ -197,13 +198,13 @@ func getPeersListFromFile(filePath string) ([]string, error) {
 
 	var peersJSON map[string]interface{}
 	var peers []string
-    err = json.Unmarshal(body, &peersJSON)
-    if err != nil {
-        return nil, err
-    }
+	err = json.Unmarshal(body, &peersJSON)
+	if err != nil {
+		return nil, err
+	}
 	for peer := range peersJSON {
-	    peers = append(peers, peer)
-    }
+		peers = append(peers, peer)
+	}
 	//for _, addr := range strings.Split(string(body), "\n") {
 	//	addr = whitespaceFilter.ReplaceAllString(addr, "")
 	//	if addr == "" {
@@ -282,4 +283,3 @@ func buildReport(report Report) string {
 
 	return sb.String()
 }
-

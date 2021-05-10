@@ -56,6 +56,7 @@ type Connections struct {
 func NewConnections(dconns []daemon.Connection) Connections {
 	conns := make([]readable.Connection, len(dconns))
 	for i, dc := range dconns {
+		// nolint:gosec
 		conns[i] = readable.NewConnection(&dc)
 	}
 

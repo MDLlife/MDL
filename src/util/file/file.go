@@ -110,6 +110,7 @@ func LoadJSON(filename string, thing interface{}) error {
 	if err != nil {
 		return err
 	}
+	// nolint:gosec
 	defer file.Close()
 
 	dec := json.NewDecoder(file)
@@ -137,6 +138,7 @@ func SaveJSONSafe(filename string, thing interface{}, mode os.FileMode) error {
 	if err != nil {
 		return err
 	}
+	// nolint:gosec
 	defer f.Close()
 	n, err := f.Write(b)
 	if n != len(b) && err != nil {
