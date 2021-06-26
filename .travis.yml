@@ -24,16 +24,16 @@ env:
     - BUILD_DIR: build
     - BUILDLIB_DIR: $BUILD_DIR/libskycoin
     - LIB_DIR: lib
-    - BUILD_UI_TRAVIS_DIR: HOME/.mdl-ui-travis
+    - BUILD_UI_TRAVIS_DIR: $HOME/.mdl-ui-travis
 
 cache:
   directories:
   - electron/node_modules
-  - electron/src/node_modules
+  - electron/app/node_modules
   - $HOME/.cache/electron
   - $HOME/.cache/electron-builder
   - $HOME/.npm/_prebuilds
-  - src/gui/static/node_modules
+#   - src/gui/static/node_modules
 
 addons:
   chrome: stable

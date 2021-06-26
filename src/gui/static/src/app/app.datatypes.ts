@@ -15,7 +15,7 @@ export class Address {
 export class PurchaseOrder {
   coin_type: string;
   filename: string;
-  deposit_address: string;
+  address: string;
   recipient_address: string;
   status?: string;
 }
@@ -40,12 +40,14 @@ export class Transaction {
   hoursSent?: BigNumber;
   hoursBurned?: BigNumber;
   coinsMovedInternally?: boolean;
+  note?: string;
 }
 
 export class PreviewTransaction extends Transaction {
   from: string;
   to: string[];
   encoded: string;
+  innerHash: string;
   wallet?: Wallet;
 }
 
@@ -132,6 +134,8 @@ export interface ConfirmationData {
   cancelButtonText?: string;
   redTitle?: boolean;
   disableDismiss?: boolean;
+  linkText?: string;
+  linkFunction?(): void;
 }
 
 /**

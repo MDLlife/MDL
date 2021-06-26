@@ -123,6 +123,6 @@ elif [[ (-z $TEST || $TEST = "cli") && $CLI_FAIL -ne 0 ]]; then
   exit $CLI_FAIL
 elif [[ (-z $TEST || $TEST = "cli") && $CLI_FAIL_LIVE -ne 0 ]]; then
   exit $CLI_FAIL_LIVE
-else 
+else
   exit 0
 fi

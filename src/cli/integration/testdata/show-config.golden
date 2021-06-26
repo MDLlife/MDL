@@ -1,6 +1,4 @@
 {
-	"wallet_directory": "IGNORED/.mdl/wallets",
-	"wallet_name": "mdl_cli.wlt",
 	"data_directory": "IGNORED/.mdl",
 	"coin": "mdl",
 	"rpc_address": "http://127.0.0.1:1024"

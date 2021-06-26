@@ -13,6 +13,7 @@ import (
 	_ "net/http/pprof"
 	"os"
 
+	"github.com/MDLlife/MDL/src/fiber"
 	"github.com/MDLlife/MDL/src/readable"
 	"github.com/MDLlife/MDL/src/mdl"
 	"github.com/MDLlife/MDL/src/util/logging"
@@ -20,7 +21,7 @@ import (
 
 var (
 	// Version of the node. Can be set by -ldflags
-	Version = "0.26.0"
+	Version = "0.27.0"
 	// Commit ID. Can be set by -ldflags
 	Commit = ""
 	// Branch name. Can be set by -ldflags
@@ -56,19 +57,36 @@ var (
 	{{- end}}
 	}
 
-	nodeConfig = mdl.NewNodeConfig(ConfigMode, mdl.NodeParameters{
-		CoinName:                       CoinName,
-		GenesisSignatureStr:            GenesisSignatureStr,
-		GenesisAddressStr:              GenesisAddressStr,
-		GenesisCoinVolume:              GenesisCoinVolume,
-		GenesisTimestamp:               GenesisTimestamp,
-		BlockchainPubkeyStr:            BlockchainPubkeyStr,
-		BlockchainSeckeyStr:            BlockchainSeckeyStr,
-		DefaultConnections:             DefaultConnections,
-		PeerListURL:                    "{{.PeerListURL}}",
-		Port:                           {{.Port}},
-		WebInterfacePort:               {{.WebInterfacePort}},
-		DataDirectory:                  "{{.DataDirectory}}",
+	nodeConfig = mdl.NewNodeConfig(ConfigMode, fiber.NodeConfig{
+		CoinName:            CoinName,
+		GenesisSignatureStr: GenesisSignatureStr,
+		GenesisAddressStr:   GenesisAddressStr,
+		GenesisCoinVolume:   GenesisCoinVolume,
+		GenesisTimestamp:    GenesisTimestamp,
+		BlockchainPubkeyStr: BlockchainPubkeyStr,
+		BlockchainSeckeyStr: BlockchainSeckeyStr,
+		DefaultConnections:  DefaultConnections,
+		PeerListURL:         "{{.PeerListURL}}",
+		Port:                {{.Port}},
+		WebInterfacePort:    {{.WebInterfacePort}},
+		DataDirectory:       "{{.DataDirectory}}",
+
+		UnconfirmedBurnFactor:          {{.UnconfirmedBurnFactor}},
+		UnconfirmedMaxTransactionSize:  {{.UnconfirmedMaxTransactionSize}},
+		UnconfirmedMaxDropletPrecision: {{.UnconfirmedMaxDropletPrecision}},
+		CreateBlockBurnFactor:          {{.CreateBlockBurnFactor}},
+		CreateBlockMaxTransactionSize:  {{.CreateBlockMaxTransactionSize}},
+		CreateBlockMaxDropletPrecision: {{.CreateBlockMaxDropletPrecision}},
+		MaxBlockTransactionsSize:       {{.MaxBlockTransactionsSize}},
+
+		DisplayName:           "{{.DisplayName}}",
+		Ticker:                "{{.Ticker}}",
+		CoinHoursName:         "{{.CoinHoursName}}",
+		CoinHoursNameSingular: "{{.CoinHoursNameSingular}}",
+		CoinHoursTicker:       "{{.CoinHoursTicker}}",
+		ExplorerURL:           "{{.ExplorerURL}}",
+		VersionURL:            "{{.VersionURL}}",
+		Bip44Coin:             {{.Bip44Coin}},
 	})
 
 	parseFlags = true

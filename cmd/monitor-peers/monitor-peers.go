@@ -9,23 +9,21 @@ Introduction_parameters were added in v0.25.0 so will be absent for earlier peer
 package main
 
 import (
-	"flag"
-	"fmt"
-	"io/ioutil"
-	"net"
-	"os"
-	"regexp"
-	"strconv"
-	"strings"
-	"time"
+    "flag"
+    "fmt"
+    "io/ioutil"
+    "os"
+    "strconv"
+    "strings"
+    "time"
 
-	"github.com/sirupsen/logrus"
+    "github.com/sirupsen/logrus"
 
-	"github.com/MDLlife/MDL/cmd/monitor-peers/connection"
-	"github.com/MDLlife/MDL/src/cipher"
-	"github.com/MDLlife/MDL/src/daemon"
-	"github.com/MDLlife/MDL/src/daemon/pex"
-	"github.com/MDLlife/MDL/src/util/logging"
+    "encoding/json"
+    "github.com/MDLlife/MDL/cmd/monitor-peers/connection"
+    "github.com/MDLlife/MDL/src/cipher"
+    "github.com/MDLlife/MDL/src/daemon"
+    "github.com/MDLlife/MDL/src/util/logging"
 )
 
 // PeerState is a current state of the peer
@@ -120,7 +118,6 @@ const (
 var (
 	logger = logging.MustGetLogger("main")
 	// For removing inadvertent whitespace from addresses
-	whitespaceFilter = regexp.MustCompile(`\s`)
 	help             = fmt.Sprintf(`monitor-peers checks the status of peers.
 
 By default it gets peers list from %s. May be overridden with -f flag.
@@ -189,31 +186,43 @@ func main() {
 // If the line fails to parse, an error is returned
 // Localhost addresses are allowed if allowLocalhost is true
 func getPeersListFromFile(filePath string) ([]string, error) {
-	body, err := ioutil.ReadFile(filePath)
+    file, err := os.Open(filePath)
+    if err != nil {
+        return nil, err
+    }
+	body, err := ioutil.ReadAll(file)
 	if err != nil {
 		return nil, err
 	}
 
+	var peersJSON map[string]interface{}
 	var peers []string
-	for _, addr := range strings.Split(string(body), "\n") {
-		addr = whitespaceFilter.ReplaceAllString(addr, "")
-		if addr == "" {
-			continue
-		}
-
-		if strings.HasPrefix(addr, "#") {
-			continue
-		}
-
-		a, err := validateAddress(addr, true)
-		if err != nil {
-			err = fmt.Errorf("peers list has invalid address %s: %v", addr, err)
-			logger.WithError(err).Error()
-			return nil, err
-		}
-
-		peers = append(peers, a)
-	}
+    err = json.Unmarshal(body, &peersJSON)
+    if err != nil {
+        return nil, err
+    }
+	for peer := range peersJSON {
+	    peers = append(peers, peer)
+    }
+	//for _, addr := range strings.Split(string(body), "\n") {
+	//	addr = whitespaceFilter.ReplaceAllString(addr, "")
+	//	if addr == "" {
+	//		continue
+	//	}
+	//
+	//	if strings.HasPrefix(addr, "#") {
+	//		continue
+	//	}
+	//
+	//	a, err := validateAddress(addr, true)
+	//	if err != nil {
+	//		err = fmt.Errorf("peers list has invalid address %s: %v", addr, err)
+	//		logger.WithError(err).Error()
+	//		return nil, err
+	//	}
+	//
+	//	peers = append(peers, a)
+	//}
 
 	return peers, nil
 }
@@ -274,33 +283,3 @@ func buildReport(report Report) string {
 	return sb.String()
 }
 
-// validateAddress returns a sanitized address if valid, otherwise an error
-func validateAddress(ipPort string, allowLocalhost bool) (string, error) {
-	ipPort = whitespaceFilter.ReplaceAllString(ipPort, "")
-	pts := strings.Split(ipPort, ":")
-	if len(pts) != 2 {
-		return "", pex.ErrInvalidAddress
-	}
-
-	ip := net.ParseIP(pts[0])
-	if ip == nil {
-		return "", pex.ErrInvalidAddress
-	} else if ip.IsLoopback() {
-		if !allowLocalhost {
-			return "", pex.ErrNoLocalhost
-		}
-	} else if !ip.IsGlobalUnicast() {
-		return "", pex.ErrNotExternalIP
-	}
-
-	port, err := strconv.ParseUint(pts[1], 10, 16)
-	if err != nil {
-		return "", pex.ErrInvalidAddress
-	}
-
-	if port < 1024 {
-		return "", pex.ErrPortTooLow
-	}
-
-	return ipPort, nil
-}

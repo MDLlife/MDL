@@ -441,7 +441,7 @@ func TagOmitempty(tag string) bool {
 	return strings.Contains(tag, ",omitempty")
 }
 
-func tagName(tag string) string { // nolint: deadcode,megacheck
+func tagName(tag string) string { //nolint:deadcode,megacheck
 	commaIndex := strings.Index(tag, ",")
 	if commaIndex == -1 {
 		return tag
@@ -509,12 +509,12 @@ func lePutUint64(b []byte, v uint64) {
 	b[7] = byte(v >> 56)
 }
 
-// Decoder decodes an object from the mdl binary encoding format
+// Decoder decodes an object from the skycoin binary encoding format
 type Decoder struct {
 	Buffer []byte
 }
 
-// Encoder encodes an object to the mdl binary encoding format
+// Encoder encodes an object to the skycoin binary encoding format
 type Encoder struct {
 	Buffer []byte
 }

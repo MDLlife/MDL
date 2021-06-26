@@ -5,33 +5,22 @@ import (
 
 	"github.com/MDLlife/MDL/src/wallet"
 
-	gcli "github.com/spf13/cobra"
+	"github.com/spf13/cobra"
 )
 
-func listAddressesCmd() *gcli.Command {
-	return &gcli.Command{
+func listAddressesCmd() *cobra.Command {
+	return &cobra.Command{
 		Short:                 "Lists all addresses in a given wallet",
-		Use:                   "listAddresses [walletName]",
-		Args:                  gcli.MaximumNArgs(1),
+		Use:                   "listAddresses [wallet]",
+		Args:                  cobra.ExactArgs(1),
 		DisableFlagsInUseLine: true,
 		SilenceUsage:          true,
 		RunE:                  listAddresses,
 	}
 }
 
-func listAddresses(_ *gcli.Command, args []string) error {
-	var wltPath string
-	if len(args) > 0 {
-		wltPath = args[0]
-	}
-
-	// get wallet name
-	w, err := resolveWalletPath(cliConfig, wltPath)
-	if err != nil {
-		return err
-	}
-
-	wlt, err := wallet.Load(w)
+func listAddresses(_ *cobra.Command, args []string) error {
+	wlt, err := wallet.Load(args[0])
 	if err != nil {
 		return WalletLoadError{err}
 	}

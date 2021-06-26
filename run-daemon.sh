@@ -17,7 +17,7 @@ GORUNFLAGS=${GORUNFLAGS:-}
 go run -ldflags "${GOLDFLAGS}" $GORUNFLAGS cmd/mdl/mdl.go \
     -enable-gui=false \
     -launch-browser=false \
-    -log-level=error \
+    -log-level=debug \
     $@
 
 popd >/dev/null

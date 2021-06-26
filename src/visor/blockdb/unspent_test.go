@@ -910,25 +910,16 @@ func TestUnspentPoolAddrIndex(t *testing.T) {
 }
 
 func TestUnspentMaybeBuildIndexesNoIndexNoHead(t *testing.T) {
-	//TODO: create database file that lacks UnspentPoolAddrIndexBkt
-	t.Skipf("create database file that lacks UnspentPoolAddrIndexBkt")
-
 	// Test with a database that has no unspent addr index
 	testUnspentMaybeBuildIndexes(t, 0, nil)
 }
 
 func TestUnspentMaybeBuildIndexesNoIndexHaveHead(t *testing.T) {
-	//TODO: create database file that lacks UnspentPoolAddrIndexBkt
-	t.Skipf("create database file that lacks UnspentPoolAddrIndexBkt")
-
 	// Test with a database that has no unspent addr index
 	testUnspentMaybeBuildIndexes(t, 10, nil)
 }
 
 func TestUnspentMaybeBuildIndexesPartialIndex(t *testing.T) {
-	//TODO: create database file that lacks UnspentPoolAddrIndexBkt
-	t.Skipf("create database file that lacks UnspentPoolAddrIndexBkt")
-
 	// Test with a database that has an unspent addr index but the height is wrong
 	headHeight := uint64(3)
 	testUnspentMaybeBuildIndexes(t, headHeight+1, func(db *dbutil.DB) {
@@ -1057,9 +1048,6 @@ func testUnspentMaybeBuildIndexes(t *testing.T, headIndex uint64, setupDB func(*
 }
 
 func TestUnspentMaybeBuildIndexesNoRebuild(t *testing.T) {
-	//TODO: create database file that lacks UnspentPoolAddrIndexBkt
-	t.Skipf("create database file that lacks UnspentPoolAddrIndexBkt")
-
 	// Set addrIndexHeight to head block height, but don't populate the addr index
 	// Check that the addr index was not populated, so we know that the index did not get rebuilt if the height matches
 	db, shutdown := setupNoUnspentAddrIndexDB(t)
@@ -1103,9 +1091,6 @@ func setupNoUnspentAddrIndexDB(t *testing.T) (*dbutil.DB, func()) {
 	// Open a test database file that lacks UnspentPoolAddrIndexBkt,
 	// copy it to a temp file and open a database around the temp file
 	dbFilename := "./testdata/blockchain-180.no-unspent-addr-index.db"
-
-	fmt.Printf("setupNoUnspentAddrIndexDB, " + dbFilename)
-
 	dbFile, err := os.Open(dbFilename)
 	require.NoError(t, err)
 

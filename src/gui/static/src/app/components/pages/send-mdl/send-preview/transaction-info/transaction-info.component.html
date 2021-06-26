@@ -31,11 +31,17 @@
         <div class="-data" *ngIf="!isPreview">
           <span>{{ 'tx.id' | translate }}:</span> <span>{{ transaction.txid }}</span>
         </div>
+        <div class="-data" *ngIf="transaction.note || !isPreview">
+          <span>{{ 'tx.note' | translate }}:</span>
+          <span *ngIf="transaction.note">{{ transaction.note }}</span>
+          <span *ngIf="!transaction.note" class="-grey">{{ 'tx.without-note' | translate }}</span>
+          <mat-icon (click)="editNote()" *ngIf="!isPreview">edit</mat-icon>
+        </div>
       </div>
 
       <div class="col-md-3 -tx-price">
         <div class="-icon" [ngClass]="{ '-incoming': !isPreview && transaction.balance.isGreaterThan(0) && !transaction.coinsMovedInternally }">
-          <img src="/assets/img/send-blue.png">
+          <img src="/assets/img/send-black.png">
         </div>
         <h4>{{ transaction.balance.decimalPlaces(6).toString() | number:'1.0-6' }} {{ 'common.coin-id' | translate }}</h4>
         <p *ngIf="price" [matTooltip]="!isPreview ? ('tx.current-rate' | translate) : ''">

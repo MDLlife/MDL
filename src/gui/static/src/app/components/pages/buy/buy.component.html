@@ -3,7 +3,7 @@
   <div class="container">
     <div [formGroup]="form" class="-paper" *ngIf="config">
       <div class="-available flex-fill">
-        <h2>{{ 'buy.available-now' | translate }} {{ available  | number:'1.0-6' }} MDL</h2>
+        <h2>{{ 'buy.available-now' | translate }} {{ available/1000000.0  | number:'1.0-6' }} MDL</h2>
         <app-button #refresh (action)="refreshConfig()">{{ 'buy.refresh' | translate }}</app-button>
       </div>
       <div class="-step">
@@ -16,8 +16,12 @@
           <div class="form-field">
             <select formControlName="wallet" id="wallet" class="-wallet" required>
               <option disabled selected>{{ 'buy.make-choice' | translate }}</option>
-            <option *ngFor="let wallet of wallets" [value]="wallet.filename">
-            {{ wallet.label }} - <span class="-coins">{{ wallet.coins }} MDL</span>
+            <option *ngFor="let wallet of walletService.all() | async" [value]="wallet.filename">
+            {{ wallet.label }} -
+            <span *ngIf="wallet.coins && wallet.hours">
+            {{ (wallet.coins ? wallet.coins.decimalPlaces(6).toString() : 0) | number:'1.0-6' }} {{ 'common.coin-id' | translate }}
+              ({{ wallet.hours.decimalPlaces(0).toString() | number:'1.0-0' }} {{ 'common.coin-hours' | translate }})
+            </span>
             </option>
             </select>
           </div>
@@ -42,10 +46,16 @@
           <p>
           {{ 'buy.send-coin' | translate }} {{form.value.coin_type}} {{ 'buy.send-coin-text-1' | translate }} <span>{{ currentCoinPrice() }} MDL = 1 {{form.value.coin_type}}</span>.
           </p>
-          <span class="-address">
-          {{ order.deposit_address }}
-          </span>
-          <span class="-subtitle">{{ 'buy.fraction-warning' | translate }}</span>
+          <div>
+            <img src="../../../../../assets/img/qr-code-black.png"
+                 style="top: 12px; position: relative;"
+                 (click)="showQrCode($event, order.address)" class="qr-code-button">
+            <span class="-address" (click)="copyAddress($event, order.address)" style="display:inline; margin-left: 10px">
+              {{ order.address }}
+            </span>
+            <br><br><br>
+          </div>
+          <span class="-subtitle">{{ 'buy.note' | translate }}</span>
         </div>
       </div>
       <div class="-step" *ngIf="order">

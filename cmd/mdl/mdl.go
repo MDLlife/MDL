@@ -10,7 +10,7 @@ AVOID EDITING THIS MANUALLY
 
 import (
 	"flag"
-	_ "net/http/pprof"
+    "github.com/MDLlife/MDL/src/fiber"
 	"os"
 
 	"github.com/MDLlife/MDL/src/mdl"
@@ -20,7 +20,7 @@ import (
 
 var (
 	// Version of the node. Can be set by -ldflags
-	Version = "0.26.0"
+    Version = "0.27.1"
 	// Commit ID. Can be set by -ldflags
 	Commit = ""
 	// Branch name. Can be set by -ldflags
@@ -56,7 +56,7 @@ var (
 		"128.199.148.6:7800",
 	}
 
-	nodeConfig = mdl.NewNodeConfig(ConfigMode, mdl.NodeParameters{
+	nodeConfig = mdl.NewNodeConfig(ConfigMode, fiber.NodeConfig{
 		CoinName:            CoinName,
 		GenesisSignatureStr: GenesisSignatureStr,
 		GenesisAddressStr:   GenesisAddressStr,
@@ -69,6 +69,23 @@ var (
 		Port:                7800,
 		WebInterfacePort:    8320,
 		DataDirectory:       "$HOME/.mdl",
+
+        UnconfirmedBurnFactor:          10,
+        UnconfirmedMaxTransactionSize:  32768,
+        UnconfirmedMaxDropletPrecision: 3,
+        CreateBlockBurnFactor:          10,
+        CreateBlockMaxTransactionSize:  32768,
+        CreateBlockMaxDropletPrecision: 3,
+        MaxBlockTransactionsSize:       32768,
+
+        DisplayName:           "MDL Talent Hub",
+        Ticker:                "MDL",
+        CoinHoursName:         "Talent Hours",
+        CoinHoursNameSingular: "Talent Hour",
+        CoinHoursTicker:       "MTH",
+        ExplorerURL:           "https://explorer.mdl.wtf",
+        VersionURL:            "https://api.github.com/repos/MDLlife/MDL/tags",
+        Bip44Coin:             8000,
 	})
 
 	parseFlags = true

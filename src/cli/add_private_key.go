@@ -11,140 +11,120 @@ import (
 )
 
 func addPrivateKeyCmd() *cobra.Command {
-	addPrivateKeyCmd := &cobra.Command{
-		Short: "Add a private key to specific wallet",
-		Use:   "addPrivateKey [flags] [private key]",
-		Long: fmt.Sprintf(`Add a private key to specific wallet, the default
-    wallet (%s) will be
-    used if the wallet file or path is not specified
-
+    // TODO -- allow private key to be entered privately, same as the password can be
+    addPrivateKeyCmd := &cobra.Command{
+        Short: "Add a private key to wallet",
+        Use:   "addPrivateKey [wallet] [private key]",
+        Long: `Add a private key to wallet.
+    This method only works on "collection" type wallets.
+    Use "skycoin-cli walletCreate -t collection" to create a "collection" type wallet.
+    Use caution when using this from your shell. The private key will be recorded
+    if your shell's history file, unless you disable the shell history.
     Use caution when using the "-p" command. If you have command
     history enabled your wallet encryption password can be recovered from the
     history log. If you do not include the "-p" option you will be prompted to
-    enter your password after you enter your command.`, cliConfig.FullWalletPath()),
-		SilenceUsage:          true,
-		Args:                  cobra.MinimumNArgs(1),
-		DisableFlagsInUseLine: true,
-		RunE: func(c *cobra.Command, args []string) error {
-			// get private key
-			skStr := args[0]
-			if skStr == "" {
-				return c.Help()
-			}
+    enter your password after you enter your command.`,
+        SilenceUsage:          true,
+        Args:                  cobra.ExactArgs(2),
+        DisableFlagsInUseLine: true,
+        RunE: func(c *cobra.Command, args []string) error {
+            walletFile := args[0]
+            skStr := args[1]
 
-			// get wallet file path
-			walletFile, err := c.Flags().GetString("wallet-file")
-			if err != nil {
-				return err
-			}
+            password, err := c.Flags().GetString("password")
+            if err != nil {
+                return err
+            }
+            pr := NewPasswordReader([]byte(password))
 
-			w, err := resolveWalletPath(cliConfig, walletFile)
-			if err != nil {
-				return err
-			}
+            err = AddPrivateKeyToFile(walletFile, skStr, pr)
 
-			password, err := c.Flags().GetString("password")
-			if err != nil {
-				return err
-			}
-			pr := NewPasswordReader([]byte(password))
+            switch err.(type) {
+            case nil:
+                fmt.Println("success")
+                return nil
+            case WalletLoadError:
+                printHelp(c)
+                return err
+            default:
+                return err
+            }
+        },
+    }
 
-			err = AddPrivateKeyToFile(w, skStr, pr)
+    addPrivateKeyCmd.Flags().StringP("password", "p", "", "wallet password")
 
-			switch err.(type) {
-			case nil:
-				fmt.Println("success")
-				return nil
-			case WalletLoadError:
-				printHelp(c)
-				return err
-			default:
-				return err
-			}
-		},
-	}
-
-	addPrivateKeyCmd.Flags().StringP("wallet-file", "f", "", "wallet file or path. If no path is specified your default wallet path will be used.")
-	addPrivateKeyCmd.Flags().StringP("password", "p", "", "Wallet password")
-
-	return addPrivateKeyCmd
+    return addPrivateKeyCmd
 }
 
-// AddPrivateKey adds a private key to a *wallet.Wallet. Caller should save the wallet afterwards
-func AddPrivateKey(wlt *wallet.Wallet, key string) error {
-	sk, err := cipher.SecKeyFromHex(key)
-	if err != nil {
-		return fmt.Errorf("invalid private key: %s, must be a hex string of length 64", key)
-	}
+// AddPrivateKey adds a private key to a wallet.Wallet. Caller should save the wallet afterwards
+func AddPrivateKey(wlt *wallet.CollectionWallet, key string) error {
+    sk, err := cipher.SecKeyFromHex(key)
+    if err != nil {
+        return fmt.Errorf("invalid private key: %s, must be a hex string of length 64", key)
+    }
 
-	pk, err := cipher.PubKeyFromSecKey(sk)
-	if err != nil {
-		return err
-	}
+    pk, err := cipher.PubKeyFromSecKey(sk)
+    if err != nil {
+        return err
+    }
 
-	addr := cipher.AddressFromPubKey(pk)
+    addr := wlt.AddressConstructor()(pk)
 
-	entry := wallet.Entry{
-		Address: addr,
-		Public:  pk,
-		Secret:  sk,
-	}
+    entry := wallet.Entry{
+        Address: addr,
+        Public:  pk,
+        Secret:  sk,
+    }
 
-	return wlt.AddEntry(entry)
+    return wlt.AddEntry(entry)
 }
 
-// AddPrivateKeyToFile adds a private key to a wallet based on filename.  Will save the wallet after modifying.
+// AddPrivateKeyToFile adds a private key to a wallet based on filename.
+// Will save the wallet after modifying.
 func AddPrivateKeyToFile(walletFile, key string, pr PasswordReader) error {
-	wlt, err := wallet.Load(walletFile)
-	if err != nil {
-		return WalletLoadError{err}
-	}
+    wlt, err := wallet.Load(walletFile)
+    if err != nil {
+        return WalletLoadError{err}
+    }
 
-	switch pr.(type) {
-	case nil:
-		if wlt.IsEncrypted() {
-			return wallet.ErrMissingPassword
-		}
-	case PasswordFromBytes:
-		p, err := pr.Password()
-		if err != nil {
-			return err
-		}
+    if wlt.Type() != wallet.WalletTypeCollection {
+        return fmt.Errorf("only %q type wallets can have keypairs added manually", wallet.WalletTypeCollection)
+    }
 
-		if !wlt.IsEncrypted() && len(p) != 0 {
-			return wallet.ErrWalletNotEncrypted
-		}
-	}
+    if pr == nil && wlt.IsEncrypted() {
+        return wallet.ErrMissingPassword
+    }
 
-	addKey := func(w *wallet.Wallet, key string) error {
-		return AddPrivateKey(w, key)
-	}
+    addKey := func(w *wallet.CollectionWallet, key string) error {
+        return AddPrivateKey(w, key)
+    }
 
-	if wlt.IsEncrypted() {
-		addKey = func(w *wallet.Wallet, key string) error {
-			password, err := pr.Password()
-			if err != nil {
-				return err
-			}
+    if wlt.IsEncrypted() {
+        addKey = func(w *wallet.CollectionWallet, key string) error {
+            password, err := pr.Password()
+            if err != nil {
+                return err
+            }
 
-			return w.GuardUpdate(password, func(wlt *wallet.Wallet) error {
-				return AddPrivateKey(wlt, key)
-			})
-		}
-	}
+            return wallet.GuardUpdate(w, password, func(wlt wallet.Wallet) error {
+                return AddPrivateKey(wlt.(*wallet.CollectionWallet), key)
+            })
+        }
+    }
 
-	if err := addKey(wlt, key); err != nil {
-		return err
-	}
+    if err := addKey(wlt.(*wallet.CollectionWallet), key); err != nil {
+        return err
+    }
 
-	dir, err := filepath.Abs(filepath.Dir(walletFile))
-	if err != nil {
-		return err
-	}
+    dir, err := filepath.Abs(filepath.Dir(walletFile))
+    if err != nil {
+        return err
+    }
 
-	if err := wlt.Save(dir); err != nil {
-		return WalletSaveError{err}
-	}
+    if err := wallet.Save(wlt, dir); err != nil {
+        return WalletSaveError{err}
+    }
 
-	return nil
+    return nil
 }

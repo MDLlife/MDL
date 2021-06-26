@@ -2,10 +2,13 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PurchaseService } from '../../../services/purchase.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { WalletService } from '../../../services/wallet.service';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { Address, PurchaseOrder, Wallet } from '../../../app.datatypes';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ButtonComponent } from '../../layout/button/button.component';
-import { Subscription } from 'rxjs/Subscription';
+import { ISubscription } from 'rxjs/Subscription';
+import { MsgBarService } from '../../../services/msg-bar.service';
+import { QrCodeComponent, QrDialogConfig } from '../../layout/qr-code/qr-code.component';
+import {copyTextToClipboard} from "../../../utils";
 
 @Component({
   selector: 'app-buy',
@@ -25,12 +28,13 @@ export class BuyComponent implements OnInit, OnDestroy {
   order: PurchaseOrder;
   wallets: Wallet[];
 
-  private subscription: Subscription;
+  private subscriptionsGroup: ISubscription[] = [];
 
   constructor(
+    private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private purchaseService: PurchaseService,
-    private snackBar: MatSnackBar,
+    private msgBarService: MsgBarService,
     private walletService: WalletService,
   ) {}
 
@@ -40,7 +44,7 @@ export class BuyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscriptionsGroup.forEach(sub => sub.unsubscribe());
   }
 
   checkStatus() {
@@ -69,18 +73,22 @@ export class BuyComponent implements OnInit, OnDestroy {
       coin_type: ['', Validators.required],
     });
 
-    this.subscription = this.form.get('wallet').valueChanges.subscribe(filename => {
-      if (this.form.value.coin_type === '') return;
+    this.subscriptionsGroup.push(this.form.get('wallet').valueChanges.subscribe(filename => {
+      if ( this.form.value.coin_type === '' ) return;
       const wallet = this.wallets.find(wlt => wlt.filename === filename);
       console.log('changing wallet value', filename);
       this.purchaseService.generate(wallet, this.form.value.coin_type).subscribe(
         order => this.saveData(order),
-        error => this.snackBar.open(error.toString()),
-      );
-    });
+        err => {
+          this.msgBarService.showError("Please choose an unencrypted wallet. This issue will be fixed in the next version. Thank you. " + err._body);
+          setTimeout(() => {
+            this.msgBarService.hide();
+          }, 5000)
+        }
+      )
+    }));
 
     this.form.controls.coin_type.valueChanges.subscribe(type => {
-
       if (this.order) this.order.coin_type = type;
       if (type === '') return;
       if (this.form.value.wallet === '') return;
@@ -90,9 +98,9 @@ export class BuyComponent implements OnInit, OnDestroy {
           this.saveData(order);
         },
         err => {
-          this.snackBar.open(err._body);
+          this.msgBarService.showError("Please choose an unencrypted wallet. This issue will be fixed in the next version. Thank you. " + err._body);
           setTimeout(() => {
-            this.snackBar.dismiss();
+            this.msgBarService.hide();
           }, 5000)
         }
       );
@@ -128,7 +136,7 @@ export class BuyComponent implements OnInit, OnDestroy {
     this.loadConfig();
     this.loadOrder();
 
-    this.subscription.add(this.walletService.all().subscribe(wallets => {
+    this.subscriptionsGroup.push(this.walletService.all().subscribe(wallets => {
       this.wallets = wallets;
 
       if (this.order) {
@@ -168,5 +176,20 @@ export class BuyComponent implements OnInit, OnDestroy {
       case "WAVES": return this.config.supported[3].exchange_rate;
     }
     return "1"
+  }
+
+  showQrCode(event, address: string) {
+    event.stopPropagation();
+
+
+    const config: QrDialogConfig = { address, hideCoinRequestForm : true, ignoreCoinPrefix : true};
+    QrCodeComponent.openDialog(this.dialog, config);
+  }
+
+  copyAddress(event, address) {
+    event.stopPropagation();
+
+    copyTextToClipboard(address);
+    this.msgBarService.showDone('qr.copied', 4000);
   }
 }

@@ -28,7 +28,7 @@ const (
 )
 
 var (
-	// import path for github.com/MDLlife/MDL/cmd/mdl
+	// import path for github.com/MDLlife/MDL/cmd/mdl-cli
 	ldflagsNameCmd string
 
 	// import path for github.com/MDLlife/MDL/src/mdl

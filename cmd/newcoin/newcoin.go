@@ -7,13 +7,14 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/MDLlife/MDL/src/fiber"
+
 	"os"
 	"path/filepath"
 	"text/template"
 
 	"github.com/urfave/cli"
 
-	"github.com/MDLlife/MDL/src/mdl"
 	"github.com/MDLlife/MDL/src/util/logging"
 	"github.com/MDLlife/MDL/src/util/useragent"
 )
@@ -130,7 +131,7 @@ func createCoinCommand() cli.Command {
 
 			// -- parse template and create new coin.go and config blockchain.go -- //
 
-			config, err := mdl.NewParameters(configFile, configDir)
+			config, err := fiber.NewConfig(configFile, configDir)
 			if err != nil {
 				log.Errorf("failed to create new fiber coin config")
 				return err

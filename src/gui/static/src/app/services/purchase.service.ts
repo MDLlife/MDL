@@ -62,7 +62,7 @@ export class PurchaseService {
       return this.post('bind', {mdladdr: address[0].address, coin_type: coin_type})
         .map(response => ({
           coin_type: response.coin_type,
-          deposit_address: response.deposit_address,
+          address: response.deposit_address,
           filename: wallet.filename,
           recipient_address: address[0].address,
           status: 'waiting_deposit',

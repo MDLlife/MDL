@@ -37,8 +37,14 @@ export class OnboardingCreatePage {
     });
   }
 
-  createWallet() {
+  createWallet(goToManualSeedMode = true) {
     element(by.buttonText('New')).click();
+
+    if (goToManualSeedMode) {
+      element(by.css('.seed-type-button >div')).click();
+      element(by.css('.e2e-confirm-checkbox')).click();
+      element(by.buttonText('Continue')).click();
+    }
 
     const label = element(by.css('[formcontrolname="label"]'));
     const seed = element(by.css('[formcontrolname="seed"]'));
@@ -54,6 +60,10 @@ export class OnboardingCreatePage {
     confirm.sendKeys('test test');
     seedValidationCheckBox.click();
 
+    browser.sleep(1000);
+    const seedValidationCheckBox = element(by.css('.-check'));
+    seedValidationCheckBox.click();
+
     return btnCreate.isEnabled().then(status => {
       if (status) {
         btnCreate.click();
@@ -66,6 +76,9 @@ export class OnboardingCreatePage {
   loadWallet() {
     element(by.buttonText('Load')).click();
 
+    element(by.css('.seed-type-button >div')).click();
+    element(by.buttonText('Continue')).click();
+
     const label = element(by.css('[formcontrolname="label"]'));
     const seed = element(by.css('[formcontrolname="seed"]'));
     const btnLoad = element(by.buttonText('Create'));
@@ -75,6 +88,10 @@ export class OnboardingCreatePage {
     label.sendKeys('Test wallet');
     seed.clear();
     seed.sendKeys('test test');
+    seedValidationCheckBox.click();
+
+    browser.sleep(1000);
+    const seedValidationCheckBox = element(by.css('.-check'));
     seedValidationCheckBox.click();
 
     return btnLoad.isEnabled();
