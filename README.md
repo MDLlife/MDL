@@ -152,14 +152,14 @@ $ docker run -ti --rm \
     -v mdl-data:/data \
     -v mdl-wallet:/wallet \
     -p 6000:6000 \
-    -p 6420:6420 \
-    -p 6430:6430 \
+    -p 8320:8320 \
+    -p 8330:8330 \
     mdl/mdl
 ```
 
-Access the dashboard: [http://localhost:6420](http://localhost:6420).
+Access the dashboard: [http://localhost:8320](http://localhost:8320).
 
-Access the API: [http://localhost:6420/version](http://localhost:6420/version).
+Access the API: [http://localhost:8320/version](http://localhost:8320/version).
 This is the quickest way to start using MDL using Docker.
 
 ```sh
@@ -169,8 +169,8 @@ $ docker run -ti --rm \
     -v mdl-data:/data \
     -v mdl-wallet:/wallet \
     -p 6000:6000 \
-    -p 6420:6420 \
-    -p 6430:6430 \
+    -p 8320:8320 \
+    -p 8330:8330 \
     mdl/mdl
 ```
 
@@ -187,9 +187,9 @@ example will show you the available options.
 docker run --rm mdl/mdl -help
 ```
 
-Access the dashboard: [http://localhost:6420](http://localhost:6420).
+Access the dashboard: [http://localhost:8320](http://localhost:8320).
 
-Access the API: [http://localhost:6420/version](http://localhost:6420/version).
+Access the API: [http://localhost:8320/version](http://localhost:8320/version).
 
 ### Building your own images
 
