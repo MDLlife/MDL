@@ -8,7 +8,6 @@
 // Can do binary floating point in multiprecision decimal precisely
 // because 2 divides 10; cannot do decimal floating point
 // in multiprecision binary precisely.
-
 package decimal
 
 type decimal struct {

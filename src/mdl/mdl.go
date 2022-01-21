@@ -6,8 +6,7 @@ package mdl
 import (
 	"errors"
 	"fmt"
-    "github.com/MDLlife/MDL/src/util/droplet"
-    "io/ioutil"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -16,6 +15,8 @@ import (
 	"runtime/pprof"
 	"sync"
 	"time"
+
+	"github.com/MDLlife/MDL/src/util/droplet"
 
 	"github.com/blang/semver"
 	"github.com/toqueteos/webbrowser"

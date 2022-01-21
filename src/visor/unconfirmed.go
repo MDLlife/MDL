@@ -358,6 +358,7 @@ func (utp *UnconfirmedTransactionPool) Refresh(tx *dbutil.Tx, bc Blockchainer, d
 			return nil, err
 		}
 
+		// nolint
 		if err := utp.txns.put(tx, &utxn); err != nil {
 			return nil, err
 		}

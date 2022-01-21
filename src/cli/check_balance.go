@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	 "github.com/spf13/cobra"
+	"github.com/spf13/cobra"
 
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/readable"

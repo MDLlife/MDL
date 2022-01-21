@@ -63,6 +63,7 @@ func TestSortSpendsCoinsLowToHigh(t *testing.T) {
 		copy(uxb, orderedUxb)
 
 		for i := range uxb {
+			// nolint:gosec
 			j := rand.Intn(i + 1)
 			uxb[i], uxb[j] = uxb[j], uxb[i]
 		}
@@ -223,6 +224,7 @@ func TestSortSpendsHoursLowToHigh(t *testing.T) {
 		copy(uxb, orderedUxb)
 
 		for i := range uxb {
+			// nolint
 			j := rand.Intn(i + 1)
 			uxb[i], uxb[j] = uxb[j], uxb[i]
 		}
@@ -255,6 +257,7 @@ func TestSortSpendsHoursLowToHigh(t *testing.T) {
 func TestChooseSpendsMaximizeUxOuts(t *testing.T) {
 	nRand := 10000
 	for i := 0; i < nRand; i++ {
+		// nolint
 		coins := uint64((rand.Intn(3)+1)*10 + rand.Intn(3)) // 10,20,30 + 0,1,2
 		uxb := makeRandomUxBalances(t)
 
@@ -287,6 +290,7 @@ func TestChooseSpendsMaximizeUxOuts(t *testing.T) {
 func TestChooseSpendsMinimizeUxOutsRandom(t *testing.T) {
 	nRand := 10000
 	for i := 0; i < nRand; i++ {
+		// nolint:gosec
 		coins := uint64((rand.Intn(3)+1)*10 + rand.Intn(3)) // 10,20,30 + 0,1,2
 		uxb := makeRandomUxBalances(t)
 
@@ -325,17 +329,22 @@ func makeRandomUxBalances(t *testing.T) []UxBalance {
 	// Small ranges are used for Coins, Hours, BkSeq to increase likelihood
 	// that they collide and test deeper sorting comparisons
 
+	// nolint:gosec
 	n := rand.Intn(101)
 	uxb := make([]UxBalance, n)
 
 	// Use a random max range for the hours' rand range to ensure enough
 	// balances have zero hours
+	// nolint:gosec
 	hasZeroHoursRange := rand.Intn(3) + 1
 
 	for i := 0; i < n; i++ {
 		ux := UxBalance{
+			// nolint:gosec
 			Coins: uint64(rand.Intn(10) + 1), // 1-10
+			// nolint:gosec
 			Hours: uint64(rand.Intn(hasZeroHoursRange)),
+			// nolint:gosec
 			BkSeq: uint64(rand.Intn(11)), // 0-10
 			Hash:  testutil.RandSHA256(t),
 		}

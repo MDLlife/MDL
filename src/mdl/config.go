@@ -4,13 +4,14 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-    "github.com/MDLlife/MDL/src/fiber"
-    "math"
+	"math"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/MDLlife/MDL/src/fiber"
 
 	"github.com/MDLlife/MDL/src/coin"
 	"github.com/MDLlife/MDL/src/kvstorage"

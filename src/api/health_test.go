@@ -227,7 +227,7 @@ func TestHealthHandler(t *testing.T) {
 			require.Equal(t, len(conns), r.OpenConnections)
 			require.Equal(t, "mdl", r.CoinName)
 			require.Equal(t, "mdl:0.25.0(test)", r.DaemonUserAgent)
-            require.Equal(t, tc.cfg.health.BlockPublisher, r.BlockPublisher)
+			require.Equal(t, tc.cfg.health.BlockPublisher, r.BlockPublisher)
 
 			require.Equal(t, unconfirmed, r.BlockchainMetadata.Unconfirmed)
 			require.Equal(t, unspents, r.BlockchainMetadata.Unspents)

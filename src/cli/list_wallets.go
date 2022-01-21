@@ -7,7 +7,7 @@ import (
 
 	"github.com/MDLlife/MDL/src/wallet"
 
-    "github.com/spf13/cobra"
+	"github.com/spf13/cobra"
 )
 
 // WalletEntry represents an enty in a wallet file

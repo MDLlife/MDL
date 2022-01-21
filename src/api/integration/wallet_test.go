@@ -14,9 +14,9 @@ import (
 	"github.com/MDLlife/MDL/src/api"
 	"github.com/MDLlife/MDL/src/cipher"
 	"github.com/MDLlife/MDL/src/cipher/bip39"
-    "github.com/MDLlife/MDL/src/cipher/bip44"
-    "github.com/MDLlife/MDL/src/testutil"
-    "github.com/MDLlife/MDL/src/wallet"
+	"github.com/MDLlife/MDL/src/cipher/bip44"
+	"github.com/MDLlife/MDL/src/testutil"
+	"github.com/MDLlife/MDL/src/wallet"
 )
 
 func skipWalletIfLive(t *testing.T) bool {

@@ -319,6 +319,7 @@ func TestUxArraySorting(t *testing.T) {
 	assert.False(t, manualUxArrayIsSorted(uxa))
 	assert.False(t, sort.IsSorted(uxa))
 	uxb := make(UxArray, 4)
+	// nolint
 	for i, ux := range uxa {
 		uxb[i] = ux
 	}

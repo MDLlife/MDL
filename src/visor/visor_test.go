@@ -48,6 +48,7 @@ func prepareDB(t *testing.T) (*dbutil.DB, func()) {
 func readAll(t *testing.T, f string) []byte {
 	fi, err := os.Open(f)
 	require.NoError(t, err)
+	// nolint:gosec
 	defer fi.Close()
 
 	b, err := ioutil.ReadAll(fi)
@@ -68,6 +69,7 @@ func writeDBFile(t *testing.T, badDBFile string, badDBData []byte) {
 	t.Logf("Writing the original bad db file back to %s", badDBFile)
 	fi, err := os.OpenFile(badDBFile, os.O_WRONLY, 0600)
 	require.NoError(t, err)
+	// nolint:gosec
 	defer fi.Close()
 
 	_, err = io.Copy(fi, bytes.NewBuffer(badDBData))
@@ -88,6 +90,7 @@ func removeCorruptDBFiles(t *testing.T, badDBFile string) {
 	}
 }
 
+//nolint
 func addGenesisBlockToVisor(t *testing.T, vs *Visor) *coin.SignedBlock {
 	// create genesis block
 	gb, err := coin.NewGenesisBlock(genAddress, genCoins, genTime)
@@ -269,6 +272,7 @@ func TestVisorCreateBlock(t *testing.T) {
 	bc, err := NewBlockchain(db, BlockchainConfig{
 		Pubkey: genPublic,
 	})
+	require.NoError(t, err)
 
 	unconfirmed, err := NewUnconfirmedTransactionPool(db)
 	require.NoError(t, err)

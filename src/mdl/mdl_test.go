@@ -187,10 +187,12 @@ func TestDBVerifyLogic(t *testing.T) {
 		// Copy the database file to a temp file since it will be modified by the application
 		dbf, err := os.Open(filepath.Join(testFixturesDir, dbFile))
 		require.NoError(t, err)
+		// nolint:gosec
 		defer dbf.Close()
 
 		f, err := ioutil.TempFile("", fmt.Sprintf("%s.*", dbFile))
 		require.NoError(t, err)
+		// nolint:gosec
 		defer f.Close()
 
 		_, err = io.Copy(f, dbf)

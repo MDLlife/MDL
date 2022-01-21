@@ -148,12 +148,15 @@ func TestDistributeCoinHoursProportional(t *testing.T) {
 	maxHours := 15000000
 	coins := make([]uint64, maxCoinsLen)
 	for i := 0; i < iterations; i++ {
+		// nolint:gosec
 		coinsLen := rand.Intn(maxCoinsLen) + 1
 
+		// nolint:gosec
 		maxCoins := rand.Intn(maxMaxCoins) + 1
 
 		var totalCoins uint64
 		for i := 0; i < coinsLen; i++ {
+			// nolint:gosec
 			coins[i] = uint64(rand.Intn(maxCoins) + 1)
 
 			var err error
@@ -161,6 +164,7 @@ func TestDistributeCoinHoursProportional(t *testing.T) {
 			require.NoError(t, err)
 		}
 
+		// nolint:gosec
 		hours := uint64(rand.Intn(maxHours))
 
 		output, err := DistributeCoinHoursProportional(coins[:coinsLen], hours)
